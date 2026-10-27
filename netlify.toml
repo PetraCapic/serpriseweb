@@ -4,13 +4,10 @@
 
 [build.environment]
   NODE_VERSION = "24"
-
-# Admin i stranica zahvale ne trebaju biti u Googleu
-[[headers]]
-  for = "/admin/*"
-  [headers.values]
-    X-Robots-Tag = "noindex, nofollow"
-    Cache-Control = "no-store"
+  # Supabase projekt "SERPRise GP Studio" (ista baza kao admin.serprise.agency).
+  # Publishable ključ je javan po dizajnu: smije samo upisati upit u tablicu leads (RLS).
+  PUBLIC_SUPABASE_URL = "https://amuajqvesspnnfklaavj.supabase.co"
+  PUBLIC_SUPABASE_ANON_KEY = "sb_publishable_IVzFie3O0FJufXDt6POG3g_qfp22Cvt"
 
 [[headers]]
   for = "/*"
@@ -79,9 +76,13 @@
   to = "/"
   status = 301
 [[redirects]]
+  from = "/admin/*"
+  to = "https://admin.serprise.agency/"
+  status = 302
+[[redirects]]
   from = "/wp-admin/*"
-  to = "/admin/"
-  status = 301
+  to = "https://admin.serprise.agency/"
+  status = 302
 [[redirects]]
   from = "/bank-industry-case-study/*"
   to = "/"

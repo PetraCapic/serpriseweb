@@ -4,19 +4,18 @@ Novi web SERPRise agencije (hrvatski jezik): AI vidljivost (LLM optimizacija) te
 
 - **Frontend:** [Astro](https://astro.build) (statičan web, brz i SEO-friendly)
 - **Hosting:** Netlify
-- **Backend:** Supabase (upiti s kontakt forme + prijava u admin)
-- **Admin:** `/admin/`: popis upita, statusi, bilješke, izvoz u CSV
+- **Backend:** Supabase, ista baza kao admin (GP Studio). Kontakt forma upisuje upit u tablicu `leads`.
+- **Admin:** upiti, klijenti, ponude i računi su u GP Studiju na admin.serprise.agency (repo `serprise-gp-studio`).
 
 ## Struktura
 
 ```
 src/
   lib/site.ts            podaci o firmi, izbornik, popis klijenata
-  lib/supabase.ts        Supabase klijent
+  lib/supabase.ts        Supabase klijent (samo upis upita)
   components/            Header, Footer, Clients, ContactForm, Faq, Cta...
-  pages/                 index, ai-vidljivost, link-building-digitalni-pr, o-nama, kontakt, hvala, pravila-privatnosti, admin
+  pages/                 index, ai-vidljivost, link-building-digitalni-pr, o-nama, kontakt, hvala, pravila-privatnosti
 public/                  logo, favicon, og.png, robots.txt, llms.txt
-supabase/migrations/     SQL za tablice i sigurnosna pravila (RLS)
 netlify.toml             build, headeri, 301 preusmjeravanja sa starog weba
 ```
 
@@ -25,7 +24,7 @@ netlify.toml             build, headeri, 301 preusmjeravanja sa starog weba
 Treba Node 24+.
 
 ```bash
-cp .env.example .env   # upiši Supabase URL i publishable/anon ključ
+cp .env.example .env
 npm install
 npm run dev            # http://localhost:4321
 ```
@@ -34,24 +33,13 @@ npm run dev            # http://localhost:4321
 
 ### 1. Supabase
 
-1. Na [supabase.com](https://supabase.com) napravi novi projekt (regija: **EU**, npr. Frankfurt `eu-central-1`).
-2. **SQL Editor** → zalijepi i pokreni `supabase/migrations/20261027120000_leads_and_admins.sql`.
-3. **Authentication → Sign In / Providers**: isključi *Allow new users to sign up* (admin račune dodaješ ručno).
-4. **Authentication → Users → Add user**: dodaj svoj e-mail i lozinku (označi *Auto confirm*).
-5. U **SQL Editoru** daj tom korisniku admin prava:
-   ```sql
-   insert into public.admin_users (user_id)
-   select id from auth.users where email = 'jure@serprise.agency';
-   ```
-6. **Project Settings → API**: kopiraj *Project URL* i *publishable* (anon) ključ. Nikad ne koristi `service_role` ključ na webu.
+Tablica `leads` i pravilo da web smije samo upisati upit dolaze iz migracije `drizzle/0006_poslovanje.sql` u repou
+`serprise-gp-studio`. URL projekta i publishable ključ već su upisani u `netlify.toml`.
 
 ### 2. Netlify
 
 1. **Add new site → Import from GitHub** → odaberi ovaj repozitorij. Build postavke se čitaju iz `netlify.toml`.
-2. **Site configuration → Environment variables**:
-   - `PUBLIC_SUPABASE_URL`
-   - `PUBLIC_SUPABASE_ANON_KEY`
-3. Pokreni deploy i provjeri web na `*.netlify.app` adresi (pošalji probni upit, prijavi se na `/admin/`).
+2. Pokreni deploy i provjeri web na `*.netlify.app` adresi (pošalji probni upit i provjeri ga u adminu pod Upiti).
 
 ### 3. Domena (selidba s Totohosta)
 
@@ -61,7 +49,7 @@ npm run dev            # http://localhost:4321
    - `CNAME` za `www` → `<tvoj-site>.netlify.app`
    
    ili prebaci nameservere na Netlify DNS (Netlify će ih prikazati).
-3. **Prije promjene DNS-a** prepiši MX/TXT zapise za e-mail (npr. ako je mail `jure@serprise.agency` kod Totohosta ili Google Workspacea) da e-mail nastavi raditi.
+3. **Prije promjene DNS-a** prepiši MX i TXT zapise (mail je na Google Workspaceu: `aspmx.l.google.com` i `alt1–alt4`) da e-mail nastavi raditi.
 4. Netlify automatski izdaje SSL (Let's Encrypt) nakon što DNS proradi.
 5. Hosting na Totohostu otkaži tek kad novi web radi i mail je provjeren.
 

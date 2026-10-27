@@ -1,0 +1,78 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Clients from '../components/Clients.astro';
+import Cta from '../components/Cta.astro';
+---
+
+<Base
+  title="O nama"
+  description="SERPRise je hrvatska agencija specijalizirana za AI vidljivost (LLM optimizaciju), link building i digitalni PR. Mali tim, puno iskustva i fokus na hrvatsko tržište."
+>
+  <PageHero
+    eyebrow="O nama"
+    title="Mala agencija koja <span class='grad-text'>radi samo ono u čemu je najbolja</span>"
+    lead="SERPRise je specijalizirana agencija iz Hrvatske. Godinama gradimo vidljivost brendovima u pretraživačima, a danas i u odgovorima AI asistenata."
+    cta={false}
+  />
+
+  <section class="section">
+    <div class="container grid grid--2 story">
+      <div>
+        <h2>Zašto smo se specijalizirali</h2>
+        <p>
+          Kroz godine rada na brojnim projektima naučili smo jedno: najveću razliku u rezultatima rade autoritet brenda i
+          spomeni na pravim mjestima. To je danas važnije nego ikad, jer upravo na tim izvorima uče i AI asistenti.
+        </p>
+        <p>
+          Zato smo se fokusirali na dvije stvari koje najbolje radimo: <a href="/ai-vidljivost/">AI vidljivost (LLM optimizaciju)</a>
+          te <a href="/link-building-digitalni-pr/">link building i digitalni PR</a> na hrvatskom tržištu.
+        </p>
+      </div>
+      <div class="card">
+        <h3>Kako radimo</h3>
+        <ul class="checklist">
+          <li>Primamo ograničen broj novih klijenata mjesečno, da svaki dobije punu pažnju.</li>
+          <li>Ne vežemo vas ugovorom. Ostajete jer vidite rezultate.</li>
+          <li>Ne obećavamo nemoguće. Ako nešto nema smisla, reći ćemo vam.</li>
+          <li>Rokove poštujemo. Uvijek.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <Clients />
+
+  <section class="section">
+    <div class="container">
+      <span class="eyebrow">Tim</span>
+      <h2>Ljudi iza SERPRisea</h2>
+      <div class="grid grid--3" style="margin-top:32px">
+        <div class="card">
+          <h3>Jure Kljajić</h3>
+          <p class="eyebrow" style="margin-bottom:8px">Osnivač i SEO strateg</p>
+          <p class="muted">Vodi strategiju i odnose s klijentima. Na LinkedInu redovito dijeli iskustva iz SEO-a i AI pretraživanja.</p>
+        </div>
+        <div class="card">
+          <h3>Outreach i PR</h3>
+          <p class="eyebrow" style="margin-bottom:8px">Link building</p>
+          <p class="muted">Tim koji svakodnevno surađuje s urednicima hrvatskih portala i pronalazi prave prilike za objave.</p>
+        </div>
+        <div class="card">
+          <h3>Sadržaj i analitika</h3>
+          <p class="eyebrow" style="margin-bottom:8px">Copywriting i AI praćenje</p>
+          <p class="muted">Pisci i analitičari koji stvaraju sadržaj kakav AI citira i prate vašu vidljivost iz mjeseca u mjesec.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Cta />
+</Base>
+
+<style>
+  .story {
+    gap: 48px;
+    align-items: start;
+  }
+</style>

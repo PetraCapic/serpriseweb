@@ -1,0 +1,5 @@
+---
+interface Props { height?: number }
+const { height = 34 } = Astro.props;
+---
+<img src="/logo-sm.png" alt="SERPRise" width={Math.round(height * 926 / 263)} height={height} class="logo" />

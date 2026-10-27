@@ -1,0 +1,517 @@
+---
+import Base from '../../layouts/Base.astro';
+import Logo from '../../components/Logo.astro';
+---
+
+<Base title="Admin" description="SERPRise admin" noindex minimal>
+  <div class="admin">
+    <header class="admin__top">
+      <a href="/" aria-label="Na web"><Logo height={28} /></a>
+      <span class="admin__badge">Admin</span>
+      <span class="admin__spacer"></span>
+      <span id="who" class="muted small"></span>
+      <button id="logout" class="btn btn--ghost btn--sm" hidden>Odjava</button>
+    </header>
+
+    <!-- Prijava -->
+    <section id="login-view" class="login" hidden>
+      <form id="login-form" class="card">
+        <h1>Prijava</h1>
+        <label>E-mail <input type="email" name="email" required autocomplete="username" /></label>
+        <label>Lozinka <input type="password" name="password" required autocomplete="current-password" /></label>
+        <button class="btn btn--primary" type="submit">Prijavi se</button>
+        <p id="login-msg" class="msg" role="status"></p>
+      </form>
+    </section>
+
+    <!-- Nije konfigurirano / nema prava -->
+    <section id="notice-view" class="login" hidden>
+      <div class="card"><p id="notice-msg"></p></div>
+    </section>
+
+    <!-- Dashboard -->
+    <section id="dash-view" hidden>
+      <div class="stats" id="stats"></div>
+
+      <div class="toolbar">
+        <input id="search" type="search" placeholder="Traži ime, e-mail, tvrtku, poruku..." />
+        <select id="filter-status">
+          <option value="">Svi statusi</option>
+        </select>
+        <select id="filter-service">
+          <option value="">Sve usluge</option>
+        </select>
+        <button id="export" class="btn btn--ghost btn--sm">Izvoz CSV</button>
+        <button id="refresh" class="btn btn--ghost btn--sm">Osvježi</button>
+      </div>
+
+      <div class="layout">
+        <div class="table-wrap card">
+          <table>
+            <thead>
+              <tr><th>Datum</th><th>Ime</th><th>Tvrtka / web</th><th>Usluga</th><th>Budžet</th><th>Status</th></tr>
+            </thead>
+            <tbody id="rows"></tbody>
+          </table>
+          <p id="empty" class="muted empty" hidden>Nema upita za odabrane filtre.</p>
+        </div>
+
+        <aside id="detail" class="card detail" hidden></aside>
+      </div>
+    </section>
+  </div>
+</Base>
+
+<script>
+  import { supabase } from '../../lib/supabase';
+  import { serviceLabels, budgetLabels } from '../../lib/site';
+
+  type Lead = {
+    id: string;
+    created_at: string;
+    updated_at: string;
+    name: string;
+    email: string;
+    company: string | null;
+    website: string | null;
+    service: string;
+    budget: string | null;
+    message: string;
+    source_page: string | null;
+    utm: Record<string, string> | null;
+    status: string;
+    notes: string | null;
+  };
+
+  const STATUSES: Record<string, string> = {
+    novo: 'Novo',
+    u_kontaktu: 'U kontaktu',
+    ponuda: 'Ponuda poslana',
+    klijent: 'Klijent',
+    odbijeno: 'Odbijeno',
+  };
+
+  const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
+  const show = (id: string) => {
+    ['login-view', 'notice-view', 'dash-view'].forEach((v) => ($(v).hidden = v !== id));
+  };
+  const esc = (s: unknown) =>
+    String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
+  const fmtDate = (d: string) =>
+    new Date(d).toLocaleString('hr-HR', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+  const href = (url: string) => (/^https?:\/\//i.test(url) ? url : `https://${url}`);
+
+  let leads: Lead[] = [];
+  let selectedId: string | null = null;
+
+  function notice(msg: string) {
+    $('notice-msg').textContent = msg;
+    show('notice-view');
+  }
+
+  async function init() {
+    if (!supabase) {
+      notice('Supabase nije konfiguriran. Postavi PUBLIC_SUPABASE_URL i PUBLIC_SUPABASE_ANON_KEY u Netlifyju (vidi README).');
+      return;
+    }
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+    if (!session) {
+      show('login-view');
+      return;
+    }
+    $('who').textContent = session.user.email ?? '';
+    $('logout').hidden = false;
+
+    const { data: isAdmin, error } = await supabase.rpc('is_admin');
+    if (error || !isAdmin) {
+      notice('Prijavljeni ste, ali ovaj račun nema administratorska prava. Dodaj ga u tablicu admin_users (vidi README).');
+      return;
+    }
+    show('dash-view');
+    await load();
+  }
+
+  async function load() {
+    const { data, error } = await supabase!.from('leads').select('*').order('created_at', { ascending: false }).limit(1000);
+    if (error) {
+      notice(`Greška pri učitavanju: ${error.message}`);
+      return;
+    }
+    leads = data as Lead[];
+    renderStats();
+    renderRows();
+    if (selectedId) renderDetail();
+  }
+
+  function filtered() {
+    const q = ($('search') as HTMLInputElement).value.trim().toLowerCase();
+    const st = ($('filter-status') as HTMLSelectElement).value;
+    const sv = ($('filter-service') as HTMLSelectElement).value;
+    return leads.filter(
+      (l) =>
+        (!st || l.status === st) &&
+        (!sv || l.service === sv) &&
+        (!q || [l.name, l.email, l.company, l.website, l.message, l.notes].some((f) => f?.toLowerCase().includes(q))),
+    );
+  }
+
+  function renderStats() {
+    const since = Date.now() - 30 * 864e5;
+    const items = [
+      ['Ukupno upita', leads.length],
+      ['Zadnjih 30 dana', leads.filter((l) => +new Date(l.created_at) > since).length],
+      ['Novi (neobrađeni)', leads.filter((l) => l.status === 'novo').length],
+      ['Postali klijenti', leads.filter((l) => l.status === 'klijent').length],
+    ];
+    $('stats').innerHTML = items.map(([k, v]) => `<div class="card stat"><span class="muted">${k}</span><strong>${v}</strong></div>`).join('');
+  }
+
+  function renderRows() {
+    const rows = filtered();
+    $('empty').hidden = rows.length > 0;
+    $('rows').innerHTML = rows
+      .map(
+        (l) => `<tr data-id="${l.id}" class="${l.id === selectedId ? 'is-sel' : ''}">
+          <td>${fmtDate(l.created_at)}</td>
+          <td><strong>${esc(l.name)}</strong><br><span class="muted small">${esc(l.email)}</span></td>
+          <td>${esc(l.company)}${l.company && l.website ? '<br>' : ''}<span class="muted small">${esc(l.website)}</span></td>
+          <td>${esc(serviceLabels[l.service] ?? l.service)}</td>
+          <td>${esc(l.budget ? budgetLabels[l.budget] : '')}</td>
+          <td><span class="pill pill--${l.status}">${STATUSES[l.status]}</span></td>
+        </tr>`,
+      )
+      .join('');
+  }
+
+  function renderDetail() {
+    const l = leads.find((x) => x.id === selectedId);
+    const el = $('detail');
+    if (!l) {
+      el.hidden = true;
+      return;
+    }
+    el.hidden = false;
+    el.innerHTML = `
+      <div class="detail__head">
+        <h2>${esc(l.name)}</h2>
+        <button class="close" id="d-close" aria-label="Zatvori">×</button>
+      </div>
+      <p><a href="mailto:${esc(l.email)}">${esc(l.email)}</a></p>
+      ${l.company ? `<p><strong>Tvrtka:</strong> ${esc(l.company)}</p>` : ''}
+      ${l.website ? `<p><strong>Web:</strong> <a href="${esc(href(l.website))}" target="_blank" rel="noopener noreferrer">${esc(l.website)}</a></p>` : ''}
+      <p><strong>Usluga:</strong> ${esc(serviceLabels[l.service])} · <strong>Budžet:</strong> ${esc(l.budget ? budgetLabels[l.budget] : '-')}</p>
+      <p class="muted small">Zaprimljeno ${fmtDate(l.created_at)}${l.source_page ? ` · ${esc(l.source_page)}` : ''}</p>
+      ${l.utm ? `<p class="muted small">UTM: ${esc(Object.entries(l.utm).map(([k, v]) => `${k}=${v}`).join(', '))}</p>` : ''}
+      <div class="detail__msg">${esc(l.message)}</div>
+      <label>Status
+        <select id="d-status">${Object.entries(STATUSES)
+          .map(([v, t]) => `<option value="${v}" ${v === l.status ? 'selected' : ''}>${t}</option>`)
+          .join('')}</select>
+      </label>
+      <label>Bilješke
+        <textarea id="d-notes" rows="5" placeholder="Interne bilješke...">${esc(l.notes)}</textarea>
+      </label>
+      <div class="detail__actions">
+        <button class="btn btn--primary btn--sm" id="d-save">Spremi</button>
+        <a class="btn btn--ghost btn--sm" href="mailto:${esc(l.email)}?subject=${encodeURIComponent('SERPRise: vaš upit')}">Odgovori</a>
+        <button class="btn btn--ghost btn--sm danger" id="d-delete">Obriši</button>
+      </div>
+      <p id="d-msg" class="msg" role="status"></p>`;
+
+    $('d-close').onclick = () => {
+      selectedId = null;
+      el.hidden = true;
+      renderRows();
+    };
+    $('d-save').onclick = async () => {
+      const status = ($('d-status') as HTMLSelectElement).value;
+      const notes = ($('d-notes') as HTMLTextAreaElement).value.trim() || null;
+      const { error } = await supabase!.from('leads').update({ status, notes }).eq('id', l.id);
+      $('d-msg').textContent = error ? `Greška: ${error.message}` : 'Spremljeno ✓';
+      if (!error) {
+        Object.assign(l, { status, notes });
+        renderStats();
+        renderRows();
+      }
+    };
+    $('d-delete').onclick = async () => {
+      if (!confirm(`Trajno obrisati upit od ${l.name}?`)) return;
+      const { error } = await supabase!.from('leads').delete().eq('id', l.id);
+      if (error) {
+        $('d-msg').textContent = `Greška: ${error.message}`;
+        return;
+      }
+      leads = leads.filter((x) => x.id !== l.id);
+      selectedId = null;
+      el.hidden = true;
+      renderStats();
+      renderRows();
+    };
+  }
+
+  function exportCsv() {
+    const cols: (keyof Lead)[] = ['created_at', 'name', 'email', 'company', 'website', 'service', 'budget', 'status', 'message', 'notes', 'source_page'];
+    const cell = (v: unknown) => `"${String(v ?? '').replace(/"/g, '""')}"`;
+    const csv = [cols.join(','), ...filtered().map((l) => cols.map((c) => cell(l[c])).join(','))].join('\n');
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8' }));
+    a.download = `serprise-upiti-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+    URL.revokeObjectURL(a.href);
+  }
+
+  // Filteri
+  $('filter-status').insertAdjacentHTML('beforeend', Object.entries(STATUSES).map(([v, t]) => `<option value="${v}">${t}</option>`).join(''));
+  $('filter-service').insertAdjacentHTML(
+    'beforeend',
+    Object.entries(serviceLabels).map(([v, t]) => `<option value="${v}">${esc(t)}</option>`).join(''),
+  );
+  ['search', 'filter-status', 'filter-service'].forEach((id) => $(id).addEventListener('input', renderRows));
+  $('refresh').onclick = load;
+  $('export').onclick = exportCsv;
+  $('rows').addEventListener('click', (e) => {
+    const tr = (e.target as HTMLElement).closest('tr');
+    if (!tr?.dataset.id) return;
+    selectedId = tr.dataset.id;
+    renderRows();
+    renderDetail();
+  });
+
+  // Prijava / odjava
+  $('login-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const fd = new FormData(e.target as HTMLFormElement);
+    $('login-msg').textContent = 'Prijava...';
+    const { error } = await supabase!.auth.signInWithPassword({
+      email: String(fd.get('email')),
+      password: String(fd.get('password')),
+    });
+    if (error) {
+      $('login-msg').textContent = 'Pogrešan e-mail ili lozinka.';
+      return;
+    }
+    $('login-msg').textContent = '';
+    init();
+  });
+  $('logout').onclick = async () => {
+    await supabase?.auth.signOut();
+    location.reload();
+  };
+
+  init();
+</script>
+
+<style is:global>
+  .admin {
+    min-height: 100vh;
+    background: var(--bg-2);
+    padding-bottom: 40px;
+    font-size: 15px;
+  }
+  .admin__top {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 24px;
+    background: #fff;
+    border-bottom: 1px solid var(--border);
+  }
+  .admin__badge {
+    font-size: 0.75rem;
+    font-weight: 600;
+    background: var(--navy);
+    color: #fff;
+    padding: 3px 10px;
+    border-radius: 999px;
+  }
+  .admin__spacer {
+    flex: 1;
+  }
+  .admin .small {
+    font-size: 0.85rem;
+  }
+  .admin .btn--sm {
+    padding: 8px 14px;
+    font-size: 0.88rem;
+  }
+  .admin label {
+    display: grid;
+    gap: 6px;
+    font-weight: 500;
+    margin-bottom: 12px;
+  }
+  .admin input,
+  .admin select,
+  .admin textarea {
+    font: inherit;
+    color: var(--text);
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 12px;
+  }
+  .login {
+    display: grid;
+    place-items: center;
+    padding: 80px 20px;
+  }
+  .login .card {
+    width: 100%;
+    max-width: 400px;
+  }
+  .login h1 {
+    font-size: 1.6rem;
+  }
+  .msg {
+    margin: 10px 0 0;
+    color: var(--muted);
+    min-height: 1.3em;
+  }
+  #dash-view {
+    padding: 24px;
+    max-width: 1500px;
+    margin: 0 auto;
+  }
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+  .stat {
+    padding: 18px 20px;
+    display: grid;
+    gap: 4px;
+  }
+  .stat strong {
+    font-family: var(--font-display);
+    font-size: 1.9rem;
+  }
+  .toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .toolbar input {
+    flex: 1;
+    min-width: 220px;
+  }
+  .layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+    align-items: start;
+  }
+  .layout:has(.detail:not([hidden])) {
+    grid-template-columns: minmax(0, 1fr) 420px;
+  }
+  .table-wrap {
+    padding: 0;
+    overflow-x: auto;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  th,
+  td {
+    text-align: left;
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  th {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    background: var(--bg-2);
+  }
+  tbody tr {
+    cursor: pointer;
+  }
+  tbody tr:hover,
+  tbody tr.is-sel {
+    background: #f7f9fc;
+  }
+  .empty {
+    padding: 24px;
+    text-align: center;
+  }
+  .pill {
+    display: inline-block;
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 999px;
+    white-space: nowrap;
+    background: var(--bg-2);
+  }
+  .pill--novo {
+    background: var(--accent-soft);
+    color: var(--accent);
+  }
+  .pill--u_kontaktu {
+    background: #fff4dd;
+    color: #8a5a00;
+  }
+  .pill--ponuda {
+    background: #e6efff;
+    color: #1f4fa8;
+  }
+  .pill--klijent {
+    background: #e2f6ec;
+    color: #146c49;
+  }
+  .pill--odbijeno {
+    color: var(--muted);
+  }
+  .detail {
+    position: sticky;
+    top: 16px;
+  }
+  .detail__head {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+  }
+  .detail h2 {
+    font-size: 1.4rem;
+  }
+  .detail p {
+    margin-bottom: 6px;
+  }
+  .close {
+    background: none;
+    border: 0;
+    font-size: 1.6rem;
+    cursor: pointer;
+    color: var(--muted);
+  }
+  .detail__msg {
+    white-space: pre-wrap;
+    background: var(--bg-2);
+    border-radius: 10px;
+    padding: 14px;
+    margin: 14px 0 18px;
+  }
+  .detail__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .danger {
+    color: var(--accent);
+  }
+  @media (max-width: 1000px) {
+    .layout:has(.detail:not([hidden])) {
+      grid-template-columns: 1fr;
+    }
+    .detail {
+      position: static;
+    }
+  }
+</style>

@@ -1,0 +1,23 @@
+---
+interface Props { title?: string; text?: string }
+const {
+  title = 'Saznajte gdje vaš brend stoji danas',
+  text = 'Besplatno provjeravamo kako vas vide Google i AI asistenti te koje poveznice i spomeni vam nedostaju. Bez obveze, s konkretnim prijedlozima.',
+} = Astro.props;
+---
+<section class="section">
+  <div class="container">
+    <div class="cta">
+      <h2>{title}</h2>
+      <p class="lead">{text}</p>
+      <div class="btn-row"><a href="/kontakt/" class="btn btn--primary">Zatraži besplatnu analizu</a></div>
+    </div>
+  </div>
+</section>
+<style>
+  .cta { text-align: center; padding: clamp(40px, 7vw, 80px) 24px; border-radius: 28px; border: 1px solid var(--border);
+    background: radial-gradient(ellipse at top right, rgba(186, 37, 37, 0.35), transparent 55%), var(--navy); color: #fff; border: 0; }
+  .cta .lead { color: #c9d4df; }
+  .cta .lead { margin: 0 auto; }
+  .cta .btn-row { justify-content: center; }
+</style>

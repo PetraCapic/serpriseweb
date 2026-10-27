@@ -1,0 +1,154 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Clients from '../components/Clients.astro';
+import Faq from '../components/Faq.astro';
+import Cta from '../components/Cta.astro';
+import { site } from '../lib/site';
+
+const faq = [
+  {
+    q: 'Na kojim portalima objavljujete?',
+    a: 'Na hrvatskim informativnim, poslovnim, lifestyle i nišnim portalima te specijaliziranim blogovima. Popis biramo za svakog klijenta posebno, prema temi, publici i kvaliteti portala, i uvijek ga vidite prije objave.',
+  },
+  {
+    q: 'Je li link building siguran za moj web?',
+    a: 'Kad se radi kako treba, da. Ne koristimo mreže privatnih blogova (PBN), farme linkova ni automatizirane alate. Objavljujemo samo na stvarnim portalima sa stvarnim čitateljima i prirodnim profilom poveznica.',
+  },
+  {
+    q: 'Koja je razlika između link buildinga i digitalnog PR-a?',
+    a: 'Link building je ciljano stjecanje poveznica na relevantnim stranicama, najčešće kroz PR članke i suradnje s portalima. Digitalni PR ide korak dalje: osmislimo priču, istraživanje ili podatke koje novinari sami žele objaviti, pa poveznice i spomeni dolaze prirodno.',
+  },
+  {
+    q: 'Pomaže li link building i AI vidljivosti?',
+    a: 'Da. Jezični modeli brendove preporučuju na temelju onoga što o njima piše na vjerodostojnim izvorima. Svaki kvalitetan članak u medijima jača i vaš Google rang i vjerojatnost da vas AI spomene.',
+  },
+  {
+    q: 'Kako izgleda izvještavanje?',
+    a: 'Svaki mjesec dobivate popis svih objava s poveznicama, metrikama portala, anchor tekstovima i statusom indeksacije, uz pregled kretanja ključnih riječi.',
+  },
+];
+---
+
+<Base
+  title="Link building i digitalni PR na hrvatskim portalima"
+  description="Link building i digitalni PR za hrvatsko tržište: PR članci na relevantnim portalima, digitalne PR kampanje i kvalitetne poveznice bez PBN-ova i farmi linkova."
+  schema={[
+    {
+      '@context': 'https://schema.org',
+      '@type': 'Service',
+      name: 'Link building i digitalni PR',
+      alternateName: ['Link building', 'Digitalni PR', 'PR članci'],
+      serviceType: 'Link building',
+      provider: { '@id': `${site.url}/#organization` },
+      areaServed: 'HR',
+      inLanguage: 'hr',
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+    },
+  ]}
+>
+  <PageHero
+    eyebrow="Link building · Digitalni PR · PR članci"
+    title="Poveznice i objave na <span class='grad-text'>hrvatskim portalima</span> koje stvarno pomiču rezultate"
+    lead="Kvalitetne poveznice i spomeni u medijima i dalje su jedan od najjačih signala za Google, a sve više i za AI asistente. Gradimo ih ručno, na stvarnim hrvatskim portalima, bez prečaca koji vam kasnije mogu naštetiti."
+  />
+
+  <Clients title="Gradili smo autoritet za" />
+
+  <section class="section">
+    <div class="container">
+      <span class="eyebrow">Što radimo</span>
+      <h2>Tri načina na koja gradimo vaš autoritet</h2>
+      <div class="grid grid--3" style="margin-top:32px">
+        <div class="card">
+          <div class="icon">✎</div>
+          <h3>PR članci na portalima</h3>
+          <p class="muted">Pišemo i objavljujemo kvalitetne članke na hrvatskim informativnim, poslovnim, lifestyle i nišnim portalima, s prirodno ugrađenom poveznicom prema vama.</p>
+        </div>
+        <div class="card">
+          <div class="icon">✺</div>
+          <h3>Digitalne PR kampanje</h3>
+          <p class="muted">Istraživanja, ankete, zanimljivi podaci i priče iz vaše branše koje novinari rado prenose. Jedna dobra kampanja može donijeti desetke spomena.</p>
+        </div>
+        <div class="card">
+          <div class="icon">⌖</div>
+          <h3>Nišni i lokalni linkovi</h3>
+          <p class="muted">Ručno odabrani blogovi, strukovni portali, udruge, lokalni imenici i partneri koji su tematski povezani s vašim poslom.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--dark">
+    <div class="container grid grid--2 rules">
+      <div>
+        <span class="eyebrow">Kvaliteta</span>
+        <h2>Kako biramo gdje objavljujemo</h2>
+        <p class="lead">Ne gledamo samo DR ili DA. Portal mora imati stvarne čitatelje i smisla za vašu publiku.</p>
+      </div>
+      <div>
+        <ul class="checklist">
+          <li>Stvaran organski promet i publika iz Hrvatske</li>
+          <li>Tematska povezanost s vašom djelatnošću</li>
+          <li>Uredništvo, a ne stranica stvorena za prodaju linkova</li>
+          <li>Prirodni anchor tekstovi i raznolik profil poveznica</li>
+          <li>Svaki portal odobravate vi prije objave</li>
+        </ul>
+        <h3 style="margin-top:28px">Što ne radimo</h3>
+        <p class="muted">PBN mreže, farme linkova, automatizirane komentare, spam direktorije i "1000 linkova za 50 €". Takvi linkovi danas štete i Google rangu i ugledu brenda.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <span class="eyebrow">Proces</span>
+      <h2>Kako izgleda suradnja</h2>
+      <div class="steps" style="margin-top:32px">
+        <div class="card">
+          <h3>Analiza profila</h3>
+          <p class="muted">Snimamo vaše postojeće poveznice i uspoređujemo ih s konkurencijom koja je ispred vas.</p>
+        </div>
+        <div class="card">
+          <h3>Plan objava</h3>
+          <p class="muted">Predlažemo portale, teme i ciljne stranice za sljedeći mjesec. Vi odobravate.</p>
+        </div>
+        <div class="card">
+          <h3>Pisanje i objava</h3>
+          <p class="muted">Pišemo sadržaj, dogovaramo s urednicima i pratimo objavu do kraja.</p>
+        </div>
+        <div class="card">
+          <h3>Izvještaj</h3>
+          <p class="muted">Popis svih objava s metrikama, statusom indeksacije i kretanjem ključnih riječi.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--alt">
+    <div class="container grid grid--2">
+      <div>
+        <span class="eyebrow">Za agencije</span>
+        <h2>White label link building za agencije</h2>
+      </div>
+      <div>
+        <p class="muted">Radite SEO za klijente na hrvatskom tržištu? Preuzimamo link building i PR objave pod vašim imenom, s izvještajima koje možete proslijediti klijentu.</p>
+        <a href="/kontakt/" class="btn btn--ghost">Javite se za partnerstvo</a>
+      </div>
+    </div>
+  </section>
+
+  <Faq items={faq} />
+  <Cta title="Saznajte koje poveznice vam nedostaju" text="Besplatno ćemo usporediti vaš profil poveznica s 3 glavna konkurenta i predložiti prve portale za objavu." />
+</Base>
+
+<style>
+  .rules {
+    gap: 48px;
+    align-items: start;
+  }
+</style>

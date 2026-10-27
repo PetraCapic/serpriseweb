@@ -1,0 +1,25 @@
+---
+interface Props { eyebrow?: string; title: string; lead?: string; cta?: boolean }
+const { eyebrow, title, lead, cta = true } = Astro.props;
+---
+<section class="page-hero">
+  <div class="container">
+    {eyebrow && <span class="eyebrow">{eyebrow}</span>}
+    <h1 set:html={title} />
+    {lead && <p class="lead">{lead}</p>}
+    {cta && (
+      <div class="btn-row">
+        <a href="/kontakt/" class="btn btn--primary">Zatraži besplatnu analizu</a>
+      </div>
+    )}
+    <slot />
+  </div>
+</section>
+<style>
+  .page-hero {
+    padding: clamp(48px, 8vw, 96px) 0 clamp(40px, 6vw, 72px);
+    background: radial-gradient(ellipse at 90% 0%, rgba(186, 37, 37, 0.08), transparent 50%), var(--bg);
+    border-bottom: 1px solid var(--border);
+  }
+  .page-hero h1 { max-width: 880px; }
+</style>

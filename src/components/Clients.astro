@@ -1,0 +1,25 @@
+---
+import { clients } from '../lib/site';
+interface Props { title?: string }
+const { title = 'Vjeruju nam hrvatski brendovi' } = Astro.props;
+---
+<section class="clients" aria-labelledby="clients-title">
+  <div class="container">
+    <p id="clients-title" class="clients__title">{title}</p>
+    <ul class="clients__list">
+      {clients.map((c) => (
+        <li>{c.logo ? <img src={c.logo} alt={c.name} loading="lazy" height="36" /> : <span>{c.name}</span>}</li>
+      ))}
+    </ul>
+    <p class="clients__more muted">i još mnogo tvrtki iz osiguranja, nekretnina, nautike, trgovine, modne i beauty industrije.</p>
+  </div>
+</section>
+<style>
+  .clients { padding: 36px 0 44px; border-block: 1px solid var(--border); background: var(--bg-2); }
+  .clients__title { text-align: center; font-size: 0.8rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 22px; }
+  .clients__list { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 12px 14px; }
+  .clients__list li span { display: inline-block; font-family: var(--font-display); font-weight: 700; font-size: 1.02rem; color: var(--navy); background: #fff; border: 1px solid var(--border); border-radius: 999px; padding: 8px 18px; }
+  .clients__list img { height: 36px; width: auto; filter: grayscale(1); opacity: 0.8; transition: 0.2s; }
+  .clients__list img:hover { filter: none; opacity: 1; }
+  .clients__more { text-align: center; font-size: 0.9rem; margin: 20px 0 0; }
+</style>

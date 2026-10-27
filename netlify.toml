@@ -1,0 +1,97 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "24"
+  # Supabase projekt "SERPRise GP Studio" (ista baza kao admin.serprise.agency).
+  # Publishable ključ je javan po dizajnu: smije samo upisati upit u tablicu leads (RLS).
+  PUBLIC_SUPABASE_URL = "https://amuajqvesspnnfklaavj.supabase.co"
+  PUBLIC_SUPABASE_ANON_KEY = "sb_publishable_IVzFie3O0FJufXDt6POG3g_qfp22Cvt"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+
+[[headers]]
+  for = "/_astro/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# 301 preusmjeravanja sa starog (WordPress) weba
+[[redirects]]
+  from = "/about-us/*"
+  to = "/o-nama/"
+  status = 301
+[[redirects]]
+  from = "/contact-us/*"
+  to = "/kontakt/"
+  status = 301
+[[redirects]]
+  from = "/privacy-policy*"
+  to = "/pravila-privatnosti/"
+  status = 301
+[[redirects]]
+  from = "/services/croatian-backlinks-service/*"
+  to = "/link-building-digitalni-pr/"
+  status = 301
+[[redirects]]
+  from = "/services/reseller-link-building/*"
+  to = "/link-building-digitalni-pr/"
+  status = 301
+[[redirects]]
+  from = "/services/expired-domain-link-building/*"
+  to = "/link-building-digitalni-pr/"
+  status = 301
+[[redirects]]
+  from = "/services/agency-partnership/*"
+  to = "/link-building-digitalni-pr/"
+  status = 301
+[[redirects]]
+  from = "/services/*"
+  to = "/"
+  status = 301
+[[redirects]]
+  from = "/our-work/*"
+  to = "/"
+  status = 301
+[[redirects]]
+  from = "/case-study/*"
+  to = "/"
+  status = 301
+[[redirects]]
+  from = "/seo-work/*"
+  to = "/"
+  status = 301
+[[redirects]]
+  from = "/blog/*"
+  to = "/"
+  status = 301
+[[redirects]]
+  from = "/feed/*"
+  to = "/"
+  status = 301
+[[redirects]]
+  from = "/admin/*"
+  to = "https://admin.serprise.agency/"
+  status = 302
+[[redirects]]
+  from = "/wp-admin/*"
+  to = "https://admin.serprise.agency/"
+  status = 302
+[[redirects]]
+  from = "/bank-industry-case-study/*"
+  to = "/"
+  status = 301
+[[redirects]]
+  from = "/food-supplements-case-study/*"
+  to = "/"
+  status = 301
+[[redirects]]
+  from = "/prefab-homes-website-with-100k-clicks-serprise-agency/*"
+  to = "/"
+  status = 301

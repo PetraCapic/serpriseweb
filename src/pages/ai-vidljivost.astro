@@ -1,0 +1,159 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import Clients from '../components/Clients.astro';
+import Faq from '../components/Faq.astro';
+import Cta from '../components/Cta.astro';
+import { site } from '../lib/site';
+
+const faq = [
+  {
+    q: 'Koja je razlika između SEO-a i LLM optimizacije?',
+    a: 'Klasični SEO cilja na pozicije u Googleovim rezultatima. LLM optimizacija (AI SEO, GEO) cilja na to da vas AI asistenti spomenu i preporuče u svom odgovoru. Temelji su slični: kvalitetan sadržaj, tehnički ispravan web i spomeni na vjerodostojnim izvorima, ali se mjeri i optimizira drugačije.',
+  },
+  {
+    q: 'Možete li garantirati da će me ChatGPT preporučiti?',
+    a: 'Ne, i to nitko ne može pošteno obećati jer AI odgovori ovise o modelu, upitu i trenutku. Ono što možemo jest sustavno povećati vjerojatnost i učestalost spominjanja, te to transparentno mjeriti svaki mjesec.',
+  },
+  {
+    q: 'Koje AI alate pratite?',
+    a: 'Standardno pratimo ChatGPT, Google AI preglede (AI Overviews) i AI Mode, Gemini, Perplexity i Microsoft Copilot. Upite testiramo na hrvatskom jeziku, a po potrebi i na engleskom ili njemačkom za turistički i izvozni sektor.',
+  },
+  {
+    q: 'Treba li mi novi web?',
+    a: 'Gotovo nikad. U većini slučajeva dovoljno je doraditi postojeće stranice, strukturu sadržaja i tehničke postavke te izgraditi spomene brenda izvan vašeg weba.',
+  },
+  {
+    q: 'Koliko traje suradnja?',
+    a: 'Početni audit i strategija traju 2 do 3 tjedna. Nakon toga radimo mjesečno, bez dugoročnog ugovora. Prve pomake u AI odgovorima obično vidimo unutar 1 do 2 mjeseca.',
+  },
+];
+---
+
+<Base
+  title="AI vidljivost i LLM optimizacija za hrvatske brendove"
+  description="LLM optimizacija (AI SEO, GEO) na hrvatskom: pobrinut ćemo se da vas ChatGPT, Gemini, Perplexity i Google AI pregledi spominju i preporučuju. Zatražite besplatnu AI analizu."
+  schema={[
+    {
+      '@context': 'https://schema.org',
+      '@type': 'Service',
+      name: 'AI vidljivost (LLM optimizacija)',
+      alternateName: ['LLM optimizacija', 'AI SEO', 'GEO optimizacija'],
+      serviceType: 'Generative Engine Optimization',
+      provider: { '@id': `${site.url}/#organization` },
+      areaServed: 'HR',
+      inLanguage: 'hr',
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+    },
+  ]}
+>
+  <PageHero
+    eyebrow="AI vidljivost · LLM optimizacija · AI SEO"
+    title="Neka vas <span class='grad-text'>ChatGPT, Gemini i Google AI</span> preporučuju kupcima"
+    lead="Kupci sve češće ne pretražuju, nego pitaju. Ako AI asistent na pitanje iz vaše branše ne spomene vaš brend, preporučit će konkurenciju. LLM optimizacijom mijenjamo to."
+  />
+
+  <Clients title="Brendovi s kojima radimo" />
+
+  <section class="section">
+    <div class="container grid grid--2 intro">
+      <div>
+        <h2>Što je AI vidljivost?</h2>
+        <p>
+          AI vidljivost je mjera koliko često i kako vas spominju jezični modeli (LLM-ovi) poput ChatGPT-a, Geminija i
+          Perplexityja te Googleovi AI pregledi. LLM optimizacija je posao kojim tu vidljivost povećavamo.
+        </p>
+        <p>
+          U svijetu se to zove i <strong>GEO</strong> (Generative Engine Optimization) ili <strong>AI SEO</strong>. Mi to radimo
+          s fokusom na hrvatski jezik i hrvatske izvore koje AI modeli čitaju.
+        </p>
+      </div>
+      <div class="card">
+        <h3>Primjeri upita koje pratimo</h3>
+        <ul class="checklist">
+          <li>"Koje je najbolje osiguranje automobila u Hrvatskoj?"</li>
+          <li>"Gdje kupiti kvalitetan namještaj u Zagrebu?"</li>
+          <li>"Preporuči mi charter agenciju za jedrenje po Dalmaciji"</li>
+          <li>"Koja agencija za nekretnine u Splitu je pouzdana?"</li>
+        </ul>
+        <p class="muted">Za svakog klijenta definiramo 30 do 100 upita koje postavljaju njegovi stvarni kupci.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--alt">
+    <div class="container">
+      <span class="eyebrow">Što radimo</span>
+      <h2>Kako podižemo vašu AI vidljivost</h2>
+      <div class="grid grid--3" style="margin-top:32px">
+        <div class="card">
+          <div class="icon">01</div>
+          <h3>AI audit</h3>
+          <p class="muted">Testiramo vaše ključne upite u svim važnim AI alatima i bilježimo tko se spominje, kojim redom i iz kojih izvora AI uzima informacije.</p>
+        </div>
+        <div class="card">
+          <div class="icon">02</div>
+          <h3>Brend kao entitet</h3>
+          <p class="muted">Usklađujemo kako je vaš brend opisan na webu, Google profilu, LinkedInu, imenicima i u medijima, da AI točno zna tko ste i čime se bavite.</p>
+        </div>
+        <div class="card">
+          <div class="icon">03</div>
+          <h3>Sadržaj koji AI citira</h3>
+          <p class="muted">Preuređujemo i pišemo stranice tako da daju jasne, provjerljive odgovore: usporedbe, cijene, FAQ, vodiče i podatke koje modeli rado citiraju.</p>
+        </div>
+        <div class="card">
+          <div class="icon">04</div>
+          <h3>Tehnička priprema</h3>
+          <p class="muted">Strukturirani podaci (schema), dostupnost za AI crawlere, llms.txt, brzina i čista struktura weba.</p>
+        </div>
+        <div class="card">
+          <div class="icon">05</div>
+          <h3>Spomeni izvan weba</h3>
+          <p class="muted">AI vjeruje onome što drugi pišu o vama. Kroz <a href="/link-building-digitalni-pr/">digitalni PR</a> gradimo spomene na portalima, u usporedbama i recenzijama.</p>
+        </div>
+        <div class="card">
+          <div class="icon">06</div>
+          <h3>Mjesečno praćenje</h3>
+          <p class="muted">Izvještaj o udjelu u AI odgovorima (share of voice), novim spomenima i usporedbi s konkurencijom, mjesec za mjesecom.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container grid grid--2">
+      <div>
+        <span class="eyebrow">Za koga je</span>
+        <h2>Kome se LLM optimizacija najviše isplati</h2>
+        <p class="muted">Svima čiji kupci prije kupnje istražuju i uspoređuju. Posebno dobro radi za:</p>
+      </div>
+      <ul class="checklist">
+        <li>Osiguranje, financije i pravne usluge</li>
+        <li>Nekretnine i gradnju</li>
+        <li>Nautiku, turizam i smještaj</li>
+        <li>Namještaj, opremanje i trgovinu</li>
+        <li>Beauty, zdravlje i dodatke prehrani</li>
+        <li>B2B usluge i SaaS</li>
+      </ul>
+    </div>
+  </section>
+
+  <Faq items={faq} />
+  <Cta title="Provjerimo što AI danas kaže o vama" text="Pošaljite nam web i 3 glavne usluge. Besplatno ćemo testirati upite na hrvatskom i pokazati gdje se spominjete vi, a gdje konkurencija." />
+</Base>
+
+<style>
+  .intro {
+    align-items: start;
+    gap: 40px;
+  }
+  .icon {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 1rem;
+  }
+</style>

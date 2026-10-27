@@ -1,0 +1,269 @@
+---
+import Base from '../layouts/Base.astro';
+import Faq from '../components/Faq.astro';
+import Cta from '../components/Cta.astro';
+import Clients from '../components/Clients.astro';
+
+const faq = [
+  {
+    q: 'Što je AI vidljivost (LLM optimizacija)?',
+    a: 'To je optimizacija vašeg brenda i sadržaja kako bi vas AI asistenti poput ChatGPT-a, Geminija, Perplexityja i Googleovih AI pregleda (AI Overviews) spominjali, preporučivali i citirali kad korisnici pitaju za proizvode ili usluge iz vaše branše. U svijetu se često zove i GEO (Generative Engine Optimization) ili AI SEO.',
+  },
+  {
+    q: 'Je li to zamjena za klasični SEO?',
+    a: 'Nije. AI asistenti velik dio informacija crpe iz istih izvora kao i Google: kvalitetnih stranica, medijskih članaka, recenzija i spomena brenda. Zato AI vidljivost i link building idu ruku pod ruku. Jače poveznice i spomeni u medijima pomažu i jednom i drugom.',
+  },
+  {
+    q: 'Radite li samo s hrvatskim tvrtkama?',
+    a: 'Fokus nam je hrvatsko i regionalno tržište jer tu najbolje poznajemo medije, portale i način na koji ljudi pretražuju na hrvatskom jeziku. Strane tvrtke koje žele nastup u Hrvatskoj također su dobrodošle.',
+  },
+  {
+    q: 'Koliko brzo se vide rezultati?',
+    a: 'Prve promjene u AI odgovorima i prve objave u medijima obično vidite unutar 4 do 8 tjedana. Stabilan rast vidljivosti gradi se kroz 3 do 6 mjeseci. Nikome ne obećavamo "prvo mjesto za tjedan dana" jer to nitko pošten ne može obećati.',
+  },
+  {
+    q: 'Moram li potpisati dugoročni ugovor?',
+    a: 'Ne. Suradnja je mjesečna i možete je otkazati kad god želite. Radije zadržavamo klijente rezultatima nego ugovorima.',
+  },
+];
+---
+
+<Base
+  title="AI vidljivost, link building i digitalni PR | SERPRise"
+  description="Hrvatska agencija za AI vidljivost (LLM optimizaciju), link building i digitalni PR. Pobrinut ćemo se da vas preporučuju Google, ChatGPT, Gemini i Perplexity."
+  schema={{
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+  }}
+>
+  <section class="hero">
+    <div class="container hero__grid">
+      <div>
+        <span class="eyebrow">AI vidljivost · Link building · Digitalni PR</span>
+        <h1>Kad kupac pita AI, <span class="grad-text">neka odgovor budete vi.</span></h1>
+        <p class="lead">
+          Sve više Hrvata pitanja o proizvodima i uslugama postavlja ChatGPT-u, Geminiju i Googleovim AI pregledima. Mi se brinemo
+          da vas oni poznaju, spominju i preporučuju, uz kvalitetne poveznice i objave u hrvatskim medijima.
+        </p>
+        <div class="btn-row">
+          <a href="/kontakt/" class="btn btn--primary">Zatraži besplatnu AI analizu</a>
+          <a href="#usluge" class="btn btn--ghost">Pogledaj usluge</a>
+        </div>
+      </div>
+
+      <div class="chat" aria-hidden="true">
+        <div class="chat__bar"><span></span><span></span><span></span></div>
+        <div class="chat__q">Koja je najbolja agencija za [vašu uslugu] u Splitu?</div>
+        <div class="chat__a">
+          <p>Za [vašu uslugu] u Splitu često se preporučuje <mark>Vaš Brend</mark>. Ističu se po ...</p>
+          <ul>
+            <li><mark>Vaš Brend</mark>: iskustvo, odlične recenzije</li>
+            <li>Konkurent A</li>
+            <li>Konkurent B</li>
+          </ul>
+          <div class="chat__src">Izvori: <span>vasbrend.hr</span><span>index.hr</span><span>poslovni.hr</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Clients />
+
+  <section class="section">
+    <div class="container">
+      <span class="eyebrow">Što se promijenilo</span>
+      <h2>Pretraživanje više nije samo 10 plavih linkova</h2>
+      <div class="grid grid--3" style="margin-top:32px">
+        <div class="card">
+          <div class="icon">✦</div>
+          <h3>AI daje gotov odgovor</h3>
+          <p class="muted">Google AI pregledi, ChatGPT i Perplexity korisniku odmah predlože 2 do 3 brenda. Ako niste među njima, za tog kupca ne postojite.</p>
+        </div>
+        <div class="card">
+          <div class="icon">⟶</div>
+          <h3>AI vjeruje tuđim riječima</h3>
+          <p class="muted">Jezični modeli brendove preporučuju na temelju onoga što o njima pišu mediji, portali, recenzije i stručni članci, a ne samo vaš web.</p>
+        </div>
+        <div class="card">
+          <div class="icon">★</div>
+          <h3>Poveznice i dalje odlučuju</h3>
+          <p class="muted">Kvalitetne poveznice i spomeni u medijima i dalje su jedan od najjačih signala za Google, a sada i za AI. Isti posao, dvostruka korist.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="usluge">
+    <div class="container">
+      <span class="eyebrow">Usluge</span>
+      <h2>Dvije usluge, jedan cilj: da vas kupci pronađu prvi</h2>
+      <div class="grid grid--2" style="margin-top:32px">
+        <a href="/ai-vidljivost/" class="card card--link service">
+          <div class="icon">◎</div>
+          <h3>AI vidljivost (LLM optimizacija)</h3>
+          <p class="muted">Pratimo što ChatGPT, Gemini, Perplexity i Google AI govore o vama i vašoj konkurenciji, pa sustavno radimo na tome da vas spominju, točno opisuju i preporučuju.</p>
+          <ul class="checklist">
+            <li>AI audit na hrvatskom jeziku</li>
+            <li>Optimizacija sadržaja i entiteta brenda</li>
+            <li>Mjesečno praćenje udjela u AI odgovorima</li>
+          </ul>
+          <span class="service__more">Saznaj više →</span>
+        </a>
+        <a href="/link-building-digitalni-pr/" class="card card--link service">
+          <div class="icon">⛓</div>
+          <h3>Link building i digitalni PR</h3>
+          <p class="muted">Objave i poveznice na relevantnim hrvatskim portalima, medijima i nišnim blogovima. Priče koje novinari žele objaviti, a Google i AI žele citirati.</p>
+          <ul class="checklist">
+            <li>PR članci na hrvatskim portalima</li>
+            <li>Digitalne PR kampanje s podacima</li>
+            <li>Ručno odabrani nišni blogovi, bez farmi linkova</li>
+          </ul>
+          <span class="service__more">Saznaj više →</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--dark">
+    <div class="container">
+      <span class="eyebrow">Kako radimo</span>
+      <h2>Od analize do rezultata u četiri koraka</h2>
+      <div class="steps" style="margin-top:32px">
+        <div class="card">
+          <h3>Analiza</h3>
+          <p class="muted">Testiramo desetke upita na hrvatskom u AI alatima i Googleu te snimamo profil poveznica vaš i konkurencije.</p>
+        </div>
+        <div class="card">
+          <h3>Strategija</h3>
+          <p class="muted">Dobivate jasan plan: koje teme, koji mediji, koji sadržaj i koje poveznice donose najviše.</p>
+        </div>
+        <div class="card">
+          <h3>Izvedba</h3>
+          <p class="muted">Pišemo, objavljujemo, dogovaramo s urednicima i optimiziramo. Vi odobravate, mi radimo.</p>
+        </div>
+        <div class="card">
+          <h3>Mjerenje</h3>
+          <p class="muted">Svaki mjesec izvještaj: gdje vas AI spominje, koje su objave izašle i što se pomaknulo na Googleu.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container why">
+      <div>
+        <span class="eyebrow">Zašto SERPRise</span>
+        <h2>Mala ekipa, velik fokus na hrvatsko tržište</h2>
+        <p class="lead">Ne radimo sa stotinu klijenata odjednom. Radimo s onima kojima stvarno možemo pomoći i za koje znamo koji hrvatski mediji i portali imaju smisla.</p>
+      </div>
+      <ul class="checklist why__list">
+        <li><strong>Hrvatski jezik i mediji.</strong> Testiramo upite onako kako ih vaši kupci stvarno pišu, a objave radimo na portalima koje oni čitaju.</li>
+        <li><strong>Bez dugoročnih ugovora.</strong> Mjesečna suradnja koju možete otkazati kad želite.</li>
+        <li><strong>Iskreno, bez bajki.</strong> Ne obećavamo nemoguće. Ako nešto nema smisla za vaš posao, reći ćemo vam.</li>
+        <li><strong>Transparentno.</strong> Vidite svaku objavu, svaku poveznicu i svaki AI odgovor koji pratimo.</li>
+      </ul>
+    </div>
+  </section>
+
+  <Faq items={faq} />
+  <Cta />
+</Base>
+
+<style>
+  .hero {
+    padding: clamp(48px, 8vw, 96px) 0 clamp(56px, 8vw, 100px);
+    background: radial-gradient(ellipse at 85% 10%, rgba(186, 37, 37, 0.08), transparent 50%),
+      radial-gradient(ellipse at 0% 100%, rgba(16, 43, 67, 0.06), transparent 50%);
+  }
+  .hero__grid {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: 56px;
+    align-items: center;
+  }
+  .chat {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    box-shadow: 0 30px 60px -30px rgba(16, 43, 67, 0.35);
+    padding: 18px 22px 24px;
+    font-size: 0.95rem;
+  }
+  .chat__bar {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 18px;
+  }
+  .chat__bar span {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--border);
+  }
+  .chat__q {
+    margin-left: auto;
+    max-width: 85%;
+    background: var(--navy);
+    color: #fff;
+    padding: 12px 16px;
+    border-radius: 16px 16px 4px 16px;
+    margin-bottom: 16px;
+    width: fit-content;
+  }
+  .chat__a {
+    background: var(--bg-2);
+    border-radius: 16px 16px 16px 4px;
+    padding: 14px 18px;
+  }
+  .chat__a p {
+    margin-bottom: 8px;
+  }
+  .chat__a ul {
+    margin: 0 0 12px;
+    padding-left: 1.1em;
+  }
+  .chat mark {
+    background: var(--accent-soft);
+    color: var(--accent);
+    font-weight: 600;
+    padding: 0 4px;
+    border-radius: 4px;
+  }
+  .chat__src {
+    font-size: 0.8rem;
+    color: var(--muted);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+  }
+  .chat__src span {
+    background: #fff;
+    border: 1px solid var(--border);
+    padding: 2px 8px;
+    border-radius: 999px;
+  }
+  .service .checklist {
+    margin-top: 16px;
+  }
+  .service__more {
+    font-weight: 600;
+    color: var(--accent);
+  }
+  .why {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: start;
+  }
+  .why__list li {
+    margin-bottom: 18px;
+  }
+  @media (max-width: 900px) {
+    .hero__grid,
+    .why {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

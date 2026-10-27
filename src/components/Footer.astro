@@ -1,0 +1,54 @@
+---
+import { site, nav } from '../lib/site';
+import Logo from './Logo.astro';
+const year = new Date().getFullYear();
+---
+<footer class="footer">
+  <div class="container footer__grid">
+    <div>
+      <span class="footer__logo"><Logo /></span>
+      <p class="muted footer__about">AI vidljivost (LLM optimizacija), link building i digitalni PR za brendove koji žele biti prvi izbor, i na Googleu i u odgovorima AI asistenata.</p>
+    </div>
+    <div>
+      <h4>Usluge</h4>
+      <ul>
+        <li><a href="/ai-vidljivost/">AI vidljivost (LLM optimizacija)</a></li>
+        <li><a href="/link-building-digitalni-pr/">Link building i digitalni PR</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Agencija</h4>
+      <ul>
+        {nav.slice(2).map((n) => <li><a href={n.href}>{n.label}</a></li>)}
+        <li><a href="/pravila-privatnosti/">Pravila privatnosti</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Kontakt</h4>
+      <ul>
+        <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
+        <li><a href={`tel:${site.phone.replace(/\s/g, '')}`}>{site.phone}</a></li>
+        <li><a href={site.linkedin} rel="noopener" target="_blank">LinkedIn</a> · <a href={site.instagram} rel="noopener" target="_blank">Instagram</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="container footer__bottom muted">
+    <span>© {year} {site.legalName} · OIB {site.oib}</span>
+    <span>{site.address}</span>
+  </div>
+</footer>
+<style>
+  .footer { padding: 64px 0 28px; background: var(--navy); color: #fff; font-size: 0.95rem; }
+  .footer .muted { color: #b9c6d4; }
+  .footer__logo { display: inline-block; background: #fff; padding: 10px 14px; border-radius: 12px; }
+  .footer__grid { display: grid; gap: 32px; grid-template-columns: 2fr 1fr 1fr 1fr; }
+  .footer__about { margin-top: 14px; max-width: 340px; }
+  .footer h4 { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.1em; color: #8fa3b8; }
+  .footer ul { list-style: none; padding: 0; margin: 0; }
+  .footer li { margin-bottom: 8px; }
+  .footer a { color: #fff; text-decoration: none; }
+  .footer a:hover { color: #ff7a6b; }
+  .footer__bottom { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; margin-top: 48px; padding-top: 24px; border-top: 1px solid rgba(255,255,255,.12); font-size: 0.85rem; }
+  @media (max-width: 800px) { .footer__grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 520px) { .footer__grid { grid-template-columns: 1fr; } }
+</style>

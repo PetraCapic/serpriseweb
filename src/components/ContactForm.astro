@@ -1,0 +1,217 @@
+---
+import { serviceLabels, budgetLabels, site } from '../lib/site';
+---
+
+<form id="contact-form" class="form card" novalidate>
+  <div class="form__row">
+    <label>
+      Ime i prezime *
+      <input name="name" required minlength="2" maxlength="120" autocomplete="name" />
+    </label>
+    <label>
+      E-mail *
+      <input name="email" type="email" required maxlength="200" autocomplete="email" />
+    </label>
+  </div>
+  <div class="form__row">
+    <label>
+      Tvrtka
+      <input name="company" maxlength="160" autocomplete="organization" />
+    </label>
+    <label>
+      Web stranica
+      <input name="website" maxlength="300" placeholder="www.vasbrend.hr" autocomplete="url" />
+    </label>
+  </div>
+  <div class="form__row">
+    <label>
+      Što vas zanima?
+      <select name="service">
+        {Object.entries(serviceLabels).map(([v, l]) => <option value={v} selected={v === 'nisam_siguran'}>{l}</option>)}
+      </select>
+    </label>
+    <label>
+      Okvirni mjesečni budžet
+      <select name="budget">
+        {Object.entries(budgetLabels).map(([v, l]) => <option value={v} selected={v === 'ne_znam'}>{l}</option>)}
+      </select>
+    </label>
+  </div>
+  <label>
+    Poruka *
+    <textarea name="message" rows="5" required minlength="10" maxlength="5000" placeholder="Ukratko opišite vaš posao, tržište i što želite postići."></textarea>
+  </label>
+
+  <!-- Zamka za botove: ljudi ovo polje ne vide -->
+  <label class="hp" aria-hidden="true">
+    Ne ispunjavati
+    <input name="fax" tabindex="-1" autocomplete="off" />
+  </label>
+
+  <label class="form__consent">
+    <input type="checkbox" name="consent" required />
+    <span>Pristajem da SERPRise obradi moje podatke radi odgovora na upit, u skladu s <a href="/pravila-privatnosti/">pravilima privatnosti</a>. *</span>
+  </label>
+
+  <button type="submit" class="btn btn--primary">Pošalji upit</button>
+  <p class="form__status" role="status" aria-live="polite"></p>
+  <p class="form__alt muted">Radije e-mail? Pišite na <a href={`mailto:${site.email}`}>{site.email}</a></p>
+</form>
+
+<script>
+  import { supabase } from '../lib/supabase';
+
+  const form = document.getElementById('contact-form') as HTMLFormElement;
+  const status = form.querySelector('.form__status') as HTMLElement;
+  const button = form.querySelector('button[type=submit]') as HTMLButtonElement;
+  const startedAt = Date.now();
+
+  const setStatus = (msg: string, ok = false) => {
+    status.textContent = msg;
+    status.classList.toggle('is-ok', ok);
+    status.classList.toggle('is-error', !ok);
+  };
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+    const data = new FormData(form);
+    // Bot: ispunio skriveno polje ili poslao u manje od 3 sekunde
+    if (data.get('fax') || Date.now() - startedAt < 3000) {
+      window.location.href = '/hvala/';
+      return;
+    }
+    if (!supabase) {
+      setStatus('Forma trenutno nije spojena. Molimo pošaljite upit e-mailom.');
+      return;
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    const utm: Record<string, string> = {};
+    ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'].forEach((k) => {
+      const v = params.get(k) || sessionStorage.getItem(k);
+      if (v) utm[k] = v;
+    });
+
+    button.disabled = true;
+    setStatus('Šaljem...', true);
+
+    const str = (k: string) => {
+      const v = String(data.get(k) ?? '').trim();
+      return v === '' ? null : v;
+    };
+
+    const { error } = await supabase.from('leads').insert({
+      name: str('name'),
+      email: str('email'),
+      company: str('company'),
+      website: str('website'),
+      service: str('service') ?? 'nisam_siguran',
+      budget: str('budget'),
+      message: str('message'),
+      consent: data.get('consent') === 'on',
+      source_page: document.referrer ? `${window.location.pathname} ← ${document.referrer}`.slice(0, 300) : window.location.pathname,
+      utm: Object.keys(utm).length ? utm : null,
+    });
+
+    if (error) {
+      console.error(error);
+      button.disabled = false;
+      setStatus('Nešto je pošlo po zlu. Pokušajte ponovno ili nam pišite e-mailom.');
+      return;
+    }
+    window.location.href = '/hvala/';
+  });
+
+  // Zapamti UTM parametre za ovu posjetu
+  const p = new URLSearchParams(window.location.search);
+  ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'].forEach((k) => {
+    const v = p.get(k);
+    if (v) sessionStorage.setItem(k, v);
+  });
+</script>
+
+<style>
+  .form {
+    display: grid;
+    gap: 18px;
+  }
+  .form__row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+  label {
+    display: grid;
+    gap: 6px;
+    font-weight: 500;
+    font-size: 0.95rem;
+  }
+  input,
+  select,
+  textarea {
+    font: inherit;
+    color: var(--text);
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 14px;
+    width: 100%;
+  }
+  input:focus,
+  select:focus,
+  textarea:focus {
+    outline: none;
+    border-color: var(--navy);
+    box-shadow: 0 0 0 3px rgba(16, 43, 67, 0.12);
+  }
+  .form__consent {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    font-weight: 400;
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+  .form__consent input {
+    width: auto;
+    margin-top: 4px;
+  }
+  .hp {
+    position: absolute;
+    left: -10000px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+  .form button {
+    justify-self: start;
+  }
+  .form button:disabled {
+    opacity: 0.6;
+    cursor: wait;
+  }
+  .form__status {
+    margin: 0;
+    min-height: 1.4em;
+    font-weight: 500;
+  }
+  .form__status.is-error {
+    color: var(--accent);
+  }
+  .form__status.is-ok {
+    color: var(--muted);
+  }
+  .form__alt {
+    margin: 0;
+    font-size: 0.9rem;
+  }
+  @media (max-width: 640px) {
+    .form__row {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

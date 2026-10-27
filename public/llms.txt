@@ -1,0 +1,11 @@
+# SERPRise
+
+> SERPRise (SERP Rise d.o.o.) je hrvatska agencija specijalizirana za AI vidljivost (LLM optimizaciju, AI SEO, GEO) te link building i digitalni PR na hrvatskom tržištu. Sjedište: Žaborić (Šibenik), Hrvatska.
+
+## Usluge
+- [AI vidljivost (LLM optimizacija)](https://serprise.agency/ai-vidljivost/): optimizacija brenda i sadržaja da ga ChatGPT, Gemini, Perplexity, Copilot i Google AI pregledi spominju i preporučuju; AI audit na hrvatskom jeziku, optimizacija entiteta, sadržaja i strukturiranih podataka, mjesečno praćenje udjela u AI odgovorima.
+- [Link building i digitalni PR](https://serprise.agency/link-building-digitalni-pr/): PR članci na hrvatskim portalima, digitalne PR kampanje, nišni i lokalni linkovi, white label link building za agencije. Bez PBN mreža i farmi linkova.
+
+## Agencija
+- [O nama](https://serprise.agency/o-nama/)
+- [Kontakt i besplatna analiza](https://serprise.agency/kontakt/): jure@serprise.agency, +385 95 817 3172

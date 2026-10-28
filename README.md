@@ -56,5 +56,5 @@ Tablica `leads` i pravilo da web smije samo upisati upit dolaze iz migracije `dr
 ## Uređivanje sadržaja
 
 - Kontakt podaci, OIB, društvene mreže: `src/lib/site.ts`
-- Klijenti na traci "Vjeruju nam": `clients` u `src/lib/site.ts`. Logo stavi u `public/klijenti/` i dodaj `logo: '/klijenti/ime.svg'`.
+- Klijenti na traci "Vjeruju nam": `clients` u `src/lib/site.ts`. Logo stavi u `public/klijenti/` i dodaj `logo`, `width` i `height` (široki logotipi niži, kvadratni viši, da svi izgledaju podjednako veliki).
 - Tekstovi usluga: `src/pages/*.astro`

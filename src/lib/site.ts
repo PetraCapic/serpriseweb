@@ -13,6 +13,8 @@ export const site = {
     'SERPRise je hrvatska agencija za AI vidljivost (LLM optimizaciju) te link building i digitalni PR. Pomažemo brendovima da ih pronađu Google, ChatGPT, Gemini i Perplexity.',
 };
 
+export const adminUrl = 'https://admin.serprise.agency/';
+
 export const nav = [
   { href: '/ai-vidljivost/', label: 'AI vidljivost' },
   { href: '/link-building-digitalni-pr/', label: 'Link building i PR' },
@@ -35,19 +37,25 @@ export const budgetLabels: Record<string, string> = {
 };
 
 // Klijenti za "Vjeruju nam" traku. Dodaj `logo: '/klijenti/ime.svg'` kad logo bude spreman.
-export const clients: { name: string; logo?: string }[] = [
-  { name: 'UNIQA osiguranje' },
-  { name: 'Favbet' },
-  { name: 'Namještaj Mima' },
-  { name: 'Solin građa' },
-  { name: 'Zagreb montaža' },
-  { name: 'Croatia Property Sales' },
-  { name: 'Villsy' },
+// Logotipi su u public/klijenti/. width i height ujednačuju vizualnu veličinu (široki logotipi su niži).
+export const clients: { name: string; logo?: string; width?: number; height?: number }[] = [
+  { name: 'UNIQA osiguranje', logo: '/klijenti/uniqa.png', width: 66, height: 51 },
+  { name: 'Favbet', logo: '/klijenti/favbet.png', width: 153, height: 22 },
+  { name: 'PSK', logo: '/klijenti/psk.png', width: 100, height: 34 },
+  { name: 'Namještaj Mima', logo: '/klijenti/namjestaj-mima.png', width: 84, height: 40 },
+  { name: 'Solin građa', logo: '/klijenti/solin-gradja.png', width: 144, height: 24 },
+  { name: 'Zagreb montaža', logo: '/klijenti/zagreb-montaza.png', width: 152, height: 22 },
+  { name: 'Croatia Property Sales', logo: '/klijenti/croatia-property-sales.png', width: 107, height: 32 },
+  { name: 'Villsy', logo: '/klijenti/villsy.png', width: 104, height: 33 },
   { name: 'MyLuxoria' },
-  { name: 'Yachts Croatia' },
-  { name: 'Croatia Yachts Charter' },
-  { name: 'Kruna mode' },
+  { name: 'Yachts Croatia', logo: '/klijenti/yachts-croatia.png', width: 101, height: 34 },
+  { name: 'Croatia Yachts Charter', logo: '/klijenti/croatia-yachts-charter.png', width: 47, height: 52 },
+  { name: 'Kruna mode', logo: '/klijenti/kruna-mode.png', width: 52, height: 52 },
   { name: 'Collagen Boost' },
-  { name: 'Hedera' },
-  { name: 'Apipet' },
+  { name: 'Hedera', logo: '/klijenti/hedera.png', width: 137, height: 25 },
+  { name: 'Apipet', logo: '/klijenti/apipet.png', width: 102, height: 33 },
+  { name: 'Juicefast', logo: '/klijenti/juicefast.png', width: 104, height: 33 },
+  { name: 'Total Croatia News', logo: '/klijenti/total-croatia-news.png', width: 87, height: 39 },
+  { name: 'Croatia Revealed', logo: '/klijenti/croatia-revealed.png', width: 64, height: 52 },
+  { name: 'Terra Dalmatica', logo: '/klijenti/terra-dalmatica.png', width: 170, height: 19 },
 ];

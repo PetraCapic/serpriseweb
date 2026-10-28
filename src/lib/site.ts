@@ -89,6 +89,7 @@ export const clients: { name: string; logo?: string; width?: number; height?: nu
   { name: 'Terra Dalmatica', logo: '/klijenti/terra-dalmatica.png', width: 170, height: 19 },
   { name: 'Collabiomè', logo: '/klijenti/collabiome.png', width: 82, height: 40 },
   { name: 'Kati Care', logo: '/klijenti/kati-care.png', width: 123, height: 27 },
+  { name: 'Jumper.xyz', logo: '/klijenti/jumper.png', width: 28, height: 41 },
   { name: 'Factory', logo: '/klijenti/factory.png', width: 177, height: 19 },
   { name: 'ZBD', logo: '/klijenti/zbd.png', width: 89, height: 37 },
   { name: 'LI.FI', logo: '/klijenti/lifi.png', width: 94, height: 35 },

@@ -9,7 +9,7 @@ import { site } from '../lib/site';
 const faq = [
   {
     q: 'Na kojim portalima objavljujete?',
-    a: 'Na hrvatskim informativnim, poslovnim, lifestyle i nišnim portalima te specijaliziranim blogovima. Popis biramo za svakog klijenta posebno, prema temi, publici i kvaliteti portala, i uvijek ga vidite prije objave.',
+    a: 'Na hrvatskim informativnim, poslovnim, lifestyle i nišnim portalima te specijaliziranim blogovima. Popis biramo za svakog klijenta posebno, prema temi, publici i kvaliteti portala, i uvijek ga vidite prije objave. Za strana tržišta imamo bazu od preko 15.000 stranica diljem svijeta.',
   },
   {
     q: 'Je li link building siguran za moj web?',
@@ -57,7 +57,7 @@ const faq = [
     lead="Kvalitetne poveznice i spomeni u medijima i dalje su jedan od najjačih signala za Google, a sve više i za AI asistente. Gradimo ih ručno, na stvarnim hrvatskim portalima, bez prečaca koji vam kasnije mogu naštetiti."
   />
 
-  <Clients title="Gradili smo autoritet za" portalsCta />
+  <Clients title="Gradili smo autoritet za" />
 
   <section class="section">
     <div class="container">
@@ -80,6 +80,22 @@ const faq = [
           <p class="muted">Ručno odabrani blogovi, strukovni portali, udruge, lokalni imenici i partneri koji su tematski povezani s vašim poslom.</p>
         </div>
       </div>
+    </div>
+  </section>
+
+  <section class="section section--alt" id="white-label">
+    <div class="container grid grid--2 wl">
+      <div>
+        <span class="eyebrow">Za agencije · White label</span>
+        <h2>White label partner link building agencijama</h2>
+        <p class="lead">Surađujemo s link building i SEO agencijama iz Hrvatske i inozemstva. Objave odrađujemo pod vašim imenom, a izvještaje možete izravno proslijediti klijentu.</p>
+        <a href="/kontakt/" class="btn btn--primary">Javite se za partnerstvo</a>
+      </div>
+      <ul class="wl__stats">
+        <li><strong>15.000+</strong><span>stranica u našoj bazi, diljem svijeta</span></li>
+        <li><strong>335</strong><span>provjerenih hrvatskih portala</span></li>
+        <li><strong>100%</strong><span>white label: izvještaji pod vašim imenom, bez našeg brenda</span></li>
+      </ul>
     </div>
   </section>
 
@@ -129,24 +145,18 @@ const faq = [
     </div>
   </section>
 
-  <section class="section section--alt">
-    <div class="container grid grid--2">
-      <div>
-        <span class="eyebrow">Za agencije</span>
-        <h2>White label link building za agencije</h2>
-      </div>
-      <div>
-        <p class="muted">Radite SEO za klijente na hrvatskom tržištu? Preuzimamo link building i PR objave pod vašim imenom, s izvještajima koje možete proslijediti klijentu.</p>
-        <a href="/kontakt/" class="btn btn--ghost">Javite se za partnerstvo</a>
-      </div>
-    </div>
-  </section>
 
   <Faq items={faq} />
   <Cta title="Saznajte koje poveznice vam nedostaju" text="Besplatno ćemo usporediti vaš profil poveznica s 3 glavna konkurenta i predložiti prve portale za objavu." />
 </Base>
 
 <style>
+  .wl { gap: 48px; align-items: center; }
+  .wl .btn { margin-top: 8px; }
+  .wl__stats { list-style: none; margin: 0; padding: 0; display: grid; gap: 16px; }
+  .wl__stats li { display: flex; align-items: baseline; gap: 16px; padding: 20px 24px; background: var(--surface, #fff); border: 1px solid var(--border); border-radius: var(--radius); }
+  .wl__stats strong { font-family: var(--font-display); font-size: 2rem; line-height: 1; color: var(--accent); width: 130px; flex-shrink: 0; }
+  .wl__stats span { color: var(--muted); }
   .rules {
     gap: 48px;
     align-items: start;

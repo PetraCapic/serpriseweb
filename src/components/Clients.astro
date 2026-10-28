@@ -1,7 +1,8 @@
 ---
 import { clients } from '../lib/site';
-interface Props { title?: string }
-const { title = 'Vjeruju nam hrvatski brendovi' } = Astro.props;
+import portali from '../data/portali.json';
+interface Props { title?: string; portalsCta?: boolean }
+const { title = 'Vjeruju nam hrvatski brendovi', portalsCta = false } = Astro.props;
 ---
 <section class="clients" aria-labelledby="clients-title">
   <div class="container">
@@ -18,6 +19,11 @@ const { title = 'Vjeruju nam hrvatski brendovi' } = Astro.props;
       ))}
     </ul>
     <p class="clients__more muted">i još mnogo tvrtki iz osiguranja, nekretnina, nautike, trgovine, modne i beauty industrije.</p>
+    {portalsCta && (
+      <div class="clients__cta">
+        <a href="/portali/" class="btn btn--ghost">Pogledaj {portali.portals.length} portala na kojima objavljujemo</a>
+      </div>
+    )}
   </div>
 </section>
 <style>
@@ -31,6 +37,7 @@ const { title = 'Vjeruju nam hrvatski brendovi' } = Astro.props;
   .clients__list li:hover span { filter: none; opacity: 1; }
   .clients__list img { height: auto; max-width: 100%; }
   .clients__list span { font-family: var(--font-display); font-weight: 700; font-size: 1.15rem; letter-spacing: -0.01em; color: var(--navy); white-space: nowrap; }
+  .clients__cta { display: flex; justify-content: center; margin-top: 22px; }
   .clients__more { text-align: center; font-size: 0.9rem; margin: 26px 0 0; }
   @media (max-width: 640px) {
     .clients__list { gap: 18px 28px; }

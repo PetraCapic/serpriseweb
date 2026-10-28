@@ -74,6 +74,7 @@ export const clients: { name: string; logo?: string; width?: number; height?: nu
   { name: 'Polleo Sport', logo: '/klijenti/polleo-sport.png', width: 65, height: 51 },
   { name: 'Collaborator', logo: '/klijenti/collaborator.png', width: 147, height: 23 },
   { name: 'Lequal', logo: '/klijenti/lequal.png', width: 104, height: 32 },
+  { name: 'Colak Franchise Consulting Group', logo: '/klijenti/cfcg.png', width: 175, height: 19 },
   { name: 'Croatia Property Sales', logo: '/klijenti/croatia-property-sales.png', width: 107, height: 32 },
   { name: 'Villsy', logo: '/klijenti/villsy.png', width: 104, height: 33 },
   { name: 'MyLuxoria' },
@@ -103,5 +104,4 @@ export const clients: { name: string; logo?: string; width?: number; height?: nu
   { name: 'Ortho Dental', logo: '/klijenti/ortho-dental.png', width: 70, height: 47 },
   { name: 'Symbiosis', logo: '/klijenti/symbiosis.png', width: 108, height: 31 },
   { name: 'Rocketwheel', logo: '/klijenti/rocketwheel.png', width: 157, height: 21 },
-  { name: 'Colak Franchise Consulting Group', logo: '/klijenti/cfcg.png', width: 175, height: 19 },
 ];

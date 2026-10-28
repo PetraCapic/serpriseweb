@@ -1,17 +1,18 @@
 ---
 import { clients } from '../lib/site';
-import portali from '../data/portali.json';
-interface Props { title?: string; portalsCta?: boolean }
-const { title = 'Brendovi s kojima smo surađivali', portalsCta = false } = Astro.props;
+interface Props { title?: string }
+const { title = 'Brendovi s kojima smo surađivali' } = Astro.props;
 // Prvih ~60% logotipa je odmah vidljivo, ostali se otvaraju na "Učitaj još".
 const visible = Math.ceil(clients.length * 0.6);
+// Na mobitelu je odmah vidljivo manje logotipa.
+const visibleMobile = 12;
 ---
 <section class="clients" aria-labelledby="clients-title" data-clients>
   <div class="container">
     <p id="clients-title" class="clients__title">{title}</p>
     <ul class="clients__list">
       {clients.map((c, i) => (
-        <li title={c.name} class={i >= visible ? 'is-extra' : undefined}>
+        <li title={c.name} class={i >= visible ? 'is-extra' : i >= visibleMobile ? 'is-extra-m' : undefined}>
           {c.logo ? (
             <img src={c.logo} alt={c.name} width={c.width} height={c.height} loading="lazy" decoding="async" />
           ) : (
@@ -26,11 +27,6 @@ const visible = Math.ceil(clients.length * 0.6);
       </div>
     )}
   </div>
-  {portalsCta && (
-    <div class="container clients__cta">
-      <a href="/portali/" class="btn btn--ghost">Pogledaj {portali.portals.length} portala na kojima objavljujemo</a>
-    </div>
-  )}
 </section>
 
 <script>
@@ -57,7 +53,6 @@ const visible = Math.ceil(clients.length * 0.6);
   .clients__list img { height: auto; max-width: 100%; }
   .clients__list span { font-family: var(--font-display); font-weight: 700; font-size: 1.15rem; letter-spacing: -0.01em; color: var(--navy); white-space: nowrap; }
   .clients__more { display: flex; justify-content: center; margin-top: 26px; }
-  .clients__cta { display: flex; justify-content: center; margin-top: 26px; text-align: center; }
 
   /* Kad su otvoreni svi, zadnji red blijedi prema dnu, kao da popis ide dalje */
   .is-open .clients__list { mask-image: linear-gradient(180deg, #000 calc(100% - 110px), transparent); -webkit-mask-image: linear-gradient(180deg, #000 calc(100% - 110px), transparent); }
@@ -70,5 +65,7 @@ const visible = Math.ceil(clients.length * 0.6);
     .clients__list { gap: 18px 28px; }
     .clients__list li { height: 48px; }
     .clients__list img { transform: scale(0.85); }
+    .clients__list li.is-extra-m { display: none; }
+    .is-open .clients__list li.is-extra-m { display: flex; }
   }
 </style>

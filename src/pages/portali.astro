@@ -1,0 +1,419 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import data from '../data/portali.json';
+
+// Podaci: Ahrefs (DR, organski promet, ključne riječi, referring domains). Cijene i kontakti se namjerno ne objavljuju.
+// Osvježavanje: scratchpad skripta generira src/data/portali.json iz tablice portala i Ahrefs batch analize.
+type Portal = { d: string; dr: number; t: number; kw: number; rd: number; c: string; z: string | null; s: boolean | null };
+const portals = data.portals as Portal[];
+const categories = data.categories as Record<string, string>;
+const usedCats = Object.keys(categories).filter((k) => portals.some((p) => p.c === k));
+
+const compact = new Intl.NumberFormat('hr-HR', { notation: 'compact', maximumFractionDigits: 1 });
+const full = new Intl.NumberFormat('hr-HR');
+const updated = new Date(data.updated).toLocaleDateString('hr-HR', { month: 'long', year: 'numeric' });
+const countryNames: Record<string, string> = { ba: 'BiH', rs: 'Srbija', si: 'Slovenija', at: 'Austrija', de: 'Njemačka', me: 'Crna Gora', dk: 'Danska' };
+---
+
+<Base
+  title="Hrvatski portali za PR članke i link building"
+  description={`Popis ${portals.length} hrvatskih portala na kojima objavljujemo PR članke. Usporedite DR, organski promet i referring domains, odaberite portale i pošaljite upit.`}
+>
+  <PageHero
+    eyebrow="Portali"
+    title="Hrvatski portali za <span class='grad-text'>PR članke</span>"
+    lead={`${portals.length} provjerenih portala s kojima surađujemo, od nacionalnih medija do lokalnih i nišnih portala. Odaberite one koji vas zanimaju i pošaljite upit, a mi vam šaljemo ponudu i prijedlog teme.`}
+    cta={false}
+  />
+
+  <section class="section portali">
+    <div class="container">
+      <div class="toolbar card" role="search">
+        <label class="toolbar__search">
+          <span class="sr-only">Traži portal</span>
+          <input id="f-q" type="search" placeholder="Traži portal, npr. zadar" autocomplete="off" />
+        </label>
+        <label>
+          <span>Kategorija</span>
+          <select id="f-cat">
+            <option value="">Sve kategorije</option>
+            {usedCats.map((k) => <option value={k}>{categories[k]}</option>)}
+          </select>
+        </label>
+        <label>
+          <span>DR</span>
+          <select id="f-dr">
+            <option value="0">Svi</option>
+            <option value="20">20+</option>
+            <option value="40">40+</option>
+            <option value="60">60+</option>
+          </select>
+        </label>
+        <label>
+          <span>Promet / mj.</span>
+          <select id="f-t">
+            <option value="0">Svi</option>
+            <option value="1000">1.000+</option>
+            <option value="10000">10.000+</option>
+            <option value="100000">100.000+</option>
+          </select>
+        </label>
+        <label>
+          <span>Poredaj po</span>
+          <select id="f-sort">
+            <option value="t">prometu</option>
+            <option value="dr">DR-u</option>
+            <option value="kw">ključnim riječima</option>
+            <option value="rd">referring domains</option>
+            <option value="d">nazivu</option>
+          </select>
+        </label>
+      </div>
+
+      <p class="meta muted">
+        Prikazano <strong id="count">{portals.length}</strong> od {portals.length} portala · Podaci: Ahrefs, {updated} Promet je procjena organskog prometa iz Googlea.
+      </p>
+
+      <div class="table-wrap">
+        <table class="ptable">
+          <thead>
+            <tr>
+              <th scope="col" class="col-check"><span class="sr-only">Odaberi</span></th>
+              <th scope="col">Portal</th>
+              <th scope="col" class="num"><abbr title="Domain Rating (Ahrefs)">DR</abbr></th>
+              <th scope="col" class="num">Promet / mj.</th>
+              <th scope="col" class="num">Ključne riječi</th>
+              <th scope="col" class="num"><abbr title="Broj domena koje linkaju na portal">Ref. domene</abbr></th>
+            </tr>
+          </thead>
+          <tbody id="rows">
+            {portals.map((p) => (
+              <tr data-d={p.d} data-c={p.c} data-dr={p.dr} data-t={p.t} data-kw={p.kw} data-rd={p.rd}>
+                <td class="col-check">
+                  <input type="checkbox" value={p.d} aria-label={`Odaberi ${p.d}`} />
+                </td>
+                <td class="col-name">
+                  <strong>{p.d}</strong>
+                  <span class="tags">
+                    <span class="tag">{categories[p.c]}</span>
+                    {p.z && <span class="tag tag--warn" title="Većina prometa dolazi iz ove zemlje">{countryNames[p.z] ?? p.z.toUpperCase()}</span>}
+                    {p.s === false && <span class="tag tag--ok" title="Članak nije označen kao sponzorirani">bez oznake</span>}
+                  </span>
+                </td>
+                <td class="num" data-label="DR"><span class="dr">{p.dr}</span></td>
+                <td class="num" data-label="Promet" title={full.format(p.t)}>{compact.format(p.t)}</td>
+                <td class="num" data-label="Ključne riječi" title={full.format(p.kw)}>{compact.format(p.kw)}</td>
+                <td class="num" data-label="Ref. domene" title={full.format(p.rd)}>{compact.format(p.rd)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        <p id="empty" class="empty muted" hidden>Nijedan portal ne odgovara filtrima.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="upit" class="section section--alt">
+    <div class="container inquiry">
+      <div>
+        <span class="eyebrow">Upit za portale</span>
+        <h2>Pošaljite odabir, mi šaljemo ponudu</h2>
+        <p class="muted">Cijene ovise o portalu, temi i broju poveznica pa ih ne objavljujemo. Javljamo se unutar jednog radnog dana s ponudom, prijedlogom tema i rokovima objave.</p>
+        <div class="card picked">
+          <h3>Odabrani portali (<span data-picked-count>0</span>)</h3>
+          <ul id="picked" class="picked__list"></ul>
+          <p id="picked-empty" class="muted">Još niste odabrali portale. Označite ih u tablici iznad ili nam samo opišite što trebate.</p>
+        </div>
+      </div>
+
+      <form id="portal-form" class="form card" novalidate>
+        <div class="form__row">
+          <label>Ime i prezime *<input name="name" required minlength="2" maxlength="120" autocomplete="name" /></label>
+          <label>E-mail *<input name="email" type="email" required maxlength="200" autocomplete="email" /></label>
+        </div>
+        <div class="form__row">
+          <label>Tvrtka<input name="company" maxlength="160" autocomplete="organization" /></label>
+          <label>Web stranica<input name="website" maxlength="300" placeholder="www.vasbrend.hr" autocomplete="url" /></label>
+        </div>
+        <label>
+          Napomena
+          <textarea name="message" rows="4" maxlength="3000" placeholder="Npr. tema članka, ciljna stranica, željeni rok objave."></textarea>
+        </label>
+        <label class="hp" aria-hidden="true">Ne ispunjavati<input name="fax" tabindex="-1" autocomplete="off" /></label>
+        <label class="form__consent">
+          <input type="checkbox" name="consent" required />
+          <span>Pristajem da SERPRise obradi moje podatke radi odgovora na upit, u skladu s <a href="/pravila-privatnosti/">pravilima privatnosti</a>. *</span>
+        </label>
+        <button type="submit" class="btn btn--primary">Pošalji upit</button>
+        <p class="form__status" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+  </section>
+
+  <div id="basket" class="basket" hidden>
+    <div class="container basket__inner">
+      <span><strong data-picked-count>0</strong> <span id="basket-word">portala</span> odabrano</span>
+      <button type="button" id="clear" class="basket__clear">Očisti</button>
+      <a href="#upit" class="btn btn--primary">Pošalji upit</a>
+    </div>
+  </div>
+</Base>
+
+<script>
+  import { supabase } from '../lib/supabase';
+
+  const KEY = 'serprise-portali';
+  const rows = Array.from(document.querySelectorAll<HTMLTableRowElement>('#rows tr'));
+  const tbody = document.getElementById('rows')!;
+  const byDomain = new Map(rows.map((r) => [r.dataset.d!, r]));
+  const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
+  const q = $<HTMLInputElement>('f-q');
+  const cat = $<HTMLSelectElement>('f-cat');
+  const dr = $<HTMLSelectElement>('f-dr');
+  const tr = $<HTMLSelectElement>('f-t');
+  const sort = $<HTMLSelectElement>('f-sort');
+
+  let selected = new Set<string>();
+  try {
+    selected = new Set((JSON.parse(localStorage.getItem(KEY) || '[]') as string[]).filter((d) => byDomain.has(d)));
+  } catch {}
+
+  const fmt = new Intl.NumberFormat('hr-HR');
+  const plural = (n: number) => (n % 10 === 1 && n % 100 !== 11 ? 'portal' : 'portala');
+
+  function applyFilters() {
+    const text = q.value.trim().toLowerCase();
+    const minDr = Number(dr.value);
+    const minT = Number(tr.value);
+    const key = sort.value;
+    let shown = 0;
+    const sorted = [...rows].sort((a, b) =>
+      key === 'd' ? a.dataset.d!.localeCompare(b.dataset.d!) : Number(b.dataset[key]) - Number(a.dataset[key])
+    );
+    for (const r of sorted) {
+      const ok =
+        (!text || r.dataset.d!.includes(text)) &&
+        (!cat.value || r.dataset.c === cat.value) &&
+        Number(r.dataset.dr) >= minDr &&
+        Number(r.dataset.t) >= minT;
+      r.hidden = !ok;
+      if (ok) shown++;
+      tbody.appendChild(r);
+    }
+    $('count').textContent = String(shown);
+    $('empty').hidden = shown > 0;
+  }
+
+  function renderSelection() {
+    const n = selected.size;
+    document.querySelectorAll('[data-picked-count]').forEach((el) => (el.textContent = String(n)));
+    $('basket-word').textContent = plural(n);
+    $('basket').hidden = n === 0;
+    document.body.classList.toggle('has-basket', n > 0);
+    $('picked-empty').hidden = n > 0;
+    const list = $('picked');
+    list.replaceChildren(
+      ...[...selected].map((d) => {
+        const li = document.createElement('li');
+        li.textContent = d;
+        const x = document.createElement('button');
+        x.type = 'button';
+        x.textContent = '×';
+        x.setAttribute('aria-label', `Ukloni ${d}`);
+        x.addEventListener('click', () => toggle(d, false));
+        li.appendChild(x);
+        return li;
+      })
+    );
+    for (const [d, r] of byDomain) {
+      const on = selected.has(d);
+      r.classList.toggle('is-picked', on);
+      (r.querySelector('input') as HTMLInputElement).checked = on;
+    }
+    try {
+      localStorage.setItem(KEY, JSON.stringify([...selected]));
+    } catch {}
+  }
+
+  function toggle(d: string, on: boolean) {
+    on ? selected.add(d) : selected.delete(d);
+    renderSelection();
+  }
+
+  tbody.addEventListener('change', (e) => {
+    const t = e.target as HTMLInputElement;
+    if (t.type === 'checkbox') toggle(t.value, t.checked);
+  });
+  // Klik bilo gdje na retku odabire portal
+  tbody.addEventListener('click', (e) => {
+    const t = e.target as HTMLElement;
+    if (t.closest('input, a')) return;
+    const r = t.closest('tr');
+    if (r) toggle(r.dataset.d!, !selected.has(r.dataset.d!));
+  });
+  [q, cat, dr, tr, sort].forEach((el) => el.addEventListener('input', applyFilters));
+  $('clear').addEventListener('click', () => {
+    selected.clear();
+    renderSelection();
+  });
+
+  applyFilters();
+  renderSelection();
+
+  // Sakrij traku s odabirom kad je obrazac za upit na ekranu
+  new IntersectionObserver(([entry]) => $('basket').classList.toggle('is-away', entry.isIntersecting), { threshold: 0.2 }).observe($('upit'));
+
+  // Slanje upita
+  const form = $<HTMLFormElement>('portal-form');
+  const status = form.querySelector('.form__status') as HTMLElement;
+  const button = form.querySelector('button[type=submit]') as HTMLButtonElement;
+  const startedAt = Date.now();
+  const setStatus = (msg: string, ok = false) => {
+    status.textContent = msg;
+    status.classList.toggle('is-ok', ok);
+    status.classList.toggle('is-error', !ok);
+  };
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+    const data = new FormData(form);
+    if (data.get('fax') || Date.now() - startedAt < 3000) {
+      window.location.href = '/hvala/';
+      return;
+    }
+    if (!supabase) {
+      setStatus('Forma trenutno nije spojena. Molimo pošaljite upit e-mailom.');
+      return;
+    }
+    const str = (k: string) => {
+      const v = String(data.get(k) ?? '').trim();
+      return v === '' ? null : v;
+    };
+    const picked = [...selected].map((d) => {
+      const r = byDomain.get(d)!;
+      return `- ${d} (DR ${r.dataset.dr}, promet ${fmt.format(Number(r.dataset.t))})`;
+    });
+    const note = str('message');
+    const message = [
+      picked.length ? `Upit za portale (${picked.length}):\n${picked.join('\n')}` : 'Upit za portale (bez odabira).',
+      note ? `Napomena:\n${note}` : '',
+    ]
+      .filter(Boolean)
+      .join('\n\n');
+
+    button.disabled = true;
+    setStatus('Šaljem...', true);
+    const { error } = await supabase.from('leads').insert({
+      name: str('name'),
+      email: str('email'),
+      company: str('company'),
+      website: str('website'),
+      service: 'link_building_pr',
+      budget: null,
+      message,
+      consent: data.get('consent') === 'on',
+      source_page: '/portali/',
+      utm: null,
+    });
+    if (error) {
+      console.error(error);
+      button.disabled = false;
+      setStatus('Nešto je pošlo po zlu. Pokušajte ponovno ili nam pišite e-mailom.');
+      return;
+    }
+    try {
+      localStorage.removeItem(KEY);
+    } catch {}
+    window.location.href = '/hvala/';
+  });
+</script>
+
+<style>
+  .portali { padding-top: 0; }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .toolbar { display: grid; grid-template-columns: 2fr repeat(4, 1fr); gap: 14px; align-items: end; padding: 18px; }
+  .toolbar label { display: grid; gap: 4px; font-size: 0.8rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+  .toolbar input,
+  .toolbar select,
+  .form input,
+  .form textarea {
+    font: inherit; font-size: 0.95rem; text-transform: none; letter-spacing: 0; font-weight: 400;
+    color: var(--text); background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; width: 100%;
+  }
+  .toolbar :is(input, select):focus,
+  .form :is(input, textarea):focus { outline: none; border-color: var(--navy); box-shadow: 0 0 0 3px rgba(16, 43, 67, 0.12); }
+  .meta { font-size: 0.9rem; margin: 16px 0; }
+
+  .table-wrap { border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface, #fff); overflow: hidden; }
+  .ptable { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+  .ptable th { text-align: left; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); padding: 12px 14px; border-bottom: 1px solid var(--border); background: var(--bg-2); position: sticky; top: 0; }
+  .ptable td { padding: 12px 14px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+  .ptable tbody tr { cursor: pointer; transition: background 0.15s; }
+  .ptable tbody tr:hover { background: var(--bg-2); }
+  .ptable tbody tr.is-picked { background: var(--accent-soft); }
+  .ptable abbr { text-decoration: none; }
+  .num { text-align: right !important; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .col-check { width: 44px; }
+  .col-check input { width: 18px; height: 18px; accent-color: var(--accent); cursor: pointer; }
+  .col-name strong { display: block; color: var(--navy); }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+  .tag { font-size: 0.72rem; padding: 2px 8px; border-radius: 99px; background: var(--bg-2); color: var(--muted); border: 1px solid var(--border); }
+  .tag--warn { color: #8a5a00; background: #fff6e0; border-color: #f3dfae; }
+  .tag--ok { color: #1d6b43; background: #e8f6ee; border-color: #c5e8d3; }
+  .dr { display: inline-block; min-width: 2.4em; text-align: center; font-weight: 700; padding: 2px 6px; border-radius: 6px; background: var(--navy); color: #fff; font-size: 0.85rem; }
+  .empty { padding: 28px; text-align: center; margin: 0; }
+
+  #upit { scroll-margin-top: 60px; }
+  .basket.is-away { transform: translateY(100%); }
+  .basket { transition: transform 0.25s; }
+  .inquiry { display: grid; grid-template-columns: 1fr 1.2fr; gap: 40px; align-items: start; }
+  .inquiry h2 { margin-top: 8px; }
+  .picked { margin-top: 20px; }
+  .picked h3 { margin: 0 0 12px; font-size: 1rem; }
+  .picked__list { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .picked__list :global(li) { display: inline-flex; align-items: center; gap: 6px; padding: 4px 6px 4px 12px; border-radius: 99px; background: var(--accent-soft); font-size: 0.9rem; font-weight: 500; }
+  .picked__list :global(button) { border: 0; background: transparent; font-size: 1.1rem; line-height: 1; cursor: pointer; color: var(--muted); padding: 0 4px; }
+  .picked p { margin: 0; font-size: 0.9rem; }
+
+  .form { display: grid; gap: 16px; }
+  .form__row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .form label { display: grid; gap: 6px; font-weight: 500; font-size: 0.95rem; }
+  .form__consent { display: flex !important; gap: 10px; align-items: flex-start; font-weight: 400 !important; font-size: 0.9rem !important; color: var(--muted); }
+  .form__consent input { width: auto; margin-top: 4px; }
+  .hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+  .form button { justify-self: start; }
+  .form button:disabled { opacity: 0.6; cursor: wait; }
+  .form__status { margin: 0; min-height: 1.4em; font-weight: 500; }
+  .form__status.is-error { color: var(--accent); }
+  .form__status.is-ok { color: var(--muted); }
+
+  .basket { position: fixed; left: 0; right: 0; bottom: 0; z-index: 40; background: var(--navy); color: #fff; box-shadow: 0 -8px 24px rgba(16, 43, 67, 0.25); }
+  .basket__inner { display: flex; align-items: center; gap: 16px; padding-block: 12px; }
+  .basket__inner > span { margin-right: auto; }
+  .basket__clear { background: transparent; border: 0; color: rgba(255, 255, 255, 0.75); font: inherit; cursor: pointer; text-decoration: underline; }
+  :global(body.has-basket) { padding-bottom: 72px; }
+
+  @media (max-width: 900px) {
+    .toolbar { grid-template-columns: 1fr 1fr; }
+    .toolbar__search { grid-column: 1 / -1; }
+    .inquiry { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 640px) {
+    .ptable thead { display: none; }
+    .ptable, .ptable tbody { display: block; }
+    .ptable tr { display: grid; grid-template-columns: 36px repeat(4, 1fr); padding: 12px; border-bottom: 1px solid var(--border); }
+    .ptable td { border: 0; padding: 2px 4px; }
+    .ptable .col-check { grid-row: 1 / 3; width: auto; padding-top: 4px; }
+    .ptable .col-name { grid-column: 2 / -1; padding-bottom: 8px; }
+    .ptable td.num { text-align: left !important; font-size: 0.9rem; }
+    .ptable td.num::before { content: attr(data-label); display: block; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); }
+    .form__row { grid-template-columns: 1fr; }
+    .basket__inner { gap: 10px; font-size: 0.9rem; }
+    .basket__inner .btn { padding: 10px 14px; }
+  }
+</style>

@@ -8,18 +8,33 @@ const { title = 'Vjeruju nam hrvatski brendovi' } = Astro.props;
     <p id="clients-title" class="clients__title">{title}</p>
     <ul class="clients__list">
       {clients.map((c) => (
-        <li>{c.logo ? <img src={c.logo} alt={c.name} loading="lazy" height="36" /> : <span>{c.name}</span>}</li>
+        <li title={c.name}>
+          {c.logo ? (
+            <img src={c.logo} alt={c.name} width={c.width} height={c.height} loading="lazy" decoding="async" />
+          ) : (
+            <span>{c.name}</span>
+          )}
+        </li>
       ))}
     </ul>
     <p class="clients__more muted">i još mnogo tvrtki iz osiguranja, nekretnina, nautike, trgovine, modne i beauty industrije.</p>
   </div>
 </section>
 <style>
-  .clients { padding: 36px 0 44px; border-block: 1px solid var(--border); background: var(--bg-2); }
-  .clients__title { text-align: center; font-size: 0.8rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 22px; }
-  .clients__list { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; justify-content: center; gap: 12px 14px; }
-  .clients__list li span { display: inline-block; font-family: var(--font-display); font-weight: 700; font-size: 1.02rem; color: var(--navy); background: #fff; border: 1px solid var(--border); border-radius: 999px; padding: 8px 18px; }
-  .clients__list img { height: 36px; width: auto; filter: grayscale(1); opacity: 0.8; transition: 0.2s; }
-  .clients__list img:hover { filter: none; opacity: 1; }
-  .clients__more { text-align: center; font-size: 0.9rem; margin: 20px 0 0; }
+  .clients { padding: 40px 0 44px; border-block: 1px solid var(--border); background: var(--bg-2); }
+  .clients__title { text-align: center; font-size: 0.8rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 26px; }
+  .clients__list { list-style: none; margin: 0 auto; padding: 0; max-width: 1040px; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 26px 42px; }
+  .clients__list li { display: flex; align-items: center; height: 56px; }
+  .clients__list img,
+  .clients__list span { filter: grayscale(1); opacity: 0.65; transition: filter 0.2s, opacity 0.2s; }
+  .clients__list li:hover img,
+  .clients__list li:hover span { filter: none; opacity: 1; }
+  .clients__list img { height: auto; max-width: 100%; }
+  .clients__list span { font-family: var(--font-display); font-weight: 700; font-size: 1.15rem; letter-spacing: -0.01em; color: var(--navy); white-space: nowrap; }
+  .clients__more { text-align: center; font-size: 0.9rem; margin: 26px 0 0; }
+  @media (max-width: 640px) {
+    .clients__list { gap: 18px 28px; }
+    .clients__list li { height: 48px; }
+    .clients__list img { transform: scale(0.85); }
+  }
 </style>

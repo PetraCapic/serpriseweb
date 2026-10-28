@@ -2,14 +2,17 @@
 import { clients } from '../lib/site';
 import portali from '../data/portali.json';
 interface Props { title?: string; portalsCta?: boolean }
-const { title = 'Vjeruju nam hrvatski brendovi', portalsCta = false } = Astro.props;
+const { title = 'Vjeruju nam brendovi iz Hrvatske i inozemstva', portalsCta = false } = Astro.props;
+// Prvih ~60% logotipa je odmah vidljivo, ostali se otvaraju na "Učitaj još".
+const visible = Math.ceil(clients.length * 0.6);
+const withLogo = clients.filter((c) => c.logo);
 ---
-<section class="clients" aria-labelledby="clients-title">
+<section class="clients" aria-labelledby="clients-title" data-clients>
   <div class="container">
     <p id="clients-title" class="clients__title">{title}</p>
     <ul class="clients__list">
-      {clients.map((c) => (
-        <li title={c.name}>
+      {clients.map((c, i) => (
+        <li title={c.name} class={i >= visible ? 'is-extra' : undefined}>
           {c.logo ? (
             <img src={c.logo} alt={c.name} width={c.width} height={c.height} loading="lazy" decoding="async" />
           ) : (
@@ -18,27 +21,72 @@ const { title = 'Vjeruju nam hrvatski brendovi', portalsCta = false } = Astro.pr
         </li>
       ))}
     </ul>
-    <p class="clients__more muted">i još mnogo tvrtki iz osiguranja, nekretnina, nautike, trgovine, modne i beauty industrije.</p>
-    {portalsCta && (
-      <div class="clients__cta">
-        <a href="/portali/" class="btn btn--ghost">Pogledaj {portali.portals.length} portala na kojima objavljujemo</a>
+    {visible < clients.length && (
+      <div class="clients__more">
+        <button type="button" class="btn btn--ghost" data-clients-more>Učitaj još ({clients.length - visible})</button>
       </div>
     )}
   </div>
+  <div class="clients__marquee" aria-hidden="true" hidden data-clients-marquee>
+    <div class="clients__track">
+      {[0, 1].map(() => (
+        <ul>
+          {withLogo.map((c) => (
+            <li><img src={c.logo} alt="" width={c.width} height={c.height} loading="lazy" decoding="async" /></li>
+          ))}
+        </ul>
+      ))}
+    </div>
+  </div>
+  {portalsCta && (
+    <div class="container clients__cta">
+      <a href="/portali/" class="btn btn--ghost">Pogledaj {portali.portals.length} portala na kojima objavljujemo</a>
+    </div>
+  )}
 </section>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-clients]').forEach((section) => {
+    const btn = section.querySelector<HTMLButtonElement>('[data-clients-more]');
+    btn?.addEventListener('click', () => {
+      section.classList.add('is-open');
+      btn.parentElement?.remove();
+      const marquee = section.querySelector<HTMLElement>('[data-clients-marquee]');
+      if (marquee) marquee.hidden = false;
+    });
+  });
+</script>
+
 <style>
-  .clients { padding: 40px 0 44px; border-block: 1px solid var(--border); background: var(--bg-2); }
+  .clients { padding: 40px 0 44px; border-block: 1px solid var(--border); background: var(--bg-2); overflow: hidden; }
   .clients__title { text-align: center; font-size: 0.8rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 26px; }
   .clients__list { list-style: none; margin: 0 auto; padding: 0; max-width: 1040px; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 26px 42px; }
   .clients__list li { display: flex; align-items: center; height: 56px; }
+  .clients__list li.is-extra { display: none; }
+  .is-open .clients__list li.is-extra { display: flex; animation: clients-in 0.4s ease both; }
   .clients__list img,
   .clients__list span { filter: grayscale(1); opacity: 0.65; transition: filter 0.2s, opacity 0.2s; }
   .clients__list li:hover img,
   .clients__list li:hover span { filter: none; opacity: 1; }
   .clients__list img { height: auto; max-width: 100%; }
   .clients__list span { font-family: var(--font-display); font-weight: 700; font-size: 1.15rem; letter-spacing: -0.01em; color: var(--navy); white-space: nowrap; }
-  .clients__cta { display: flex; justify-content: center; margin-top: 22px; }
-  .clients__more { text-align: center; font-size: 0.9rem; margin: 26px 0 0; }
+  .clients__more { display: flex; justify-content: center; margin-top: 26px; }
+  .clients__cta { display: flex; justify-content: center; margin-top: 26px; text-align: center; }
+
+  /* Beskonačna traka na dnu, prikazuje se kad su otvoreni svi logotipi */
+  .clients__marquee { margin-top: 34px; mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); }
+  .clients__track { display: flex; width: max-content; animation: clients-scroll 60s linear infinite; }
+  .clients__marquee:hover .clients__track { animation-play-state: paused; }
+  .clients__track ul { list-style: none; margin: 0; padding: 0 21px; display: flex; align-items: center; gap: 42px; }
+  .clients__track li { display: flex; align-items: center; height: 44px; }
+  .clients__track img { filter: grayscale(1); opacity: 0.4; transform: scale(0.8); }
+  @keyframes clients-scroll { to { transform: translateX(-50%); } }
+  @keyframes clients-in { from { opacity: 0; transform: translateY(8px); } }
+  @media (prefers-reduced-motion: reduce) {
+    .clients__track { animation: none; }
+    .is-open .clients__list li.is-extra { animation: none; }
+  }
+
   @media (max-width: 640px) {
     .clients__list { gap: 18px 28px; }
     .clients__list li { height: 48px; }

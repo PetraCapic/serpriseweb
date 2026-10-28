@@ -63,9 +63,13 @@ export const budgetLabels: Record<string, string> = {
 // Logotipi su u public/klijenti/. width i height ujednačuju vizualnu veličinu (široki logotipi su niži).
 export const clients: { name: string; logo?: string; width?: number; height?: number }[] = [
   { name: 'UNIQA osiguranje', logo: '/klijenti/uniqa.png', width: 66, height: 51 },
+  { name: 'WhitePress', logo: '/klijenti/whitepress.png', width: 132, height: 25 },
   { name: 'Favbet', logo: '/klijenti/favbet.png', width: 153, height: 22 },
+  { name: 'Bazoom', logo: '/klijenti/bazoom.png', width: 134, height: 25 },
   { name: 'PSK', logo: '/klijenti/psk.png', width: 100, height: 34 },
+  { name: 'Collaborator', logo: '/klijenti/collaborator.png', width: 147, height: 23 },
   { name: 'Namještaj Mima', logo: '/klijenti/namjestaj-mima.png', width: 84, height: 40 },
+  { name: 'Lequal', logo: '/klijenti/lequal.png', width: 104, height: 32 },
   { name: 'Solin građa', logo: '/klijenti/solin-gradja.png', width: 144, height: 24 },
   { name: 'Zagreb montaža', logo: '/klijenti/zagreb-montaza.png', width: 152, height: 22 },
   { name: 'Croatia Property Sales', logo: '/klijenti/croatia-property-sales.png', width: 107, height: 32 },

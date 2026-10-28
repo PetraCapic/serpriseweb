@@ -38,6 +38,7 @@ export const budgetLabels: Record<string, string> = {
 export const clients: { name: string; logo?: string }[] = [
   { name: 'UNIQA osiguranje' },
   { name: 'Favbet' },
+  { name: 'PSK' },
   { name: 'Namještaj Mima' },
   { name: 'Solin građa' },
   { name: 'Zagreb montaža' },
@@ -50,4 +51,8 @@ export const clients: { name: string; logo?: string }[] = [
   { name: 'Collagen Boost' },
   { name: 'Hedera' },
   { name: 'Apipet' },
+  { name: 'Juicefast' },
+  { name: 'Total Croatia News' },
+  { name: 'Croatia Revealed' },
+  { name: 'Terra Dalmatica' },
 ];

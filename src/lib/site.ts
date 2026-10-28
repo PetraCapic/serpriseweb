@@ -65,6 +65,7 @@ export const clients: { name: string; logo?: string; width?: number; height?: nu
   { name: 'UNIQA osiguranje', logo: '/klijenti/uniqa.png', width: 66, height: 51 },
   { name: 'WhitePress', logo: '/klijenti/whitepress.png', width: 132, height: 25 },
   { name: 'Favbet', logo: '/klijenti/favbet.png', width: 153, height: 22 },
+  { name: 'Auto Zubak', logo: '/klijenti/auto-zubak.png', width: 141, height: 23 },
   { name: 'Bazoom', logo: '/klijenti/bazoom.png', width: 134, height: 25 },
   { name: 'PSK', logo: '/klijenti/psk.png', width: 100, height: 34 },
   { name: 'Collaborator', logo: '/klijenti/collaborator.png', width: 147, height: 23 },

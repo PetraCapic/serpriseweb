@@ -18,6 +18,7 @@ export const adminUrl = 'https://admin.serprise.agency/';
 export const nav = [
   { href: '/ai-vidljivost/', label: 'AI vidljivost' },
   { href: '/link-building-digitalni-pr/', label: 'Link building i PR' },
+  { href: '/portali/', label: 'Portali' },
   { href: '/o-nama/', label: 'O nama' },
   { href: '/kontakt/', label: 'Kontakt' },
 ];

@@ -58,3 +58,7 @@ Tablica `leads` i pravilo da web smije samo upisati upit dolaze iz migracije `dr
 - Kontakt podaci, OIB, društvene mreže: `src/lib/site.ts`
 - Klijenti na traci "Vjeruju nam": `clients` u `src/lib/site.ts`. Logo stavi u `public/klijenti/` i dodaj `logo`, `width` i `height` (široki logotipi niži, kvadratni viši, da svi izgledaju podjednako veliki).
 - Tekstovi usluga: `src/pages/*.astro`
+
+## Katalog portala (/portali/)
+
+Podaci su u `src/data/portali.json` (DR, organski promet, ključne riječi i referring domains iz Ahrefsa; kategorije su ručno dodijeljene u polju `c`). Cijene i kontakti portala se namjerno ne objavljuju. Upit s odabranim portalima sprema se u `leads` (usluga `link_building_pr`, `source_page` = `/portali/`), s popisom portala u poruci.

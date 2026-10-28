@@ -23,6 +23,28 @@ export const nav = [
   { href: '/kontakt/', label: 'Kontakt' },
 ];
 
+// Tim za stranicu O nama. photo je u public/tim/ (kvadrat, npr. 480x480).
+export const team: { name: string; role: string; bio: string; linkedin?: string; photo?: string }[] = [
+  {
+    name: 'Jure Kljajić',
+    role: 'Osnivač i SEO strateg',
+    bio: 'Jure gradi poveznice za brendove kojima pozicije na Googleu moraju donositi prihod. Na LinkedInu ga prati više od 11.000 ljudi s kojima dijeli iskustva iz link buildinga i AI pretraživanja. Klijentima je prva osoba za kontakt i postavlja strategiju svake kampanje.',
+    linkedin: 'https://www.linkedin.com/in/jurekljajic/',
+  },
+  {
+    name: 'Petra Capić',
+    role: 'Suosnivačica, odnosi s portalima',
+    bio: 'Petra je s nama od prvog dana. Dogovara teme s urednicima portala, prati rokove objave i pazi da svaki članak izgleda jednako dobro kao što radi za klijenta.',
+    linkedin: 'https://www.linkedin.com/in/petra-capi%C4%87-600b13196/',
+  },
+  {
+    name: 'Nikola Kljajić',
+    role: 'Link building i outreach',
+    bio: 'Nikola svakodnevno istražuje portale i prilike za objave. Prati autoritet, promet i kvalitetu svakog portala s naše liste, pa klijentima predlažemo samo mjesta koja stvarno donose vrijednost.',
+    linkedin: 'https://www.linkedin.com/in/nikola-kljaji%C4%87-b787271ba/',
+  },
+];
+
 export const serviceLabels: Record<string, string> = {
   ai_vidljivost: 'AI vidljivost (LLM optimizacija)',
   link_building_pr: 'Link building i digitalni PR',

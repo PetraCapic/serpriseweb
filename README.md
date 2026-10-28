@@ -62,3 +62,7 @@ Tablica `leads` i pravilo da web smije samo upisati upit dolaze iz migracije `dr
 ## Katalog portala (/portali/)
 
 Podaci su u `src/data/portali.json` (DR, organski promet, ključne riječi i referring domains iz Ahrefsa; kategorije su ručno dodijeljene u polju `c`). Cijene i kontakti portala se namjerno ne objavljuju. Upit s odabranim portalima sprema se u `leads` (usluga `link_building_pr`, `source_page` = `/portali/`), s popisom portala u poruci.
+
+## Blog
+
+Članci su Markdown datoteke u `src/content/blog/` (naziv datoteke = URL, npr. `google-ai-nacin.md` → `/blog/google-ai-nacin/`). Polja u zaglavlju i primjer su u `src/content/blog/_predlozak.md`; datoteke koje počinju s `_` se ne objavljuju, kao ni one s `draft: true`. Slike idu u `public/blog/`. Svaki commit na `main` Netlify automatski objavi. Poveznica „Blog“ u izborniku pojavljuje se tek kad postoji prvi objavljeni članak.

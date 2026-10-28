@@ -1,7 +1,10 @@
 ---
 import { nav, adminUrl } from '../lib/site';
 import Logo from './Logo.astro';
+import { getPosts } from '../lib/blog';
 const path = Astro.url.pathname;
+// Blog se u izborniku pojavljuje tek kad postoji barem jedan objavljeni članak.
+const items = (await getPosts()).length ? [...nav.slice(0, 3), { href: '/blog/', label: 'Blog' }, ...nav.slice(3)] : nav;
 ---
 
 <header class="header">
@@ -12,7 +15,7 @@ const path = Astro.url.pathname;
     </button>
     <nav id="main-nav" class="header__nav" aria-label="Glavni izbornik">
       {
-        nav.map((item) => (
+        items.map((item) => (
           <a href={item.href} aria-current={path.startsWith(item.href) ? 'page' : undefined}>
             {item.label}
           </a>

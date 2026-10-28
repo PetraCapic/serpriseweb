@@ -5,7 +5,6 @@ interface Props { title?: string; portalsCta?: boolean }
 const { title = 'Vjeruju nam brendovi iz Hrvatske i inozemstva', portalsCta = false } = Astro.props;
 // Prvih ~60% logotipa je odmah vidljivo, ostali se otvaraju na "Učitaj još".
 const visible = Math.ceil(clients.length * 0.6);
-const withLogo = clients.filter((c) => c.logo);
 ---
 <section class="clients" aria-labelledby="clients-title" data-clients>
   <div class="container">
@@ -23,20 +22,9 @@ const withLogo = clients.filter((c) => c.logo);
     </ul>
     {visible < clients.length && (
       <div class="clients__more">
-        <button type="button" class="btn btn--ghost" data-clients-more>Učitaj još ({clients.length - visible})</button>
+        <button type="button" class="btn btn--ghost" data-clients-more>Učitaj još</button>
       </div>
     )}
-  </div>
-  <div class="clients__marquee" aria-hidden="true" hidden data-clients-marquee>
-    <div class="clients__track">
-      {[0, 1].map(() => (
-        <ul>
-          {withLogo.map((c) => (
-            <li><img src={c.logo} alt="" width={c.width} height={c.height} loading="lazy" decoding="async" /></li>
-          ))}
-        </ul>
-      ))}
-    </div>
   </div>
   {portalsCta && (
     <div class="container clients__cta">
@@ -51,8 +39,6 @@ const withLogo = clients.filter((c) => c.logo);
     btn?.addEventListener('click', () => {
       section.classList.add('is-open');
       btn.parentElement?.remove();
-      const marquee = section.querySelector<HTMLElement>('[data-clients-marquee]');
-      if (marquee) marquee.hidden = false;
     });
   });
 </script>
@@ -73,17 +59,10 @@ const withLogo = clients.filter((c) => c.logo);
   .clients__more { display: flex; justify-content: center; margin-top: 26px; }
   .clients__cta { display: flex; justify-content: center; margin-top: 26px; text-align: center; }
 
-  /* Beskonačna traka na dnu, prikazuje se kad su otvoreni svi logotipi */
-  .clients__marquee { margin-top: 34px; mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); }
-  .clients__track { display: flex; width: max-content; animation: clients-scroll 60s linear infinite; }
-  .clients__marquee:hover .clients__track { animation-play-state: paused; }
-  .clients__track ul { list-style: none; margin: 0; padding: 0 21px; display: flex; align-items: center; gap: 42px; }
-  .clients__track li { display: flex; align-items: center; height: 44px; }
-  .clients__track img { filter: grayscale(1); opacity: 0.4; transform: scale(0.8); }
-  @keyframes clients-scroll { to { transform: translateX(-50%); } }
+  /* Kad su otvoreni svi, zadnji red blijedi prema dnu, kao da popis ide dalje */
+  .is-open .clients__list { mask-image: linear-gradient(180deg, #000 calc(100% - 110px), transparent); -webkit-mask-image: linear-gradient(180deg, #000 calc(100% - 110px), transparent); }
   @keyframes clients-in { from { opacity: 0; transform: translateY(8px); } }
   @media (prefers-reduced-motion: reduce) {
-    .clients__track { animation: none; }
     .is-open .clients__list li.is-extra { animation: none; }
   }
 

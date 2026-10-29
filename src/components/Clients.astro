@@ -1,7 +1,7 @@
 ---
-import { clients } from '../lib/site';
-interface Props { title?: string }
-const { title = 'Brendovi s kojima smo surađivali' } = Astro.props;
+import { clients as allClients } from '../lib/site';
+interface Props { title?: string; items?: typeof allClients; moreLabel?: string }
+const { title = 'Brendovi s kojima smo surađivali', items: clients = allClients, moreLabel = 'Učitaj još' } = Astro.props;
 // Prvih ~60% logotipa je odmah vidljivo, ostali se otvaraju na "Učitaj još".
 const visible = Math.ceil(clients.length * 0.6);
 // Na mobitelu je odmah vidljivo manje logotipa.
@@ -23,7 +23,7 @@ const visibleMobile = 12;
     </ul>
     {visible < clients.length && (
       <div class="clients__more">
-        <button type="button" class="btn btn--ghost" data-clients-more>Učitaj još</button>
+        <button type="button" class="btn btn--ghost" data-clients-more>{moreLabel}</button>
       </div>
     )}
   </div>

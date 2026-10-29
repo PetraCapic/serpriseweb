@@ -1,0 +1,27 @@
+---
+const niches = [
+  'SaaS & B2B tech', 'E-commerce & retail', 'Finance & fintech', 'Health & wellness', 'Travel & hospitality',
+  'Real estate & home', 'Legal & professional services', 'Fashion & beauty',
+];
+const grey = ['iGaming & casino', 'Sports betting', 'Crypto & Web3'];
+---
+<section class="section">
+  <div class="container niches">
+    <div>
+      <span class="eyebrow">Niches</span>
+      <h2>Including the niches other vendors turn down</h2>
+      <p class="muted">We place links for mainstream brands and for grey niches such as iGaming, casino, betting and crypto. For grey niches we only use publishers that openly accept the topic, we follow local advertising rules and label content where the law requires it.</p>
+    </div>
+    <div>
+      <ul class="tags">{niches.map((n) => <li>{n}</li>)}</ul>
+      <ul class="tags tags--grey">{grey.map((n) => <li>{n}</li>)}</ul>
+    </div>
+  </div>
+</section>
+<style>
+  .niches { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+  .tags { list-style: none; margin: 0 0 14px; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .tags li { padding: 7px 14px; border-radius: 10px; background: var(--bg-2); border: 1px solid var(--border); font-weight: 500; font-size: 0.95rem; }
+  .tags--grey li { background: var(--accent-soft); border-color: transparent; color: var(--accent); }
+  @media (max-width: 900px) { .niches { grid-template-columns: 1fr; gap: 24px; } }
+</style>

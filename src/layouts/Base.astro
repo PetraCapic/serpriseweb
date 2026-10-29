@@ -3,15 +3,18 @@ import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import { site } from '../lib/site';
+import { en, altFor } from '../lib/en';
 
 interface Props {
   title: string;
   description: string;
   noindex?: boolean;
   schema?: Record<string, unknown> | Record<string, unknown>[];
+  lang?: 'hr' | 'en';
 }
 
-const { title, description, noindex = false, schema } = Astro.props;
+const { title, description, noindex = false, schema, lang = 'hr' } = Astro.props;
+const alt = altFor(Astro.url.pathname);
 const canonical = new URL(Astro.url.pathname, site.url).href;
 const fullTitle = title.includes(site.name) ? title : `${title} | ${site.name}`;
 
@@ -21,8 +24,8 @@ const orgSchema = {
   '@id': `${site.url}/#organization`,
   name: site.name,
   url: site.url,
-  description: site.description,
-  areaServed: ['HR', 'Europe'],
+  description: lang === 'en' ? en.description : site.description,
+  areaServed: lang === 'en' ? ['GB', 'US', 'DE', 'EU'] : ['HR', 'Europe'],
   knowsLanguage: ['hr', 'en'],
   legalName: 'SERP Rise d.o.o. za djelatnost promidžbe',
   email: site.email,
@@ -42,7 +45,7 @@ const schemas = [orgSchema, ...(schema ? (Array.isArray(schema) ? schema : [sche
 ---
 
 <!doctype html>
-<html lang="hr">
+<html lang={lang}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -50,12 +53,21 @@ const schemas = [orgSchema, ...(schema ? (Array.isArray(schema) ? schema : [sche
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     {noindex && <meta name="robots" content="noindex, nofollow" />}
+    {
+      alt && !noindex && (
+        <>
+          <link rel="alternate" hreflang="hr" href={new URL(alt.hr, site.url).href} />
+          <link rel="alternate" hreflang="en" href={new URL(alt.en, site.url).href} />
+          <link rel="alternate" hreflang="x-default" href={new URL(alt.hr, site.url).href} />
+        </>
+      )
+    }
     <link rel="icon" href="/favicon.png" type="image/png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="theme-color" content="#102b43" />
 
     <meta property="og:type" content="website" />
-    <meta property="og:locale" content="hr_HR" />
+    <meta property="og:locale" content={lang === 'en' ? 'en_GB' : 'hr_HR'} />
     <meta property="og:site_name" content={site.name} />
     <meta property="og:title" content={fullTitle} />
     <meta property="og:description" content={description} />
@@ -73,11 +85,11 @@ const schemas = [orgSchema, ...(schema ? (Array.isArray(schema) ? schema : [sche
     {!noindex && schemas.map((s) => <script type="application/ld+json" set:html={JSON.stringify(s)} />)}
   </head>
   <body>
-    <a class="skip-link" href="#main">Preskoči na sadržaj</a>
-    <Header />
+    <a class="skip-link" href="#main">{lang === 'en' ? 'Skip to content' : 'Preskoči na sadržaj'}</a>
+    <Header lang={lang} />
     <main id="main">
       <slot />
     </main>
-    <Footer />
+    <Footer lang={lang} />
   </body>
 </html>

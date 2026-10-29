@@ -1,0 +1,53 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import ContactForm from '../../components/ContactForm.astro';
+import { site } from '../../lib/site';
+---
+
+<Base
+  lang="en"
+  title="Contact us & get a free link gap audit"
+  description="Ask for agency rates, a free link gap audit or an AI visibility check. EU-based link building partner, we reply within one business day."
+>
+  <PageHero
+    eyebrow="Contact"
+    title="Let's talk <span class='grad-text'>links</span>"
+    lead="Tell us about your agency, brand or clients. We'll reply within one business day with agency rates or first findings from a free link gap audit."
+    cta={false}
+  />
+  <section class="section">
+    <div class="container contact">
+      <ContactForm lang="en" service="link_building_pr" />
+      <aside>
+        <div class="card">
+          <h3>Direct contact</h3>
+          <ul class="contact__list">
+            <li><span class="muted">Email</span><a href={`mailto:${site.email}`}>{site.email}</a></li>
+            <li><span class="muted">Phone</span><a href={`tel:${site.phone.replace(/\s/g, '')}`}>{site.phone}</a></li>
+            <li><span class="muted">LinkedIn</span><a href={site.linkedin} target="_blank" rel="noopener">SERPRise</a></li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>What happens next?</h3>
+          <ul class="checklist">
+            <li>We reply within 1 business day (CET)</li>
+            <li>A short 20-minute call to understand your goals</li>
+            <li>Agency price list or a free audit with first recommendations</li>
+          </ul>
+        </div>
+        <p class="muted small">{site.legalName} · Put Drage 25, 22000 Žaborić, Croatia (EU) · VAT ID HR{site.oib}</p>
+      </aside>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .contact { display: grid; grid-template-columns: 1.4fr 1fr; gap: 32px; align-items: start; }
+  aside { display: grid; gap: 20px; }
+  .contact__list { list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
+  .contact__list li { display: grid; }
+  .contact__list span { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; }
+  .small { font-size: 0.85rem; }
+  @media (max-width: 900px) { .contact { grid-template-columns: 1fr; } }
+</style>

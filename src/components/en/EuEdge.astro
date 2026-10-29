@@ -1,0 +1,39 @@
+---
+interface Props { dark?: boolean }
+const { dark = true } = Astro.props;
+---
+<section class:list={['section', { 'section--dark': dark, 'section--alt': !dark }]}>
+  <div class="container">
+    <span class="eyebrow">Why an EU partner</span>
+    <h2>An EU company, so working with us is simple</h2>
+    <p class="lead">For European agencies we remove the usual friction of offshore link vendors: no currency surprises, proper invoices your accountant accepts, and data handled under GDPR.</p>
+    <div class="grid grid--4 eu">
+      <div class="card">
+        <div class="icon">€</div>
+        <h3>Invoiced in EUR</h3>
+        <p class="muted">Clear prices in euros, paid by bank transfer (SEPA). No exchange-rate surprises for eurozone agencies.</p>
+      </div>
+      <div class="card">
+        <div class="icon">§</div>
+        <h3>EU VAT invoice, reverse charge</h3>
+        <p class="muted">We are a VAT-registered company in Croatia (EU). EU businesses with a valid VAT ID get an invoice under the reverse charge mechanism.</p>
+      </div>
+      <div class="card">
+        <div class="icon">✓</div>
+        <h3>GDPR compliant</h3>
+        <p class="muted">As an EU company we process your and your clients' data under GDPR. Your client list stays confidential, always.</p>
+      </div>
+      <div class="card">
+        <div class="icon">◷</div>
+        <h3>CET time zone</h3>
+        <p class="muted">Same working hours as most of Europe, a full overlap with the UK and US East Coast mornings. Replies within one business day.</p>
+      </div>
+    </div>
+  </div>
+</section>
+<style>
+  .eu { margin-top: 32px; grid-template-columns: repeat(4, 1fr); }
+  .eu .icon { font-family: var(--font-display); font-weight: 700; }
+  @media (max-width: 1000px) { .eu { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 600px) { .eu { grid-template-columns: 1fr; } }
+</style>

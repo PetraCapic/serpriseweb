@@ -1,0 +1,375 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import data from '../../data/publishers.json';
+import hr from '../../data/portali.json';
+
+// Catalog of foreign publishers by country. Countries without sites show a "list on request" card.
+// Croatia reuses portali.json, with Croatian categories mapped to the English ones.
+type Site = { d: string; dr: number; t: number; kw: number; rd: number; c: string };
+const hrCat: Record<string, string> = {
+  vijesti: 'news', regija: 'regional', lifestyle: 'lifestyle', zdravlje: 'health', roditelji: 'family', sport: 'sport',
+  tech: 'tech', biznis: 'business', gastro: 'food', putovanja: 'travel', dom: 'home', edu: 'edu', ostalo: 'other',
+};
+const categories = data.categories as Record<string, string>;
+const countries = data.countries.map((c) => ({
+  ...c,
+  sites: (c.sites === 'portali'
+    ? (hr.portals as Site[]).map((p) => ({ d: p.d, dr: p.dr, t: p.t, kw: p.kw, rd: p.rd, c: hrCat[p.c] ?? 'other' }))
+    : (c.sites as Site[])
+  ).sort((a, b) => b.t - a.t),
+}));
+const rows = countries.flatMap((c) => c.sites.map((s) => ({ ...s, cc: c.code, country: c.name })));
+const withSites = countries.filter((c) => c.sites.length);
+const usedCats = Object.keys(categories).filter((k) => rows.some((r) => r.c === k));
+const compact = new Intl.NumberFormat('en-GB', { notation: 'compact', maximumFractionDigits: 1 });
+const full = new Intl.NumberFormat('en-GB');
+const firstCountry = withSites[0]?.code ?? '';
+---
+
+<Base
+  lang="en"
+  title="Publishers by country for link building & digital PR"
+  description="Browse publishers for link building and digital PR by country: UK, US, Germany, other EU markets and Croatia. DR, organic traffic and referring domains for every site. Pick publishers and send an enquiry."
+>
+  <PageHero
+    eyebrow="Publishers"
+    title="Publishers <span class='grad-text'>by country</span>"
+    lead="A selection from our database of 15,000+ sites, organised by market. Metrics come from Ahrefs. Pick the publishers you like and send an enquiry, we reply with agency rates and topic ideas. Prices are not published because they depend on topic and volume."
+    cta={false}
+  />
+
+  <section class="section pubs">
+    <div class="container">
+      <div class="countries" role="tablist" aria-label="Countries">
+        {
+          countries.map((c) => (
+            <button type="button" role="tab" class="country" data-cc={c.code} aria-selected={c.code === firstCountry ? 'true' : 'false'}>
+              <strong>{c.name}</strong>
+              <span>{c.sites.length ? `${c.sites.length} publishers` : 'List on request'}</span>
+            </button>
+          ))
+        }
+      </div>
+
+      <div class="toolbar card" role="search">
+        <label class="toolbar__search">
+          <span class="sr-only">Search publishers</span>
+          <input id="f-q" type="search" placeholder="Search a domain" autocomplete="off" />
+        </label>
+        <label>
+          <span>Category</span>
+          <select id="f-cat">
+            <option value="">All categories</option>
+            {usedCats.map((k) => <option value={k}>{categories[k]}</option>)}
+          </select>
+        </label>
+        <label>
+          <span>DR</span>
+          <select id="f-dr">
+            <option value="0">Any</option>
+            <option value="20">20+</option>
+            <option value="40">40+</option>
+            <option value="60">60+</option>
+          </select>
+        </label>
+        <label>
+          <span>Traffic / mo</span>
+          <select id="f-t">
+            <option value="0">Any</option>
+            <option value="1000">1,000+</option>
+            <option value="10000">10,000+</option>
+            <option value="100000">100,000+</option>
+          </select>
+        </label>
+      </div>
+
+      <p class="meta muted">Showing <strong id="count">0</strong> publishers · Traffic is Ahrefs' estimate of monthly organic Google traffic.</p>
+
+      <div class="table-wrap" id="table-wrap">
+        <table class="ptable">
+          <thead>
+            <tr>
+              <th scope="col" class="col-check"><span class="sr-only">Select</span></th>
+              <th scope="col">Publisher</th>
+              <th scope="col" class="num"><abbr title="Domain Rating (Ahrefs)">DR</abbr></th>
+              <th scope="col" class="num">Traffic / mo</th>
+              <th scope="col" class="num">Keywords</th>
+              <th scope="col" class="num"><abbr title="Referring domains">Ref. domains</abbr></th>
+            </tr>
+          </thead>
+          <tbody id="rows">
+            {
+              rows.map((r) => (
+                <tr data-cc={r.cc} data-d={r.d} data-c={r.c} data-dr={r.dr} data-t={r.t} hidden={r.cc !== firstCountry}>
+                  <td class="col-check">
+                    <input type="checkbox" value={r.d} data-country={r.country} aria-label={`Select ${r.d}`} />
+                  </td>
+                  <td class="col-name">
+                    <strong>{r.d}</strong>
+                    <span class="tag">{categories[r.c]}</span>
+                  </td>
+                  <td class="num" data-label="DR"><span class="dr">{r.dr}</span></td>
+                  <td class="num" data-label="Traffic" title={full.format(r.t)}>{compact.format(r.t)}</td>
+                  <td class="num" data-label="Keywords" title={full.format(r.kw)}>{compact.format(r.kw)}</td>
+                  <td class="num" data-label="Ref. domains" title={full.format(r.rd)}>{compact.format(r.rd)}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+        <p id="empty" class="empty muted" hidden>No publishers match these filters.</p>
+      </div>
+
+      <div class="card soon" id="soon" hidden>
+        <h2>Publisher list for <span data-country-name></span> on request</h2>
+        <p class="muted">We're adding this market to the online catalog. In the meantime, tell us your niche and targets and we'll send a shortlist of matching publishers with metrics within one business day.</p>
+        <a href="#enquiry" class="btn btn--primary" data-soon-cta>Request the list</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="enquiry" class="section section--alt">
+    <div class="container inquiry">
+      <div>
+        <span class="eyebrow">Enquiry</span>
+        <h2>Send your selection, we send rates</h2>
+        <p class="muted">Rates depend on the publisher, topic and volume. We reply within one business day with agency pricing, topic ideas and publishing times.</p>
+        <div class="card picked">
+          <h3>Selected publishers (<span data-picked-count>0</span>)</h3>
+          <ul id="picked" class="picked__list"></ul>
+          <p id="picked-empty" class="muted">Nothing selected yet. Tick publishers in the table above, or just tell us which markets and niches you need.</p>
+        </div>
+      </div>
+
+      <form id="pub-form" class="form card" novalidate>
+        <div class="form__row">
+          <label>Full name *<input name="name" required minlength="2" maxlength="120" autocomplete="name" /></label>
+          <label>Work email *<input name="email" type="email" required maxlength="200" autocomplete="email" /></label>
+        </div>
+        <div class="form__row">
+          <label>Company / agency<input name="company" maxlength="160" autocomplete="organization" /></label>
+          <label>Website<input name="website" maxlength="300" placeholder="www.yourbrand.com" autocomplete="url" /></label>
+        </div>
+        <label>
+          Markets, niche and notes
+          <textarea name="message" rows="4" maxlength="3000" placeholder="e.g. UK and Germany, iGaming, 10 links per month, target page..."></textarea>
+        </label>
+        <label class="hp" aria-hidden="true">Do not fill in<input name="fax" tabindex="-1" autocomplete="off" /></label>
+        <label class="form__consent">
+          <input type="checkbox" name="consent" required />
+          <span>I agree that SERPRise may process my data to respond to this enquiry, in line with the <a href="/pravila-privatnosti/">privacy policy</a>. *</span>
+        </label>
+        <button type="submit" class="btn btn--primary">Send enquiry</button>
+        <p class="form__status" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+  </section>
+</Base>
+
+<script>
+  import { supabase } from '../../lib/supabase';
+
+  const rows = [...document.querySelectorAll<HTMLTableRowElement>('#rows tr')];
+  const tabs = [...document.querySelectorAll<HTMLButtonElement>('.country')];
+  const q = document.getElementById('f-q') as HTMLInputElement;
+  const cat = document.getElementById('f-cat') as HTMLSelectElement;
+  const dr = document.getElementById('f-dr') as HTMLSelectElement;
+  const tr = document.getElementById('f-t') as HTMLSelectElement;
+  const count = document.getElementById('count')!;
+  const empty = document.getElementById('empty')!;
+  const wrap = document.getElementById('table-wrap')!;
+  const toolbar = document.querySelector<HTMLElement>('.toolbar')!;
+  const soon = document.getElementById('soon')!;
+  const fmt = new Intl.NumberFormat('en-GB');
+  let cc = tabs.find((t) => t.getAttribute('aria-selected') === 'true')?.dataset.cc ?? tabs[0]?.dataset.cc ?? '';
+  let requested = '';
+
+  const apply = () => {
+    const term = q.value.trim().toLowerCase();
+    const minDr = Number(dr.value);
+    const minT = Number(tr.value);
+    let n = 0;
+    let inCountry = 0;
+    for (const r of rows) {
+      const own = r.dataset.cc === cc;
+      if (own) inCountry++;
+      const show =
+        own &&
+        (!term || r.dataset.d!.includes(term)) &&
+        (!cat.value || r.dataset.c === cat.value) &&
+        Number(r.dataset.dr) >= minDr &&
+        Number(r.dataset.t) >= minT;
+      r.hidden = !show;
+      if (show) n++;
+    }
+    count.textContent = String(n);
+    empty.hidden = n > 0;
+    const hasList = inCountry > 0;
+    wrap.hidden = !hasList;
+    toolbar.hidden = !hasList;
+    count.parentElement!.hidden = !hasList;
+    soon.hidden = hasList;
+    const tab = tabs.find((t) => t.dataset.cc === cc);
+    soon.querySelector('[data-country-name]')!.textContent = tab?.querySelector('strong')?.textContent ?? '';
+  };
+
+  tabs.forEach((t) =>
+    t.addEventListener('click', () => {
+      cc = t.dataset.cc!;
+      tabs.forEach((x) => x.setAttribute('aria-selected', String(x === t)));
+      apply();
+    }),
+  );
+  [q, cat, dr, tr].forEach((el) => el.addEventListener('input', apply));
+
+  // Selection
+  const picked = document.getElementById('picked')!;
+  const pickedEmpty = document.getElementById('picked-empty')!;
+  const pickedCount = document.querySelector('[data-picked-count]')!;
+  const selected = new Map<string, string>();
+  const render = () => {
+    picked.innerHTML = '';
+    selected.forEach((country, d) => {
+      const li = document.createElement('li');
+      li.textContent = `${d} · ${country}`;
+      picked.append(li);
+    });
+    pickedCount.textContent = String(selected.size);
+    pickedEmpty.hidden = selected.size > 0;
+  };
+  document.getElementById('rows')!.addEventListener('change', (e) => {
+    const box = e.target as HTMLInputElement;
+    if (box.checked) selected.set(box.value, box.dataset.country ?? '');
+    else selected.delete(box.value);
+    render();
+  });
+  soon.querySelector('[data-soon-cta]')!.addEventListener('click', () => {
+    requested = soon.querySelector('[data-country-name]')!.textContent ?? '';
+  });
+
+  // Enquiry
+  const form = document.getElementById('pub-form') as HTMLFormElement;
+  const status = form.querySelector('.form__status') as HTMLElement;
+  const button = form.querySelector('button[type=submit]') as HTMLButtonElement;
+  const startedAt = Date.now();
+  const setStatus = (msg: string, ok = false) => {
+    status.textContent = msg;
+    status.classList.toggle('is-ok', ok);
+    status.classList.toggle('is-error', !ok);
+  };
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+    const data = new FormData(form);
+    if (data.get('fax') || Date.now() - startedAt < 3000) {
+      window.location.href = '/en/thank-you/';
+      return;
+    }
+    if (!supabase) {
+      setStatus('The form is not connected right now. Please email us instead.');
+      return;
+    }
+    const str = (k: string) => {
+      const v = String(data.get(k) ?? '').trim();
+      return v === '' ? null : v;
+    };
+    const list = [...selected].map(([d, country]) => {
+      const r = rows.find((x) => x.dataset.d === d);
+      return `- ${d} (${country}, DR ${r?.dataset.dr}, traffic ${fmt.format(Number(r?.dataset.t))})`;
+    });
+    const note = str('message');
+    const message = [
+      '[EN publishers]',
+      list.length ? `Selected publishers (${list.length}):\n${list.join('\n')}` : 'No publishers selected.',
+      requested ? `Requested list for: ${requested}` : '',
+      note ? `Notes:\n${note}` : '',
+    ]
+      .filter(Boolean)
+      .join('\n\n')
+      .slice(0, 5000);
+
+    button.disabled = true;
+    setStatus('Sending...', true);
+    const { error } = await supabase.from('leads').insert({
+      name: str('name'),
+      email: str('email'),
+      company: str('company'),
+      website: str('website'),
+      service: 'link_building_pr',
+      budget: null,
+      message,
+      consent: data.get('consent') === 'on',
+      source_page: '/en/publishers/',
+      utm: null,
+    });
+    if (error) {
+      console.error(error);
+      button.disabled = false;
+      setStatus('Something went wrong. Please try again or email us.');
+      return;
+    }
+    window.location.href = '/en/thank-you/';
+  });
+
+  apply();
+  render();
+</script>
+
+<style>
+  .pubs { padding-top: 32px; }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .countries { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; margin-bottom: 20px; }
+  .country { font: inherit; text-align: left; cursor: pointer; display: grid; gap: 2px; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--border); background: var(--surface); color: var(--text); }
+  .country span { font-size: 0.82rem; color: var(--muted); }
+  .country:hover { border-color: var(--navy); }
+  .country[aria-selected='true'] { background: var(--navy); border-color: var(--navy); color: #fff; }
+  .country[aria-selected='true'] span { color: #b9c6d4; }
+  .toolbar { display: grid; grid-template-columns: 2fr repeat(3, 1fr); gap: 14px; align-items: end; padding: 18px; }
+  .toolbar label { display: grid; gap: 6px; font-size: 0.85rem; font-weight: 500; color: var(--muted); }
+  .toolbar input, .toolbar select { font: inherit; color: var(--text); background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; width: 100%; }
+  .meta { margin: 16px 0; font-size: 0.9rem; }
+  .table-wrap { border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; background: #fff; }
+  .ptable { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+  .ptable th { text-align: left; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); padding: 12px 14px; background: var(--bg-2); border-bottom: 1px solid var(--border); }
+  .ptable td { padding: 12px 14px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+  .ptable .num { text-align: right; white-space: nowrap; }
+  .col-check { width: 40px; }
+  .col-name strong { margin-right: 8px; }
+  .tag { display: inline-block; font-size: 0.75rem; padding: 2px 8px; border-radius: 999px; background: var(--bg-2); color: var(--muted); }
+  .dr { font-weight: 600; }
+  .empty { padding: 24px; text-align: center; margin: 0; }
+  .soon { text-align: center; padding: 40px 24px; }
+  .soon p { max-width: 620px; margin: 0 auto 20px; }
+  .inquiry { display: grid; grid-template-columns: 1fr 1.2fr; gap: 32px; align-items: start; }
+  .picked__list { margin: 0 0 8px; padding-left: 1.1em; max-height: 260px; overflow: auto; }
+  .form { display: grid; gap: 18px; }
+  .form__row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .form label { display: grid; gap: 6px; font-weight: 500; font-size: 0.95rem; }
+  .form input, .form textarea { font: inherit; color: var(--text); background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; width: 100%; }
+  .form__consent { display: flex !important; gap: 10px; align-items: flex-start; font-weight: 400 !important; font-size: 0.9rem !important; color: var(--muted); }
+  .form__consent input { width: auto !important; margin-top: 4px; }
+  .hp { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+  .form button { justify-self: start; }
+  .form__status { margin: 0; min-height: 1.4em; font-weight: 500; }
+  .form__status.is-error { color: var(--accent); }
+  @media (max-width: 900px) {
+    .toolbar { grid-template-columns: 1fr 1fr; }
+    .toolbar__search { grid-column: 1 / -1; }
+    .inquiry { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 640px) {
+    .form__row { grid-template-columns: 1fr; }
+    .ptable thead { display: none; }
+    .ptable tr { display: grid; grid-template-columns: 40px 1fr 1fr 1fr; padding: 10px 0; border-bottom: 1px solid var(--border); }
+    .ptable td { border: 0; padding: 4px 8px; }
+    .ptable td.col-name { grid-column: 2 / -1; }
+    .ptable td.num { grid-column: auto; text-align: left; font-size: 0.85rem; }
+    .ptable td.num::before { content: attr(data-label) ' '; color: var(--muted); }
+    .ptable td.num:nth-child(3) { grid-column: 2; }
+    .ptable tr[hidden] { display: none; }
+  }
+</style>

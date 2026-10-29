@@ -14,6 +14,7 @@ const hrCat: Record<string, string> = {
 const categories = data.categories as Record<string, string>;
 const countries = data.countries.map((c) => ({
   ...c,
+  more: (c as { more?: number }).more ?? 0,
   sites: (c.sites === 'portali'
     ? (hr.portals as Site[]).map((p) => ({ d: p.d, dr: p.dr, t: p.t, kw: p.kw, rd: p.rd, c: hrCat[p.c] ?? 'other' }))
     : (c.sites as Site[])
@@ -25,6 +26,7 @@ const usedCats = Object.keys(categories).filter((k) => rows.some((r) => r.c === 
 const compact = new Intl.NumberFormat('en-GB', { notation: 'compact', maximumFractionDigits: 1 });
 const full = new Intl.NumberFormat('en-GB');
 const firstCountry = withSites[0]?.code ?? '';
+const totalSites = countries.reduce((n, c) => n + c.sites.length + c.more, 0);
 ---
 
 <Base
@@ -35,7 +37,7 @@ const firstCountry = withSites[0]?.code ?? '';
   <PageHero
     eyebrow="Publishers"
     title="Publishers <span class='grad-text'>by country</span>"
-    lead="A selection from our database of 15,000+ sites, organised by market. Metrics come from Ahrefs. Pick the publishers you like and send an enquiry, we reply with agency rates and topic ideas. Prices are not published because they depend on topic and volume. Smaller markets show a sample, ask for the full list."
+    lead={`${full.format(totalSites)} publishers from our database, organised by market. The strongest sites show Ahrefs metrics, the rest have metrics on request. Pick the publishers you like and send an enquiry, we reply with agency rates and topic ideas. Prices are not published because they depend on topic and volume.`}
     cta={false}
   />
 
@@ -45,8 +47,8 @@ const firstCountry = withSites[0]?.code ?? '';
         {
           countries.map((c) => (
             <button type="button" role="tab" class="country" data-cc={c.code} aria-selected={c.code === firstCountry ? 'true' : 'false'}>
-              <strong>{c.name}</strong>
-              <span>{c.sites.length ? `${c.sites.length} publishers` : 'List on request'}</span>
+              <strong><img src={`/flags/${c.code}.svg`} alt="" width="20" height="15" loading="lazy" />{c.name}</strong>
+              <span>{c.sites.length + c.more ? `${full.format(c.sites.length + c.more)} publishers` : 'List on request'}</span>
             </button>
           ))
         }
@@ -84,7 +86,7 @@ const firstCountry = withSites[0]?.code ?? '';
         </label>
       </div>
 
-      <p class="meta muted">Showing <strong id="count">0</strong> publishers · Traffic is Ahrefs' estimate of monthly organic Google traffic.</p>
+      <p class="meta muted">Showing <strong id="count">0</strong> publishers with metrics · Traffic is Ahrefs' estimate of monthly organic Google traffic.</p>
 
       <div class="table-wrap" id="table-wrap">
         <table class="ptable">
@@ -119,6 +121,30 @@ const firstCountry = withSites[0]?.code ?? '';
           </tbody>
         </table>
         <p id="empty" class="empty muted" hidden>No publishers match these filters.</p>
+      </div>
+
+      <div class="more" id="more" hidden>
+        <div class="more__head">
+          <h2><span id="more-count">0</span> more publishers in <span data-more-country></span></h2>
+          <p class="muted">Metrics and rates for these sites are on request. Tick the ones you like and they go into your enquiry, we send DR, traffic and pricing within one business day.</p>
+        </div>
+        <div class="table-wrap">
+          <table class="ptable ptable--more">
+            <thead>
+              <tr>
+                <th scope="col" class="col-check"><span class="sr-only">Select</span></th>
+                <th scope="col">Publisher</th>
+                <th scope="col" class="num">DR</th>
+                <th scope="col" class="num">Traffic / mo</th>
+                <th scope="col" class="num">Keywords</th>
+                <th scope="col" class="num">Metrics</th>
+              </tr>
+            </thead>
+            <tbody id="more-rows"></tbody>
+          </table>
+          <p id="more-empty" class="empty muted" hidden>No more publishers match this search.</p>
+        </div>
+        <button type="button" class="btn btn--ghost more__btn" id="more-btn" hidden>Show more</button>
       </div>
 
       <div class="card soon" id="soon" hidden>
@@ -185,6 +211,84 @@ const firstCountry = withSites[0]?.code ?? '';
   let cc = tabs.find((t) => t.getAttribute('aria-selected') === 'true')?.dataset.cc ?? tabs[0]?.dataset.cc ?? '';
   let requested = '';
 
+  // Publishers without published metrics, loaded on demand and shown blurred
+  const moreBox = document.getElementById('more')!;
+  const moreRows = document.getElementById('more-rows')!;
+  const moreCount = document.getElementById('more-count')!;
+  const moreEmpty = document.getElementById('more-empty')!;
+  const moreBtn = document.getElementById('more-btn') as HTMLButtonElement;
+  const PAGE = 50;
+  let more: Record<string, string[]> | null = null;
+  let moreList: string[] = [];
+  let shown = 0;
+  const fake = (d: string, i: number) => {
+    let h = i * 31;
+    for (const ch of d) h = (h * 33 + ch.charCodeAt(0)) % 99991;
+    return h;
+  };
+  const moreRow = (d: string, country: string) => {
+    const row = document.createElement('tr');
+    const cell = (cls: string, text: string, label = '') => {
+      const td = document.createElement('td');
+      td.className = cls;
+      if (label) td.dataset.label = label;
+      td.textContent = text;
+      row.append(td);
+      return td;
+    };
+    const check = cell('col-check', '');
+    const box = document.createElement('input');
+    box.type = 'checkbox';
+    box.value = d;
+    box.dataset.country = country;
+    box.checked = selected.has(d);
+    box.setAttribute('aria-label', `Select ${d}`);
+    check.append(box);
+    const name = cell('col-name', '');
+    const strong = document.createElement('strong');
+    strong.textContent = d;
+    name.append(strong);
+    for (const [i, label] of ['DR', 'Traffic', 'Keywords'].entries()) {
+      const n = fake(d, i);
+      const td = cell('num blur', i === 0 ? String(20 + (n % 60)) : `${(n % 900) / 10}k`, label);
+      td.setAttribute('aria-hidden', 'true');
+    }
+    const req = cell('num', '');
+    const tag = document.createElement('span');
+    tag.className = 'tag tag--req';
+    tag.textContent = 'On request';
+    req.append(tag);
+    return row;
+  };
+  const renderMore = (reset: boolean) => {
+    if (!more) return;
+    const country = tabs.find((t) => t.dataset.cc === cc)?.querySelector('strong')?.textContent ?? '';
+    if (reset) {
+      const term = q.value.trim().toLowerCase();
+      moreList = (more[cc] ?? []).filter((d) => !term || d.includes(term));
+      moreRows.innerHTML = '';
+      shown = 0;
+    }
+    const frag = document.createDocumentFragment();
+    moreList.slice(shown, shown + PAGE).forEach((d) => frag.append(moreRow(d, country)));
+    moreRows.append(frag);
+    shown = Math.min(shown + PAGE, moreList.length);
+    moreCount.textContent = fmt.format(moreList.length);
+    moreBox.querySelector('[data-more-country]')!.textContent = country;
+    moreEmpty.hidden = moreList.length > 0;
+    moreBtn.hidden = shown >= moreList.length;
+    moreBtn.textContent = `Show more (${fmt.format(moreList.length - shown)} left)`;
+    moreBox.hidden = !(more[cc] ?? []).length;
+  };
+  moreBtn.addEventListener('click', () => renderMore(false));
+  fetch('/data/publishers-more.json')
+    .then((r) => (r.ok ? r.json() : null))
+    .then((json) => {
+      more = json;
+      renderMore(true);
+    })
+    .catch(() => {});
+
   const apply = () => {
     const term = q.value.trim().toLowerCase();
     const minDr = Number(dr.value);
@@ -210,6 +314,7 @@ const firstCountry = withSites[0]?.code ?? '';
     toolbar.hidden = !hasList;
     count.parentElement!.hidden = !hasList;
     soon.hidden = hasList;
+    renderMore(true);
     const tab = tabs.find((t) => t.dataset.cc === cc);
     soon.querySelector('[data-country-name]')!.textContent = tab?.querySelector('strong')?.textContent ?? '';
   };
@@ -238,12 +343,14 @@ const firstCountry = withSites[0]?.code ?? '';
     pickedCount.textContent = String(selected.size);
     pickedEmpty.hidden = selected.size > 0;
   };
-  document.getElementById('rows')!.addEventListener('change', (e) => {
+  const onPick = (e: Event) => {
     const box = e.target as HTMLInputElement;
     if (box.checked) selected.set(box.value, box.dataset.country ?? '');
     else selected.delete(box.value);
     render();
-  });
+  };
+  document.getElementById('rows')!.addEventListener('change', onPick);
+  moreRows.addEventListener('change', onPick);
   soon.querySelector('[data-soon-cta]')!.addEventListener('click', () => {
     requested = soon.querySelector('[data-country-name]')!.textContent ?? '';
   });
@@ -279,7 +386,9 @@ const firstCountry = withSites[0]?.code ?? '';
     };
     const list = [...selected].map(([d, country]) => {
       const r = rows.find((x) => x.dataset.d === d);
-      return `- ${d} (${country}, DR ${r?.dataset.dr}, traffic ${fmt.format(Number(r?.dataset.t))})`;
+      return r
+        ? `- ${d} (${country}, DR ${r.dataset.dr}, traffic ${fmt.format(Number(r.dataset.t))})`
+        : `- ${d} (${country}, metrics on request)`;
     });
     const note = str('message');
     const message = [
@@ -324,6 +433,8 @@ const firstCountry = withSites[0]?.code ?? '';
   .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
   .countries { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; margin-bottom: 20px; }
   .country { font: inherit; text-align: left; cursor: pointer; display: grid; gap: 2px; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--border); background: var(--surface); color: var(--text); }
+  .country strong { display: flex; align-items: center; gap: 8px; }
+  .country img { width: 20px; height: 15px; border-radius: 2px; box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08); flex: none; }
   .country span { font-size: 0.82rem; color: var(--muted); }
   .country:hover { border-color: var(--navy); }
   .country[aria-selected='true'] { background: var(--navy); border-color: var(--navy); color: #fff; }
@@ -342,6 +453,16 @@ const firstCountry = withSites[0]?.code ?? '';
   .tag { display: inline-block; font-size: 0.75rem; padding: 2px 8px; border-radius: 999px; background: var(--bg-2); color: var(--muted); }
   .dr { font-weight: 600; }
   .empty { padding: 24px; text-align: center; margin: 0; }
+  .more { margin-top: 40px; }
+  .more__head h2 { font-size: 1.4rem; margin: 0 0 6px; }
+  .more__head p { margin: 0 0 16px; max-width: 720px; }
+  /* Rows in #more-rows are created in the browser, so they need unscoped selectors */
+  #more-rows :global(td) { padding: 12px 14px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+  #more-rows :global(.num) { text-align: right; white-space: nowrap; }
+  #more-rows :global(.col-check) { width: 40px; }
+  #more-rows :global(.blur) { filter: blur(5px); user-select: none; color: var(--muted); }
+  #more-rows :global(.tag) { display: inline-block; font-size: 0.75rem; padding: 2px 8px; border-radius: 999px; background: rgba(200, 40, 40, 0.08); color: var(--accent); font-weight: 600; }
+  .more__btn { margin: 16px auto 0; display: block; }
   .soon { text-align: center; padding: 40px 24px; }
   .soon p { max-width: 620px; margin: 0 auto 20px; }
   .inquiry { display: grid; grid-template-columns: 1fr 1.2fr; gap: 32px; align-items: start; }
@@ -371,5 +492,9 @@ const firstCountry = withSites[0]?.code ?? '';
     .ptable td.num::before { content: attr(data-label) ' '; color: var(--muted); }
     .ptable td.num:nth-child(3) { grid-column: 2; }
     .ptable tr[hidden] { display: none; }
+    #more-rows :global(td) { border: 0; padding: 4px 8px; }
+    #more-rows :global(td.col-name) { grid-column: 2 / -1; }
+    #more-rows :global(td.num) { text-align: left; font-size: 0.85rem; }
+    #more-rows :global(td.num::before) { content: attr(data-label) ' '; color: var(--muted); }
   }
 </style>

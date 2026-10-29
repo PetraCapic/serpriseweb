@@ -12,7 +12,7 @@ const { title = 'UK, US, Germany + other EU markets and languages', compact = fa
     </div>
     <div>
       <p class="markets__label">Markets</p>
-      <ul class="pills">{markets.map((m) => <li>{m}</li>)}</ul>
+      <ul class="pills">{markets.map((m) => <li><img src={`/flags/${m.cc}.svg`} alt="" width="20" height="15" loading="lazy" />{m.name}</li>)}</ul>
       <p class="markets__label">Languages</p>
       <ul class="pills pills--soft">{languages.map((l) => <li>{l}</li>)}</ul>
     </div>
@@ -24,7 +24,8 @@ const { title = 'UK, US, Germany + other EU markets and languages', compact = fa
   .markets__inner { display: grid; grid-template-columns: 1fr 1.1fr; gap: 48px; align-items: center; }
   .markets__label { font-size: 0.8rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin: 0 0 10px; }
   .pills { list-style: none; margin: 0 0 22px; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
-  .pills li { padding: 6px 14px; border-radius: 999px; background: var(--navy); color: #fff; font-weight: 500; font-size: 0.92rem; }
+  .pills li { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 999px; background: var(--navy); color: #fff; font-weight: 500; font-size: 0.92rem; }
+  .pills img { width: 20px; height: 15px; border-radius: 2px; box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.25); flex: none; }
   .pills--soft li { background: var(--bg-2); color: var(--text); border: 1px solid var(--border); }
   @media (max-width: 900px) { .markets__inner { grid-template-columns: 1fr; gap: 24px; } }
 </style>

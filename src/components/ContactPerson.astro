@@ -1,0 +1,33 @@
+---
+import { team } from '../lib/site';
+interface Props { lang?: 'hr' | 'en' }
+const { lang = 'hr' } = Astro.props;
+// Kontakt osoba je osnivač, prvi u nizu tima.
+const person = team[0];
+const t = lang === 'en'
+  ? { title: 'Your contact person', role: 'Founder & SEO strategist', cta: 'Connect on LinkedIn' }
+  : { title: 'Vaša kontakt osoba', role: person.role, cta: 'Povežite se na LinkedInu' };
+---
+<div class="card person">
+  {person.photo && <img src={person.photo} alt={person.name} width="320" height="320" loading="lazy" class="person__photo" />}
+  <div>
+    <p class="person__eyebrow muted">{t.title}</p>
+    <h3 class="person__name">{person.name}</h3>
+    <p class="person__role muted">{t.role}</p>
+    {person.linkedin && (
+      <a class="person__link" href={person.linkedin} target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>
+        {t.cta}
+      </a>
+    )}
+  </div>
+</div>
+
+<style>
+  .person { display: flex; gap: 18px; align-items: center; }
+  .person__photo { width: 104px; height: 104px; flex: none; border-radius: 50%; object-fit: cover; object-position: top; background: var(--grad); }
+  .person__eyebrow { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 4px; }
+  .person__name { margin: 0; }
+  .person__role { margin: 2px 0 10px; font-size: 0.9rem; }
+  .person__link { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; font-size: 0.9rem; color: #0a66c2; }
+</style>

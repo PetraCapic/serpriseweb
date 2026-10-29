@@ -30,6 +30,7 @@ export const team: { name: string; role: string; bio: string; linkedin?: string;
     role: 'Osnivač i SEO strateg',
     bio: 'Jure gradi poveznice za brendove kojima pozicije na Googleu moraju donositi prihod. Na LinkedInu ga prati više od 11.000 ljudi s kojima dijeli iskustva iz link buildinga i AI pretraživanja. Klijentima je prva osoba za kontakt i postavlja strategiju svake kampanje.',
     linkedin: 'https://www.linkedin.com/in/jurekljajic/',
+    photo: '/tim/jure-kljajic.webp',
   },
   {
     name: 'Petra Capić',

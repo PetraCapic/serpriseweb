@@ -3,6 +3,7 @@ import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
 import ContactForm from '../components/ContactForm.astro';
 import { site } from '../lib/site';
+import ContactPerson from '../components/ContactPerson.astro';
 ---
 
 <Base
@@ -19,6 +20,7 @@ import { site } from '../lib/site';
     <div class="container contact">
       <ContactForm />
       <aside>
+        <ContactPerson />
         <div class="card">
           <h3>Izravni kontakt</h3>
           <ul class="contact__list">

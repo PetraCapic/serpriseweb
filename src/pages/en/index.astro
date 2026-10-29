@@ -35,18 +35,17 @@ const faq = [
   },
 ];
 const compare = [
-  ['Salary and payroll', 'Fixed monthly salary, even in quiet months', 'Not on your payroll, you pay only for the work you order'],
-  ['Taxes and social contributions', 'Contributions, benefits, sick leave, holidays', 'None, one invoice in EUR (reverse charge in the EU)'],
-  ['Hiring', 'Weeks of recruiting and onboarding', 'Start this week, no hiring'],
-  ['Training', 'Months before a new hire is productive', 'No training needed, we already do this every day'],
-  ['Management', 'Someone has to manage, check and motivate', 'No management, you get results, not tasks'],
-  ['Specialisation', 'One person juggling SEO, content and outreach', 'A specialised link building team, already running'],
-  ['Publisher database', 'Built from scratch, one contact at a time', '15,000+ publishers, worldwide and by market'],
-  ['Languages', 'Usually one or two', 'Native language outreach in every market'],
-  ['Reporting', 'Spreadsheets you have to chase', 'A live list of every placement, updated as links go live'],
-  ['Flexibility', 'Hard to scale up, costly to scale down', 'Scale up or down any month'],
-  ['Reliability', 'Results depend on one person', 'Proven process and track record with agencies and brands'],
+  ['No salary or payroll', 'Fixed monthly salary, even in quiet months.', 'Not on your payroll, you pay only for the work you order.'],
+  ['No taxes or contributions', 'Contributions, benefits, sick leave and holidays.', 'None. One invoice in EUR, reverse charge in the EU.'],
+  ['No hiring or training', 'Weeks of recruiting, then months before a new hire is productive.', 'Start this week. We already do this every day.'],
+  ['No one to manage', 'Someone has to brief, check and motivate.', 'You get results, not tasks to supervise.'],
+  ['A live list of every link', 'Spreadsheets you have to chase.', 'Every placement in a live list, updated as links go live.'],
+  ['Specialised and proven', 'One person juggling SEO, content and outreach.', 'A dedicated link building team with a track record.'],
+  ['15,000+ publishers', 'A contact list built from scratch.', 'Publishers across the UK, US, Germany and other EU markets.'],
+  ['Native language outreach', 'Usually one or two languages.', 'Native speakers for every market.'],
+  ['Scale up or down monthly', 'Hard to scale up, costly to scale down.', 'Change volume any month, no contracts.'],
 ];
+const compareVisible = 5;
 ---
 
 <Base
@@ -79,52 +78,32 @@ const compare = [
         </ul>
       </div>
 
-      <div class="report" aria-hidden="true">
-        <div class="report__head">
-          <span class="report__logo">Your Agency</span>
-          <span class="muted">Monthly link report · Client A</span>
+      <div class="perks">
+        <div class="perks__head">
+          <span>Why outsource to us</span>
+          <span class="perks__col">In-house</span>
+          <span class="perks__col perks__col--us">SERPRise</span>
         </div>
-        <table>
-          <thead><tr><th>Publisher</th><th>Market</th><th>DR</th><th>Status</th></tr></thead>
-          <tbody>
-            <tr><td>national-news.co.uk</td><td>UK</td><td>78</td><td><span class="live">Live</span></td></tr>
-            <tr><td>tech-magazine.com</td><td>US</td><td>71</td><td><span class="live">Live</span></td></tr>
-            <tr><td>wirtschaft-portal.de</td><td>DE</td><td>64</td><td><span class="live">Live</span></td></tr>
-            <tr><td>lifestyle-blog.fr</td><td>FR</td><td>52</td><td><span class="pending">Writing</span></td></tr>
-          </tbody>
-        </table>
-        <p class="report__note">Unbranded report, ready to forward to your client.</p>
+        {compare.map(([label, inhouse, us], i) => (
+          <details class:list={['perk', { 'perk--extra': i >= compareVisible }]}>
+            <summary>
+              <span class="perk__label">{label}</span>
+              <i class="perk__no" aria-label="In-house: no">✕</i>
+              <i class="perk__yes" aria-label="SERPRise: yes">✓</i>
+            </summary>
+            <div class="perk__body">
+              <p><strong>In-house:</strong> {inhouse}</p>
+              <p><strong>SERPRise:</strong> {us}</p>
+            </div>
+          </details>
+        ))}
+        <button type="button" class="perks__more" aria-expanded="false">+ {compare.length - compareVisible} more benefits</button>
+        <p class="perks__note">Tap a row to compare.</p>
       </div>
     </div>
   </section>
 
   <Clients title="Brands we've worked with" items={enClients} moreLabel="Show more" />
-
-  <section class="section compare" id="in-house-vs-serprise">
-    <div class="container">
-      <span class="eyebrow">In-house vs. outsourcing</span>
-      <h2>Why an external link building partner beats another hire</h2>
-      <p class="lead muted compare__lead">No salary, no contributions, no training and no one to manage. We are specialised, already running and reliable, and you get a live list of every link we build.</p>
-      <div class="compare__table" role="table" aria-label="In-house team compared with SERPRise">
-        <div class="compare__row compare__row--head" role="row">
-          <span role="columnheader"></span>
-          <span role="columnheader">In-house hire</span>
-          <span role="columnheader" class="compare__us">SERPRise</span>
-        </div>
-        {compare.map(([label, inhouse, us]) => (
-          <div class="compare__row" role="row">
-            <strong role="rowheader">{label}</strong>
-            <span role="cell" class="compare__no"><i aria-hidden="true">✕</i><span class="sr-label">In-house: </span>{inhouse}</span>
-            <span role="cell" class="compare__yes compare__us"><i aria-hidden="true">✓</i><span class="sr-label">SERPRise: </span>{us}</span>
-          </div>
-        ))}
-      </div>
-      <div class="compare__cta">
-        <a href="/en/contact/" class="btn btn--primary">Get a quote</a>
-        <a href="/en/publishers/" class="btn btn--ghost">Browse publishers</a>
-      </div>
-    </div>
-  </section>
 
   <section class="section">
     <div class="container">
@@ -246,6 +225,14 @@ const compare = [
     button={en.cta}
     href="/en/contact/"
   />
+  <script>
+    document.querySelectorAll('.perks__more').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        btn.closest('.perks')?.classList.add('is-open');
+        btn.setAttribute('aria-expanded', 'true');
+      });
+    });
+  </script>
 </Base>
 
 <style>
@@ -257,55 +244,45 @@ const compare = [
   .hero__grid { display: grid; grid-template-columns: 1.15fr 1fr; gap: 56px; align-items: center; }
   .hero__facts { list-style: none; padding: 0; margin: 28px 0 0; display: flex; flex-wrap: wrap; gap: 10px 28px; color: var(--muted); font-size: 0.95rem; }
   .hero__facts strong { color: var(--text); font-family: var(--font-display); }
-  .report {
-    background: #fff;
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    box-shadow: 0 30px 60px -30px rgba(16, 43, 67, 0.35);
-    padding: 20px 22px;
-    font-size: 0.92rem;
-  }
-  .report__head { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; font-size: 0.82rem; }
-  .report__logo { font-family: var(--font-display); font-weight: 700; font-size: 1rem; border: 1.5px dashed var(--border); border-radius: 8px; padding: 4px 10px; }
-  .report table { width: 100%; border-collapse: collapse; }
-  .report th { text-align: left; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); font-weight: 600; padding: 6px 4px; border-bottom: 1px solid var(--border); }
-  .report td { padding: 10px 4px; border-bottom: 1px solid var(--border); }
-  .report td:first-child { font-weight: 500; overflow-wrap: anywhere; }
-  .live, .pending { font-size: 0.75rem; font-weight: 600; padding: 2px 8px; border-radius: 999px; }
-  .live { background: #e3f5ec; color: var(--ok); }
-  .pending { background: var(--accent-soft); color: var(--accent); }
-  .report__note { margin: 12px 0 0; font-size: 0.8rem; color: var(--muted); }
   .service .checklist { margin-top: 16px; }
   .service__more { font-weight: 600; color: var(--accent); }
   .why { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
   .why__list li { margin-bottom: 18px; }
-  .compare__lead { max-width: 720px; margin-top: 12px; }
-  .compare__table { margin-top: 32px; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; background: var(--surface, #fff); }
-  .compare__row { display: grid; grid-template-columns: 1.1fr 1.4fr 1.6fr; border-top: 1px solid var(--border); }
-  .compare__row:first-child { border-top: 0; }
-  .compare__row > * { padding: 14px 18px; }
-  .compare__row--head { font-family: var(--font-display); font-weight: 700; font-size: 0.95rem; }
-  .compare__row--head .compare__us { color: var(--ok); }
-  .compare__us { background: #f0faf5; }
-  .compare__row strong { font-weight: 600; }
-  .compare__no, .compare__yes { display: flex; gap: 10px; align-items: flex-start; }
-  .compare__no { color: var(--muted); }
-  .compare__no i, .compare__yes i { flex: none; width: 22px; height: 22px; border-radius: 50%; display: inline-grid; place-items: center; font-style: normal; font-size: 0.75rem; font-weight: 700; margin-top: 1px; }
-  .compare__no i { background: #fdecec; color: #d64545; }
-  .compare__yes i { background: #d6f2e4; color: var(--ok); }
-  .compare__yes { font-weight: 500; }
-  .sr-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-  .compare__cta { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 28px; }
-  @media (max-width: 720px) {
-    .compare__row--head { display: none; }
-    .compare__row { grid-template-columns: 1fr; }
-    .compare__row > * { padding: 6px 16px; }
-    .compare__row strong { padding-top: 16px; }
-    .compare__row > :last-child { padding-bottom: 16px; }
-    .compare__us { background: none; }
-    .compare__yes { background: #f0faf5; border-radius: 10px; margin: 0 10px; padding: 10px 6px; }
+  .perks {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    box-shadow: 0 30px 60px -30px rgba(16, 43, 67, 0.35);
+    padding: 8px 8px 14px;
+    font-size: 0.95rem;
   }
+  .perks__head, .perk summary { display: grid; grid-template-columns: 1fr 72px 72px 16px; align-items: center; gap: 4px; }
+  .perks__head { padding: 10px 12px; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); font-weight: 600; border-bottom: 1px solid var(--border); }
+  .perks__col { text-align: center; white-space: nowrap; }
+  .perks__col--us { color: var(--ok); }
+  .perk { border-bottom: 1px solid var(--border); }
+  .perk summary { list-style: none; cursor: pointer; padding: 10px 12px; border-radius: 10px; }
+  .perk summary::-webkit-details-marker { display: none; }
+  .perk summary::after { content: '▾'; color: var(--muted); font-size: 0.8rem; transition: transform 0.2s; justify-self: end; }
+  .perk[open] summary::after { transform: rotate(180deg); }
+  .perk summary:hover { background: #f6f8fb; }
+  .perk__label { font-weight: 600; }
+  .perk__no, .perk__yes { justify-self: center; width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; font-style: normal; font-size: 0.78rem; font-weight: 700; }
+  .perk__no { background: #fdecec; color: #d64545; }
+  .perk__yes { background: #d6f2e4; color: var(--ok); }
+  .perk__body { padding: 0 12px 12px; font-size: 0.88rem; color: var(--muted); }
+  .perk__body p { margin: 4px 0; }
+  .perk__body strong { color: var(--text); font-weight: 600; }
+  .perks:not(.is-open) .perk--extra { display: none; }
+  .perks.is-open .perks__more { display: none; }
+  .perks__more { display: block; margin: 12px auto 0; background: none; border: 1px solid var(--border); border-radius: 999px; padding: 7px 16px; font: inherit; font-size: 0.85rem; font-weight: 600; color: var(--accent); cursor: pointer; }
+  .perks__note { margin: 8px 0 0; text-align: center; font-size: 0.78rem; color: var(--muted); }
   @media (max-width: 900px) {
     .hero__grid, .why { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 480px) {
+    .perks__head, .perk summary { grid-template-columns: 1fr 50px 54px 12px; padding-inline: 8px; }
+    .perks__head { font-size: 0.6rem; letter-spacing: 0.03em; }
+    .perk__label { font-size: 0.92rem; }
   }
 </style>

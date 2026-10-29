@@ -1,61 +1,98 @@
 ---
 import { serviceLabels, budgetLabels, site } from '../lib/site';
+import { enServiceLabels, enBudgetLabels } from '../lib/en';
+interface Props { lang?: 'hr' | 'en'; service?: string; agency?: boolean }
+const { lang = 'hr', service = 'nisam_siguran', agency = false } = Astro.props;
+const isEn = lang === 'en';
+const t = isEn
+  ? {
+      name: 'Full name', email: 'Work email', company: 'Company / agency', website: 'Website', websitePh: 'www.yourbrand.com',
+      service: 'What do you need?', budget: 'Monthly budget', message: 'Message',
+      messagePh: 'Tell us about your clients or brand, target markets and what you want to achieve.',
+      hp: 'Do not fill in', submit: 'Send enquiry', alt: 'Prefer email? Write to',
+      consent: 'I agree that SERPRise may process my data to respond to this enquiry, in line with the', privacy: 'privacy policy',
+      thanks: '/en/thank-you/', sending: 'Sending...', offline: 'The form is not connected right now. Please email us instead.',
+      failed: 'Something went wrong. Please try again or email us.',
+    }
+  : {
+      name: 'Ime i prezime', email: 'E-mail', company: 'Tvrtka', website: 'Web stranica', websitePh: 'www.vasbrend.hr',
+      service: 'Što vas zanima?', budget: 'Okvirni mjesečni budžet', message: 'Poruka',
+      messagePh: 'Ukratko opišite vaš posao, tržište i što želite postići.',
+      hp: 'Ne ispunjavati', submit: 'Pošalji upit', alt: 'Radije e-mail? Pišite na',
+      consent: 'Pristajem da SERPRise obradi moje podatke radi odgovora na upit, u skladu s', privacy: 'pravilima privatnosti',
+      thanks: '/hvala/', sending: 'Šaljem...', offline: 'Forma trenutno nije spojena. Molimo pošaljite upit e-mailom.',
+      failed: 'Nešto je pošlo po zlu. Pokušajte ponovno ili nam pišite e-mailom.',
+    };
+const services = isEn ? enServiceLabels : serviceLabels;
+const budgets = isEn ? enBudgetLabels : budgetLabels;
 ---
 
-<form id="contact-form" class="form card" novalidate>
+<form id="contact-form" class="form card" novalidate data-thanks={t.thanks} data-sending={t.sending} data-offline={t.offline} data-failed={t.failed}>
   <div class="form__row">
     <label>
-      Ime i prezime *
+      {t.name} *
       <input name="name" required minlength="2" maxlength="120" autocomplete="name" />
     </label>
     <label>
-      E-mail *
+      {t.email} *
       <input name="email" type="email" required maxlength="200" autocomplete="email" />
     </label>
   </div>
   <div class="form__row">
     <label>
-      Tvrtka
+      {t.company}
       <input name="company" maxlength="160" autocomplete="organization" />
     </label>
     <label>
-      Web stranica
-      <input name="website" maxlength="300" placeholder="www.vasbrend.hr" autocomplete="url" />
+      {t.website}
+      <input name="website" maxlength="300" placeholder={t.websitePh} autocomplete="url" />
     </label>
   </div>
   <div class="form__row">
     <label>
-      Što vas zanima?
+      {t.service}
       <select name="service">
-        {Object.entries(serviceLabels).map(([v, l]) => <option value={v} selected={v === 'nisam_siguran'}>{l}</option>)}
+        {Object.entries(services).map(([v, l]) => <option value={v} selected={v === service}>{l}</option>)}
       </select>
     </label>
     <label>
-      Okvirni mjesečni budžet
+      {t.budget}
       <select name="budget">
-        {Object.entries(budgetLabels).map(([v, l]) => <option value={v} selected={v === 'ne_znam'}>{l}</option>)}
+        {Object.entries(budgets).map(([v, l]) => <option value={v} selected={v === 'ne_znam'}>{l}</option>)}
       </select>
     </label>
   </div>
+  {isEn && (
+    <>
+      <label>
+        Target markets & languages
+        <input name="markets" maxlength="200" placeholder="e.g. UK, US, Germany (DE), France" />
+      </label>
+      <label class="form__consent form__agency">
+        <input type="checkbox" name="agency" checked={agency} />
+        <span>We are an agency looking for a white-label link building partner</span>
+      </label>
+    </>
+  )}
   <label>
-    Poruka *
-    <textarea name="message" rows="5" required minlength="10" maxlength="5000" placeholder="Ukratko opišite vaš posao, tržište i što želite postići."></textarea>
+    {t.message} *
+    <textarea name="message" rows="5" required minlength="10" maxlength="5000" placeholder={t.messagePh}></textarea>
   </label>
 
   <!-- Zamka za botove: ljudi ovo polje ne vide -->
   <label class="hp" aria-hidden="true">
-    Ne ispunjavati
+    {t.hp}
     <input name="fax" tabindex="-1" autocomplete="off" />
   </label>
 
   <label class="form__consent">
     <input type="checkbox" name="consent" required />
-    <span>Pristajem da SERPRise obradi moje podatke radi odgovora na upit, u skladu s <a href="/pravila-privatnosti/">pravilima privatnosti</a>. *</span>
+    <span>{t.consent} <a href="/pravila-privatnosti/">{t.privacy}</a>. *</span>
   </label>
 
-  <button type="submit" class="btn btn--primary">Pošalji upit</button>
+  <button type="submit" class="btn btn--primary">{t.submit}</button>
   <p class="form__status" role="status" aria-live="polite"></p>
-  <p class="form__alt muted">Radije e-mail? Pišite na <a href={`mailto:${site.email}`}>{site.email}</a></p>
+  <p class="form__alt muted">{t.alt} <a href={`mailto:${site.email}`}>{site.email}</a></p>
 </form>
 
 <script>
@@ -65,6 +102,7 @@ import { serviceLabels, budgetLabels, site } from '../lib/site';
   const status = form.querySelector('.form__status') as HTMLElement;
   const button = form.querySelector('button[type=submit]') as HTMLButtonElement;
   const startedAt = Date.now();
+  const txt = form.dataset as Record<string, string>;
 
   const setStatus = (msg: string, ok = false) => {
     status.textContent = msg;
@@ -81,11 +119,11 @@ import { serviceLabels, budgetLabels, site } from '../lib/site';
     const data = new FormData(form);
     // Bot: ispunio skriveno polje ili poslao u manje od 3 sekunde
     if (data.get('fax') || Date.now() - startedAt < 3000) {
-      window.location.href = '/hvala/';
+      window.location.href = txt.thanks;
       return;
     }
     if (!supabase) {
-      setStatus('Forma trenutno nije spojena. Molimo pošaljite upit e-mailom.');
+      setStatus(txt.offline);
       return;
     }
 
@@ -97,12 +135,19 @@ import { serviceLabels, budgetLabels, site } from '../lib/site';
     });
 
     button.disabled = true;
-    setStatus('Šaljem...', true);
+    setStatus(txt.sending, true);
 
     const str = (k: string) => {
       const v = String(data.get(k) ?? '').trim();
       return v === '' ? null : v;
     };
+
+    // Engleska forma: tržišta i white label oznaka idu na početak poruke (tablica leads nema ta polja).
+    const extra = [
+      data.get('agency') === 'on' ? '[Agency / white label]' : '',
+      str('markets') ? `[Markets: ${str('markets')}]` : '',
+    ].filter(Boolean).join(' ');
+    const message = [extra, str('message')].filter(Boolean).join('\n\n').slice(0, 5000);
 
     const { error } = await supabase.from('leads').insert({
       name: str('name'),
@@ -111,7 +156,7 @@ import { serviceLabels, budgetLabels, site } from '../lib/site';
       website: str('website'),
       service: str('service') ?? 'nisam_siguran',
       budget: str('budget'),
-      message: str('message'),
+      message,
       consent: data.get('consent') === 'on',
       source_page: document.referrer ? `${window.location.pathname} ← ${document.referrer}`.slice(0, 300) : window.location.pathname,
       utm: Object.keys(utm).length ? utm : null,
@@ -120,14 +165,17 @@ import { serviceLabels, budgetLabels, site } from '../lib/site';
     if (error) {
       console.error(error);
       button.disabled = false;
-      setStatus('Nešto je pošlo po zlu. Pokušajte ponovno ili nam pišite e-mailom.');
+      setStatus(txt.failed);
       return;
     }
-    window.location.href = '/hvala/';
+    window.location.href = txt.thanks;
   });
 
   // Zapamti UTM parametre za ovu posjetu
   const p = new URLSearchParams(window.location.search);
+  // ?agency=1 (engleske stranice za agencije) unaprijed označi white label
+  const agencyBox = form.querySelector<HTMLInputElement>('input[name=agency]');
+  if (agencyBox && p.get('agency') === '1') agencyBox.checked = true;
   ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'].forEach((k) => {
     const v = p.get(k);
     if (v) sessionStorage.setItem(k, v);
@@ -179,6 +227,10 @@ import { serviceLabels, budgetLabels, site } from '../lib/site';
   .form__consent input {
     width: auto;
     margin-top: 4px;
+  }
+  .form__agency {
+    color: var(--text);
+    font-weight: 500;
   }
   .hp {
     position: absolute;

@@ -1,0 +1,246 @@
+---
+import Base from '../../layouts/Base.astro';
+import Faq from '../../components/Faq.astro';
+import Cta from '../../components/Cta.astro';
+import Clients from '../../components/Clients.astro';
+import Markets from '../../components/en/Markets.astro';
+import EuEdge from '../../components/en/EuEdge.astro';
+import Niches from '../../components/en/Niches.astro';
+import { en, enClients } from '../../lib/en';
+
+const faq = [
+  {
+    q: 'Do you work white label?',
+    a: 'Yes, and it is a big part of what we do. We work behind SEO and link building agencies across Europe and the US. Your client never sees our name: reports are unbranded or carry your logo, and all communication goes through you.',
+  },
+  {
+    q: 'Which markets and languages do you cover?',
+    a: 'Our database has 15,000+ sites worldwide, with the strongest coverage in the UK, US, Germany and the rest of the EU, plus deep coverage of Croatia and the Balkans. Content is written in the language of the publisher, by native speakers.',
+  },
+  {
+    q: 'Are your links safe?',
+    a: 'We only use real publishers with real readers and organic traffic. No PBNs, link farms, hacked sites or automated tools. You approve every publisher before anything goes live.',
+  },
+  {
+    q: 'Do you accept grey niches like casino or crypto?',
+    a: 'Yes. We place links for iGaming, casino, betting and crypto on publishers that openly accept these topics, in line with local advertising rules.',
+  },
+  {
+    q: 'How do invoicing and VAT work?',
+    a: 'We are an EU company based in Croatia and invoice in EUR. EU businesses with a valid VAT ID receive an invoice under the reverse charge mechanism, so no Croatian VAT is added. UK and US clients are invoiced without VAT.',
+  },
+  {
+    q: 'Do I need to sign a long-term contract?',
+    a: 'No. You can order single placements, run monthly packages or book a one-off digital PR campaign. We keep partners with results, not contracts.',
+  },
+];
+---
+
+<Base
+  lang="en"
+  title="White-label link building & digital PR for agencies | SERPRise"
+  description="EU-based link building, digital PR and LLM visibility partner for agencies, marketing teams and in-house SEO teams. 15,000+ real publishers in the UK, US, Germany and other EU markets."
+  schema={{
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+  }}
+>
+  <section class="hero">
+    <div class="container hero__grid">
+      <div>
+        <span class="eyebrow">Link building · LLM visibility · Digital PR</span>
+        <h1>The link building team <span class="grad-text">behind your SEO results.</span></h1>
+        <p class="lead">
+          We help agencies, marketing teams and in-house SEO teams scale link building, digital PR and LLM visibility. Real publishers, 15,000+ sites
+          across the UK, US, Germany and other EU markets, delivered under your brand or ours.
+        </p>
+        <div class="btn-row">
+          <a href="/en/contact/" class="btn btn--primary">{en.cta}</a>
+          <a href="/en/white-label-link-building/" class="btn btn--ghost">White label for agencies</a>
+        </div>
+        <ul class="hero__facts">
+          <li><strong>15,000+</strong> publishers worldwide</li>
+          <li><strong>100%</strong> white label</li>
+          <li><strong>EU</strong> company, EUR invoicing</li>
+        </ul>
+      </div>
+
+      <div class="report" aria-hidden="true">
+        <div class="report__head">
+          <span class="report__logo">Your Agency</span>
+          <span class="muted">Monthly link report · Client A</span>
+        </div>
+        <table>
+          <thead><tr><th>Publisher</th><th>Market</th><th>DR</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>national-news.co.uk</td><td>UK</td><td>78</td><td><span class="live">Live</span></td></tr>
+            <tr><td>tech-magazine.com</td><td>US</td><td>71</td><td><span class="live">Live</span></td></tr>
+            <tr><td>wirtschaft-portal.de</td><td>DE</td><td>64</td><td><span class="live">Live</span></td></tr>
+            <tr><td>lifestyle-blog.fr</td><td>FR</td><td>52</td><td><span class="pending">Writing</span></td></tr>
+          </tbody>
+        </table>
+        <p class="report__note">Unbranded report, ready to forward to your client.</p>
+      </div>
+    </div>
+  </section>
+
+  <Clients title="Brands we've worked with" items={enClients} moreLabel="Show more" />
+
+  <section class="section">
+    <div class="container">
+      <span class="eyebrow">Who we work with</span>
+      <h2>An extra link building team, when you need one</h2>
+      <div class="grid grid--3" style="margin-top:32px">
+        <div class="card">
+          <div class="icon">◈</div>
+          <h3>SEO & link building agencies</h3>
+          <p class="muted">Outsource placements and outreach under your brand. Scale delivery without hiring, keep your margins and your client relationship.</p>
+        </div>
+        <div class="card">
+          <div class="icon">◎</div>
+          <h3>Marketing & growth teams</h3>
+          <p class="muted">Get authority links and media mentions that support your content, product launches and expansion into new markets.</p>
+        </div>
+        <div class="card">
+          <div class="icon">⌂</div>
+          <h3>In-house SEO teams</h3>
+          <p class="muted">Your team owns the strategy, we handle the time-consuming part: prospecting, outreach, content and getting links live.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--alt" id="services">
+    <div class="container">
+      <span class="eyebrow">Services</span>
+      <h2>Links and mentions that move Google rankings and AI answers</h2>
+      <div class="grid grid--3" style="margin-top:32px">
+        <a href="/en/link-building/" class="card card--link service">
+          <div class="icon">⛓</div>
+          <h3>Link building & digital PR</h3>
+          <p class="muted">Editorial placements on real publishers and data-led PR campaigns that journalists actually want to cover.</p>
+          <ul class="checklist">
+            <li>Hand-picked publishers, approved by you</li>
+            <li>Native-language content</li>
+            <li>Digital PR for news-level links</li>
+          </ul>
+          <span class="service__more">Learn more →</span>
+        </a>
+        <a href="/en/white-label-link-building/" class="card card--link service">
+          <div class="icon">◧</div>
+          <h3>White-label link building packages</h3>
+          <p class="muted">Flexible packages for agencies: pay per placement, monthly link packages or full campaigns, all delivered under your name.</p>
+          <ul class="checklist">
+            <li>Agency rates</li>
+            <li>Unbranded or co-branded reports</li>
+            <li>No minimum commitment</li>
+          </ul>
+          <span class="service__more">See packages →</span>
+        </a>
+        <a href="/en/llm-visibility/" class="card card--link service">
+          <div class="icon">✦</div>
+          <h3>LLM visibility</h3>
+          <p class="muted">Get your brand, or your clients' brands, mentioned and recommended by ChatGPT, Gemini, Perplexity and Google AI Overviews.</p>
+          <ul class="checklist">
+            <li>AI visibility audit</li>
+            <li>Mentions on sources LLMs cite</li>
+            <li>Monthly AI share-of-voice tracking</li>
+          </ul>
+          <span class="service__more">Learn more →</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <Markets />
+
+  <EuEdge />
+
+  <Niches />
+
+  <section class="section section--alt">
+    <div class="container">
+      <span class="eyebrow">How it works</span>
+      <h2>From brief to live links in four steps</h2>
+      <div class="steps" style="margin-top:32px">
+        <div class="card">
+          <h3>Brief</h3>
+          <p class="muted">Send us the target site, market, anchor ideas and budget. Or ask for a free link gap audit first.</p>
+        </div>
+        <div class="card">
+          <h3>Publisher list</h3>
+          <p class="muted">We propose relevant publishers with metrics. You approve, swap or remove any of them.</p>
+        </div>
+        <div class="card">
+          <h3>Content & outreach</h3>
+          <p class="muted">Native speakers write the content, we handle editors and publishing deadlines.</p>
+        </div>
+        <div class="card">
+          <h3>Report</h3>
+          <p class="muted">Every live link with URL, metrics and anchor, in a report you can forward to your client as is.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container why">
+      <div>
+        <span class="eyebrow">Why SERPRise</span>
+        <h2>A specialist partner, not a link marketplace</h2>
+        <p class="lead">We are a small team that does one thing: links and mentions that hold up. You talk to the people doing the work, not a ticket system.</p>
+      </div>
+      <ul class="checklist why__list">
+        <li><strong>Real publishers only.</strong> Sites with editorial standards, real readers and organic traffic. No PBNs, no link farms.</li>
+        <li><strong>You approve everything.</strong> Every publisher and every article is yours to approve before it goes live.</li>
+        <li><strong>Transparent metrics.</strong> DR, organic traffic and referring domains for every site, from Ahrefs.</li>
+        <li><strong>Honest advice.</strong> If a link will not help your client, we will tell you instead of selling it.</li>
+      </ul>
+    </div>
+  </section>
+
+  <Faq items={faq} title="Frequently asked questions" />
+  <Cta
+    title="See which links your client is missing"
+    text="Send us a domain and its top 3 competitors. We will compare their link profiles and suggest the first publishers, free and without obligation."
+    button={en.cta}
+    href="/en/contact/"
+  />
+</Base>
+
+<style>
+  .hero {
+    padding: clamp(48px, 8vw, 96px) 0 clamp(56px, 8vw, 100px);
+    background: radial-gradient(ellipse at 85% 10%, rgba(186, 37, 37, 0.08), transparent 50%),
+      radial-gradient(ellipse at 0% 100%, rgba(16, 43, 67, 0.06), transparent 50%);
+  }
+  .hero__grid { display: grid; grid-template-columns: 1.15fr 1fr; gap: 56px; align-items: center; }
+  .hero__facts { list-style: none; padding: 0; margin: 28px 0 0; display: flex; flex-wrap: wrap; gap: 10px 28px; color: var(--muted); font-size: 0.95rem; }
+  .hero__facts strong { color: var(--text); font-family: var(--font-display); }
+  .report {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    box-shadow: 0 30px 60px -30px rgba(16, 43, 67, 0.35);
+    padding: 20px 22px;
+    font-size: 0.92rem;
+  }
+  .report__head { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; font-size: 0.82rem; }
+  .report__logo { font-family: var(--font-display); font-weight: 700; font-size: 1rem; border: 1.5px dashed var(--border); border-radius: 8px; padding: 4px 10px; }
+  .report table { width: 100%; border-collapse: collapse; }
+  .report th { text-align: left; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); font-weight: 600; padding: 6px 4px; border-bottom: 1px solid var(--border); }
+  .report td { padding: 10px 4px; border-bottom: 1px solid var(--border); }
+  .report td:first-child { font-weight: 500; overflow-wrap: anywhere; }
+  .live, .pending { font-size: 0.75rem; font-weight: 600; padding: 2px 8px; border-radius: 999px; }
+  .live { background: #e3f5ec; color: var(--ok); }
+  .pending { background: var(--accent-soft); color: var(--accent); }
+  .report__note { margin: 12px 0 0; font-size: 0.8rem; color: var(--muted); }
+  .service .checklist { margin-top: 16px; }
+  .service__more { font-weight: 600; color: var(--accent); }
+  .why { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+  .why__list li { margin-bottom: 18px; }
+  @media (max-width: 900px) {
+    .hero__grid, .why { grid-template-columns: 1fr; }
+  }
+</style>

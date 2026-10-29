@@ -1,0 +1,35 @@
+{
+  "_comment": "Foreign publisher catalog for /en/publishers/. Fill sites per country with the same fields as portali.json: d (domain), dr, t (organic traffic), kw, rd, c (category key). Croatia is read from portali.json. Never add prices or contacts.",
+  "updated": null,
+  "categories": {
+    "news": "News & media",
+    "regional": "Regional & local",
+    "business": "Business & finance",
+    "tech": "Tech & auto",
+    "lifestyle": "Lifestyle & entertainment",
+    "health": "Health & beauty",
+    "family": "Parenting & family",
+    "sport": "Sports",
+    "food": "Food & drink",
+    "travel": "Travel",
+    "home": "Home & garden",
+    "edu": "Education & culture",
+    "igaming": "iGaming & betting",
+    "crypto": "Crypto & finance",
+    "other": "Other"
+  },
+  "countries": [
+    { "code": "gb", "name": "United Kingdom", "lang": "English", "sites": [] },
+    { "code": "us", "name": "United States", "lang": "English", "sites": [] },
+    { "code": "de", "name": "Germany", "lang": "German", "sites": [] },
+    { "code": "at", "name": "Austria", "lang": "German", "sites": [] },
+    { "code": "ch", "name": "Switzerland", "lang": "German, French", "sites": [] },
+    { "code": "fr", "name": "France", "lang": "French", "sites": [] },
+    { "code": "es", "name": "Spain", "lang": "Spanish", "sites": [] },
+    { "code": "it", "name": "Italy", "lang": "Italian", "sites": [] },
+    { "code": "nl", "name": "Netherlands", "lang": "Dutch", "sites": [] },
+    { "code": "pl", "name": "Poland", "lang": "Polish", "sites": [] },
+    { "code": "nordics", "name": "Nordics", "lang": "Swedish, Danish, Norwegian, Finnish", "sites": [] },
+    { "code": "hr", "name": "Croatia", "lang": "Croatian", "sites": "portali" }
+  ]
+}

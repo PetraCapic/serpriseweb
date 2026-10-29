@@ -1,0 +1,167 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import Clients from '../../components/Clients.astro';
+import Faq from '../../components/Faq.astro';
+import Cta from '../../components/Cta.astro';
+import Markets from '../../components/en/Markets.astro';
+import EuEdge from '../../components/en/EuEdge.astro';
+import Niches from '../../components/en/Niches.astro';
+import { site } from '../../lib/site';
+import { enClients } from '../../lib/en';
+
+const faq = [
+  {
+    q: 'Will my client ever see your name?',
+    a: 'No. We never contact your clients, our name does not appear in content or reports, and reports can carry your logo. We treat your client list as confidential.',
+  },
+  {
+    q: 'Do you work with other link building agencies?',
+    a: 'Yes. Many of our partners are link building agencies themselves. They use us for markets, languages or niches they do not cover in-house, or simply for extra capacity.',
+  },
+  {
+    q: 'Is there a minimum order?',
+    a: 'No. You can start with a single placement to test quality, then move to monthly packages once you are happy.',
+  },
+  {
+    q: 'How fast is delivery?',
+    a: 'Most editorial placements go live within 2 to 4 weeks, depending on the publisher. Digital PR campaigns usually take 4 to 8 weeks from idea to first coverage.',
+  },
+  {
+    q: 'How do you price white-label work?',
+    a: 'Agency rates depend on the publisher, market and volume, so we send a price list on request. You set your own margin. We invoice in EUR as an EU company, with reverse charge VAT for EU businesses.',
+  },
+];
+---
+
+<Base
+  lang="en"
+  title="White-label link building for agencies"
+  description="White-label link building and digital PR packages for SEO and link building agencies. 15,000+ publishers in the UK, US, Germany and other EU markets, unbranded reports, agency rates, EU invoicing."
+  schema={[
+    {
+      '@context': 'https://schema.org',
+      '@type': 'Service',
+      name: 'White-label link building',
+      alternateName: ['Reseller link building', 'Link building outsourcing', 'Agency link building partner'],
+      serviceType: 'Link building',
+      provider: { '@id': `${site.url}/#organization` },
+      areaServed: ['GB', 'US', 'DE', 'EU'],
+      audience: { '@type': 'BusinessAudience', audienceType: 'SEO and digital marketing agencies' },
+      inLanguage: 'en',
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+    },
+  ]}
+>
+  <PageHero
+    eyebrow="For agencies · White label"
+    title="White-label link building, <span class='grad-text'>delivered under your brand</span>"
+    lead="We are the link building and digital PR team behind SEO and link building agencies in Europe and the US. You keep the client relationship and the margin, we handle publishers, content and outreach."
+    ctaLabel="Request agency rates"
+    ctaHref="/en/contact/?agency=1"
+  >
+    <ul class="stats">
+      <li><strong>15,000+</strong><span>publishers in our database, worldwide</span></li>
+      <li><strong>100%</strong><span>white label, your logo or none</span></li>
+      <li><strong>0</strong><span>minimum order or long-term contract</span></li>
+    </ul>
+  </PageHero>
+
+  <section class="section">
+    <div class="container">
+      <span class="eyebrow">Packages</span>
+      <h2>Pick the model that fits your agency</h2>
+      <p class="muted intro">Prices depend on the publisher, market and volume. Ask for our agency price list and we'll send it within one business day.</p>
+      <div class="grid grid--3 packages">
+        <div class="card pkg">
+          <span class="pkg__tag">Flexible</span>
+          <h3>Pay per placement</h3>
+          <p class="muted">Pick publishers from our list or send us a target, and pay per live link. Ideal for testing us or for one-off client needs.</p>
+          <ul class="checklist">
+            <li>Choose from 15,000+ publishers</li>
+            <li>Content written by native speakers</li>
+            <li>Agency pricing per publisher</li>
+          </ul>
+        </div>
+        <div class="card pkg pkg--main">
+          <span class="pkg__tag">Most popular</span>
+          <h3>Monthly link packages</h3>
+          <p class="muted">A fixed number of placements per client each month. We propose publishers, you approve, we deliver and report.</p>
+          <ul class="checklist">
+            <li>Monthly publisher plan per client</li>
+            <li>Mix of markets, languages and niches</li>
+            <li>Unbranded monthly report</li>
+          </ul>
+        </div>
+        <div class="card pkg">
+          <span class="pkg__tag">Authority</span>
+          <h3>Digital PR campaigns</h3>
+          <p class="muted">Data-led campaigns that earn links from news and industry media. For clients who need authority, not just volume.</p>
+          <ul class="checklist">
+            <li>Idea, research and press release</li>
+            <li>Journalist outreach in target markets</li>
+            <li>Coverage report under your brand</li>
+          </ul>
+        </div>
+      </div>
+      <div class="btn-row" style="justify-content:center;margin-top:32px">
+        <a href="/en/contact/?agency=1" class="btn btn--primary">Request agency price list</a>
+        <a href="/en/publishers/" class="btn btn--ghost">Browse publishers by country</a>
+      </div>
+    </div>
+  </section>
+
+  <Clients title="Brands and partners we've worked with" items={enClients} moreLabel="Show more" />
+
+  <section class="section">
+    <div class="container grid grid--2 how">
+      <div>
+        <span class="eyebrow">How white label works</span>
+        <h2>Invisible to your client, visible in your results</h2>
+        <p class="lead">We fit into your workflow, not the other way around.</p>
+      </div>
+      <ul class="checklist">
+        <li><strong>One point of contact.</strong> You talk to the same people every time, by email, call or a shared sheet.</li>
+        <li><strong>Your brief, your rules.</strong> Anchor strategy, target pages, publisher criteria and content tone come from you.</li>
+        <li><strong>Approve before publishing.</strong> Publishers and articles go live only after your OK.</li>
+        <li><strong>Unbranded reporting.</strong> Live URL, publisher metrics, anchor and date for every link, ready to forward.</li>
+        <li><strong>Confidential.</strong> We never contact your clients and never use them as references without your consent.</li>
+      </ul>
+    </div>
+  </section>
+
+  <Markets />
+
+  <EuEdge />
+
+  <Niches />
+
+  <Faq items={faq} title="Frequently asked questions" />
+  <Cta
+    title="Let's talk about a partnership"
+    text="Tell us about your agency, markets and typical monthly volume. We'll send agency rates and a sample report."
+    button="Become a partner"
+    href="/en/contact/?agency=1"
+  />
+</Base>
+
+<style>
+  .stats { list-style: none; margin: 36px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; max-width: 880px; }
+  .stats li { display: grid; gap: 4px; padding: 18px 20px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); }
+  .stats strong { font-family: var(--font-display); font-size: 2rem; line-height: 1; color: var(--accent); }
+  .stats span { color: var(--muted); font-size: 0.95rem; }
+  .intro { max-width: 680px; }
+  .packages { margin-top: 32px; align-items: stretch; }
+  .pkg { display: flex; flex-direction: column; }
+  .pkg .checklist { margin-top: auto; padding-top: 8px; }
+  .pkg__tag { align-self: flex-start; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; padding: 3px 10px; border-radius: 999px; background: var(--bg-2); color: var(--muted); margin-bottom: 14px; }
+  .pkg--main { border: 2px solid var(--accent); }
+  .pkg--main .pkg__tag { background: var(--accent-soft); color: var(--accent); }
+  .how { gap: 48px; align-items: start; }
+  .how li { margin-bottom: 16px; }
+  @media (max-width: 700px) { .stats { grid-template-columns: 1fr; } }
+</style>

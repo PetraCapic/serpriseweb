@@ -1,8 +1,50 @@
 ---
 import { site, nav } from '../lib/site';
+import { enNav } from '../lib/en';
 import Logo from './Logo.astro';
+interface Props { lang?: 'hr' | 'en' }
+const { lang = 'hr' } = Astro.props;
 const year = new Date().getFullYear();
 ---
+{lang === 'en' ? (
+<footer class="footer">
+  <div class="container footer__grid">
+    <div>
+      <span class="footer__logo"><Logo /></span>
+      <p class="muted footer__about">White-label link building, digital PR and LLM visibility for agencies, marketing teams and in-house SEO teams. EU company, invoiced in EUR, GDPR compliant.</p>
+    </div>
+    <div>
+      <h4>Services</h4>
+      <ul>
+        <li><a href="/en/link-building/">Link building & digital PR</a></li>
+        <li><a href="/en/white-label-link-building/">White-label link building</a></li>
+        <li><a href="/en/llm-visibility/">LLM visibility</a></li>
+        <li><a href="/en/publishers/">Publishers by country</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Company</h4>
+      <ul>
+        <li><a href={enNav[4].href}>{enNav[4].label}</a></li>
+        <li><a href="/pravila-privatnosti/" hreflang="hr">Privacy policy (HR)</a></li>
+        <li><a href="/" hreflang="hr" lang="hr">Hrvatski</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Contact</h4>
+      <ul>
+        <li><a href={`mailto:${site.email}`}>{site.email}</a></li>
+        <li><a href={`tel:${site.phone.replace(/\s/g, '')}`}>{site.phone}</a></li>
+        <li><a href={site.linkedin} rel="noopener" target="_blank">LinkedIn</a> · <a href={site.instagram} rel="noopener" target="_blank">Instagram</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="container footer__bottom muted">
+    <span>© {year} {site.legalName} · EU VAT ID HR{site.oib}</span>
+    <span>Put Drage 25, 22000 Žaborić, Croatia (EU)</span>
+  </div>
+</footer>
+) : (
 <footer class="footer">
   <div class="container footer__grid">
     <div>
@@ -38,6 +80,7 @@ const year = new Date().getFullYear();
     <span>{site.address}</span>
   </div>
 </footer>
+)}
 <style>
   .footer { padding: 64px 0 28px; background: var(--navy); color: #fff; font-size: 0.95rem; }
   .footer .muted { color: #b9c6d4; }

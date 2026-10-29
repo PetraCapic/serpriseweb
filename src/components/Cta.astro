@@ -1,8 +1,10 @@
 ---
-interface Props { title?: string; text?: string }
+interface Props { title?: string; text?: string; button?: string; href?: string }
 const {
   title = 'Saznajte gdje vaš brend stoji danas',
   text = 'Besplatno provjeravamo kako vas vide Google i AI asistenti te koje poveznice i spomeni vam nedostaju. Bez obveze, s konkretnim prijedlozima.',
+  button = 'Zatraži besplatnu analizu',
+  href = '/kontakt/',
 } = Astro.props;
 ---
 <section class="section">
@@ -10,7 +12,7 @@ const {
     <div class="cta">
       <h2>{title}</h2>
       <p class="lead">{text}</p>
-      <div class="btn-row"><a href="/kontakt/" class="btn btn--primary">Zatraži besplatnu analizu</a></div>
+      <div class="btn-row"><a href={href} class="btn btn--primary">{button}</a></div>
     </div>
   </div>
 </section>

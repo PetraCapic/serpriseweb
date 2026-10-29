@@ -1,6 +1,6 @@
 ---
-interface Props { eyebrow?: string; title: string; lead?: string; cta?: boolean }
-const { eyebrow, title, lead, cta = true } = Astro.props;
+interface Props { eyebrow?: string; title: string; lead?: string; cta?: boolean; ctaLabel?: string; ctaHref?: string }
+const { eyebrow, title, lead, cta = true, ctaLabel = 'Zatraži besplatnu analizu', ctaHref = '/kontakt/' } = Astro.props;
 ---
 <section class="page-hero">
   <div class="container">
@@ -9,7 +9,7 @@ const { eyebrow, title, lead, cta = true } = Astro.props;
     {lead && <p class="lead">{lead}</p>}
     {cta && (
       <div class="btn-row">
-        <a href="/kontakt/" class="btn btn--primary">Zatraži besplatnu analizu</a>
+        <a href={ctaHref} class="btn btn--primary">{ctaLabel}</a>
       </div>
     )}
     <slot />

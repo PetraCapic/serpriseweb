@@ -1,0 +1,30 @@
+---
+import { markets, languages } from '../../lib/en';
+interface Props { title?: string; compact?: boolean }
+const { title = 'UK, US, Germany + other EU markets and languages', compact = false } = Astro.props;
+---
+<section class:list={['markets', { 'markets--compact': compact }]} aria-labelledby="markets-title">
+  <div class="container markets__inner">
+    <div>
+      <span class="eyebrow">Markets & languages</span>
+      <h2 id="markets-title">{title}</h2>
+      <p class="muted">Native-language content and outreach for every market, so a German client gets German publishers and German copy, not a translated English article.</p>
+    </div>
+    <div>
+      <p class="markets__label">Markets</p>
+      <ul class="pills">{markets.map((m) => <li>{m}</li>)}</ul>
+      <p class="markets__label">Languages</p>
+      <ul class="pills pills--soft">{languages.map((l) => <li>{l}</li>)}</ul>
+    </div>
+  </div>
+</section>
+<style>
+  .markets { padding: clamp(48px, 7vw, 80px) 0; }
+  .markets--compact { padding-top: 0; }
+  .markets__inner { display: grid; grid-template-columns: 1fr 1.1fr; gap: 48px; align-items: center; }
+  .markets__label { font-size: 0.8rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin: 0 0 10px; }
+  .pills { list-style: none; margin: 0 0 22px; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .pills li { padding: 6px 14px; border-radius: 999px; background: var(--navy); color: #fff; font-weight: 500; font-size: 0.92rem; }
+  .pills--soft li { background: var(--bg-2); color: var(--text); border: 1px solid var(--border); }
+  @media (max-width: 900px) { .markets__inner { grid-template-columns: 1fr; gap: 24px; } }
+</style>

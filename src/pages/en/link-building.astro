@@ -1,0 +1,167 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import Clients from '../../components/Clients.astro';
+import Faq from '../../components/Faq.astro';
+import Cta from '../../components/Cta.astro';
+import Markets from '../../components/en/Markets.astro';
+import Niches from '../../components/en/Niches.astro';
+import { site } from '../../lib/site';
+import { en, enClients } from '../../lib/en';
+
+const faq = [
+  {
+    q: 'Where do you publish?',
+    a: 'On news sites, business and industry media, lifestyle magazines and niche blogs with real readers. We pick publishers for each campaign by topic, audience and quality, and you see the full list before anything is published.',
+  },
+  {
+    q: 'Is link building safe for my site?',
+    a: 'Done properly, yes. We do not use private blog networks (PBNs), link farms or automated tools. We only publish on real sites with real audiences and keep anchor text and link profiles natural.',
+  },
+  {
+    q: 'What is the difference between link building and digital PR?',
+    a: 'Link building is targeted acquisition of links on relevant sites, usually through editorial placements. Digital PR goes a step further: we create a story, survey or data set that journalists want to cover, so links and brand mentions come naturally from news media.',
+  },
+  {
+    q: 'Does link building help LLM visibility?',
+    a: 'Yes. Large language models recommend brands based on what credible sources say about them. Every quality article that mentions a brand strengthens both its Google rankings and its chance of being mentioned by ChatGPT, Gemini or Perplexity.',
+  },
+  {
+    q: 'What does reporting look like?',
+    a: 'You get a list of every live link with its URL, publisher metrics, anchor text and indexing status. Agencies can get the report unbranded or with their own logo.',
+  },
+];
+---
+
+<Base
+  lang="en"
+  title="Link building & digital PR services"
+  description="Link building and digital PR on real publishers in the UK, US, Germany and other EU markets. Editorial placements, data-led PR campaigns and niche links. No PBNs, no link farms."
+  schema={[
+    {
+      '@context': 'https://schema.org',
+      '@type': 'Service',
+      name: 'Link building & digital PR',
+      alternateName: ['Link building', 'Digital PR', 'Guest posting', 'Editorial links'],
+      serviceType: 'Link building',
+      provider: { '@id': `${site.url}/#organization` },
+      areaServed: ['GB', 'US', 'DE', 'EU'],
+      inLanguage: 'en',
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+    },
+  ]}
+>
+  <PageHero
+    eyebrow="Link building · Digital PR · Editorial placements"
+    title="Links on <span class='grad-text'>real publishers</span> that actually move rankings"
+    lead="Quality links and media mentions are still one of the strongest signals for Google, and increasingly for AI assistants. We build them by hand, on real sites in your target market, without shortcuts that can hurt you later."
+    ctaLabel={en.cta}
+    ctaHref="/en/contact/"
+  />
+
+  <Clients title="We've built authority for" items={enClients} moreLabel="Show more" />
+
+  <section class="section">
+    <div class="container">
+      <span class="eyebrow">What we do</span>
+      <h2>Three ways we build authority</h2>
+      <div class="grid grid--3" style="margin-top:32px">
+        <div class="card">
+          <div class="icon">✎</div>
+          <h3>Editorial placements</h3>
+          <p class="muted">Well-written articles on news, business, lifestyle and niche publishers, with a natural, contextual link to your page. Content written by native speakers.</p>
+        </div>
+        <div class="card">
+          <div class="icon">✺</div>
+          <h3>Digital PR campaigns</h3>
+          <p class="muted">Surveys, data studies and stories from your industry that journalists pick up. One strong campaign can earn dozens of links and mentions from news media.</p>
+        </div>
+        <div class="card">
+          <div class="icon">⌖</div>
+          <h3>Niche & local links</h3>
+          <p class="muted">Hand-picked industry blogs, trade media, associations and local sites that are topically related to the business you are promoting.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Markets compact />
+
+  <section class="section section--dark">
+    <div class="container grid grid--2 rules">
+      <div>
+        <span class="eyebrow">Quality</span>
+        <h2>How we choose publishers</h2>
+        <p class="lead">We look beyond DR. A publisher needs real readers and has to make sense for your audience.</p>
+      </div>
+      <div>
+        <ul class="checklist">
+          <li>Real organic traffic from the target country</li>
+          <li>Topical relevance to the business we are promoting</li>
+          <li>An actual editorial site, not a site built to sell links</li>
+          <li>Natural anchor text and a diverse link profile</li>
+          <li>You approve every publisher before publication</li>
+        </ul>
+        <h3 style="margin-top:28px">What we don't do</h3>
+        <p class="muted">PBNs, link farms, hacked sites, automated comments, spam directories and "1,000 links for $50". Links like that hurt both rankings and brand reputation.</p>
+      </div>
+    </div>
+  </section>
+
+  <Niches />
+
+  <section class="section section--alt">
+    <div class="container">
+      <span class="eyebrow">Process</span>
+      <h2>How we work together</h2>
+      <div class="steps" style="margin-top:32px">
+        <div class="card">
+          <h3>Link gap analysis</h3>
+          <p class="muted">We audit the current backlink profile and compare it with the competitors ranking above you.</p>
+        </div>
+        <div class="card">
+          <h3>Publisher plan</h3>
+          <p class="muted">We propose publishers, topics and target pages for the month. You approve.</p>
+        </div>
+        <div class="card">
+          <h3>Content & publishing</h3>
+          <p class="muted">We write the content, handle editors and follow every placement through to publication.</p>
+        </div>
+        <div class="card">
+          <h3>Report</h3>
+          <p class="muted">Every live link with metrics, indexing status and keyword movement.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container agency">
+      <div>
+        <span class="eyebrow">For agencies</span>
+        <h2>Need it under your own brand?</h2>
+        <p class="muted">We deliver everything on this page white label for SEO and link building agencies, with agency rates and unbranded reports.</p>
+      </div>
+      <a href="/en/white-label-link-building/" class="btn btn--primary">See white-label packages</a>
+    </div>
+  </section>
+
+  <Faq items={faq} title="Frequently asked questions" />
+  <Cta
+    title="Find out which links you're missing"
+    text="We'll compare your link profile with your top 3 competitors for free and suggest the first publishers to target."
+    button={en.cta}
+    href="/en/contact/"
+  />
+</Base>
+
+<style>
+  .rules { gap: 48px; align-items: start; }
+  .agency { display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap; padding: 32px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--bg-2); }
+  .agency h2 { margin-bottom: 0.3em; }
+  .agency p { margin: 0; max-width: 620px; }
+</style>

@@ -30,7 +30,7 @@ export const altFor = (path: string) => {
 };
 
 // Markets and languages we cover, shown on several English pages.
-export const markets = ['UK', 'US', 'Germany', 'Austria', 'Switzerland', 'France', 'Spain', 'Italy', 'Netherlands', 'Nordics', 'Poland', 'Croatia & Balkans'];
+export const markets = ['UK', 'US', 'Germany', 'Austria', 'Switzerland', 'France', 'Spain', 'Italy', 'Poland', 'Nordics', 'Czechia', 'Romania', 'Hungary', 'Baltics', 'Croatia & Balkans'];
 export const languages = ['English', 'German', 'French', 'Spanish', 'Italian', 'Dutch', 'Polish', 'Croatian', '+ other EU languages'];
 
 // Client strip for international visitors: brands known outside Croatia first.

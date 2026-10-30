@@ -67,9 +67,10 @@
   from = "/seo-work/*"
   to = "/"
   status = 301
+# Stari WordPress blog: postojeći članci na /blog/ imaju prednost, nepoznati URL-ovi idu na popis članaka.
 [[redirects]]
   from = "/blog/*"
-  to = "/"
+  to = "/blog/"
   status = 301
 [[redirects]]
   from = "/feed/*"

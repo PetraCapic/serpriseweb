@@ -19,6 +19,7 @@ export const nav = [
   { href: '/ai-vidljivost/', label: 'AI vidljivost' },
   { href: '/link-building-digitalni-pr/', label: 'Link building i PR' },
   { href: '/portali/', label: 'Portali' },
+  { href: '/blog/', label: 'Blog' },
   { href: '/o-nama/', label: 'O nama' },
   { href: '/kontakt/', label: 'Kontakt' },
 ];

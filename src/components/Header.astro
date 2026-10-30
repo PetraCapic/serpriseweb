@@ -2,12 +2,15 @@
 import { nav, adminUrl } from '../lib/site';
 import { enNav, altFor } from '../lib/en';
 import Logo from './Logo.astro';
+import { getPosts } from '../lib/blog';
 interface Props { lang?: 'hr' | 'en' }
 const { lang = 'hr' } = Astro.props;
 const isEn = lang === 'en';
 const path = Astro.url.pathname;
 const alt = altFor(path);
-const items = isEn ? enNav : nav;
+// Blog je u izborniku tek kad ima barem jedan objavljen članak.
+const hasPosts = (await getPosts()).length > 0;
+const items = isEn ? enNav : nav.filter((i) => i.href !== '/blog/' || hasPosts);
 // Jezični prekidač vodi na odgovarajuću stranicu na drugom jeziku, inače na početnu.
 const switchHref = isEn ? (alt?.hr ?? '/') : (alt?.en ?? '/en/');
 ---

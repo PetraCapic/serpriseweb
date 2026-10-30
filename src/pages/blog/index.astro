@@ -1,0 +1,64 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import Cta from '../../components/Cta.astro';
+import { getPosts, formatDate, readingTime } from '../../lib/blog';
+import { site } from '../../lib/site';
+
+const posts = await getPosts();
+---
+
+<Base
+  title="Blog"
+  description="Konkretni savjeti o link buildingu, digitalnom PR-u i AI vidljivosti. Koraci, postavke i brojke koje možete primijeniti odmah."
+  noindex={posts.length === 0}
+  schema={{
+    '@context': 'https://schema.org',
+    '@type': 'Blog',
+    '@id': `${site.url}/blog/#blog`,
+    name: `${site.name} blog`,
+    url: `${site.url}/blog/`,
+    inLanguage: 'hr',
+    publisher: { '@id': `${site.url}/#organization` },
+  }}
+>
+  <PageHero
+    eyebrow="Blog"
+    title="Link building i AI vidljivost, <span class='grad-text'>korak po korak</span>"
+    lead="Bez općenitih savjeta. Samo postavke, upiti i brojke koje možete primijeniti na svom webu odmah."
+    cta={false}
+  />
+
+  <section class="section">
+    <div class="container">
+      {
+        posts.length === 0 ? (
+          <p class="muted">Prvi članci stižu uskoro.</p>
+        ) : (
+          <div class="grid posts">
+            {posts.map((p) => (
+              <a href={`/blog/${p.id}/`} class="card card--link post">
+                {p.data.image && <img src={p.data.image} alt={p.data.imageAlt ?? ''} loading="lazy" class="post__img" />}
+                <p class="muted post__meta">
+                  <time datetime={p.data.date.toISOString()}>{formatDate(p.data.date)}</time> · {readingTime(p.body)} min čitanja
+                </p>
+                <h2 class="post__title">{p.data.title}</h2>
+                <p>{p.data.description}</p>
+              </a>
+            ))}
+          </div>
+        )
+      }
+    </div>
+  </section>
+
+  <Cta />
+</Base>
+
+<style>
+  .posts { grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
+  .post { color: var(--text); text-decoration: none; display: flex; flex-direction: column; }
+  .post__img { border-radius: 10px; margin-bottom: 16px; aspect-ratio: 1200 / 630; object-fit: cover; width: 100%; }
+  .post__meta { font-size: 0.85rem; margin-bottom: 8px; }
+  .post__title { font-size: 1.3rem; margin-bottom: 0.4em; }
+</style>

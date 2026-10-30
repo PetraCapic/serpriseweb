@@ -2,9 +2,11 @@
 import { site, nav } from '../lib/site';
 import { enNav } from '../lib/en';
 import Logo from './Logo.astro';
+import { getPosts } from '../lib/blog';
 interface Props { lang?: 'hr' | 'en' }
 const { lang = 'hr' } = Astro.props;
 const year = new Date().getFullYear();
+const hasPosts = (await getPosts()).length > 0;
 ---
 {lang === 'en' ? (
 <footer class="footer">
@@ -62,7 +64,7 @@ const year = new Date().getFullYear();
     <div>
       <h4>Agencija</h4>
       <ul>
-        {nav.slice(3).map((n) => <li><a href={n.href}>{n.label}</a></li>)}
+        {nav.slice(3).filter((n) => n.href !== '/blog/' || hasPosts).map((n) => <li><a href={n.href}>{n.label}</a></li>)}
         <li><a href="/pravila-privatnosti/">Pravila privatnosti</a></li>
       </ul>
     </div>

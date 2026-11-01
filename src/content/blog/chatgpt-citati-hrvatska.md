@@ -82,4 +82,6 @@ Rastavili smo 19 citiranih stranica. Ponavljalo se pet stvari:
 
 Istih 35 pitanja postavljamo ChatGPT-u prvog dana u mjesecu i bilježimo tko je citiran. Polazna točka za SERPRise je 1 od 45 odgovora. Sljedeće mjerenje je 1. prosinca.
 
+Što iz ovoga slijedi za vašu stranicu objašnjavamo u vodiču [LLM vidljivost: kako hrvatska tvrtka ulazi u odgovore ChatGPT-a i Googlea](/blog/llm-vidljivost/), a sami se možete provjeriti s [20 pitanja za ChatGPT](/blog/provjera-ai-vidljivosti/).
+
 Ako želite da isti test napravimo za vašu djelatnost, s pitanjima koja postavljaju vaši kupci, javite se preko stranice [AI vidljivost](/ai-vidljivost/) ili [kontakt forme](/kontakt/). Dobit ćete popis stranica koje ChatGPT citira umjesto vas.

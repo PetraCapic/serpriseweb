@@ -2,6 +2,8 @@
 title: "Koje stranice ChatGPT citira kad netko traži agenciju u Hrvatskoj"
 description: "Postavili smo ChatGPT-u 35 hrvatskih pitanja o SEO-u i AI vidljivosti. Citirane su i stranice s DR 0. Evo što su imale i što napraviti na svom webu."
 date: 2026-11-01
+image: /blog/chatgpt-citati-hrvatska/naslovna.png
+imageAlt: "Koje stranice ChatGPT citira za hrvatske upite: i stranice s DR 0"
 ---
 
 Od 45 ChatGPT odgovora na 35 pitanja o SEO-u i AI vidljivosti u Hrvatskoj, stranice s Domain Ratingom od 0 do 6 citirane su u 14 odgovora. Autoritet domene zato nije presudan. Presudno je kako je stranica napisana i tko još o vama piše.

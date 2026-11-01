@@ -37,7 +37,9 @@ window.dataLayer.push({
 });
 ```
 
-U Tag Manageru za svaki takav događaj postoji okidač "Custom Event" s istim imenom i oznaka koja ga šalje u GA4.
+U Tag Manageru za svaki takav događaj postoji okidač "Custom Event" i oznaka koja ga šalje dalje. Za grupe događaja koristimo jedan okidač s regexom, pa novi događaj iz iste grupe ne traži novu oznaku.
+
+![Tok događaja od dataLayer.push u kodu preko okidača u Tag Manageru do oznaka za GA4 i Google Ads, stvarni nazivi iz spremnika](/blog/claude-code-google-tag-manager/gtm-tok.png)
 
 ## Korak 4: kako Claude mijenja spremnik
 
@@ -48,15 +50,9 @@ Preko API-ja Claude radi isto što biste vi radili u sučelju:
 3. napravi verziju s imenom i opisom,
 4. objavi je.
 
-Od 16. listopada na portalu je tako objavljeno 9 verzija. Neke od njih:
+Od 16. listopada na portalu je tako objavljeno 9 verzija:
 
-| Verzija | Opis |
-| --- | --- |
-| 8 | Praćenje prodaje: GA4 ecommerce, bez duplih Meta tagova |
-| 10 | Newsletter signup GA4 |
-| 12 | Pauziran Meta StartMemorial (okidao na otvaranje forme; event sada šalje kod nakon odabira osobe) |
-| 14 | Google Ads: Conversion Linker + kupnja memorijala |
-| 15 | Svijeće izvan Google Ads konverzije + GA4 ignore_referrer |
+![Povijest verzija Tag Manager spremnika od v7 do v15 s datumima i opisima](/blog/claude-code-google-tag-manager/gtm-verzije.png)
 
 Opisi su važni. Kad za mjesec dana netko pita zašto se konverzije razlikuju, u povijesti verzija piše što je promijenjeno i zašto.
 

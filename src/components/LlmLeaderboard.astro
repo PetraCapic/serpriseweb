@@ -1,0 +1,144 @@
+---
+import data from '../data/llm-leaderboard.json';
+// Leaderboard LLM vidljivosti iz istraživanja ChatGPT citata. Podaci u src/data/llm-leaderboard.json.
+const { answers, entries } = data;
+const max = Math.max(...entries.map((e) => e.cites));
+const pct = (n: number) => Math.round((n / answers) * 100);
+---
+<section class="lb" data-lb aria-labelledby="lb-title">
+  <div class="lb__head">
+    <div>
+      <p class="lb__eyebrow">Leaderboard · LLM vidljivost</p>
+      <h2 id="lb-title" class="lb__title">Koga ChatGPT najčešće citira za hrvatske upite</h2>
+      <p class="lb__lead">Broj od {answers} ChatGPT odgovora u kojima je domena citirana. Kliknite red za detalje.</p>
+    </div>
+    <div class="lb__controls">
+      <div class="lb__seg" role="group" aria-label="Poredaj po">
+        <button type="button" data-sort="cites" aria-pressed="true">Citati</button>
+        <button type="button" data-sort="eff" aria-pressed="false">Citati uz najniži DR</button>
+      </div>
+      <label class="lb__toggle"><input type="checkbox" data-sources /> Prikaži i direktorije i liste</label>
+    </div>
+  </div>
+
+  <ol class="lb__list">
+    {entries.map((e) => (
+      <li
+        class:list={['lb__row', { 'is-self': e.self, 'is-source': e.type === 'izvor' }]}
+        data-cites={e.cites}
+        data-dr={e.dr ?? 100}
+        data-type={e.type}
+        hidden={e.type === 'izvor'}
+      >
+        <button type="button" class="lb__main" aria-expanded="false">
+          <span class="lb__rank"></span>
+          <span class="lb__name">
+            <strong>{e.name}</strong>
+            <span class="lb__domain">{e.domain}{e.country && <span class="lb__tag">{e.country}</span>}{e.type === 'izvor' && <span class="lb__tag">direktorij / lista</span>}</span>
+          </span>
+          <span class="lb__bar" aria-hidden="true"><span style={`--w:${(e.cites / max) * 100}%`}></span></span>
+          <span class="lb__score"><strong>{e.cites}</strong><small>/{answers}</small></span>
+        </button>
+        <div class="lb__more" hidden>
+          <dl>
+            <div><dt>Udio odgovora</dt><dd>{pct(e.cites)}%</dd></div>
+            <div><dt>Domain Rating</dt><dd>{e.dr ?? 'n/a'}{e.dr === 0 && <span class="lb__zero">DR 0, a ipak citiran</span>}</dd></div>
+            <div><dt>Što je citirano</dt><dd>{e.page}</dd></div>
+          </dl>
+          {!e.self && <a href={e.url} target="_blank" rel="noopener">Posjeti {e.domain} ↗</a>}
+        </div>
+      </li>
+    ))}
+  </ol>
+  <p class="lb__note">Mjereno 30. listopada 2026. preko OpenAI API-ja s web pretragom, lokacija Zagreb. Brojke pokazuju smjer, ne točnu sliku. Sljedeće mjerenje 1. prosinca.</p>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-lb]').forEach((lb) => {
+    // Komponenta se renderira ispod članka i premješta na mjesto označeno u tekstu.
+    const slot = document.querySelector('[data-embed="leaderboard"]');
+    if (slot) slot.replaceWith(lb);
+    const list = lb.querySelector('ol')!;
+    const rows = [...list.querySelectorAll<HTMLLIElement>('li')];
+    const sources = lb.querySelector<HTMLInputElement>('[data-sources]')!;
+    let key = 'cites';
+    const apply = () => {
+      const by = (r: HTMLLIElement) => Number(r.dataset.cites);
+      const dr = (r: HTMLLIElement) => Number(r.dataset.dr);
+      // "Citati uz najniži DR": koliko citata domena dobiva po bodu autoriteta.
+      const eff = (r: HTMLLIElement) => by(r) / (dr(r) + 1);
+      rows.sort(key === 'eff' ? (a, b) => eff(b) - eff(a) : (a, b) => by(b) - by(a) || dr(a) - dr(b));
+      let n = 0;
+      for (const r of rows) {
+        r.hidden = r.dataset.type === 'izvor' && !sources.checked;
+        if (!r.hidden) r.querySelector('.lb__rank')!.textContent = String(++n);
+        list.appendChild(r);
+      }
+      lb.classList.remove('is-ready');
+      requestAnimationFrame(() => requestAnimationFrame(() => lb.classList.add('is-ready')));
+    };
+    lb.querySelectorAll<HTMLButtonElement>('[data-sort]').forEach((b) =>
+      b.addEventListener('click', () => {
+        key = b.dataset.sort!;
+        lb.querySelectorAll('[data-sort]').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+        apply();
+      })
+    );
+    sources.addEventListener('change', apply);
+    list.addEventListener('click', (e) => {
+      const btn = (e.target as HTMLElement).closest<HTMLButtonElement>('.lb__main');
+      if (!btn) return;
+      const open = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', String(!open));
+      (btn.nextElementSibling as HTMLElement).hidden = open;
+    });
+    apply();
+  });
+</script>
+
+<style>
+  .lb { margin: 2em 0; padding: 28px; border: 1px solid var(--border); border-radius: var(--radius); background: #fff; box-shadow: 0 10px 30px rgba(16, 43, 67, 0.06); }
+  .lb__head { display: flex; flex-wrap: wrap; gap: 18px; justify-content: space-between; align-items: end; margin-bottom: 18px; }
+  .lb__eyebrow { margin: 0 0 6px; color: var(--accent); font: 700 0.75rem var(--font-display); letter-spacing: 0.1em; text-transform: uppercase; }
+  .lb__title { margin: 0 0 6px !important; font-size: 1.45rem; }
+  .lb__lead { margin: 0; color: var(--muted); font-size: 0.95rem; }
+  .lb__controls { display: grid; gap: 10px; justify-items: end; }
+  .lb__seg { display: inline-flex; background: var(--bg-2); border-radius: 999px; padding: 4px; }
+  .lb__seg button { border: 0; background: none; font: 600 0.85rem var(--font); color: var(--muted); padding: 7px 14px; border-radius: 999px; cursor: pointer; }
+  .lb__seg button[aria-pressed='true'] { background: #fff; color: var(--navy); box-shadow: 0 1px 4px rgba(16, 43, 67, 0.12); }
+  .lb__toggle { font-size: 0.85rem; color: var(--muted); display: inline-flex; gap: 6px; align-items: center; cursor: pointer; }
+  .lb__list { list-style: none; margin: 0 !important; padding: 0 !important; }
+  .lb__row { margin: 0 !important; border-top: 1px solid var(--border); }
+  .lb__main { width: 100%; display: grid; grid-template-columns: 34px minmax(0, 1.3fr) minmax(0, 1fr) 64px; gap: 14px; align-items: center; padding: 12px 6px; background: none; border: 0; font: inherit; color: inherit; text-align: left; cursor: pointer; border-radius: 10px; }
+  .lb__main:hover { background: var(--bg-2); }
+  .lb__rank { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font: 700 0.9rem var(--font-display); background: var(--bg-2); color: var(--navy); }
+  .lb__row:nth-child(-n + 3) .lb__rank { background: var(--grad); color: #fff; }
+  .lb__name { display: grid; min-width: 0; }
+  .lb__name strong { color: var(--navy); }
+  .lb__domain { font-size: 0.82rem; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .lb__tag { margin-left: 6px; padding: 1px 7px; border-radius: 999px; background: var(--bg-2); font-size: 0.72rem; }
+  .lb__bar { height: 10px; border-radius: 999px; background: var(--bg-2); overflow: hidden; }
+  .lb__bar span { display: block; height: 100%; width: 0; border-radius: inherit; background: var(--grad); transition: width 0.7s cubic-bezier(0.2, 0.8, 0.2, 1); }
+  .is-ready .lb__bar span { width: var(--w); }
+  .is-source .lb__bar span { background: #9aa8b8; }
+  .is-self .lb__bar span { background: var(--navy); }
+  .is-self .lb__name strong::after { content: ' (mi)'; font-weight: 400; color: var(--muted); }
+  .lb__score { text-align: right; font-family: var(--font-display); }
+  .lb__score strong { font-size: 1.25rem; color: var(--navy); }
+  .lb__score small { color: var(--muted); }
+  .lb__more { padding: 4px 6px 16px 54px; font-size: 0.92rem; }
+  .lb__more dl { display: grid; grid-template-columns: repeat(3, auto); gap: 6px 24px; margin: 0 0 10px; justify-content: start; }
+  .lb__more dt { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+  .lb__more dd { margin: 0; color: var(--navy); font-weight: 600; }
+  .lb__zero { margin-left: 8px; padding: 1px 8px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); font-size: 0.75rem; font-weight: 600; }
+  .lb__note { margin: 14px 0 0 !important; font-size: 0.8rem; color: var(--muted); }
+  @media (max-width: 640px) {
+    .lb { padding: 18px 14px; }
+    .lb__controls { justify-items: start; }
+    .lb__main { grid-template-columns: 30px minmax(0, 1fr) 54px; gap: 10px; }
+    .lb__bar { grid-column: 2 / 4; grid-row: 2; }
+    .lb__more { padding-left: 40px; }
+    .lb__more dl { grid-template-columns: 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) { .lb__bar span { transition: none; } }
+</style>

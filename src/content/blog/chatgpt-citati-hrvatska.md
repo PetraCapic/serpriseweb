@@ -42,21 +42,23 @@ Najčešće citirane domene u 45 odgovora:
 
 | Domena | Odgovora u kojima je citirana | DR | Što je citirano |
 | --- | --- | --- | --- |
-| slade.hr | 6 | 26 | Naslovnica agencije |
-| clutch.co | 6 | 91 | Direktorij agencija za Hrvatsku i Zagreb |
-| digiadria.hr | 5 | 33 | Uslužna stranica za AEO |
-| glarodigital.com.hr | 5 | 0 | Uslužna stranica za AI optimizaciju |
-| linkgrid.hr | 5 | 0 | Stranica "O nama" |
-| digitalmatrix.hr | 4 | 4,5 | Javni cjenik |
-| assemblio.hr | 4 | 16 | Lista "Top 5 SEO agencija u Hrvatskoj" |
-| tsunami-digital.com | 4 | 29 | Uslužna stranica za SEO i GEO |
-| igrow.at | 4 | 39 | Case study s "Croatia" u URL-u |
+| [slade.hr](https://slade.hr/) | 6 | 26 | Naslovnica agencije |
+| [clutch.co](https://clutch.co/) | 6 | 91 | Direktorij agencija za Hrvatsku i Zagreb |
+| [digiadria.hr](https://digiadria.hr/) | 5 | 33 | Uslužna stranica za AEO |
+| [glarodigital.com.hr](https://glarodigital.com.hr/) | 5 | 0 | Uslužna stranica za AI optimizaciju |
+| [linkgrid.hr](https://linkgrid.hr/) | 5 | 0 | Stranica "O nama" |
+| [digitalmatrix.hr](https://digitalmatrix.hr/) | 4 | 4,5 | Javni cjenik |
+| [assemblio.hr](https://assemblio.hr/) | 4 | 16 | Lista "Top 5 SEO agencija u Hrvatskoj" |
+| [tsunami-digital.com](https://tsunami-digital.com/) | 4 | 29 | Uslužna stranica za SEO i GEO |
+| [igrow.at](https://igrow.at/) | 4 | 39 | Case study s "Croatia" u URL-u |
+
+<div data-embed="leaderboard"></div>
 
 Primijetite: među citiranima nema niti jednog velikog blog članka. Citirane su uslužne stranice, cjenici, liste agencija i direktoriji.
 
 ## Nalaz 3: DR gotovo ne odlučuje
 
-Glaro Digital i LinkGrid imaju DR 0, a citirani su po 5 puta. Digital Matrix ima DR 4,5 i četiri citata za pitanje o cijeni. Lista na tako.hr ima DR 6 i citirana je dvaput.
+[Glaro Digital](https://glarodigital.com.hr/) i [LinkGrid](https://linkgrid.hr/) imaju DR 0, a citirani su po 5 puta. [Digital Matrix](https://digitalmatrix.hr/) ima DR 4,5 i četiri citata za pitanje o cijeni. Lista na tako.hr ima DR 6 i citirana je dvaput.
 
 Na Googleu za "seo agencija" u top 10 stoje domene s DR 4 do 31. Na hrvatskom tržištu, i na Googleu i u ChatGPT-u, prepreka nije autoritet. Prepreka je što većina agencija nema stranicu koja izravno odgovara na pitanje.
 
@@ -65,10 +67,10 @@ Na Googleu za "seo agencija" u top 10 stoje domene s DR 4 do 31. Na hrvatskom tr
 Rastavili smo 19 citiranih stranica. Ponavljalo se pet stvari:
 
 1) Naziv usluge u naslovu, točno onim riječima kojima se pita. "Vidljivost u ChatGPT-u i AI tražilicama", "AI SEO i GEO", "SEO i AI optimizacija".
-2) Cijene u eurima. Digital Matrix ima javni cjenik s više od 50 iznosa i on je glavni izvor za svako pitanje o cijeni. DigiAdria ima sekciju "Početne cijene".
-3) Kratak odgovor na vrhu. Tsunami Digital ima blok "Ukratko", DigiAdria "Što dobivate i je li ovo za vas".
+2) Cijene u eurima. [Digital Matrix](https://digitalmatrix.hr/) ima javni cjenik s više od 50 iznosa i on je glavni izvor za svako pitanje o cijeni. [DigiAdria](https://digiadria.hr/) ima sekciju "Početne cijene".
+3) Kratak odgovor na vrhu. [Tsunami Digital](https://tsunami-digital.com/) ima blok "Ukratko", DigiAdria "Što dobivate i je li ovo za vas".
 4) FAQ i schema. Većina ima FAQPage, a uslužne stranice i Service schemu s cijenom (Offer).
-5) Brojke iz stvarnog projekta. Skyzone opisuje klijenta "od dna druge stranice do AI preporuke u tri mjeseca", iGrow, agencija iz Austrije, citiran je za Hrvatsku preko case studyja s Hrvatskom u naslovu.
+5) Brojke iz stvarnog projekta. Skyzone opisuje klijenta "od dna druge stranice do AI preporuke u tri mjeseca", [iGrow](https://igrow.at/), agencija iz Austrije, citiran je za Hrvatsku preko case studyja s Hrvatskom u naslovu.
 
 Šesta stvar nije na vašem webu: pitanje "koje su najbolje agencije" ChatGPT ne rješava stranicom agencije nego tuđim listama (assemblio.hr, tako.hr), direktorijima (Clutch, The Manifest, trebam.hr) i stranicama konferencija (Croatia SEO Summit).
 

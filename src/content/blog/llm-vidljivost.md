@@ -44,7 +44,7 @@ Citirane hrvatske stranice za kupovna pitanja imale su pet zajedničkih stvari:
 
 Jedna stranica po usluzi. Blog članak o "trendovima" ne zamjenjuje uslužnu stranicu.
 
-Koje riječi ChatGPT stvarno pretražuje za pitanje vašeg kupca možete vidjeti sami, u Chromeu. Postupak i što iz pretraga pročitati: [Što ChatGPT stvarno pretražuje kad netko pita za vašu uslugu](/blog/chatgpt-pretrage/).
+Koje riječi ChatGPT stvarno pretražuje za pitanje vašeg kupca možete vidjeti sami, u Chromeu. Postupak i što iz pretraga pročitati: [Metoda: kako vidjeti što ChatGPT pretražuje](/blog/chatgpt-pretrage/).
 
 ### 3. Spominju li vas drugi
 

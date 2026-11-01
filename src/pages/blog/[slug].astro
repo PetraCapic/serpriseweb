@@ -3,6 +3,7 @@ import { render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import Cta from '../../components/Cta.astro';
 import LlmLeaderboard from '../../components/LlmLeaderboard.astro';
+import ChatgptCitati from '../../components/ChatgptCitati.astro';
 import LlmTracker from '../../components/blog/LlmTracker.astro';
 import AiQuiz from '../../components/blog/AiQuiz.astro';
 import ClusterMap from '../../components/blog/ClusterMap.astro';
@@ -19,7 +20,7 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const { Content } = await render(post);
-const { title, description, date, updated, author, image, imageAlt, about, hasPart, faq, sources } = post.data;
+const { title, description, date, updated, author, image, imageAlt, dataset, about, hasPart, faq, sources } = post.data;
 const allPosts = hasPart ? await getPosts() : [];
 const parts = (hasPart ?? []).map((slug) => allPosts.find((p) => p.id === slug)).filter((p) => p !== undefined);
 const url = `${site.url}/blog/${post.id}/`;
@@ -30,6 +31,7 @@ const hasLeaderboard = has('leaderboard');
 const hasTerms = Boolean(post.body?.includes('data-term="'));
 const hasGa4 = Boolean(post.body?.includes('data-embed="ga4-'));
 const { howto } = post.data;
+const hasCitati = Boolean(post.body?.includes('data-embed="citati-'));
 
 const schema = [
   {
@@ -69,6 +71,36 @@ const schema = [
       { '@type': 'ListItem', position: 3, name: title, item: url },
     ],
   },
+  ...(dataset
+    ? [
+        {
+          '@context': 'https://schema.org',
+          '@type': 'Dataset',
+          '@id': `${url}#dataset`,
+          name: dataset.name,
+          description: dataset.description,
+          url,
+          inLanguage: 'hr',
+          keywords: dataset.keywords,
+          license: dataset.license,
+          isAccessibleForFree: true,
+          datePublished: date.toISOString().slice(0, 10),
+          dateModified: (updated ?? date).toISOString().slice(0, 10),
+          temporalCoverage: dataset.measured.toISOString().slice(0, 10),
+          spatialCoverage: { '@type': 'Place', name: 'Hrvatska' },
+          measurementTechnique: dataset.method,
+          creator: { '@id': `${site.url}/#organization` },
+          publisher: { '@id': `${site.url}/#organization` },
+          isBasedOn: `${url}#article`,
+          distribution: dataset.files.map((f) => ({
+            '@type': 'DataDownload',
+            name: f.name,
+            encodingFormat: 'text/csv',
+            contentUrl: new URL(f.url, site.url).href,
+          })),
+        },
+      ]
+    : []),
   ...(faq?.length
     ? [{
         '@context': 'https://schema.org',
@@ -99,6 +131,7 @@ const schema = [
       {image && <img src={image} alt={imageAlt ?? ''} class="article__img" />}
       <Content />
       {hasLeaderboard && <LlmLeaderboard />}
+      {hasCitati && <ChatgptCitati />}
       {has('tracker') && <LlmTracker />}
       {has('quiz') && <AiQuiz />}
       {has('cluster-map') && <ClusterMap />}
@@ -131,8 +164,33 @@ const schema = [
   <Cta />
 </Base>
 
+<script>
+  // Gumb "Kopiraj" na svakom bloku koda u članku.
+  document.querySelectorAll<HTMLPreElement>('.article pre').forEach((pre) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'copy-btn';
+    b.textContent = 'Kopiraj';
+    b.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(pre.querySelector('code')?.innerText ?? pre.innerText);
+        b.textContent = 'Kopirano';
+      } catch {
+        b.textContent = 'Označite i kopirajte ručno';
+      }
+      setTimeout(() => (b.textContent = 'Kopiraj'), 2000);
+    });
+    const wrap = document.createElement('div');
+    wrap.className = 'code-wrap';
+    pre.replaceWith(wrap);
+    wrap.append(b, pre);
+  });
+</script>
+
 <style>
   .article { margin: 0 auto; }
+  .article :global(.code-wrap) { position: relative; }
+  .article :global(.copy-btn) { position: absolute; top: 10px; right: 10px; z-index: 1; border: 0; border-radius: 8px; padding: 6px 12px; background: var(--accent); color: #fff; font: 600 0.8rem var(--font); cursor: pointer; }
   .article h1 { font-size: clamp(2rem, 4.2vw, 3rem); }
   .crumbs { font-size: 0.9rem; margin-bottom: 12px; }
   .article__meta { font-size: 0.95rem; }

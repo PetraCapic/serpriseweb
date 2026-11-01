@@ -28,6 +28,8 @@ Za testiranje u istom ekranu, na kartici "Test events", dobijete test kod. Sprem
 
 Ovo je najvažnije pravilo. Ako Pixel i server pošalju isti događaj s istim imenom i istim event_id, Meta ih spoji u jedan. Ako se event_id razlikuje, konverzija se broji dvaput.
 
+![Shema: isti StartMemorial događaj iz Meta Pixela i iz Conversions API-ja s istim event_id, Meta ga broji jednom](/blog/claude-code-meta-pixel-capi/meta-dedup.png)
+
 Kod nas je event_id izveden iz stvarnog objekta: za početak izrade memorijala to je prefiks i ID korisnika (start_ i ID). Tako ga i preglednik i server znaju bez dogovaranja.
 
 Pravila koja smo dali Claudeu:
@@ -49,6 +51,12 @@ Claude može napisati i malu testnu funkciju koja šalje jedan probni događaj s
 ## Korak 4: Meta Ads podaci za Claudea
 
 Za čitanje kampanja koristimo Windsor.ai konektor u Claudeu. Kad je spojen, Claude u razgovoru dobije potrošnju, klikove i konverzije po kampanji i može ih usporediti s podacima iz GA4 i Search Consolea.
+
+Ovo je stvarni odgovor na jedno pitanje o kampanjama portala u listopadu:
+
+![Meta kampanje portala za osmrtnice u listopadu 2026.: klikovi i cijena klika po kampanji](/blog/claude-code-meta-pixel-capi/meta-kampanje.png)
+
+Kampanje za besplatne vodiče i e-book imaju klik oko 1 cent, a prodajne kampanje i retargeting oko 12 centi. To nije loše samo po sebi, jer prodajne kampanje ciljaju manju i topliju publiku. Ali pokazuje zašto smo vodiče koristili kao prvi korak: jeftino dovode ljude koji se onda prijave na newsletter.
 
 Isti konektor podržava i promjene na kampanjama (na primjer pauziranje). Takve promjene Claude radi samo kad ih izričito potvrdite.
 

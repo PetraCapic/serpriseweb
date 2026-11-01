@@ -16,6 +16,8 @@ Ovo je prvi od četiri vodiča uz naš [case study o Claude Codeu na portalu za 
 - Google Cloud projekt. Besplatan je, a isti projekt koristite i za [GA4](/blog/claude-code-google-analytics-4/) i [Tag Manager](/blog/claude-code-google-tag-manager/).
 - Claude Code, lokalno ili na claude.ai/code.
 
+![Shema spajanja Claude Codea na Search Console u četiri koraka: Google Cloud, servisni račun, korisnik u Search Consoleu, varijabla okruženja](/blog/claude-code-google-search-console/gsc-shema.png)
+
 ## Korak 1: napravite servisni račun
 
 Servisni račun je Google korisnik za programe. Claude se prijavljuje njime, a ne vašim osobnim računom.
@@ -60,9 +62,19 @@ Ako je popis prazan, servisni račun nije dodan u pravo svojstvo. Domain svojstv
 
 ## Što pitati kad je spojeno
 
+Evo kako izgleda stvarni odgovor kad Claude ima pristup. Pitanje je bilo jedna rečenica, a Claude je sam napisao upit prema API-ju za četiri razdoblja.
+
+![Primjer odgovora u Claude Codeu: klikovi prije i poslije 19.10.2026. i isti dani 2025. za osmrtnica.com.hr](/blog/claude-code-google-search-console/gsc-odgovor.png)
+
 - "Usporedi klikove 12 dana prije i poslije 19.10. i iste dane prošle godine." Usporedba s prošlom godinom pokazuje koliki je dio rasta sezonski.
 - "Podijeli klikove po vrsti stranice prema URL-u." Kod nas: pojedinačne osmrtnice, gradovi, sprovodi, groblja, blog.
 - "Nađi upite s više od 2.000 impresija na poziciji 4 do 12." To su najbrže prilike.
+
+![Tablica upita s više od 2.000 impresija na poziciji 4 do 12 za osmrtnica.com.hr](/blog/claude-code-google-search-console/gsc-prilike.png)
+
+
+U našem slučaju odgovor je bio jasan: gradske stranice su na poziciji 4 do 8 za upite s desecima tisuća impresija, a CTR je ispod 1 %. Zato su one prve u planu.
+
 - "Nacrtaj graf klikova po tjednu od srpnja i spremi ga kao PNG za blog."
 
 Search Console API vraća do 25.000 redova po upitu. Za velike webove Claude mora tražiti podatke u više stranica (startRow), što obično sam napravi ako mu kažete da web ima puno URL-ova. Podaci kasne dva do tri dana.

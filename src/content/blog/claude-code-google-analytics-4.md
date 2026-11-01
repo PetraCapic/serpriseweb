@@ -10,6 +10,10 @@ GA4 spojen s Claude Codeom znači dvije stvari. Claude čita izvještaje (sesije
 
 Ovo je drugi od četiri vodiča uz naš [case study o Claude Codeu na portalu za osmrtnice](/blog/claude-code-case-study-osmrtnice/). Prvi korak, servisni račun, opisan je u [vodiču za Search Console](/blog/claude-code-google-search-console/).
 
+![Sesije po izvoru na osmrtnica.com.hr od 19. do 31.10.2026. iz GA4 Data API-ja](/blog/claude-code-google-analytics-4/ga4-izvori.png)
+
+Gornji graf je prvi izvještaj koji smo tražili nakon spajanja: sesije po izvoru za zadnjih 13 dana. Bez otvaranja GA4 vidi se da ChatGPT već donosi više posjeta od DuckDuckGoa i Ecosije zajedno.
+
 ## Korak 1: uključite GA4 API-je
 
 U istom Google Cloud projektu, u "APIs & Services", uključite:
@@ -40,6 +44,10 @@ Pravila koja smo dali Claudeu, i koja preporučujemo:
 - purchase ima transaction_id, da GA4 ne broji istu kupnju dvaput,
 - prije svakog ecommerce događaja ecommerce objekt se očisti, da vrijednosti ne prelaze s jednog događaja na drugi.
 
+Ovako to izgleda u brojkama. Pregled osmrtnice, klik na memorijal i klik na svijeću su događaji koje je Claude dodao u kod 16. listopada:
+
+![Broj događaja obituary_view, obituary_memorial_click i obituary_candle_click u GA4 od 19. do 31.10.2026.](/blog/claude-code-google-analytics-4/ga4-dogadaji.png)
+
 Kako se postavljaju oznake u Tag Manageru, opisano je u [vodiču za Tag Manager](/blog/claude-code-google-tag-manager/).
 
 ## Što pitati kad je spojeno
@@ -49,6 +57,10 @@ Kako se postavljaju oznake u Tag Manageru, opisano je u [vodiču za Tag Manager]
 - "Usporedi GA4 sesije s klikovima iz Search Consolea po danu i reci gdje se ne slažu."
 
 Zadnje pitanje nam je otkrilo da je GA4 od 1. do 18. listopada bilježio otprilike četvrtinu posjeta, iako su klikovi u Search Consoleu bili normalni. Taj period smo u statistici označili kao neusporediv.
+
+![Klikovi iz Search Consolea i organske sesije iz GA4 po danu, rujan i listopad 2026., s rupom od 1. do 18.10.](/blog/claude-code-google-analytics-4/ga4-vs-gsc.png)
+
+Razlika postoji i poslije 19. listopada, ali manja. Dio nje je očekivan: GA4 ne bilježi posjetitelje koji ne prihvate kolačiće, a Search Console broji sve klikove.
 
 ## Česte greške
 

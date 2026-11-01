@@ -179,7 +179,7 @@ Za pitanje "koja je najbolja agencija" ovi izvori se citiraju umjesto stranica a
 
 ## Ponavljamo test svaki mjesec
 
-Istih 35 pitanja postavljamo ChatGPT-u prvog dana u mjesecu i bilježimo tko je citiran. Polazna točka za SERPRise je 1 od 45 odgovora (30. listopada), a mjerenje 1. studenog dalo je isti rezultat. Cilj je 10 od 45 do veljače 2027. Sljedeće mjerenje je 1. prosinca.
+Istih 35 pitanja postavljamo ChatGPT-u prvog dana u mjesecu i bilježimo tko je citiran. Isto radimo i za klijente, s pitanjima njihovih kupaca: odgovore prikupljamo automatski, Domain Rating i backlinkove citiranih stranica povlačimo preko Ahrefs API-ja, a Google pozicije preko DataForSEO-a. Svaki klijent rezultate vidi u svom live dashboardu, pa se promjena vidi čim se dogodi, a ne tek u mjesečnom izvještaju. Polazna točka za SERPRise je 1 od 45 odgovora (30. listopada), a mjerenje 1. studenog dalo je isti rezultat. Cilj je 10 od 45 do veljače 2027. Sljedeće mjerenje je 1. prosinca.
 
 Od sljedećeg mjerenja test proširujemo na još dva alata, da rezultat ne ovisi samo o ChatGPT-u:
 

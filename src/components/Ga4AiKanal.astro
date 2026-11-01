@@ -1,0 +1,406 @@
+---
+import fs from 'node:fs';
+import path from 'node:path';
+// Interaktivni dodaci članka /blog/ga4-ai-kanal/. Svaki dio se renderira ispod članka
+// i skripta ga premješta na mjesto označeno u tekstu (<div data-embed="ga4-..."></div>).
+// Bez JavaScripta tekst članka (regex u <code>, koraci u <ol>) ostaje potpun.
+
+// Podaci: GA4 portala osmrtnica.com.hr, povučeno 1.11.2026. preko GA4 Data API-ja.
+const period = {
+  sve: {
+    label: '1.10.2025. – 31.10.2026.',
+    rows: [
+      { tool: 'ChatGPT', ai: 136, ref: 43, un: 103 },
+      { tool: 'Perplexity', ai: 0, ref: 6, un: 16 },
+      { tool: 'Copilot', ai: 1, ref: 9, un: 5 },
+      { tool: 'Gemini', ai: 7, ref: 0, un: 1 },
+      { tool: 'Claude', ai: 1, ref: 0, un: 0 },
+    ],
+  },
+  nakon: {
+    label: '5.6. – 31.10.2026. (otkad kanal postoji)',
+    rows: [
+      { tool: 'ChatGPT', ai: 136, ref: 0, un: 0 },
+      { tool: 'Perplexity', ai: 0, ref: 0, un: 8 },
+      { tool: 'Copilot', ai: 1, ref: 0, un: 2 },
+      { tool: 'Gemini', ai: 7, ref: 0, un: 1 },
+      { tool: 'Claude', ai: 1, ref: 0, un: 0 },
+    ],
+  },
+};
+const sum = (rows: typeof period.sve.rows) => rows.reduce((a, r) => ({ ai: a.ai + r.ai, ref: a.ref + r.ref, un: a.un + r.un }), { ai: 0, ref: 0, un: 0 });
+
+// Regex builder: zadani odabir je regex iz članka.
+const tools = [
+  { id: 'chatgpt', label: 'ChatGPT', re: 'chatgpt', on: true },
+  { id: 'openai', label: 'OpenAI', re: 'openai', on: true },
+  { id: 'perplexity', label: 'Perplexity', re: 'perplexity', on: true },
+  { id: 'gemini', label: 'Gemini', re: 'gemini', strict: 'gemini\\.google', on: true },
+  { id: 'copilot', label: 'Copilot', re: 'copilot', strict: 'copilot\\.(com|microsoft)', on: true },
+  { id: 'claude', label: 'Claude', re: 'claude', on: true },
+  { id: 'deepseek', label: 'DeepSeek', re: 'deepseek', on: true },
+  { id: 'mistral', label: 'Mistral', re: 'mistral', on: true },
+  { id: 'grok', label: 'Grok', re: 'grok', on: true },
+  { id: 'meta', label: 'Meta AI', re: 'meta\\.ai', on: false },
+  { id: 'you', label: 'You.com', re: 'you\\.com', on: false },
+  { id: 'phind', label: 'Phind', re: 'phind', on: false },
+  { id: 'kagi', label: 'Kagi', re: 'kagi', on: false, note: 'prije svega tražilica' },
+];
+const defaultRegex = `.*(${tools.filter((t) => t.on).map((t) => t.re).join('|')}).*`;
+
+// Koraci: screenshot se prikazuje samo ako datoteka postoji u public/blog/ga4-ai-kanal/.
+const shots = Array.from({ length: 7 }, (_, i) => {
+  const f = `/blog/ga4-ai-kanal/korak-${i + 1}.png`;
+  return fs.existsSync(path.join(process.cwd(), 'public', f)) ? f : '';
+});
+
+const eng = [
+  { k: 'Stopa angažmana', gpt: '59%', g: '46%', icon: 'M12 21s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.5-7 10-7 10z' },
+  { k: 'Stranica po sesiji', gpt: '2,3', g: '1,5', icon: 'M7 3h7l5 5v13H7zM14 3v5h5' },
+  { k: 'Prosječno trajanje', gpt: '71 s', g: '67 s', icon: 'M12 7v5l3 2M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z' },
+];
+---
+
+<div hidden data-ga4-widgets>
+  <!-- Gdje GA4 sprema AI posjete -->
+  <figure class="gw" data-w="ga4-kanali" data-period={JSON.stringify(period)}>
+    <div class="gw__head">
+      <figcaption>
+        <p class="gw__eyebrow">Podaci s hrvatskog portala</p>
+        <strong class="gw__title">Gdje GA4 sprema AI posjete</strong>
+      </figcaption>
+      <div class="gw__seg" role="group" aria-label="Razdoblje">
+        <button type="button" data-p="sve" aria-pressed="true">13 mjeseci</button>
+        <button type="button" data-p="nakon">Od 5.6.2026.</button>
+      </div>
+    </div>
+    <ul class="gw__legend">
+      <li><i class="c-ai"></i>AI Assistant</li><li><i class="c-ref"></i>Referral</li><li><i class="c-un"></i>Unassigned</li>
+    </ul>
+    <div class="gw__bars">
+      {period.sve.rows.map((r) => {
+        const t = r.ai + r.ref + r.un;
+        return (
+          <div class="gw__bar" data-tool={r.tool}>
+            <span class="gw__tool">{r.tool}</span>
+            <span class="gw__track" role="img" aria-label={`${r.tool}: AI Assistant ${r.ai}, Referral ${r.ref}, Unassigned ${r.un}`}>
+              <span class="c-ai" style={`width:${(r.ai / t) * 100}%`}></span>
+              <span class="c-ref" style={`width:${(r.ref / t) * 100}%`}></span>
+              <span class="c-un" style={`width:${(r.un / t) * 100}%`}></span>
+            </span>
+            <span class="gw__nums">{r.ai} / {r.ref} / {r.un}</span>
+          </div>
+        );
+      })}
+    </div>
+    <p class="gw__total" data-total>
+      {(() => { const s = sum(period.sve.rows); return `Ukupno ${s.ai + s.ref + s.un} AI posjeta, od toga ${s.ai} u kanalu AI Assistant.`; })()}
+    </p>
+    <p class="gw__note">Sesije po izvoru i kanalu, GA4 portala osmrtnica.com.hr, <span data-label>{period.sve.label}</span>. Brojevi: AI Assistant / Referral / Unassigned.</p>
+  </figure>
+
+  <!-- Angažman ChatGPT vs Google -->
+  <figure class="gw" data-w="ga4-angazman">
+    <figcaption>
+      <p class="gw__eyebrow">Angažman, 1.10.2025. – 31.10.2026.</p>
+      <strong class="gw__title">Posjetitelji s ChatGPT-a prema posjetiteljima s Googlea</strong>
+    </figcaption>
+    <div class="gw__cmp">
+      <div class="gw__col gw__col--gpt">
+        <p class="gw__colhead">ChatGPT <small>282 sesije</small></p>
+        {eng.map((e) => (
+          <div class="gw__stat"><svg viewBox="0 0 24 24" aria-hidden="true"><path d={e.icon} /></svg><span>{e.k}</span><strong>{e.gpt}</strong></div>
+        ))}
+      </div>
+      <div class="gw__col">
+        <p class="gw__colhead">Google organic <small>372.415 sesija</small></p>
+        {eng.map((e) => (
+          <div class="gw__stat"><svg viewBox="0 0 24 24" aria-hidden="true"><path d={e.icon} /></svg><span>{e.k}</span><strong>{e.g}</strong></div>
+        ))}
+      </div>
+    </div>
+    <p class="gw__note">Izvor sesije chatgpt.com (svi kanali) i google / organic, GA4 portala osmrtnica.com.hr.</p>
+  </figure>
+
+  <!-- Regex builder -->
+  <div class="gw" data-w="ga4-regex" data-tools={JSON.stringify(tools)}>
+    <p class="gw__eyebrow">Alat</p>
+    <strong class="gw__title">Složite svoj regex</strong>
+    <div class="gw__checks">
+      {tools.map((t) => (
+        <label><input type="checkbox" value={t.id} checked={t.on} /> {t.label}{t.note && <small> ({t.note})</small>}</label>
+      ))}
+    </div>
+    <label class="gw__strict"><input type="checkbox" data-strict /> Precizni uzorci za Gemini i Copilot (ako imate kampanju s tim imenom)</label>
+    <pre class="gw__out"><code data-regex>{defaultRegex}</code></pre>
+    <button type="button" class="btn btn--primary gw__btn" data-copy>Kopiraj regex</button>
+    <span class="gw__copied" data-copied hidden>Kopirano</span>
+  </div>
+
+  <!-- Regex tester -->
+  <div class="gw" data-w="ga4-tester">
+    <p class="gw__eyebrow">Alat</p>
+    <strong class="gw__title">Testirajte regex na svojim izvorima</strong>
+    <p class="gw__lead">U GA4 otvorite Traffic acquisition, dimenzija Session source, i zalijepite izvore, jedan po retku. Tester koristi regex iz alata iznad.</p>
+    <textarea rows="7" data-input placeholder="google&#10;chatgpt.com&#10;perplexity&#10;meta&#10;youtube.com"></textarea>
+    <ul class="gw__results" data-results aria-live="polite"></ul>
+  </div>
+
+  <!-- Kalkulator -->
+  <div class="gw" data-w="ga4-kalkulator">
+    <p class="gw__eyebrow">Kalkulator</p>
+    <strong class="gw__title">Koliko AI posjeta propuštate</strong>
+    <label class="gw__field">Sesije u kanalu AI Assistant
+      <input type="number" min="0" step="1" value="100" data-sessions inputmode="numeric" />
+    </label>
+    <fieldset class="gw__radios">
+      <legend>Razdoblje koje gledate</legend>
+      <label><input type="radio" name="gw-r" value="1.076" checked /> Samo otkad kanal postoji u vašem GA4</label>
+      <label><input type="radio" name="gw-r" value="2.262" /> 13 mjeseci, većinom prije uvođenja kanala</label>
+    </fieldset>
+    <p class="gw__result" aria-live="polite">Procjena stvarnih AI posjeta: <strong data-est>108</strong> <span data-miss>(oko 8 izvan kanala)</span></p>
+    <p class="gw__note"><strong>Procjena na temelju jednog portala.</strong> Omjeri 156/145 i 328/145 s portala osmrtnica.com.hr. Ne uključuje AI posjete koji završe u Direct, pa je stvarna brojka još veća.</p>
+  </div>
+
+  <!-- Stepper oko <ol> sa 7 koraka -->
+  <div class="gw gw--steps" data-w="ga4-koraci" data-shots={JSON.stringify(shots)}>
+    <div class="gw__stephead">
+      <span data-pos>Korak 1 od 7</span>
+      <span class="gw__dots" data-dots></span>
+    </div>
+    <div data-stage></div>
+    <img class="gw__shot" data-shot alt="" hidden />
+    <div class="gw__stepnav">
+      <button type="button" class="btn btn--ghost" data-prev>Natrag</button>
+      <label class="gw__done"><input type="checkbox" data-done /> Napravljeno</label>
+      <button type="button" class="btn btn--primary" data-next>Dalje</button>
+    </div>
+    <div class="gw__finish" data-finish hidden>
+      <strong>Sad provjerite koliko AI posjeta imate.</strong>
+      <p>Kanal pokazuje klikove. Koliko vas AI spominje bez klika provjerite ovdje: <a href="/blog/provjera-ai-vidljivosti/">Spominje li ChatGPT vašu firmu? Provjera u 20 pitanja</a>.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-ga4-widgets]');
+  if (root) {
+    // Premještanje na mjesta u tekstu.
+    root.querySelectorAll<HTMLElement>('[data-w]').forEach((w) => {
+      const slot = document.querySelector(`[data-embed="${w.dataset.w}"]`);
+      if (slot) slot.replaceWith(w);
+    });
+    root.hidden = false;
+
+    // Gdje GA4 sprema AI posjete: prebacivanje razdoblja.
+    const kanali = document.querySelector<HTMLElement>('[data-w="ga4-kanali"]');
+    if (kanali) {
+      const data = JSON.parse(kanali.dataset.period!);
+      kanali.querySelectorAll<HTMLButtonElement>('[data-p]').forEach((b) =>
+        b.addEventListener('click', () => {
+          const p = data[b.dataset.p!];
+          kanali.querySelectorAll('[data-p]').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+          let ai = 0, all = 0;
+          for (const r of p.rows) {
+            const t = r.ai + r.ref + r.un;
+            ai += r.ai; all += t;
+            const bar = kanali.querySelector<HTMLElement>(`[data-tool="${r.tool}"]`)!;
+            const s = bar.querySelectorAll<HTMLElement>('.gw__track span');
+            [r.ai, r.ref, r.un].forEach((v, i) => (s[i].style.width = `${(v / t) * 100}%`));
+            bar.querySelector('.gw__track')!.setAttribute('aria-label', `${r.tool}: AI Assistant ${r.ai}, Referral ${r.ref}, Unassigned ${r.un}`);
+            bar.querySelector('.gw__nums')!.textContent = `${r.ai} / ${r.ref} / ${r.un}`;
+          }
+          kanali.querySelector('[data-total]')!.textContent = `Ukupno ${all} AI posjeta, od toga ${ai} u kanalu AI Assistant.`;
+          kanali.querySelector('[data-label]')!.textContent = p.label;
+        })
+      );
+    }
+
+    // Regex builder.
+    const builder = document.querySelector<HTMLElement>('[data-w="ga4-regex"]');
+    let current = builder?.querySelector('[data-regex]')?.textContent ?? '';
+    const listeners: Array<() => void> = [];
+    if (builder) {
+      const tools = JSON.parse(builder.dataset.tools!) as Array<{ id: string; re: string; strict?: string }>;
+      const strict = builder.querySelector<HTMLInputElement>('[data-strict]')!;
+      const out = builder.querySelector('[data-regex]')!;
+      const build = () => {
+        const on = new Set([...builder.querySelectorAll<HTMLInputElement>('.gw__checks input:checked')].map((i) => i.value));
+        const parts = tools.filter((t) => on.has(t.id)).map((t) => (strict.checked && t.strict) || t.re);
+        current = parts.length ? `.*(${parts.join('|')}).*` : '';
+        out.textContent = current || 'Odaberite barem jedan alat.';
+        listeners.forEach((f) => f());
+      };
+      builder.addEventListener('change', build);
+      const copied = builder.querySelector<HTMLElement>('[data-copied]')!;
+      builder.querySelector('[data-copy]')!.addEventListener('click', async () => {
+        if (!current) return;
+        try { await navigator.clipboard.writeText(current); } catch {
+          const r = document.createRange(); r.selectNodeContents(out); getSelection()?.removeAllRanges(); getSelection()?.addRange(r);
+        }
+        copied.hidden = false; setTimeout(() => (copied.hidden = true), 1800);
+      });
+    }
+
+    // Regex tester (GA4 kod kanala ne razlikuje velika i mala slova).
+    const tester = document.querySelector<HTMLElement>('[data-w="ga4-tester"]');
+    if (tester) {
+      const input = tester.querySelector<HTMLTextAreaElement>('[data-input]')!;
+      const list = tester.querySelector('[data-results]')!;
+      const test = () => {
+        list.innerHTML = '';
+        let re: RegExp | null = null;
+        try { re = current ? new RegExp(`^(?:${current})$`, 'i') : null; } catch { re = null; }
+        for (const line of input.value.split('\n').map((l) => l.trim()).filter(Boolean).slice(0, 300)) {
+          const hit = !!re && re.test(line);
+          const li = document.createElement('li');
+          li.className = hit ? 'is-ai' : '';
+          const code = document.createElement('code'); code.textContent = line;
+          const tag = document.createElement('span'); tag.textContent = hit ? 'AI kanal' : 'ostaje gdje je';
+          li.append(code, tag);
+          list.append(li);
+        }
+      };
+      input.addEventListener('input', test);
+      listeners.push(test);
+    }
+
+    // Kalkulator.
+    const calc = document.querySelector<HTMLElement>('[data-w="ga4-kalkulator"]');
+    if (calc) {
+      const run = () => {
+        const n = Math.max(0, Number(calc.querySelector<HTMLInputElement>('[data-sessions]')!.value) || 0);
+        const k = Number(calc.querySelector<HTMLInputElement>('input[name="gw-r"]:checked')!.value);
+        const est = Math.round(n * k);
+        calc.querySelector('[data-est]')!.textContent = est.toLocaleString('hr-HR');
+        calc.querySelector('[data-miss]')!.textContent = `(oko ${(est - n).toLocaleString('hr-HR')} izvan kanala)`;
+      };
+      calc.addEventListener('input', run);
+      run();
+    }
+
+    // Stepper: preuzima <ol> sa 7 koraka koji stoji neposredno ispred njega u tekstu.
+    const steps = document.querySelector<HTMLElement>('[data-w="ga4-koraci"]');
+    const ol = steps?.previousElementSibling;
+    if (steps && ol?.tagName === 'OL') {
+      const items = [...ol.querySelectorAll<HTMLLIElement>(':scope > li')];
+      const shots = JSON.parse(steps.dataset.shots!) as string[];
+      const done = new Set<number>();
+      let i = 0;
+      ol.classList.add('gw__ol');
+      steps.querySelector('[data-stage]')!.append(ol);
+      const dots = steps.querySelector('[data-dots]')!;
+      items.forEach((_, n) => {
+        const d = document.createElement('button');
+        d.type = 'button'; d.setAttribute('aria-label', `Korak ${n + 1}`);
+        d.addEventListener('click', () => show(n));
+        dots.append(d);
+      });
+      const shot = steps.querySelector<HTMLImageElement>('[data-shot]')!;
+      const doneBox = steps.querySelector<HTMLInputElement>('[data-done]')!;
+      const prev = steps.querySelector<HTMLButtonElement>('[data-prev]')!;
+      const next = steps.querySelector<HTMLButtonElement>('[data-next]')!;
+      const finish = steps.querySelector<HTMLElement>('[data-finish]')!;
+      const show = (n: number) => {
+        i = n;
+        items.forEach((li, k) => (li.hidden = k !== n));
+        [...dots.children].forEach((d, k) => {
+          d.classList.toggle('is-on', k === n);
+          d.classList.toggle('is-done', done.has(k));
+        });
+        steps.querySelector('[data-pos]')!.textContent = `Korak ${n + 1} od ${items.length}`;
+        shot.hidden = !shots[n];
+        if (shots[n]) { shot.src = shots[n]; shot.alt = `GA4, korak ${n + 1}`; }
+        doneBox.checked = done.has(n);
+        prev.disabled = n === 0;
+        next.textContent = n === items.length - 1 ? 'Završi' : 'Dalje';
+        finish.hidden = true;
+      };
+      prev.addEventListener('click', () => i > 0 && show(i - 1));
+      next.addEventListener('click', () => {
+        if (i < items.length - 1) show(i + 1);
+        else finish.hidden = false;
+      });
+      doneBox.addEventListener('change', () => {
+        doneBox.checked ? done.add(i) : done.delete(i);
+        dots.children[i].classList.toggle('is-done', doneBox.checked);
+      });
+      show(0);
+    }
+  }
+</script>
+
+<style>
+  .gw { margin: 1.8em 0; padding: 24px; border: 1px solid var(--border); border-radius: var(--radius); background: #fff; box-shadow: 0 10px 30px rgba(16, 43, 67, 0.06); }
+  .gw__head { display: flex; flex-wrap: wrap; gap: 14px; justify-content: space-between; align-items: end; margin-bottom: 12px; }
+  .gw__eyebrow { margin: 0 0 4px !important; color: var(--accent); font: 700 0.75rem var(--font-display); letter-spacing: 0.1em; text-transform: uppercase; }
+  .gw__title { display: block; font: 700 1.25rem var(--font-display); color: var(--navy); margin-bottom: 8px; }
+  .gw__lead { margin: 0 0 12px !important; color: var(--muted); font-size: 0.95rem; }
+  .gw__note { margin: 12px 0 0 !important; font-size: 0.8rem; color: var(--muted); }
+  .gw__seg { display: inline-flex; background: var(--bg-2); border-radius: 999px; padding: 4px; }
+  .gw__seg button { border: 0; background: none; font: 600 0.85rem var(--font); color: var(--muted); padding: 7px 14px; border-radius: 999px; cursor: pointer; }
+  .gw__seg button[aria-pressed='true'] { background: #fff; color: var(--navy); box-shadow: 0 1px 4px rgba(16, 43, 67, 0.12); }
+  .gw__legend { display: flex; flex-wrap: wrap; gap: 16px; list-style: none; padding: 0 !important; margin: 0 0 10px !important; font-size: 0.85rem; color: var(--muted); }
+  .gw__legend li { margin: 0 !important; display: inline-flex; align-items: center; gap: 6px; }
+  .gw__legend i { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+  .c-ai { background: var(--accent); }
+  .c-ref { background: var(--navy); }
+  .c-un { background: #9aa8b8; }
+  .gw__bar { display: grid; grid-template-columns: 90px minmax(0, 1fr) 100px; gap: 12px; align-items: center; padding: 7px 0; }
+  .gw__tool { font-weight: 600; color: var(--navy); }
+  .gw__track { display: flex; height: 16px; border-radius: 999px; overflow: hidden; background: var(--bg-2); }
+  .gw__track span { display: block; height: 100%; transition: width 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); }
+  .gw__nums { font: 600 0.85rem var(--font-display); color: var(--muted); text-align: right; }
+  .gw__total { margin: 10px 0 0 !important; font-weight: 600; color: var(--navy); }
+  .gw__cmp { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 8px; }
+  .gw__col { padding: 16px; border-radius: 12px; background: var(--bg-2); }
+  .gw__col--gpt { background: var(--accent-soft); }
+  .gw__colhead { margin: 0 0 10px !important; font: 700 1.05rem var(--font-display); color: var(--navy); }
+  .gw__colhead small { display: block; font: 400 0.8rem var(--font); color: var(--muted); }
+  .gw__stat { display: grid; grid-template-columns: 24px 1fr auto; gap: 10px; align-items: center; padding: 8px 0; border-top: 1px solid rgba(16, 43, 67, 0.08); font-size: 0.92rem; }
+  .gw__stat svg { width: 22px; height: 22px; fill: none; stroke: var(--accent); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .gw__col:not(.gw__col--gpt) svg { stroke: var(--navy); }
+  .gw__stat strong { font: 700 1.3rem var(--font-display); color: var(--navy); }
+  .gw__checks { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0 10px; }
+  .gw__checks label { display: inline-flex; gap: 6px; align-items: center; padding: 6px 12px; border: 1px solid var(--border); border-radius: 999px; font-size: 0.9rem; cursor: pointer; }
+  .gw__checks label:has(input:checked) { border-color: var(--accent); background: var(--accent-soft); }
+  .gw__checks small { color: var(--muted); }
+  .gw__strict { display: flex; gap: 8px; align-items: center; font-size: 0.88rem; color: var(--muted); cursor: pointer; }
+  .gw__out { margin: 12px 0 !important; white-space: pre-wrap; word-break: break-all; }
+  .gw__out code { word-break: break-all; white-space: pre-wrap; }
+  .gw__btn { cursor: pointer; }
+  .gw__copied { margin-left: 10px; color: var(--ok); font-weight: 600; }
+  .gw textarea { width: 100%; box-sizing: border-box; font: 0.92rem ui-monospace, monospace; padding: 12px; border: 1px solid var(--border); border-radius: 10px; resize: vertical; }
+  .gw__results { list-style: none; padding: 0 !important; margin: 10px 0 0 !important; display: grid; gap: 4px; }
+  .gw__results :global(li) { margin: 0 !important; display: flex; justify-content: space-between; gap: 10px; padding: 6px 10px; border-radius: 8px; background: var(--bg-2); font-size: 0.9rem; }
+  .gw__results :global(li span) { color: var(--muted); white-space: nowrap; }
+  .gw__results :global(li.is-ai) { background: var(--accent-soft); }
+  .gw__results :global(li.is-ai span) { color: var(--accent); font-weight: 700; }
+  .gw__field { display: grid; gap: 6px; font-weight: 600; color: var(--navy); max-width: 280px; }
+  .gw__field input { font: 600 1.1rem var(--font); padding: 10px 12px; border: 1px solid var(--border); border-radius: 10px; }
+  .gw__radios { border: 0; padding: 0; margin: 14px 0; display: grid; gap: 6px; font-size: 0.92rem; }
+  .gw__radios legend { font-weight: 600; color: var(--navy); margin-bottom: 4px; }
+  .gw__result { font-size: 1.05rem; margin: 0 !important; }
+  .gw__result strong { font: 700 1.8rem var(--font-display); color: var(--accent); }
+  .gw__stephead { display: flex; justify-content: space-between; align-items: center; gap: 10px; font: 600 0.85rem var(--font-display); color: var(--muted); }
+  .gw__dots { display: inline-flex; gap: 6px; }
+  .gw__dots :global(button) { flex: none; width: 12px; height: 12px; min-width: 0; padding: 0; border-radius: 50%; box-shadow: none; border: 2px solid var(--border); background: #fff; cursor: pointer; }
+  .gw__dots :global(button.is-done) { background: var(--ok); border-color: var(--ok); }
+  .gw__dots :global(button.is-on) { border-color: var(--accent); }
+  .gw :global(.gw__ol) { list-style: none; padding: 0 !important; margin: 14px 0 !important; min-height: 4.5em; font-size: 1.05rem; }
+  .gw :global(.gw__ol li) { margin: 0 !important; }
+  .gw__shot { width: 100%; border: 1px solid var(--border); border-radius: 10px; }
+  .gw__stepnav { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-top: 12px; }
+  .gw__stepnav button { cursor: pointer; }
+  .gw__stepnav button:disabled { opacity: 0.4; cursor: default; }
+  .gw__done { display: inline-flex; gap: 6px; align-items: center; font-weight: 600; cursor: pointer; }
+  .gw__finish { margin-top: 16px; padding: 16px; border-radius: 12px; background: var(--accent-soft); }
+  .gw__finish p { margin: 6px 0 0 !important; }
+  @media (max-width: 640px) {
+    .gw { padding: 18px 14px; }
+    .gw__bar { grid-template-columns: 74px minmax(0, 1fr); }
+    .gw__nums { grid-column: 2; text-align: left; }
+    .gw__cmp { grid-template-columns: 1fr; }
+    .gw__stepnav { flex-wrap: wrap; }
+  }
+</style>

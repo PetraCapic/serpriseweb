@@ -26,6 +26,10 @@ const blog = defineCollection({
         keywords: z.array(z.string()).default([]),
       })
       .optional(),
+    // Česta pitanja za FAQPage schemu (isti tekst mora biti i vidljiv u članku).
+    faq: z.array(z.object({ q: z.string(), a: z.string() })).optional(),
+    // Koraci za HowTo schemu (isti koraci moraju biti i vidljivi u članku).
+    howto: z.object({ name: z.string(), steps: z.array(z.string()) }).optional(),
   }),
 });
 

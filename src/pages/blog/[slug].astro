@@ -4,6 +4,7 @@ import Base from '../../layouts/Base.astro';
 import Cta from '../../components/Cta.astro';
 import LlmLeaderboard from '../../components/LlmLeaderboard.astro';
 import ChatgptCitati from '../../components/ChatgptCitati.astro';
+import Ga4AiKanal from '../../components/Ga4AiKanal.astro';
 import { getPosts, formatDate, readingTime } from '../../lib/blog';
 import { site, team } from '../../lib/site';
 
@@ -20,6 +21,8 @@ const person = team.find((m) => m.name === author);
 // Interaktivni dodaci pojedinih članaka; u tekstu ih označava <div data-embed="..."></div>.
 const hasLeaderboard = post.body?.includes('data-embed="leaderboard"');
 const hasCitati = post.body?.includes('data-embed="citati-');
+const hasGa4 = post.body?.includes('data-embed="ga4-');
+const { faq, howto } = post.data;
 
 const schema = [
   {
@@ -79,6 +82,22 @@ const schema = [
         },
       ]
     : []),
+  ...(faq?.length
+    ? [{
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+      }]
+    : []),
+  ...(howto
+    ? [{
+        '@context': 'https://schema.org',
+        '@type': 'HowTo',
+        name: howto.name,
+        inLanguage: 'hr',
+        step: howto.steps.map((text, i) => ({ '@type': 'HowToStep', position: i + 1, text, url: `${url}#kanal-u-7-koraka` })),
+      }]
+    : []),
 ];
 ---
 
@@ -94,6 +113,7 @@ const schema = [
       <Content />
       {hasLeaderboard && <LlmLeaderboard />}
       {hasCitati && <ChatgptCitati />}
+      {hasGa4 && <Ga4AiKanal />}
     </div>
   </article>
 

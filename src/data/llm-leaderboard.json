@@ -1,0 +1,17 @@
+{
+  "answers": 45,
+  "measured": "2026-10-30",
+  "next": "2026-12-01",
+  "entries": [
+    { "name": "Slade", "domain": "slade.hr", "url": "https://slade.hr/", "cites": 6, "dr": 26, "page": "Naslovnica agencije", "type": "agencija" },
+    { "name": "DigiAdria", "domain": "digiadria.hr", "url": "https://digiadria.hr/", "cites": 5, "dr": 33, "page": "Uslužna stranica za AEO", "type": "agencija" },
+    { "name": "Glaro Digital", "domain": "glarodigital.com.hr", "url": "https://glarodigital.com.hr/", "cites": 5, "dr": 0, "page": "Uslužna stranica za AI optimizaciju", "type": "agencija" },
+    { "name": "LinkGrid", "domain": "linkgrid.hr", "url": "https://linkgrid.hr/", "cites": 5, "dr": 0, "page": "Stranica \"O nama\"", "type": "agencija" },
+    { "name": "Digital Matrix", "domain": "digitalmatrix.hr", "url": "https://digitalmatrix.hr/", "cites": 4, "dr": 4.5, "page": "Javni cjenik", "type": "agencija" },
+    { "name": "Tsunami Digital", "domain": "tsunami-digital.com", "url": "https://tsunami-digital.com/", "cites": 4, "dr": 29, "page": "Uslužna stranica za SEO i GEO", "type": "agencija" },
+    { "name": "iGrow", "domain": "igrow.at", "url": "https://igrow.at/", "cites": 4, "dr": 39, "page": "Case study s \"Croatia\" u URL-u", "type": "agencija", "country": "AT" },
+    { "name": "SERPRise", "domain": "serprise.agency", "url": "https://serprise.agency/", "cites": 1, "dr": null, "page": "Stari URL koji više ne postoji", "type": "agencija", "self": true },
+    { "name": "Clutch", "domain": "clutch.co", "url": "https://clutch.co/", "cites": 6, "dr": 91, "page": "Direktorij agencija za Hrvatsku i Zagreb", "type": "izvor" },
+    { "name": "Assemblio", "domain": "assemblio.hr", "url": "https://assemblio.hr/", "cites": 4, "dr": 16, "page": "Lista \"Top 5 SEO agencija u Hrvatskoj\"", "type": "izvor" }
+  ]
+}

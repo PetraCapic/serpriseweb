@@ -122,6 +122,8 @@ Ne. GA4 posjete iz AI Modea i AI pregleda broji kao google / organic, a kanal AI
 
 ## Što dalje
 
+Kod nas taj regex nije zaseban izvještaj. Svaki klijent ima vlastiti live dashboard u koji povlačimo GA4 i Search Console, a uz njih podatke iz DataForSEO i Ahrefs API-ja. Tako se AI posjeti vide na istom mjestu kao pozicije i linkovi, i odmah je jasno je li skok došao od novog citata ili od promjene u mjerenju.
+
 Sve o tome kako hrvatske tvrtke ulaze u odgovore AI alata je na [hubu o LLM vidljivosti](/blog/llm-vidljivost/). Ako želite da kanal i mjerenje postavimo mi, javite se preko stranice [AI vidljivost](/ai-vidljivost/).
 
 ## Izvori

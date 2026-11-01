@@ -1,91 +1,105 @@
 <!-- KORAK 8 -->
-<section class="page">
+<section class="page" id="k8">
  <div class="ihead"><span>LLM vidljivost u Hrvatskoj</span><b>Korak 8 od 9</b></div>
  <div class="stepno">08</div>
  <h2>Postavite praćenje</h2>
- <p class="lead">Četiri besplatna alata pokrivaju 90% onoga što trebate znati: GA4 za posjete s AI alata, Search Console za Google AI preglede, Bing Webmaster Tools za Copilot i mjesečna tablica pitanja za ChatGPT.</p>
+ <p class="lead">Pet izvora podataka, svaki za drugo pitanje: GA4 za posjete s AI alata, Search Console za Googleove AI preglede, Bing Webmaster Tools za Microsoftove AI odgovore, mjesečna tablica pitanja za ChatGPT i ostale alate te pitanje u kontakt formi.</p>
  <div class="cost"><div><span>Trošak</span><strong>0 €</strong></div><div><span>Vrijeme</span><strong>oko 1 sat jednom</strong></div><div><span>Alati</span><strong>GA4, GSC, Bing WMT, tablica</strong></div></div>
 
  <h3>1. GA4: kanal za AI posjete</h3>
- <p>GA4 ima ugrađeni kanal za AI asistente, ali on hvata manje od polovice stvarnih posjeta. Na hrvatskom portalu iz Koraka 4 ugrađeni kanal je u 13 mjeseci uhvatio 136 od 319 posjeta s AI alata. Ostatak je bio u "Unassigned" i "Referral".</p>
- <figure><img src="../../public/blog/ga4-ai-kanal/kanali.png" alt="Gdje GA4 sprema posjete s AI alata"><figcaption>Gdje je GA4 spremio 319 posjeta s AI alata, 1.10.2025. do 31.10.2026. Izvor: GA4, osmrtnica.com.hr.</figcaption></figure>
+ <p><span class="label l-izvor">Izvor</span> GA4 ima ugrađeni kanal <b>AI Assistant</b>. Posjeti iz Googleovih AI pregleda i AI načina ne ulaze u njega, nego u Organic Search, pa taj kanal nije ukupan broj posjeta iz svih AI iskustava.[@ga4-default]</p>
+ <p><span class="label l-test">Naš test</span> Na portalu osmrtnica.com.hr od 1.10.2025. do 31.10.2026. ugrađeni kanal obuhvatio je 136 od 319 sesija (42,6%) koje smo prema pravilima iz tablice ispod identificirali kao AI promet. Ostale su bile u Unassigned i Referral.[@s-ga4] Nalaz se odnosi na taj web i to razdoblje.</p>
+ <table>
+  <tr><th>Izvor sesije (pravilo identifikacije)</th><th>Sesija</th></tr>
+  <tr><td>chatgpt.com</td><td>273</td></tr>
+  <tr><td>perplexity, perplexity.ai</td><td>22</td></tr>
+  <tr><td>copilot.com</td><td>15</td></tr>
+  <tr><td>gemini.google.com, gemini</td><td>8</td></tr>
+  <tr><td>claude.ai</td><td>1</td></tr>
+  <tr><td><b>Ukupno</b></td><td><b>319</b></td></tr>
+ </table>
+ <p class="small muted">Izvor: GA4, osmrtnica.com.hr, dimenzija Session source.[@s-ga4]</p>
  <ol class="klik">
-  <li>GA4, <b>Admin</b> (zupčanik dolje lijevo), <b>Data display</b>, <b>Channel groups</b>.</li>
-  <li><b>Create new channel group</b>, ime "Default + AI". GA4 kopira sve postojeće kanale.</li>
-  <li><b>Add new channel</b>, ime "AI asistenti".</li>
-  <li>Uvjet: <b>Session source</b>, <b>matches regex</b>, i zalijepite:</li>
+  <li>Prije promjene u <b>Reports, Acquisition, Traffic acquisition</b> zapišite broj sesija po kanalu za zadnjih 90 dana. Trebat će vam za provjeru.</li>
+  <li>GA4, <b>Admin</b>, <b>Data display</b>, <b>Channel groups</b>, <b>Create new channel group</b>, ime "Default + AI". GA4 kopira zadane kanale, uključujući AI Assistant.</li>
+  <li>Otvorite kanal <b>AI Assistant</b> u novoj grupi i proširite njegov uvjet (ili ga zamijenite novim kanalom "AI asistenti"), da isti promet ne ostane razdvojen u dva AI kanala. Uvjet: <b>Session source</b>, <b>matches regex</b>:</li>
  </ol>
-<pre>.*(chatgpt|openai|perplexity|gemini|copilot|claude|deepseek|mistral|grok).*</pre>
- <ol class="klik" start="5" style="counter-reset:k 4">
-  <li>Spremite kanal i povucite ga <b>iznad kanala Referral</b>. GA4 sesiju dodjeljuje prvom kanalu čiji uvjet zadovoljava.</li>
-  <li>Spremite grupu.</li>
-  <li><b>Reports, Acquisition, Traffic acquisition</b>. Promijenite dimenziju u "Default + AI". Grupa radi i na starim podacima, pa brojke vidite odmah.</li>
-  <li>Označite ključni događaj (upit, poziv, kupnja) kao <b>Key event</b>, da uz posjete vidite i upite s AI alata.</li>
+<pre>^(chatgpt\.com|chat\.openai\.com|perplexity|(www\.)?perplexity\.ai|copilot\.com|copilot\.microsoft\.com|gemini|gemini\.google\.com|claude\.ai)$</pre>
+ <ol class="klik" start="4" style="counter-reset:k 3">
+  <li>Kanal postavite <b>iznad</b> kanala Referral i Unassigned. GA4 sesiju dodjeljuje prvom kanalu čije uvjete zadovoljava.[@ga4-custom]</li>
+  <li>Spremite grupu. U Traffic acquisition kao primarnu dimenziju odaberite novu grupu na razini sesije ("Session Default + AI"), da uspoređujete sesije sa sesijama.</li>
+  <li><b>Provjera</b>: zbroj sesija svih kanala mora biti isti kao prije promjene. Ako nije, neki uvjet hvata promet dvaput ili ga ispušta.</li>
+  <li>Upit, poziv ili kupnju označite kao <b>Key event</b>, da uz posjete vidite i upite s AI alata.</li>
  </ol>
- <div class="box tip"><b>Tips and tricks</b><ul><li>Perplexity često dolazi kao izvor "perplexity", bez domene, pa ga ugrađeni kanal ne prepoznaje. Regex iznad ga hvata.</li><li>Ako imate kampanju ili partnera s imenom "gemini" ili "copilot" u izvoru, suzite regex.</li></ul></div>
+ <div class="box data"><b>Kako čitati podatke</b><p><span class="label l-izvor">Izvor</span> Promjene u prilagođenoj grupi kanala vide se u izvještajima i za ranije podatke, ali promjena primarne grupe kanala i publika nema isti retroaktivni učinak.[@ga4-custom] Regex ne može vratiti izvor koji GA4 nije zabilježio: klik iz aplikacije ili link bez referrera dolazi kao Direct. Zbroj je zato broj <i>prepoznatih</i> AI sesija, ne svih stvarnih AI posjeta. Kratke riječi poput "gemini" i "copilot" mogu pogoditi i nepovezane izvore (npr. kampanju istog imena); zato regex traži točan izvor.</p></div>
 
  <h3>2. Search Console: izvještaj o generativnoj AI</h3>
  <ol class="klik">
-  <li>Search Console, <b>Učinak</b> (Performance), pa izvještaj <b>Generative AI</b> za Google pretraživanje.</li>
-  <li>Izvještaj pokazuje <b>impresije</b>: koliko puta je link na vaš web prikazan u AI pregledu ili AI načinu. Po stranicama, državama, datumima i uređajima.</li>
+  <li>Search Console, <b>Učinak</b> (Performance), izvještaj <b>Generative AI</b>. Google ga je učinio dostupnim svim svojstvima 31.8.2026.[@gsc-genai]</li>
+  <li>Izvještaj pokazuje <b>impresije</b> u AI pregledima i AI načinu, po stranici, državi, datumu i uređaju.[@gsc-genai]</li>
   <li>Filtrirajte državu <b>Hrvatska</b> i pogledajte koje stranice dobivaju impresije.</li>
-  <li>Klikove iz AI pregleda Google računa u običnom izvještaju o učinku, pod vrstom pretrage "Web", zajedno s ostalim klikovima.</li>
+  <li>Klikovi iz AI značajki uključeni su u običan izvještaj o učinku, vrsta pretrage "Web", zajedno s ostalim klikovima.[@g-ai-features]</li>
  </ol>
- <div class="box data"><b>Kako čitati podatke</b><p>Google je izvještaj uveo svim webovima do 31.8.2026. Ako ga ne vidite, web vjerojatno još nema dovoljno impresija u AI značajkama. To je samo po sebi podatak: znači da vas AI pregledi za sada ne prikazuju. Izvještaj broji samo impresije, ne klikove, pa impresija ne znači posjet.</p></div>
+ <div class="box data"><b>Kako čitati podatke</b><p><span class="label l-izvor">Izvor</span> Ako izvještaj nema podataka, Google kao uobičajeni razlog navodi premalo impresija. Moguće je i da je web isključen iz generativnih značajki.[@gsc-genai] Izostanak podataka zato ne dokazuje da se web nikad ne prikazuje u AI rezultatima. Impresija nije posjet.</p></div>
 
  <h3>3. Bing Webmaster Tools: AI Performance</h3>
  <ol class="klik">
   <li>bing.com/webmasters, dodajte web (najbrže uvozom iz Search Consolea).</li>
-  <li>Izvještaj <b>AI Performance</b> pokazuje koliko je puta vaš web citiran u Microsoft Copilotu i Bingovim AI odgovorima, koje stranice i za koje "grounding" upite (pretrage koje AI pokrene u pozadini).</li>
-  <li>Podaci se pojave nakon otprilike jednog dana.</li>
+  <li>Izvještaj <b>AI Performance</b> pokazuje citate i citirane URL-ove u podržanim Microsoftovim AI iskustvima i odabranim partnerskim integracijama.[@bing-ai]</li>
+  <li><b>Grounding upiti</b> su uzorak pretraga kojima je AI dohvaćao sadržaj, a ne potpun popis pitanja korisnika.[@bing-ai] Citat nije posjet ni prodaja.</li>
  </ol>
- <div class="box tip"><b>Tips and tricks</b><p>Grounding upiti iz Binga su zlato za Korak 1: to su točne pretrage koje AI pokreće kad odgovara o vašoj temi. Dodajte ih u popis ključnih riječi.</p></div>
+ <div class="box tip"><b>Tips and tricks</b><p>Grounding upiti dobra su dopuna popisu ključnih riječi iz Koraka 1: pokazuju kojim riječima je AI tražio sadržaj o vašoj temi.</p></div>
 
  <h3>4. Mjesečna tablica pitanja</h3>
- <p>Svakog prvog u mjesecu ponovite test iz Koraka 2 s istim pitanjima, istim redom, u privremenom chatu. Ne mijenjajte pitanja između mjerenja. Novo pitanje dodajte kao novi redak, ali ga ne uključujte u usporedbu s prošlim mjesecom.</p>
+ <p><span class="label l-praksa">Praksa</span> Svakog prvog u mjesecu ponovite test iz Koraka 2: ista pitanja, isti broj krugova, ista lokacija i jezik. Ne mijenjajte pitanja između mjerenja. Novo pitanje dodajte kao novi redak, ali ga ne uključujte u usporedbu s prošlim mjesecom.</p>
 
  <h3>5. Pitajte kupce</h3>
- <p>U kontakt formu dodajte padajući izbornik "Kako ste nas pronašli?" s opcijom "ChatGPT ili drugi AI alat" i polje "Što ste upisali?". To je jedini način da saznate točno pitanje koje je kupca dovelo.</p>
- <div class="box mi"><b>Kako mi to radimo</b><p>U našem admin sučelju je kartica "Ciljani pojmovi": za svaki pojam pozicija na Googleu, ima li AI pregled i citira li nas, i spominje li nas ChatGPT, uz promjenu iz mjeseca u mjesec. Mjerenje se pokreće automatski svakog prvog u mjesecu. Za klijente isti pregled dobivaju u svom dashboardu.</p></div>
- <div class="done"><b>Gotovo kad</b><ul><li>GA4 ima kanal "AI asistenti" iznad Referrala</li><li>Search Console i Bing Webmaster Tools su postavljeni</li><li>Mjesečni test je u kalendaru za 1. u mjesecu</li><li>Kontakt forma pita kako ste nas pronašli</li></ul></div>
+ <p>U kontakt formu dodajte izbornik "Kako ste nas pronašli?" s opcijom "ChatGPT ili drugi AI alat" i polje "Što ste upisali?". Tako saznajete stvarna pitanja koja su kupca dovela.</p>
+ <div class="box mi"><b>Kako mi to radimo</b><p>U našem admin sučelju je kartica "Ciljani pojmovi": za svaki pojam pozicija na Googleu, ima li AI pregled i citira li nas, i spominje li nas ChatGPT, uz promjenu iz mjeseca u mjesec. Mjerenje se pokreće automatski svakog prvog u mjesecu.[@s-tracking] Klijenti isti pregled dobivaju u svom dashboardu.</p></div>
+ <div class="done"><b>Gotovo kad</b><ul><li>GA4 ima jedan AI kanal iznad Referrala i Unassigned, a zbroj sesija se nije promijenio</li><li>Search Console i Bing Webmaster Tools su postavljeni</li><li>Mjesečni test je u kalendaru za 1. u mjesecu</li><li>Kontakt forma pita kako ste nas pronašli</li></ul></div>
 </section>
 
 <!-- KORAK 9 -->
-<section class="page">
+<section class="page" id="k9">
  <div class="ihead"><span>LLM vidljivost u Hrvatskoj</span><b>Korak 9 od 9</b></div>
  <div class="stepno">09</div>
  <h2>Mjerite rezultate i čitajte podatke</h2>
- <p class="lead">Pet brojki, jednom mjesečno, u istoj tablici. Ništa više ne treba.</p>
- <h3>Pet brojki</h3>
+ <p class="lead">Jednom mjesečno, u istoj tablici. Najvažnije je ne zbrajati različite rezultate kao da su ista metrika.</p>
+ <p><span class="label l-izvor">Izvor</span> Pew Research Center je u SAD-u izmjerio da su korisnici kliknuli link unutar Googleova AI sažetka u 1% posjeta stranicama sa sažetkom.[@pew] Uzorak nije hrvatski, ali pokazuje zašto prikaz, citat i posjet mjerimo odvojeno.</p>
+
+ <h3>Pet vrsta rezultata</h3>
  <table>
-  <tr><th>Brojka</th><th>Odakle</th><th>Kako izračunati</th></tr>
-  <tr><td><b>1. Udio AI odgovora</b></td><td>Mjesečna tablica</td><td>U koliko od 40 ChatGPT odgovora ste spomenuti. Npr. 6 od 40 = 15%</td></tr>
-  <tr><td><b>2. AI pregledi koji vas citiraju</b></td><td>Ručna provjera ili alat</td><td>Za koliko od vaših ključnih riječi ste izvor u AI pregledu</td></tr>
-  <tr><td><b>3. AI posjeti i upiti</b></td><td>GA4, kanal "AI asistenti"</td><td>Sesije i ključni događaji (upiti, pozivi) s AI alata</td></tr>
-  <tr><td><b>4. AI impresije na Googleu</b></td><td>Search Console, Generative AI</td><td>Impresije za Hrvatsku i koje stranice ih dobivaju</td></tr>
-  <tr><td><b>5. Novi spomeni</b></td><td>Vaša tablica iz Koraka 5 do 7</td><td>Koliko je novih imenika, lista i članaka ovaj mjesec</td></tr>
+  <tr><th>Rezultat</th><th>Što znači</th><th>Odakle</th></tr>
+  <tr><td><b>1. Spomen</b></td><td>Brend se pojavljuje u odgovoru</td><td>Mjesečna tablica</td></tr>
+  <tr><td><b>2. Preporuka</b></td><td>Odgovor predlaže vaš brend za kupčevu potrebu</td><td>Mjesečna tablica</td></tr>
+  <tr><td><b>3. Citat vlastitog weba</b></td><td>Odgovor linka vašu stranicu kao izvor</td><td>Tablica, Search Console, Bing WMT</td></tr>
+  <tr><td><b>4. Citat treće strane</b></td><td>Citiran je tuđi članak ili profil koji govori o vama</td><td>Tablica, Brand Radar</td></tr>
+  <tr><td><b>5. Poslovni rezultat</b></td><td>Kvalificirani upit, rezervacija, prodaja ili prihod</td><td>GA4 Key events, CRM, kontakt forma</td></tr>
  </table>
- <figure><img src="../../public/blog/case-study-ai-vidljivost-osmrtnice/ai-test.png" alt="Rezultati 12 pitanja u ChatGPT-u"><figcaption>Primjer mjesečnog testa: 12 pitanja u ChatGPT-u za osmrtnica.com.hr, 1.11.2026. Portal je spomenut u 5 od 12 odgovora, a u 3 je izvor s linkom.</figcaption></figure>
+ <p><span class="label l-praksa">Praksa</span> PR članak može donijeti spomen bez citata vašeg weba. Citat vaše informativne stranice ne mora značiti preporuku vaše usluge. Zato svaki rezultat brojite zasebno, s nazivnikom: npr. "spomen u 6 od 40 odgovora (15%), preporuka u 3 od 40".</p>
+ <p class="small"><span class="label l-test">Naš test</span> Primjer: za osmrtnica.com.hr 1.11.2026. postavili smo 12 pitanja po jednom. Portal je spomenut u 5 od 12 odgovora (41,7%), a citiran s linkom u 3 od 12 (25%).[@s-case] To je jednokratni test, ne isti postupak kao mjerenje s dva kruga po pitanju.</p>
 
  <h3>Kako čitati rezultate</h3>
- <table>
-  <tr><th>Što vidite</th><th>Što znači</th><th>Što napraviti</th></tr>
-  <tr><td>Udio AI odgovora skače gore-dolje za 5 do 10 postotnih bodova</td><td>Normalno. AI odgovori nisu stalni</td><td>Gledajte trend kroz 3 mjeseca, ne jedan mjesec</td></tr>
-  <tr><td>Spomenuti ste, ali bez linka</td><td>AI vas zna iz tuđih izvora, ali vaša stranica ne odgovara na pitanje</td><td>Korak 4: uslužna stranica s riječima iz pitanja i cijenom</td></tr>
-  <tr><td>Rastu AI impresije u Search Consoleu, a klikovi ne</td><td>Izvor ste, ali AI odgovor je dovoljan i bez klika</td><td>Na stranicu dodajte ono što AI ne može dati: kalkulator, točnu ponudu, rezervaciju, primjere</td></tr>
-  <tr><td>Brend pitanja da, kategorijska ne</td><td>Web je dobar, ali treće strane o vama ne pišu</td><td>Koraci 6 i 7: liste, portali, PR</td></tr>
-  <tr><td>Google da, ChatGPT ne</td><td>Moguće da niste u Bingu ili ChatGPT ne vidi sadržaj</td><td>Korak 4: Bing Webmaster Tools, robots.txt, JavaScript test</td></tr>
-  <tr><td>AI posjeti malo, ali s upitima</td><td>Mali kanal s visokom namjerom</td><td>Nastavite. Na portalu iz primjera posjetitelj s ChatGPT-a pregleda 2,2 stranice po sesiji, a s Googlea 1,5</td></tr>
-  <tr><td>Ništa se ne mijenja 3 mjeseca</td><td>Premalo spomena izvan weba ili pogrešna pitanja</td><td>Ponovite Korak 3 i provjerite citira li AI uopće izvore za vaša pitanja</td></tr>
+ <table class="diag">
+  <tr><th>Što vidite</th><th>Mogući razlozi</th><th>Kako provjeriti</th></tr>
+  <tr><td>Udio spomena mijenja se iz mjeseca u mjesec za nekoliko postotnih bodova</td><td>Odgovori se razlikuju između postavljanja; mali uzorak (kod 40 odgovora jedan odgovor = 2,5 boda)</td><td>Gledajte trend kroz 3 mjeseca i rezultat po pitanju, ne ukupni postotak jednog mjeseca</td></tr>
+  <tr><td>Spomenuti ste, ali bez linka na vaš web</td><td>Odgovor se oslanja na tuđe izvore; vaša stranica ne odgovara na pitanje, nije dostupna ili nije indeksirana</td><td>Pogledajte citirane izvore; usporedite sadržaj; provjerite indeksiranost i robots.txt (Korak 4)</td></tr>
+  <tr><td>Rastu AI impresije u Search Consoleu, a klikovi ne</td><td>Prikaz ne znači posjet; promjena prikaza ili upita</td><td>Pogledajte koje stranice i upiti rastu; dodajte na stranicu ono zbog čega se vrijedi kliknuti (kalkulator, ponuda, rezervacija)</td></tr>
+  <tr><td>Brend pitanja da, kategorijska ne</td><td>Malo spomena na trećim stranama za tu kategoriju</td><td>Ponovite Korak 3 za kategorijska pitanja; usporedite gap listu</td></tr>
+  <tr><td>Google da, ChatGPT ne</td><td>Botovi za pretragu blokirani; sadržaj nije u HTML-u; drugačiji izvori</td><td>robots.txt i Cloudflare za OAI-SearchBot; test izvornog koda; usporedite citirane domene</td></tr>
+  <tr><td>Malo AI posjeta, ali s upitima</td><td>Mali kanal s upitima vrijednima praćenja</td><td>Pratite Key events po kanalu; pitajte kupce što su upisali</td></tr>
+  <tr><td>Ništa se ne mijenja 3 mjeseca</td><td>Pitanja bez pretrage, premalo spomena izvan weba, tehnička prepreka</td><td>Provjerite pokreće li se pretraga za vaša pitanja; ponovite Korake 3 i 4</td></tr>
  </table>
+ <p class="small"><span class="label l-test">Naš test</span> Na osmrtnica.com.hr posjetitelj s ChatGPT-a u prosjeku je pregledao 2,2 stranice po sesiji, a posjetitelj s Googlea 1,5 (273 i 386.604 sesije, 1.10.2025. do 31.10.2026.).[@s-ga4] Dublji pregled ne znači automatski veću kupovnu namjeru.</p>
 
  <h3>Kad očekivati pomak</h3>
+ <p><span class="label l-praksa">Praksa</span> Iskustvene procjene iz našeg rada, bez jamstva:</p>
  <ul>
-  <li><b>Tehničke promjene</b> (Korak 4): u našem primjeru prvi posjeti s ChatGPT-a u roku od 1 do 2 tjedna.</li>
+  <li><b>Tehničke promjene</b> (Korak 4): na osmrtnica.com.hr više posjeta s ChatGPT-a vidjeli smo unutar dva tjedna, uz ograničenja opisana u Koraku 4.[@s-case]</li>
   <li><b>Imenici i profili</b>: obično nekoliko tjedana, dok ih tražilice ne indeksiraju.</li>
-  <li><b>Portali i PR</b>: mjesec do tri po objavi, ovisno o tome koliko brzo AI alati pokupe članak.</li>
+  <li><b>Portali i PR</b>: od nekoliko tjedana do nekoliko mjeseci po objavi. IndexNow i dobra indeksiranost mogu ubrzati otkrivanje, ali ne jamče rok.[@bing-ai]</li>
  </ul>
- <div class="box tip"><b>Tips and tricks</b><ul><li>Rezultate držite u jednoj tablici s datumom svakog mjerenja. Za šest mjeseci to je jedini dokaz što je radilo.</li><li>Ne mijenjajte pet stvari odjednom ako želite znati što je pomoglo. Zapišite datum svake veće promjene uz mjerenje.</li></ul></div>
- <div class="box mi"><b>Kako mi to radimo</b><p>Klijentima šaljemo mjesečni izvještaj s istih pet brojki i popisom što je napravljeno taj mjesec. Ciljeve postavljamo po pitanjima, ne po prometu: npr. "do kraja godine izvor u AI pregledu za 3 pojma i spomen u 8 od 32 ChatGPT odgovora". Takve ciljeve smo postavili i za SERPRise.</p></div>
- <div class="done"><b>Gotovo kad</b><ul><li>Imate tablicu s pet brojki i prvim mjerenjem</li><li>U kalendaru je mjesečni pregled</li><li>Postavili ste cilj za 3 i 6 mjeseci</li></ul></div>
+ <div class="box tip"><b>Tips and tricks</b><ul><li>Rezultate držite u jednoj tablici s datumom svakog mjerenja i bilješkom o promjenama.</li><li>Ako mijenjate više stvari odjednom, ne možete znati što je pomoglo. Tablica pokazuje povezanost promjena i rezultata, ne uzrok.</li></ul></div>
+ <div class="box mi"><b>Kako mi to radimo</b><p>Klijentima šaljemo mjesečni izvještaj s pet vrsta rezultata i popisom što je napravljeno taj mjesec. Ciljeve postavljamo po pitanjima, s nazivnikom: npr. "izvor u AI pregledu za 3 od 23 pojma i spomen u 8 od 32 ChatGPT odgovora".</p></div>
+ <div class="done"><b>Gotovo kad</b><ul><li>Imate tablicu s pet vrsta rezultata i prvim mjerenjem</li><li>U kalendaru je mjesečni pregled</li><li>Postavili ste cilj za 3 i 6 mjeseci</li></ul></div>
 </section>

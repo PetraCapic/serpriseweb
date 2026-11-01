@@ -1,21 +1,19 @@
 <!-- PLAN 90 DANA -->
-<section class="page newpage">
+<section class="page newpage" id="plan">
  <div class="ihead"><span>LLM vidljivost u Hrvatskoj</span><b>Plan za 90 dana</b></div>
  <h2>Plan za 90 dana</h2>
- <p class="lead">Cijeli vodič na jednoj stranici. Isprintajte i kvačite.</p>
+ <p class="lead">Redoslijed ovisi o stanju projekta: najprije tehnička dostupnost, zatim sadržaj i relevantni izvori, pa učinak na upite. Tjedni su okvirni.</p>
  <table>
-  <tr><th style="width:24%">Kada</th><th>Što</th><th style="width:14%">Korak</th></tr>
-  <tr><td><b>1. tjedan</b></td><td>20 pitanja i ključne riječi. Polazno mjerenje u ChatGPT-u (2 kruga), AI pregledu i AI načinu.</td><td>1, 2</td></tr>
-  <tr><td><b>2. tjedan</b></td><td>Reverse engineering: 5 citiranih stranica kroz Claude ili ChatGPT, pretrage spomena konkurenata, gap lista.</td><td>3</td></tr>
-  <tr><td><b>2. tjedan</b></td><td>GA4 kanal, Search Console, Bing Webmaster Tools, pitanje u kontakt formi.</td><td>8</td></tr>
-  <tr><td><b>3. i 4. tjedan</b></td><td>Uslužne stranice sa 7 elemenata, schema, tehnička provjera (robots.txt, Cloudflare, JavaScript, IndexNow).</td><td>4</td></tr>
-  <tr><td><b>4. tjedan</b></td><td>Dokument s podacima o tvrtki. Upis u sve imenike. Zahtjevi za recenzije.</td><td>5</td></tr>
-  <tr><td><b>5. tjedan</b></td><td>Upiti autorima lista i strukovnim katalozima.</td><td>6</td></tr>
-  <tr><td><b>5. i 6. tjedan</b></td><td>Odabir 5 do 10 portala koje AI citira. Prve 2 objave. Ideja za podatkovnu priču.</td><td>7</td></tr>
-  <tr><td><b>1. u mjesecu</b></td><td>Mjesečni test i pet brojki. Bilješka što je promijenjeno.</td><td>9</td></tr>
-  <tr><td><b>7. do 12. tjedan</b></td><td>2 objave mjesečno, podsjetnici listama, nove recenzije, nove stranice usporedbe.</td><td>4, 6, 7</td></tr>
-  <tr><td><b>12. tjedan</b></td><td>Usporedba s polaznim mjerenjem. Ponovite Korak 3 s novim podacima i složite plan za iduća 3 mjeseca.</td><td>3, 9</td></tr>
+  <tr><th style="width:20%">Faza</th><th>Što</th><th style="width:28%">Prelazite dalje kad</th><th style="width:10%">Korak</th></tr>
+  <tr><td><b>1. Polazište</b><br><span class="small muted">1. i 2. tjedan</span></td><td>Pitanja i ključne riječi. Polazno mjerenje (jednak broj krugova po pitanju). GA4 kanal, Search Console, Bing WMT, pitanje u kontakt formi.</td><td>Imate datiranu tablicu i zapisan zbroj sesija prije promjene u GA4</td><td>1, 2, 8</td></tr>
+  <tr><td><b>2. Dostupnost</b><br><span class="small muted">2. i 3. tjedan</span></td><td>Indeksiranost, robots.txt, Cloudflare, sadržaj u HTML-u, postavka generativnih značajki, IndexNow.</td><td>Botovi za pretragu nisu blokirani, a tekst je u izvornom HTML-u</td><td>4</td></tr>
+  <tr><td><b>3. Sadržaj</b><br><span class="small muted">3. do 5. tjedan</span></td><td>Reverse engineering i gap lista. Uslužne stranice, cijene, odgovori na česta pitanja, schema.</td><td>Svaka glavna usluga ima svoju stranicu</td><td>3, 4</td></tr>
+  <tr><td><b>4. Izvori</b><br><span class="small muted">4. do 8. tjedan</span></td><td>Dokument s podacima, imenici za koje ispunjavate uvjete, neutralni zahtjevi za recenzije. Upiti listama i katalozima. Odabir relevantnih portala i prve objave. Ideja za podatkovnu priču.</td><td>Gap lista ima status za svako mjesto</td><td>5, 6, 7</td></tr>
+  <tr><td><b>5. Učinak</b><br><span class="small muted">1. u mjesecu, 12. tjedan</span></td><td>Mjesečni test i pet vrsta rezultata. Bilješka o promjenama. U 12. tjednu usporedba s polazištem i plan za iduća 3 mjeseca.</td><td>Znate koji rezultat se pomaknuo, a koji nije, i imate moguće razloge</td><td>9</td></tr>
  </table>
+ <p class="small muted">Primjer rasporeda objava (npr. 2 mjesečno) prilagodite budžetu i rezultatima mjerenja. Nije obvezna kvota.</p>
+ <h3>Radni predložak</h3>
+ <p>Tablica za praćenje sa stupcima: ID pitanja, pitanje, namjera, platforma/model, datum, lokacija, jezik, krug, pretraga pokrenuta, spomen, preporuka, citirani URL vašeg weba, citirani URL treće strane, konkurenti, dokaz (snimka ili link), bilješka o promjeni. Uz mjesečni pregled dodajte kvalificirane upite i prihod ako ih imate. Preuzmite: <a href="https://serprise.agency/vodic/predlozak-pracenja.csv">serprise.agency/vodic/predlozak-pracenja.csv</a> (otvara se u Excelu i Google Sheetsu).</p>
  <h3>Što možete sami, a gdje pomažemo</h3>
  <table>
   <tr><th>Posao</th><th>Sami</th><th>SERPRise</th></tr>
@@ -23,9 +21,52 @@
   <tr><td>Reverse engineering</td><td><span class="tag free">da</span></td><td>Analiza s Ahrefsom i DataForSEO-om</td></tr>
   <tr><td>Uslužne stranice i tehnika</td><td><span class="tag free">da, uz nekoga tko uređuje web</span></td><td>Audit i popis promjena</td></tr>
   <tr><td>Imenici i recenzije</td><td><span class="tag free">da</span></td><td>Po potrebi</td></tr>
-  <tr><td>Objave na portalima</td><td><span class="tag mid">moguće, sporo</span></td><td>Katalog 335 portala, odabir po AI citatima, tekst i objava</td></tr>
+  <tr><td>Objave na portalima</td><td><span class="tag mid">moguće, sporo</span></td><td>Katalog 335 portala iz Hrvatske i regije, odabir, tekst i objava</td></tr>
   <tr><td>Digitalni PR</td><td><span class="tag mid">moguće, sporo</span></td><td>Podatkovne priče, tekst i slanje novinarima</td></tr>
  </table>
+</section>
+
+<!-- KAKO SMO MJERILI -->
+<section class="page newpage" id="metoda">
+ <div class="ihead"><span>LLM vidljivost u Hrvatskoj</span><b>Prilog</b></div>
+ <h2>Kako smo mjerili</h2>
+ <p class="lead">Nalazi označeni s "Naš test" dolaze iz mjerenja opisanih ovdje. Vrijede za taj uzorak i datum, ne kao opća pravila.</p>
+ <h3>Test 35 pitanja (30.10.2026.)</h3>
+ <table>
+  <tr><th style="width:30%">Stavka</th><th>Vrijednost</th></tr>
+  <tr><td>Sučelje</td><td>OpenAI Responses API s alatom web_search, ne ChatGPT u pregledniku. Zapisi pretrage i citati iz API odgovora.[@openai-websearch]</td></tr>
+  <tr><td>Lokacija i jezik</td><td>Približna lokacija Zagreb, Hrvatska; pitanja na hrvatskom</td></tr>
+  <tr><td>Kontekst</td><td>Svaki poziv je zaseban zahtjev, bez povijesti razgovora</td></tr>
+  <tr><td>Pitanja</td><td>35 pitanja o SEO-u, GEO optimizaciji i AI vidljivosti u Hrvatskoj, kako ih piše vlasnik firme ili marketing voditelj</td></tr>
+  <tr><td>Ponavljanja</td><td>25 pitanja jednom, 10 kupovnih pitanja dvaput: ukupno 45 odgovora. Ponavljanja nisu jednaka, pa ukupni rezultati više teže kupovnim pitanjima</td></tr>
+  <tr><td>Definicije</td><td>Kako brojimo: <b>Spomen</b>: naziv brenda u tekstu odgovora. <b>Citat</b>: URL u anotacijama odgovora. <b>Domena</b>: jedinstveni host citiranog URL-a, bez "www". "Citirano u N odgovora" broji odgovore, ne linkove</td></tr>
+  <tr><td>Domain Rating</td><td>Ahrefs, 30.10.2026. DR je Ahrefsova metrika, ne signal tražilica[@ahrefs-dr]</td></tr>
+  <tr><td>Analiza stranica</td><td>19 citiranih stranica pregledano ručno; bez usporedne skupine necitiranih stranica</td></tr>
+  <tr><td>Ponovljeni test</td><td>Isti test 1.11.2026.: na vrhu su većinom bile iste domene. Metriku preklapanja nismo računali, pa ne navodimo postotak</td></tr>
+ </table>
+ <h3>Mjesečno praćenje za SERPRise (od 1.11.2026.)</h3>
+ <table>
+  <tr><th style="width:30%">Stavka</th><th>Vrijednost</th></tr>
+  <tr><td>Google</td><td>DataForSEO, Google Hrvatska, hrvatski jezik, desktop, top 20 i izvori AI pregleda; 23 pojma</td></tr>
+  <tr><td>ChatGPT</td><td>OpenAI Responses API, model gpt-5-mini, web_search s lokacijom Hrvatska; 16 pitanja, svako dvaput (32 odgovora)</td></tr>
+  <tr><td>Spomen</td><td>Naziv domene u tekstu ili citiranom URL-u</td></tr>
+ </table>
+ <h3>Podaci iz GA4 i studije slučaja</h3>
+ <ul>
+  <li>GA4 osmrtnica.com.hr, dimenzija Session source, 1.10.2025. do 31.10.2026.; pravila identifikacije u tablici u Koraku 8.[@s-ga4]</li>
+  <li>Dnevne sesije s chatgpt.com, 1. do 31.10.2026.. Dnevni izvoz čuvamo uz studiju slučaja.[@s-case]</li>
+  <li>Volumeni ključnih riječi: Ahrefs Keywords Explorer, Hrvatska, 28.10.2026.; procjena za Google, ne za ChatGPT.[@s-ahrefs-vol]</li>
+ </ul>
+ <h3>Ograničenja</h3>
+ <p>API nije isto što i korisnička aplikacija. Mali uzorci: kod 40 odgovora jedan odgovor mijenja udio za 2,5 postotna boda, a ponovljena pitanja nisu nužno neovisna opažanja. Mjesečna tablica pokazuje povezanost, ne uzrok. Izvoze odgovora, citata i GA4 podataka pošaljemo na upit: jure@serprise.agency.</p>
+</section>
+
+<!-- IZVORI -->
+<section class="page newpage" id="izvori">
+ <div class="ihead"><span>LLM vidljivost u Hrvatskoj</span><b>Izvori</b></div>
+ <h2>Izvori</h2>
+ <p class="small muted">Brojevi odgovaraju brojevima u tekstu. Javni izvori provjereni su 1.11.2026. Interni izvori SERPRisea označeni su kao takvi; njihove brojke nisu neovisno potvrđene.</p>
+ <!--IZVORI-->
 </section>
 
 <!-- KRAJ -->
@@ -34,19 +75,7 @@
  <h2 style="margin-top:14mm;font-size:28pt">Želite da to napravimo zajedno?</h2>
  <p style="font-size:12pt">SERPRise je agencija za AI vidljivost, link building i digitalni PR iz Hrvatske. Radimo za hrvatske tvrtke i za agencije u inozemstvu.</p>
  <div class="endbox"><h3>Besplatna provjera AI vidljivosti</h3><p>Za vaša pitanja napravimo Korake 2 i 3: tko je citiran umjesto vas i gdje ste vi. Javite se na <a href="https://serprise.agency/ai-vidljivost/">serprise.agency/ai-vidljivost/</a>.</p></div>
- <div class="endbox"><h3>Objave na hrvatskim portalima i digitalni PR</h3><p>Katalog od 335 portala s DR-om, prometom i oznakom sponzorirano: <a href="https://serprise.agency/portali/">serprise.agency/portali/</a>. Odaberite portale i pošaljite upit.</p></div>
+ <div class="endbox"><h3>Objave na hrvatskim portalima i digitalni PR</h3><p>Katalog od 335 portala iz Hrvatske i regije, s DR-om, procijenjenim prometom i oznakom sponzoriranog sadržaja: <a href="https://serprise.agency/portali/">serprise.agency/portali/</a>. Odaberite portale i pošaljite upit.</p></div>
  <div class="endbox"><h3>Kontakt</h3><p>Jure Kljajić, osnivač<br><a href="https://serprise.agency/kontakt/">serprise.agency/kontakt/</a> · jure@serprise.agency</p></div>
- <h3 style="color:#fff;margin-top:10mm">Izvori</h3>
- <ul class="sources" style="color:#c6d3e1">
-  <li>SERPRise: Koje stranice ChatGPT citira kad netko traži agenciju u Hrvatskoj, serprise.agency/blog/chatgpt-citati-hrvatska/ (test 30.10. i 1.11.2026.)</li>
-  <li>SERPRise: Spominje li ChatGPT vašu firmu? Provjera u 20 pitanja, serprise.agency/blog/provjera-ai-vidljivosti/</li>
-  <li>SERPRise: GA4 skriva više od polovice posjeta s ChatGPT-a, serprise.agency/blog/ga4-ai-kanal/</li>
-  <li>SERPRise: Case study osmrtnica.com.hr, serprise.agency/blog/case-study-ai-vidljivost-osmrtnice/</li>
-  <li>SERPRise: Hrvatski portali za PR objave, serprise.agency/blog/portali-za-pr-objave/</li>
-  <li>Google Search Central: AI features and your website, developers.google.com/search/docs/appearance/ai-features</li>
-  <li>Google Search Console Help: Generative AI performance report, support.google.com/webmasters/answer/16984139</li>
-  <li>Ahrefs: cjenik (ahrefs.com/pricing) i Brand Radar, Cited Domains (ahrefs.com/academy), 1.11.2026.</li>
-  <li>uSERP: State of Backlinks Report for SEO and AI Search, rujan 2026.</li>
- </ul>
 </section>
 </body></html>

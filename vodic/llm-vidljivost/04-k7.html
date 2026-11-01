@@ -1,53 +1,57 @@
 <!-- KORAK 7 -->
-<section class="page">
+<section class="page" id="k7">
  <div class="ihead"><span>LLM vidljivost u Hrvatskoj</span><b>Korak 7 od 9</b></div>
  <div class="stepno">07</div>
  <h2>Objave na hrvatskim portalima i digitalni PR</h2>
- <p class="lead">Vaš web kaže što vi mislite o sebi. Imenici kažu da postojite. Tek kad o vama pišu treće strane, AI ima razlog da vas preporuči nekome tko pita "tko je najbolji". Ovo je korak koji najviše pomiče kategorijska pitanja.</p>
+ <p class="lead">Vaš web kaže što vi mislite o sebi. Imenici kažu da postojite. Članci trećih strana pokazuju što drugi pišu o vama. U našem testu, za kategorijska pitanja ("tko je najbolji") češće su citirane tuđe stranice nego stranice samih tvrtki.[@s-test]</p>
  <div class="cost"><div><span>Trošak</span><strong>ovisi o portalu i priči</strong></div><div><span>Vrijeme</span><strong>2 do 6 tjedana po kampanji</strong></div><div><span>Tko</span><strong>vi ili agencija</strong></div></div>
+
+ <p><span class="label l-izvor">Izvor</span> Ahrefs je na 75.000 brendova izmjerio jaču korelaciju vidljivosti u Google AI pregledima sa spomenima brenda na webu (0,664) nego s brojem backlinkova (0,218).[@ahrefs-75k] Korelacija ne dokazuje uzrok, ali je razlog da u PR-u mjerite spomene, a ne samo linkove.</p>
 
  <h3>Dvije razine</h3>
  <table>
   <tr><th></th><th>Objava na portalu</th><th>Digitalni PR</th></tr>
-  <tr><td><b>Što je</b></td><td>Plaćeni ili dogovoreni članak na portalu koji spominje vašu tvrtku i linka na web</td><td>Vijest, istraživanje ili podatkovna priča koju novinari sami prenesu jer je zanimljiva</td></tr>
+  <tr><td><b>Što je</b></td><td>Plaćeni ili dogovoreni članak koji spominje vašu tvrtku</td><td>Vijest, istraživanje ili podatkovna priča koju novinari prenesu jer je zanimljiva</td></tr>
   <tr><td><b>Kontrola</b></td><td>Vi birate portal, temu i tekst</td><td>Urednik odlučuje hoće li objaviti i kako</td></tr>
-  <tr><td><b>Oznaka</b></td><td>Često "sponzorirano"</td><td>Običan novinski članak</td></tr>
+  <tr><td><b>Oznaka</b></td><td>Plaćeni članak ima oznaku sponzorstva, a plaćeni link <code>rel="sponsored"</code> ili <code>nofollow</code>[@g-spam]</td><td>Uređivački članak</td></tr>
   <tr><td><b>Brzina</b></td><td>Dani</td><td>Tjedni</td></tr>
-  <tr><td><b>Za što je najbolje</b></td><td>Redovit spomen na pravim mjestima, link, lokalni portali</td><td>Ime u velikim medijima, više članaka iz jedne priče</td></tr>
+  <tr><td><b>Za što je dobro</b></td><td>Redovit spomen na relevantnim mjestima, lokalni portali</td><td>Ime u većim medijima, više članaka iz jedne priče</td></tr>
  </table>
+ <p><span class="label l-izvor">Izvor</span> Vidljiva oznaka "sponzorirano" i HTML atribut linka dvije su različite stvari. Google traži da se plaćeni linkovi označe atributom <code>sponsored</code> ili <code>nofollow</code>; kupnja linkova radi manipulacije rangiranjem je link spam, a ta pravila vrijede i za generativne AI odgovore.[@g-spam] Nemamo istraživanje koje pokazuje da oznaka sponzorstva smanjuje AI citiranje, pa portale ne biramo po tome.</p>
 
  <h3>Kako odabrati portal</h3>
  <ol class="klik">
-  <li><b>Prvo cilj.</b> Link za Google (gledajte DR i tematsku bliskost), čitatelji (organski promet i publika) ili AI vidljivost (citira li AI taj portal za vaša pitanja).</li>
-  <li><b>Provjerite citira li ga AI.</b> U tablici iz Koraka 2 pogledajte koje portale ChatGPT i AI pregledi već citiraju. Za lokalne usluge to su često regionalni portali, za B2B poslovni portali.</li>
-  <li><b>Provjerite stvarni promet</b> u Ahrefsu ili Semrushu. Portal s visokim DR-om i malo prometa vrijedi manje nego što izgleda.</li>
-  <li><b>Provjerite je li indeksiran.</b> U Google upišite <code>site:portal.hr</code> i pogledajte jesu li i noviji članci u indeksu.</li>
-  <li><b>Pitajte za oznaku.</b> Tekst bez oznake "sponzorirano" čitatelj i AI čitaju kao običan članak. S oznakom ima manju težinu, ali i dalje donosi spomen.</li>
+  <li><b>Relevantnost publike.</b> Čitaju li portal vaši kupci (grad, branša, tema)?</li>
+  <li><b>Citira li ga AI za vaša pitanja.</b> U tablici iz Koraka 2 pogledajte koje portale ChatGPT i AI pregledi već citiraju.</li>
+  <li><b>Procijenjeni promet.</b> Ahrefs i Semrush prikazuju <i>procjenu</i> organskog prometa s Googlea, ne ukupnu publiku portala (direktne posjete, newsletter, društvene mreže).[@ahrefs-traffic] Koristite je za usporedbu portala, ne kao stvarni broj čitatelja.</li>
+  <li><b>Indeksiranost konkretnog članka.</b> Provjerite je li objavljeni URL u Googleu. <code>site:</code> upit može pomoći, ali nije potpun popis; kad niste sigurni, pitajte izdavača.[@g-site]</li>
+  <li><b>Kvaliteta i uvjeti.</b> Kvaliteta drugih članaka, transparentni uvjeti objave i označavanja, mogućnost linka na uslužnu stranicu.</li>
  </ol>
- <figure><img src="../../public/blog/portali-za-pr-objave/oznake.png" alt="335 portala prema oznaci sponzoriranog sadržaja"><figcaption>U našem katalogu je 335 portala iz Hrvatske i regije: 186 označava plaćeni članak kao sponzorirani, 92 ne, a za 57 to još nismo provjerili. DR i promet iz Ahrefsa, 28.10.2026.</figcaption></figure>
+ <p class="small muted">U našem katalogu je 335 portala iz Hrvatske i regije, s DR-om i procijenjenim prometom iz Ahrefsa (28.10.2026.) i podatkom označava li portal plaćene članke.[@s-portali]</p>
 
- <h3>Što mora pisati u članku</h3>
+ <h3>Što napisati u članku</h3>
+ <p><span class="label l-praksa">Praksa</span> Uredničke preporuke iz našeg rada, ne dokazani faktori citiranja:</p>
  <ul>
-  <li><b>Naziv tvrtke, usluga i grad u istoj rečenici.</b> "Splitska ordinacija X, specijalizirana za dječju stomatologiju…" AI povezuje brend s kategorijom upravo iz takvih rečenica.</li>
-  <li><b>Jedna konkretna činjenica</b>: broj klijenata, godina, rezultat, cijena. Članci s brojkama češće se citiraju.</li>
-  <li><b>Link na uslužnu stranicu</b>, ne samo na naslovnicu.</li>
-  <li><b>Tema korisna čitatelju</b> portala, a ne reklama. "Koliko košta implantat u Splitu 2026." bolje prolazi od "Ordinacija X je najbolja".</li>
+  <li><b>Naziv tvrtke, usluga i grad blizu jedno drugome</b>, da je jasno što tvrtka radi i gdje.</li>
+  <li><b>Jedna provjerljiva činjenica</b>: broj klijenata, godina osnivanja, rezultat projekta, cijena.</li>
+  <li><b>Link na relevantnu uslužnu stranicu</b>, uz ispravnu oznaku ako je objava plaćena.</li>
+  <li><b>Tema korisna čitatelju</b> portala, a ne reklama. "Koliko košta implantat u Splitu 2026." korisnije je od "Ordinacija X je najbolja".</li>
  </ul>
 
  <h3>Ritam</h3>
- <p>Bolje 2 objave mjesečno kroz 6 mjeseci nego 12 u jednom tjednu. AI alati i Google vide kontinuitet, a vi svaki mjesec možete izmjeriti učinak (Korak 9) i promijeniti izbor portala.</p>
+ <p><span class="label l-praksa">Praksa</span> Primjer održivog rasporeda: 2 objave mjesečno kroz 6 mjeseci. Ne zato što bi to bio algoritamski signal, nego zato što svaki mjesec možete izmjeriti učinak (Korak 9) i promijeniti izbor portala.</p>
 
  <h3>Digitalni PR, korak po korak</h3>
  <ol class="klik">
-  <li><b>Pronađite podatak koji samo vi imate</b>: anketa među klijentima, analiza cijena, broj upita po gradovima, test kao naš s 45 ChatGPT odgovora.</li>
-  <li><b>Napišite priču u 5 rečenica</b>: naslov s brojkom, što ste izmjerili, glavni nalaz, citat stručnjaka iz tvrtke, link na cijelu analizu na vašem webu.</li>
+  <li><b>Pronađite podatak koji samo vi imate</b>: anketa među klijentima, analiza cijena, broj upita po gradovima, vlastiti test.</li>
+  <li><b>Napišite priču u 5 rečenica</b>: naslov s brojkom, što ste izmjerili i kako, glavni nalaz, citat stručnjaka iz tvrtke, link na cijelu analizu na vašem webu.</li>
   <li><b>Popis novinara</b>: tko je u zadnja 3 mjeseca pisao o vašoj temi na poslovnim, tematskim i regionalnim portalima.</li>
-  <li><b>Pošaljite osobno</b>, ne masovno. Ponudite ekskluzivu jednom mediju ako je priča jaka.</li>
+  <li><b>Pošaljite osobno</b>, ne masovno. Ekskluzivu ponudite jednom mediju ako je priča jaka.</li>
   <li><b>Pratite prenesene članke</b> (Google Alerts za naziv tvrtke) i dodajte ih na web ("Pisali su o nama").</li>
  </ol>
- <div class="box data"><b>Kako čitati podatke</b><p>U anketi agencije uSERP među 116 SEO stručnjaka (rujan 2026.) digitalni PR je izglasan kao najjača taktika za linkove i AI citate (53,4%), a 81,9% ih vjeruje da linkovi utječu na to hoće li ih AI citirati. To je mišljenje stručnjaka, ne mjerenje. Ali poklapa se s onim što vidimo u hrvatskim AI odgovorima: za kategorijska pitanja citiraju se treće strane.</p></div>
- <div class="box tip"><b>Tips and tricks</b><ul><li>Poslovni portali poput poslovni.hr, lidermedia.hr ili bug.hr za dobru priču s novim podatkom ponekad objave članak i bez plaćanja.</li><li>Index ima javni cjenik objava na cjenik.index.hr. Dobro je mjerilo kad uspoređujete ponude.</li><li>Ne kupujte linkove na mrežama stranica koje prodaju linkove svima. Takve stranice lako se prepoznaju po tome što linkaju na desetke nepovezanih tvrtki, a to šteti i na Googleu.</li></ul></div>
- <div class="box svc"><b>Naša usluga: objave na portalima i digitalni PR</b><p>Imamo katalog od 335 hrvatskih portala s DR-om, prometom i oznakom sponzorirano, i za svakog klijenta biramo portale koje AI stvarno citira za njegova pitanja. Radimo i digitalni PR: podatkovne priče, tekst i slanje novinarima. Katalog i upit za odabrane portale: <b>serprise.agency/portali/</b>. Cijenu šaljemo za konkretan popis portala, jer se razlikuje od portala do portala.</p></div>
- <div class="box mi"><b>Kako mi to radimo</b><p>Prije prve objave napravimo Korake 2 i 3 za pitanja klijenta. Portale biramo po tome koji su već izvori u AI odgovorima za njegovu kategoriju i grad, a tek onda po DR-u. Svaki članak ima brend, uslugu i grad u istoj rečenici i link na uslužnu stranicu. Mjesec nakon objave ponovimo test i gledamo je li se članak pojavio kao izvor.</p></div>
- <div class="done"><b>Gotovo kad</b><ul><li>Imate popis 5 do 10 portala koje AI citira u vašoj kategoriji</li><li>Prve 2 objave su vani, s brendom, uslugom i gradom u istoj rečenici</li><li>Imate jednu ideju za podatkovnu priču za medije</li></ul></div>
+ <div class="box data"><b>Kako čitati podatke</b><p><span class="label l-izvor">Izvor</span> U anketi "The State of Backlinks for SEO in 2027" (uSERP, ažurirano 28.9.2026.) 53,4% od 116 SEO stručnjaka navelo je digitalni PR kao link building taktiku koja im je u prethodnih 12 mjeseci dala najbolje rezultate, a 81,9% vjeruje da backlinkovi utječu na AI citiranje.[@userp] To su odgovori i iskustva ispitanika, ne eksperiment koji dokazuje uzrok.</p></div>
+ <div class="box tip"><b>Tips and tricks</b><ul><li>Poslovni i tematski portali objavljuju uređivačke članke kad priča ima nov, provjerljiv podatak. Pošaljite podatak, ne reklamu.</li><li>Ne kupujte linkove na mrežama stranica koje prodaju linkove svima. To je link spam prema Googleovim pravilima.[@g-spam]</li></ul></div>
+ <div class="box svc"><b>Naša usluga: objave na portalima i digitalni PR</b><p>Imamo katalog od 335 portala iz Hrvatske i regije[@s-portali] i za svakog klijenta biramo portale po relevantnosti i po tome citira li ih AI za njegova pitanja. Radimo i digitalni PR: podatkovne priče, tekst i slanje novinarima. Katalog i upit za odabrane portale: <a href="https://serprise.agency/portali/"><b>serprise.agency/portali/</b></a>. Cijenu šaljemo za konkretan popis portala.</p></div>
+ <div class="box mi"><b>Kako mi to radimo</b><p>Prije prve objave napravimo Korake 2 i 3 za pitanja klijenta. Portale biramo po relevantnosti publike i po tome jesu li već izvori u AI odgovorima za njegovu kategoriju, a tek onda po DR-u. Mjesec nakon objave ponovimo test i bilježimo je li se članak pojavio kao izvor i je li brend spomenut.</p></div>
+ <div class="done"><b>Gotovo kad</b><ul><li>Imate popis 5 do 10 relevantnih portala, s podatkom koje AI već citira</li><li>Prve objave su vani, s ispravnim oznakama</li><li>Imate jednu ideju za podatkovnu priču za medije</li></ul></div>
 </section>

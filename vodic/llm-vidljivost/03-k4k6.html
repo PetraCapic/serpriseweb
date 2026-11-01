@@ -1,129 +1,143 @@
 <!-- KORAK 4 -->
-<section class="page">
+<section class="page" id="k4">
  <div class="ihead"><span>LLM vidljivost u Hrvatskoj</span><b>Korak 4 od 9</b></div>
  <div class="stepno">04</div>
  <h2>Pripremite vlastiti web</h2>
- <p class="lead">Kad AI dođe na vaš web, mora u prvih nekoliko rečenica pronaći odgovor na kupčevo pitanje: što radite, za koga, gdje i od koliko eura. Ako to mora tražiti, uzet će tuđu stranicu.</p>
+ <p class="lead">Kad kupac ili AI alat dođe na vaš web, treba brzo pronaći odgovor: što radite, za koga, gdje i okvirno po kojoj cijeni. Google za AI preglede ne traži posebnu optimizaciju, nego iste temeljne SEO prakse i koristan sadržaj.[@g-ai-features,g-ai-guide]</p>
  <div class="cost"><div><span>Trošak</span><strong>0 € ako sami uređujete web</strong></div><div><span>Vrijeme</span><strong>2 do 4 sata po stranici</strong></div><div><span>Alati</span><strong>CMS, Search Console, Bing WMT</strong></div></div>
 
  <h3>Uslužna stranica: 7 elemenata</h3>
+ <p><span class="label l-praksa">Praksa</span> Ovo su naše uredničke preporuke, ne dokazani faktori ili uvjeti za AI citiranje. Pomažu kupcu i olakšavaju da se stranica razumije.</p>
  <table>
   <tr><th>#</th><th>Element</th><th>Kako</th></tr>
-  <tr><td>1</td><td><b>Jedna stranica po usluzi</b></td><td>Ne "Usluge" sa šest odlomaka, nego /implantati/, /djecja-stomatologija/. AI citira stranicu, ne web.</td></tr>
-  <tr><td>2</td><td><b>Naslov riječima iz pitanja</b></td><td>Ako kupci pitaju "dječji stomatolog Split", H1 i title neka budu "Dječji stomatolog u Splitu".</td></tr>
-  <tr><td>3</td><td><b>Blok "Ukratko" na vrhu</b></td><td>3 rečenice: što radite, za koga, gdje i od koliko eura. To je dio koji AI najčešće prepiše.</td></tr>
-  <tr><td>4</td><td><b>Cijene u eurima</b></td><td>Barem "od X €" ili raspon. Ako nemate cijenu, AI za pitanje o cijeni citira tuđi cjenik.</td></tr>
-  <tr><td>5</td><td><b>FAQ s 5 do 8 pitanja</b></td><td>Pitanja iz Koraka 1, kratki odgovori, FAQPage schema.</td></tr>
-  <tr><td>6</td><td><b>Autor i dokazi</b></td><td>Ime i uloga stručnjaka, broj godina, broj klijenata, primjer projekta s brojkama.</td></tr>
-  <tr><td>7</td><td><b>Lokacija i kontakt</b></td><td>Adresa, grad, područje rada, telefon. Isto kao u imenicima (Korak 5).</td></tr>
+  <tr><td>1</td><td><b>Jedna stranica po usluzi</b></td><td>Ne "Usluge" sa šest odlomaka, nego /implantati/, /djecja-stomatologija/. AI alati citiraju pojedine stranice, ne web u cjelini.</td></tr>
+  <tr><td>2</td><td><b>Jasan naslov</b></td><td>Naslov koji kaže uslugu i mjesto riječima kojima kupci pitaju, npr. "Dječji stomatolog u Splitu".</td></tr>
+  <tr><td>3</td><td><b>Kratak sažetak na vrhu</b></td><td>Nekoliko rečenica: što radite, za koga, gdje i od koliko eura.</td></tr>
+  <tr><td>4</td><td><b>Cijene u eurima</b></td><td>Barem "od X €" ili raspon. Bez cijene kupac i AI alat traže je na drugom mjestu.</td></tr>
+  <tr><td>5</td><td><b>Odgovori na česta pitanja</b></td><td>Pitanja iz Koraka 1, kratki odgovori, vidljivi na stranici. Broj pitanja prilagodite temi.</td></tr>
+  <tr><td>6</td><td><b>Autor i dokazi</b></td><td>Ime i uloga stručnjaka, iskustvo, primjer projekta s provjerljivim brojkama.</td></tr>
+  <tr><td>7</td><td><b>Lokacija i kontakt</b></td><td>Adresa, područje rada, telefon. Isti podaci kao u imenicima (Korak 5).</td></tr>
  </table>
- <div class="box tip"><b>Tips and tricks</b><ul><li>Napravite stranice usporedbe: "[vaša usluga] ili [alternativa]", "[vi] vs [konkurent]", "alternativa za [poznati brend]". U stranim primjerima to su stranice koje AI najčešće uzima za pitanja tipa "što je bolje". U Hrvatskoj ih gotovo nitko nema.</li><li>Tablice i popisi lakše ulaze u AI odgovor od dugih odlomaka. Cjenik u tablici, koraci u numeriranom popisu.</li></ul></div>
+ <div class="box tip"><b>Tips and tricks</b><ul><li>Stranice usporedbe ("[usluga] ili [alternativa]", "[vi] ili [konkurent]") odgovaraju na pitanja tipa "što je bolje". Pišite ih pošteno, s jasnim kriterijima.</li><li>Cjenik u tablici i korake u numeriranom popisu lakše je pročitati i ljudima i alatima.</li><li>Web trgovina: Google posebno ističe ažurne podatke o proizvodima u Merchant Centeru i poslovne podatke u Business Profileu.[@g-ai-guide]</li></ul></div>
 
- <h3>Schema oznake, klik po klik</h3>
+ <h3>Schema oznake</h3>
+ <p><span class="label l-izvor">Izvor</span> Google ne traži posebnu schemu za AI rezultate.[@g-ai-features] Schema pomaže da se podaci na stranici jednoznačno razumiju, ali nije uvjet za citat. Od 7.5.2026. Google više ne prikazuje FAQ obogaćene rezultate.[@g-updates] Odgovori na česta pitanja i dalje su koristan sadržaj; FAQPage oznaka nije dokazan uvjet za AI citiranje.</p>
  <ol class="klik">
-  <li>Na naslovnici: <b>Organization</b> (ili LocalBusiness) s nazivom, logom, adresom, telefonom i <code>sameAs</code> linkovima na LinkedIn, Facebook i profile iz Koraka 5.</li>
-  <li>Na uslužnoj stranici: <b>Service</b> s nazivom usluge, područjem (<code>areaServed: "HR"</code>) i, ako možete, <b>Offer</b> s cijenom.</li>
-  <li>Na FAQ: <b>FAQPage</b> s istim pitanjima i odgovorima koja su vidljiva na stranici.</li>
-  <li>Provjerite na <b>search.google.com/test/rich-results</b>: zalijepite URL i pogledajte ima li grešaka.</li>
+  <li>Na naslovnici: <b>Organization</b> (ili LocalBusiness) s nazivom, logom, adresom, telefonom i <code>sameAs</code> linkovima na profile iz Koraka 5.</li>
+  <li>Na uslužnoj stranici: <b>Service</b> s nazivom usluge i područjem rada, a ako imate cijenu, <b>Offer</b>.</li>
+  <li>Provjera: <b>Rich Results Test</b> (search.google.com/test/rich-results) provjerava samo tipove koje Google podržava za obogaćene rezultate. Za sve schema.org tipove koristite <b>Schema Markup Validator</b> (validator.schema.org).[@g-schema]</li>
  </ol>
- <p class="small muted">WordPress: Rank Math ili Yoast dodaju Organization i FAQ schemu iz postavki. Ostali sustavi: zamolite programera za JSON-LD blok u &lt;head&gt;.</p>
+ <p class="small muted">WordPress: SEO dodaci poput Rank Matha ili Yoasta imaju postavke za Organization schemu. Ostali sustavi: zamolite programera za JSON-LD blok u &lt;head&gt;.</p>
 
- <h3>Tehnička provjera: vidi li AI vaš web</h3>
+ <h3>Tehnička provjera: mogu li AI alati dohvatiti vaš web</h3>
  <ol class="klik">
-  <li><b>Google Search Console</b>, Indeksiranje stranica: jesu li uslužne stranice indeksirane? Ako nisu, "Pregled URL-a" i "Zatraži indeksiranje".</li>
-  <li><b>Bing Webmaster Tools</b> (bing.com/webmasters): dodajte web uvozom iz Search Consolea (dva klika). ChatGPT i Copilot oslanjaju se i na Bing, pa stranica koja nije u Bingu teže ulazi u njihove odgovore.</li>
-  <li><b>robots.txt</b>: otvorite vasweb.hr/robots.txt. Ne smije blokirati Googlebot, Bingbot, OAI-SearchBot (ChatGPT pretraga), PerplexityBot ni ClaudeBot.</li>
-  <li><b>Cloudflare</b>: ako ga koristite, u postavkama botova provjerite da nije uključeno blokiranje AI crawlera za pretragu. Cloudflare od 2026. razlikuje botove za pretragu, za agente i za treniranje modela. Treniranje možete zabraniti, a pretragu ostavite otvorenom.</li>
-  <li><b>JavaScript test</b>: u pregledniku desni klik, "Prikaži izvorni kod stranice". Vidite li tekst svoje stranice? Ako vidite samo prazan <code>&lt;div id="root"&gt;</code>, većina AI crawlera vidi praznu stranicu.</li>
-  <li><b>IndexNow</b>: ako vaš sustav to podržava (WordPress dodatak IndexNow, Cloudflare), uključite ga. Bing i druge tražilice tada odmah saznaju za nove i promijenjene stranice.</li>
+  <li><b>Google Search Console</b>: jesu li uslužne stranice indeksirane? Provjerite ih alatom "Pregled URL-a" (URL Inspection).[@g-site]</li>
+  <li><b>Generativne značajke</b>: provjerite da web nije isključen iz Googleovih generativnih AI značajki, kako opisuje Googleov vodič.[@g-ai-guide]</li>
+  <li><b>Bing Webmaster Tools</b> (bing.com/webmasters): dodajte web uvozom iz Search Consolea. Izvještaj AI Performance pokazuje citate u Microsoftovim AI iskustvima.[@bing-ai]</li>
+  <li><b>robots.txt</b>: otvorite vasweb.hr/robots.txt i provjerite pravila za botove u tablici ispod.</li>
+  <li><b>Cloudflare</b>: ako ga koristite, pogledajte pravila za AI botove. Cloudflare od 1.7.2026. razlikuje kategorije Search, Agent i Training.[@cloudflare-bots] Provjerite konkretna pravila za svoju domenu, ne samo jedan opći prekidač.</li>
+  <li><b>Sadržaj u HTML-u</b>: desni klik, "Prikaži izvorni kod stranice". Ako vidite tekst stranice, dobro. Ako vidite samo prazan <code>&lt;div id="root"&gt;</code>, sadržaj se gradi JavaScriptom, a neki dohvati ga možda neće obraditi. React sam po sebi nije problem. Google preporučuje serversko ili statičko renderiranje ili hidrataciju; posebno renderiranje samo za botove je zaobilazno rješenje, a sadržaj za ljude i botove mora ostati isti.[@g-js]</li>
+  <li><b>IndexNow</b>: ako ga vaš sustav podržava, uključite ga. IndexNow obavještava tražilice koje ga podržavaju o novim i promijenjenim stranicama. Ne jamči indeksiranje ni citat.[@bing-ai]</li>
  </ol>
- <div class="box mi"><b>Kako mi to radimo: primjer s brojkama</b><p>Hrvatski portal osmrtnica.com.hr imao je oko 36.000 klikova s Googlea mjesečno, ali je napravljen u Reactu: AI crawleri dobivali su praznu stranicu. 19.10.2026. uveli smo HTML za crawlere, zatim interne linkove, novi robots.txt i IndexNow. U 19 dana prije promjene portal je dobio 6 posjeta s ChatGPT-a, u 12 dana poslije 67. Bez novih tekstova i bez kupljenih linkova.</p></div>
- <figure><img src="../../public/blog/case-study-ai-vidljivost-osmrtnice/chatgpt-sesije.png" alt="Posjeti s ChatGPT-a po danu"><figcaption>Posjeti s ChatGPT-a po danu na osmrtnica.com.hr, rujan i listopad 2026. Izvor: GA4.</figcaption></figure>
- <div class="box tip"><b>Tips and tricks</b><p>llms.txt je datoteka s opisom weba za AI alate. Ne škodi, ali na portalu iz primjera postojala je i prije, kad posjeta s ChatGPT-a gotovo nije bilo. Ne trošite na nju više od pola sata.</p></div>
- <div class="done"><b>Gotovo kad</b><ul><li>Svaka glavna usluga ima svoju stranicu sa svih 7 elemenata</li><li>Stranice su indeksirane na Googleu i Bingu</li><li>robots.txt i Cloudflare ne blokiraju AI pretragu</li><li>Rich Results test prolazi bez grešaka</li></ul></div>
+ <table>
+  <tr><th>Bot</th><th>Čemu služi</th><th>Preporuka</th></tr>
+  <tr><td>Googlebot, Bingbot</td><td>Indeksiranje za Google i Bing</td><td>Dopustiti</td></tr>
+  <tr><td>OAI-SearchBot</td><td>Pretraga i prikaz izvora u ChatGPT-u[@openai-bots]</td><td>Dopustiti</td></tr>
+  <tr><td>ChatGPT-User</td><td>Dohvat stranice na zahtjev korisnika[@openai-bots]</td><td>Dopustiti</td></tr>
+  <tr><td>GPTBot</td><td>Sadržaj za treniranje OpenAI modela[@openai-bots]</td><td>Vaš izbor</td></tr>
+  <tr><td>Claude-SearchBot</td><td>Pretraga i kvaliteta rezultata u Claudeu[@anthropic-bots]</td><td>Dopustiti</td></tr>
+  <tr><td>Claude-User</td><td>Dohvat na zahtjev korisnika Claudea[@anthropic-bots]</td><td>Dopustiti</td></tr>
+  <tr><td>ClaudeBot</td><td>Sadržaj za razvoj i treniranje modela[@anthropic-bots]</td><td>Vaš izbor</td></tr>
+ </table>
+ <p><span class="label l-izvor">Izvor</span> Dopuštanje treniranja nije uvjet za pojavljivanje u pretrazi: OpenAI navodi da su postavke za njegove botove neovisne.[@openai-bots] GPTBot i ClaudeBot možete blokirati, a botove za pretragu ostaviti otvorenima.</p>
+
+ <div class="box mi"><b>Kako mi to radimo: primjer s brojkama</b><p><span class="label l-test">Naš test</span> Portal osmrtnica.com.hr napravljen je u Reactu i crawlerima je slao stranicu bez teksta. 19.10.2026. uveli smo HTML za crawlere, a zatim interne linkove, novi robots.txt i IndexNow. U GA4 je od 1. do 19.10. zabilježeno 6 sesija s ChatGPT-a (0,32 dnevno), a od 20. do 31.10. 67 sesija (5,58 dnevno).[@s-case] U istom razdoblju porasli su i klikovi s Googlea, s 5.479 na 10.569 tjedno.[@s-case]</p><p>Što ovo ne dokazuje: uzorak je malen, razdoblja su kratka, uvedeno je više promjena odjednom, a pred Sve svete moguća je sezonalnost. Ne možemo izdvojiti doprinos pojedine promjene.</p></div>
+ <div class="box tip"><b>Tips and tricks</b><p><span class="label l-izvor">Izvor</span> Google navodi da llms.txt ne koristi za vidljivost ni rangiranje.[@g-ai-guide] Drugi alati ga možda čitaju, ali nije zamjena za dostupan sadržaj. <span class="label l-praksa">Praksa</span> Ne trošite na njega više od pola sata.</p></div>
+ <div class="done"><b>Gotovo kad</b><ul><li>Svaka glavna usluga ima svoju stranicu</li><li>Stranice su indeksirane na Googleu i dodane u Bing Webmaster Tools</li><li>robots.txt i Cloudflare ne blokiraju botove za pretragu</li><li>Tekst stranice vidi se u izvornom HTML-u</li><li>Schema prolazi Schema Markup Validator bez grešaka</li></ul></div>
 </section>
 
 <!-- KORAK 5 -->
-<section class="page">
+<section class="page" id="k5">
  <div class="ihead"><span>LLM vidljivost u Hrvatskoj</span><b>Korak 5 od 9</b></div>
  <div class="stepno">05</div>
- <h2>Besplatni poslovni imenici i profili</h2>
- <p class="lead">Kad netko pita AI za tvrtke "u Hrvatskoj" ili "u Zagrebu", AI često citira imenike i kataloge, a ne web same tvrtke. Upis je besplatan i možete ga napraviti sami u jednom poslijepodnevu.</p>
- <div class="cost"><div><span>Trošak</span><strong>0 €</strong></div><div><span>Vrijeme</span><strong>10 do 20 min po imeniku</strong></div><div><span>Tko</span><strong>bilo tko u firmi</strong></div></div>
+ <h2>Poslovni imenici i profili</h2>
+ <p class="lead">Imenici i katalozi potvrđuju da tvrtka postoji, gdje je i što radi. U našem testu ChatGPT ih je citirao za pitanja s "Hrvatska" ili gradom: Clutch u 6 od 45 odgovora.[@s-test] Profil može pomoći da vas se pronađe, ali ne jamči preporuku.</p>
+ <div class="cost"><div><span>Trošak</span><strong>0 € za osnovne profile</strong></div><div><span>Vrijeme</span><strong>10 do 20 min po imeniku</strong></div><div><span>Tko</span><strong>bilo tko u firmi</strong></div></div>
 
  <h3>Prije upisa: jedan dokument s podacima</h3>
- <p>Napravite dokument i iz njega kopirajte u svaki imenik. Podaci moraju biti <b>isti svugdje</b>, slovo po slovo:</p>
+ <p><span class="label l-praksa">Praksa</span> Napravite dokument i iz njega kopirajte u svaki imenik. Važna je <b>činjenična dosljednost</b>: isti brend, adresa, telefon i web svugdje.</p>
  <ul>
-  <li>Naziv tvrtke (isti oblik svugdje, npr. "SERPRise", a ne jednom "Serprise d.o.o." a drugi put "SERP Rise")</li>
+  <li>Brend (npr. "SERPRise") i pravni naziv (npr. "SERPRise d.o.o.") razlikujte: brend u nazivu profila, pravni naziv gdje imenik traži podatke iz registra</li>
   <li>Adresa, grad, poštanski broj, telefon, e-mail, web</li>
-  <li>Kratki opis (150 znakova) i dugi opis (500 do 750 znakova) s nazivom usluge i gradom</li>
-  <li>Popis usluga istim riječima kao na webu</li>
-  <li>Logo (kvadrat 400×400 px) i 3 do 5 fotografija</li>
+  <li>Kratki i dugi opis s nazivom usluge i gradom. Opis prilagodite platformi, činjenice neka ostanu iste</li>
+  <li>Popis usluga istim nazivima kao na webu</li>
+  <li>Logo i nekoliko fotografija</li>
  </ul>
- <div class="box tip"><b>Tips and tricks</b><p>Ako vam naziv tvrtke zvuči kao ključna riječ (npr. "Web Dizajn Zagreb"), ni Google ni AI ne mogu znati da netko traži baš vas. Tada je dosljednost još važnija: isti naziv, isti logo i linkovi s profila na web (i obrnuto, s weba na profile u Organization schemi).</p></div>
+ <div class="box tip"><b>Tips and tricks</b><p>Ne dodajte ključne riječi u naziv tvrtke na profilu. Google traži stvarni naziv poslovanja.[@gbp-policy] Povežite profile i web u oba smjera: s profila na web, a s weba na profile u Organization schemi (<code>sameAs</code>).</p></div>
 
- <h3>Imenici, redom važnosti</h3>
+ <h3>Imenici</h3>
+ <p class="small muted">Uvjete i besplatne funkcije provjerite na dan upisa. Cijene i paketi se mijenjaju; oznake ispod su stanje koje smo vidjeli 1.11.2026.</p>
  <table>
-  <tr><th>Imenik</th><th>Cijena</th><th>Što upisati</th><th>Zašto</th></tr>
-  <tr><td><b>Google Business Profile</b><br><span class="small muted">business.google.com</span></td><td><span class="tag free">besplatno</span></td><td>Kategorija, usluge, radno vrijeme, fotografije, recenzije</td><td>Izvor za Google Karte, lokalne rezultate i AI preglede</td></tr>
-  <tr><td><b>Bing Places</b><br><span class="small muted">bingplaces.com</span></td><td><span class="tag free">besplatno</span></td><td>Uvoz iz Google profila</td><td>Bing koriste ChatGPT i Copilot</td></tr>
-  <tr><td><b>Apple Business Connect</b></td><td><span class="tag free">besplatno</span></td><td>Isti podaci</td><td>Apple Karte i Siri</td></tr>
-  <tr><td><b>LinkedIn stranica tvrtke</b></td><td><span class="tag free">besplatno</span></td><td>Opis, usluge, web, zaposlenici povezani s tvrtkom</td><td>Važno za B2B i provjeru tko stoji iza tvrtke</td></tr>
-  <tr><td><b>CompanyWall</b><br><span class="small muted">companywall.hr</span></td><td><span class="tag free">osnovno besplatno</span></td><td>Opis djelatnosti, web, kontakt</td><td>Hrvatski poslovni imenik koji se pojavljuje u pretragama naziva tvrtki</td></tr>
+  <tr><th>Imenik</th><th>Cijena</th><th>Što upisati</th><th>Napomena</th></tr>
+  <tr><td><b>Google Business Profile</b><br><span class="small muted">business.google.com</span></td><td><span class="tag free">besplatno</span></td><td>Kategorija, usluge, radno vrijeme, fotografije</td><td>Samo ako poslovanje ispunjava uvjete: tvrtke koje rade isključivo online, bez osobnog kontakta s kupcima, uglavnom nisu prihvatljive.[@gbp-policy]</td></tr>
+  <tr><td><b>Bing Places</b><br><span class="small muted">bingplaces.com</span></td><td><span class="tag free">besplatno</span></td><td>Uvoz iz Google profila</td><td>Bing karte i lokalni rezultati</td></tr>
+  <tr><td><b>Apple Business Connect</b></td><td><span class="tag free">besplatno</span></td><td>Isti podaci</td><td>Apple Karte</td></tr>
+  <tr><td><b>LinkedIn stranica tvrtke</b></td><td><span class="tag free">besplatno</span></td><td>Opis, usluge, web, povezani zaposlenici</td><td>Važno za B2B</td></tr>
+  <tr><td><b>CompanyWall</b><br><span class="small muted">companywall.hr</span></td><td><span class="tag free">osnovno besplatno</span></td><td>Opis djelatnosti, web, kontakt</td><td>Hrvatski poslovni imenik</td></tr>
   <tr><td><b>Poslovna.hr</b></td><td><span class="tag free">osnovno besplatno</span></td><td>Opis, ključne usluge, web</td><td>Hrvatski imenik s podacima o tvrtkama</td></tr>
-  <tr><td><b>Fininfo</b><br><span class="small muted">fininfo.hr</span></td><td><span class="tag mid">provjeriti podatke</span></td><td>Podaci dolaze iz registara. Provjerite jesu li web i djelatnost točni</td><td>Često se pojavljuje uz naziv tvrtke</td></tr>
-  <tr><td><b>trebam.hr</b></td><td><span class="tag mid">provjeriti uvjete</span></td><td>Profil usluge, područje rada</td><td>ChatGPT ga je citirao za hrvatska pitanja o uslugama</td></tr>
+  <tr><td><b>Fininfo</b><br><span class="small muted">fininfo.hr</span></td><td><span class="tag mid">provjeriti podatke</span></td><td>Provjerite jesu li web i djelatnost točni</td><td>Podaci dolaze iz registara</td></tr>
+  <tr><td><b>trebam.hr</b></td><td><span class="tag mid">provjeriti uvjete</span></td><td>Profil usluge, područje rada</td><td>Citiran u našem testu za hrvatska pitanja o uslugama[@s-test]</td></tr>
  </table>
  <h4>Za B2B usluge, agencije i softver</h4>
  <table>
-  <tr><th>Katalog</th><th>Cijena</th><th>Što upisati</th><th>Zašto</th></tr>
-  <tr><td><b>Clutch</b> (clutch.co)</td><td><span class="tag free">profil besplatan</span></td><td>Usluge, budžeti, klijenti, recenzije koje Clutch provjerava</td><td>Citiran u 6 od 45 naših ChatGPT odgovora o agencijama u Hrvatskoj</td></tr>
-  <tr><td><b>The Manifest</b></td><td><span class="tag free">profil besplatan</span></td><td>Puni se s Clutch profila</td><td>Konkurenti koje AI citira su ondje</td></tr>
-  <tr><td><b>DesignRush</b></td><td><span class="tag free">osnovni besplatan</span></td><td>Usluge, portfelj</td><td>Isto</td></tr>
-  <tr><td><b>GoodFirms</b></td><td><span class="tag free">osnovni besplatan</span></td><td>Usluge, portfelj, recenzije</td><td>Isto</td></tr>
+  <tr><th>Katalog</th><th>Cijena</th><th>Što upisati</th><th>Napomena</th></tr>
+  <tr><td><b>Clutch</b> (clutch.co)</td><td><span class="tag free">osnovni profil besplatan</span></td><td>Usluge, budžeti, klijenti, recenzije</td><td>Citiran u 6 od 45 naših ChatGPT odgovora[@s-test]</td></tr>
+  <tr><td><b>The Manifest</b></td><td><span class="tag mid">provjeriti uvjete</span></td><td>Usluge, klijenti</td><td>Konkurenti iz naše analize su ondje[@s-competitors]</td></tr>
+  <tr><td><b>DesignRush</b></td><td><span class="tag mid">provjeriti uvjete</span></td><td>Usluge, portfelj</td><td>Isto</td></tr>
+  <tr><td><b>GoodFirms</b></td><td><span class="tag mid">provjeriti uvjete</span></td><td>Usluge, portfelj, recenzije</td><td>Isto</td></tr>
  </table>
- <p class="small muted">Većina kataloga uz besplatni profil nudi i plaćeno isticanje. Za LLM vidljivost dovoljan je besplatni profil s recenzijama. Uvjete provjerite na dan upisa jer se mijenjaju.</p>
 
- <h3>Recenzije: tri po imeniku</h3>
+ <h3>Recenzije: pitajte sve stvarne klijente, bez usmjeravanja</h3>
+ <p><span class="label l-izvor">Izvor</span> Googleova pravila zabranjuju selektivno traženje pozitivnih recenzija i traženje da recenzija sadrži određeni sadržaj.[@g-reviews]</p>
  <ol class="klik">
-  <li>Odaberite 5 zadovoljnih klijenata.</li>
-  <li>Pošaljite im izravan link na recenziju (Google profil, gumb "Zatraži recenzije"; Clutch, "Request reviews").</li>
-  <li>Zamolite da u recenziji spomenu <b>uslugu i grad</b> ("izrada implantata u Splitu"). AI te riječi čita.</li>
-  <li>Odgovorite na svaku recenziju u roku od tjedan dana.</li>
+  <li>Recenziju zatražite od <b>svih</b> stvarnih klijenata nakon završenog posla, ne samo od zadovoljnih.</li>
+  <li>Pošaljite izravan link (Google profil: "Zatraži recenzije"; Clutch: "Request reviews").</li>
+  <li>Zamolite ih da <b>svojim riječima</b> opišu iskustvo. Ne određujte ocjenu, ključne riječi ni sadržaj.</li>
+  <li>Odgovorite na svaku recenziju, i na negativne.</li>
  </ol>
- <div class="box svc"><b>Gdje imenici prestaju</b><p>Imenici govore AI-ju da postojite i gdje ste. Ali na pitanje "tko je najbolji" AI odgovara iz onoga što drugi pišu o vama: liste, članci, mediji. Imenici su nužni, ali sami nisu dovoljni. To su Koraci 6 i 7.</p></div>
- <div class="box mi"><b>Kako mi to radimo</b><p>Za SERPRise imenike upisuje jedna osoba iz tima, sve iz istog dokumenta s podacima, i svaki upis bilježi u tablicu: imenik, datum, link na profil, broj recenzija. Svaka tri mjeseca provjerava jesu li podaci još točni.</p></div>
- <div class="done"><b>Gotovo kad</b><ul><li>Upisani ste u sve imenike koji vrijede za vašu djelatnost</li><li>Naziv, adresa, telefon i opis su isti svugdje</li><li>Google profil i Clutch (ako ste B2B) imaju barem 3 recenzije</li><li>Profil linkovi su u <code>sameAs</code> na vašem webu</li></ul></div>
+ <p><span class="label l-praksa">Praksa</span> Tri recenzije po važnom profilu dobar su prvi operativni cilj. To nije dokazan prag za AI vidljivost.</p>
+ <div class="box svc"><b>Gdje imenici prestaju</b><p>Imenici pokazuju da postojite i gdje ste. Za pitanja "tko je najbolji" u našem testu češće su citirane liste i članci trećih strana.[@s-test] Zato su tu i Koraci 6 i 7.</p></div>
+ <div class="box mi"><b>Kako mi to radimo</b><p>Imenike upisuje jedna osoba iz tima, iz istog dokumenta s podacima, i svaki upis bilježi u tablicu: imenik, datum, link na profil, broj recenzija. Svaka tri mjeseca provjerava jesu li podaci još točni.</p></div>
+ <div class="done"><b>Gotovo kad</b><ul><li>Upisani ste u imenike koji vrijede za vašu djelatnost i za koje ispunjavate uvjete</li><li>Brend, adresa, telefon i web su isti svugdje</li><li>Recenzije ste zatražili od svih klijenata u posljednja 3 mjeseca</li><li>Profili su u <code>sameAs</code> na vašem webu</li></ul></div>
 </section>
 
 <!-- KORAK 6 -->
-<section class="page">
+<section class="page" id="k6">
  <div class="ihead"><span>LLM vidljivost u Hrvatskoj</span><b>Korak 6 od 9</b></div>
  <div class="stepno">06</div>
  <h2>Liste "najboljih" i strukovni katalozi</h2>
- <p class="lead">Na pitanje "koje su najbolje agencije" ChatGPT ne citira stranicu agencije, nego tuđe liste. U našem testu to su bile liste poput assemblio.hr i tako.hr, uz direktorije poput Clutcha. Ako ste na listi, ulazite u odgovor.</p>
+ <p class="lead">U našem testu, za pitanja o najboljim agencijama u Hrvatskoj među citiranim izvorima bile su liste poput assemblio.hr i tako.hr te direktoriji poput Clutcha.[@s-test] Mjesto na listi može pomoći, ali ne jamči ulazak u odgovor.</p>
  <div class="cost"><div><span>Trošak</span><strong>0 € do cijene objave</strong></div><div><span>Vrijeme</span><strong>2 do 3 sata</strong></div><div><span>Alati</span><strong>Google, e-mail</strong></div></div>
- <h3>Kako doći na listu, klik po klik</h3>
+ <h3>Kako doći na listu</h3>
  <ol class="klik">
   <li>Iz gap liste (Korak 3) izdvojite sve <b>liste i rangiranja</b>.</li>
-  <li>Dopunite ih Google pretragama: <code>najbolji [usluga] [grad]</code>, <code>top 10 [usluga] hrvatska</code>, <code>[usluga] preporuke</code>.</li>
-  <li>Za svaku listu pronađite autora ili urednika (dno članka, stranica "O nama", LinkedIn).</li>
-  <li>Pošaljite kratak e-mail: tko ste, po čemu se razlikujete od onih na listi (jedna brojka ili činjenica), link na uslužnu stranicu i recenzije.</li>
-  <li>Ako lista prima plaćene upise, tražite da tekst o vama bude činjeničan i da sadrži uslugu i grad.</li>
+  <li>Dopunite ih pretragama: <code>najbolji [usluga] [grad]</code>, <code>top 10 [usluga] hrvatska</code>, <code>[usluga] preporuke</code>.</li>
+  <li>Za svaku listu pronađite autora ili urednika (dno članka, "O nama", LinkedIn).</li>
+  <li>Pošaljite kratak e-mail: tko ste, jedna provjerljiva činjenica po kojoj se razlikujete, link na uslužnu stranicu.</li>
+  <li>Ako je upis plaćen, link mora imati oznaku <code>rel="sponsored"</code> ili <code>nofollow</code>. Kupnja linkova radi utjecaja na rangiranje je link spam, a Googleova pravila protiv spama vrijede i za generativne odgovore.[@g-spam]</li>
   <li>Nakon 2 tjedna pošaljite jedan podsjetnik. Ne više.</li>
  </ol>
 <pre>Predmet: Prijedlog za vaš popis "[naziv liste]"
 
 Pozdrav [ime],
 pročitao sam vaš popis "[naziv]". Mi smo [tvrtka] iz [grad] i radimo
-[usluga] od [godina]. Za razliku od većine na popisu, [jedna konkretna
-razlika, npr. imamo javni cjenik / 120 recenzija prosjek 4,9].
+[usluga] od [godina]. [Jedna provjerljiva činjenica, npr. imamo javni
+cjenik / radili smo za 40 tvrtki u Dalmaciji.]
 
-Ako ažurirate popis, ovdje su podaci: [link na uslužnu stranicu]
-i recenzije: [link].
+Ako ažurirate popis, ovdje su podaci: [link na uslužnu stranicu].
 
 Hvala,
 [ime i uloga]</pre>
- <div class="box tip"><b>Tips and tricks</b><ul><li>Nove liste vrijedi provjeriti svaki mjesec. Liste "najboljih" su sadržaj koji AI alati vrlo brzo pokupe, a nove nastaju stalno.</li><li>Strukovne udruge, komore i sajmovi imaju popise članova i izlagača. HGK, strukovni klasteri i konferencije (npr. stranice govornika) AI također citira.</li></ul></div>
+ <div class="box tip"><b>Tips and tricks</b><ul><li><span class="label l-praksa">Praksa</span> Nove liste provjeravajte jednom mjesečno; nastaju stalno.</li><li>Strukovne udruge, komore, klasteri i konferencije imaju popise članova, izlagača i govornika. To su provjerljivi spomeni tvrtke na trećim stranama.</li></ul></div>
  <div class="done"><b>Gotovo kad</b><ul><li>Poslali ste upit za sve liste s gap liste</li><li>Upisani ste u katalog strukovne udruge ili komore</li><li>U tablici je datum podsjetnika za svaku listu</li></ul></div>
 </section>

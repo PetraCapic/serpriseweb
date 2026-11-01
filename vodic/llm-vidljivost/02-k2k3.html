@@ -1,86 +1,87 @@
 <!-- KORAK 2 -->
-<section class="page">
+<section class="page" id="k2">
  <div class="ihead"><span>LLM vidljivost u Hrvatskoj</span><b>Korak 2 od 9</b></div>
  <div class="stepno">02</div>
  <h2>Napravite polazno mjerenje</h2>
- <p class="lead">Prije bilo kakve promjene zapišite gdje ste danas. Bez polaznog mjerenja za tri mjeseca nećete znati je li išta pomoglo.</p>
+ <p class="lead">Prije bilo kakve promjene zapišite gdje ste danas. Bez polaznog mjerenja za tri mjeseca nećete znati je li se išta promijenilo.</p>
  <div class="cost"><div><span>Trošak</span><strong>0 €</strong></div><div><span>Vrijeme</span><strong>oko 1 sat</strong></div><div><span>Alati</span><strong>ChatGPT, Google, Gemini, tablica</strong></div></div>
 
  <h3>ChatGPT, klik po klik</h3>
  <ol class="klik">
-  <li>Otvorite chatgpt.com i uključite <b>privremeni chat</b> (Temporary chat, gornji desni kut). Tako memorija i raniji razgovori ne utječu na odgovor.</li>
-  <li>Provjerite je li uključena <b>pretraga weba</b>. Odgovor mora imati izvore (linkove ili gumb "Izvori"). Bez izvora ChatGPT odgovara iz pamćenja, a to nije test vidljivosti.</li>
+  <li>Otvorite chatgpt.com i uključite <b>privremeni chat</b> (Temporary Chat). Takav razgovor ne ulazi u povijest i iz njega se ne stvaraju nova sjećanja. Ako imate uključenu personalizaciju, privremeni chat i dalje može čitati postojeću memoriju, pa je za test isključite ili koristite račun bez povijesti.[@openai-temp]</li>
+  <li>Provjerite je li uključena <b>pretraga weba</b>. Odgovor mora imati izvore (linkove ili gumb "Izvori"). Ako izvora nema, pretraga se nije pokrenula: zapišite to kao poseban ishod, ne kao "nije spomenut".</li>
   <li>Upišite prvo pitanje točno kako je u tablici.</li>
-  <li>Zapišite: jeste li spomenuti (da/ne), jeste li izvor s linkom (da/ne), koji su drugi brendovi spomenuti i koje domene su izvori.</li>
+  <li>Zapišite pet stvari: spomen (da/ne), preporuka (da/ne), citat vašeg weba (URL), citat tuđe stranice koja govori o vama (URL) i koje su domene izvori.</li>
   <li>Otvorite novi privremeni chat i <b>isto pitanje postavite još jednom</b>. Zapišite i drugi odgovor.</li>
-  <li>Ponovite za svih 20 pitanja.</li>
+  <li>Ponovite za sva pitanja. Svako pitanje postavite <b>jednak broj puta</b> (npr. dvaput), da nijedno ne teži više u ukupnom rezultatu.</li>
  </ol>
- <div class="box data"><b>Kako čitati podatke</b><p>Kad smo isto pitanje postavili dvaput isti dan, za 10 pitanja, u prosjeku se ponovila samo četvrtina citiranih domena. AI odgovori nisu stalni. Zato jedno pitanje upisano jednom ne govori ništa. Gledajte ukupni udio na 40 odgovora, ne pojedinačni odgovor.</p></div>
+ <div class="box data"><b>Kako čitati podatke</b><p><span class="label l-praksa">Praksa</span> Isto pitanje postavljeno dvaput često ne vraća iste izvore. Zato ne zaključujte iz jednog odgovora. Rezultat računajte po pitanju (u koliko od dva kruga ste spomenuti), pa tek onda zbrojite. Kod 40 odgovora jedan odgovor više ili manje mijenja udio za 2,5 postotna boda, pa male promjene nisu signal.</p></div>
 
  <h3>Google AI pregled i AI način</h3>
  <ol class="klik">
-  <li>Otvorite Google u anonimnom prozoru (Ctrl+Shift+N), da vaša povijest ne utječe na rezultat.</li>
-  <li>Upišite ključnu riječ iz tablice. Ako se pojavi AI pregled, kliknite "Prikaži više" i ikonu linka uz rečenice da vidite izvore.</li>
+  <li>Otvorite Google u anonimnom prozoru (Ctrl+Shift+N), da vaša povijest pretraživanja manje utječe na rezultat.</li>
+  <li>Upišite ključnu riječ iz tablice. Ako se pojavi AI pregled, otvorite cijeli sažetak i ikone linkova uz rečenice da vidite izvore.</li>
   <li>Zapišite: ima li AI pregleda (da/ne), jeste li među izvorima, koje domene su izvori.</li>
-  <li>Isto pitanje postavite u <b>AI načinu</b> (kartica "AI način" ispod tražilice) i zapišite izvore s desne strane.</li>
+  <li>Isto pitanje postavite u <b>AI načinu</b> (kartica "AI način" ispod tražilice) i zapišite izvore.</li>
  </ol>
- <p>Za Gemini i Perplexity dovoljno je 5 najvažnijih pitanja, jednom mjesečno.</p>
+ <p><span class="label l-praksa">Praksa</span> Za Gemini, Perplexity i Copilot dovoljno je 5 najvažnijih pitanja, jednom mjesečno.</p>
 
  <h3>Tablica za bilježenje</h3>
  <table>
-  <tr><th>Pitanje</th><th>Alat</th><th>Krug</th><th>Spomenuti?</th><th>Izvor s linkom?</th><th>Drugi brendovi</th><th>Citirane domene</th></tr>
-  <tr><td>Preporuči mi stomatologa u Splitu za djecu</td><td>ChatGPT</td><td>1</td><td>ne</td><td>ne</td><td>Ordinacija A, Klinika B</td><td>trebam.hr, ordinacija-a.hr</td></tr>
-  <tr><td>Preporuči mi stomatologa u Splitu za djecu</td><td>ChatGPT</td><td>2</td><td>da</td><td>ne</td><td>Klinika B</td><td>dalmacijadanas.hr</td></tr>
-  <tr><td>stomatolog split djeca</td><td>AI pregled</td><td>1</td><td>ne</td><td>ne</td><td>-</td><td>klinika-b.hr</td></tr>
+  <tr><th>ID</th><th>Pitanje</th><th>Alat</th><th>Krug</th><th>Pretraga?</th><th>Spomen</th><th>Preporuka</th><th>Citirani URL</th><th>Citirane domene</th></tr>
+  <tr><td>P01</td><td>Preporuči mi stomatologa u Splitu za djecu</td><td>ChatGPT</td><td>1</td><td>da</td><td>ne</td><td>ne</td><td>-</td><td>trebam.hr, ordinacija-a.hr</td></tr>
+  <tr><td>P01</td><td>Preporuči mi stomatologa u Splitu za djecu</td><td>ChatGPT</td><td>2</td><td>da</td><td>da</td><td>ne</td><td>portal.hr/clanak</td><td>portal.hr</td></tr>
+  <tr><td>K01</td><td>stomatolog split djeca</td><td>AI pregled</td><td>1</td><td>-</td><td>ne</td><td>ne</td><td>-</td><td>klinika-b.hr</td></tr>
  </table>
- <div class="box tip"><b>Tips and tricks</b><ul><li>Stupac "Citirane domene" je najvrjedniji dio tablice. Iz njega u Koraku 3 vadite popis mjesta na kojima trebate biti.</li><li>Ako ste ulogirani u ChatGPT kao vlasnik firme o kojoj pitate, ChatGPT to može znati iz memorije. Zato uvijek privremeni chat.</li></ul></div>
- <div class="box mi"><b>Kako mi to radimo</b><p>Isto mjerenje radimo automatski, prvog dana u mjesecu. Za Google koristimo DataForSEO (pozicije u top 20 i izvori AI pregleda za Hrvatsku), a za ChatGPT OpenAI API s uključenom pretragom i lokacijom Zagreb, svako pitanje dvaput. Polazno mjerenje za SERPRise 1.11.2026.: u Googleovom top 20 bili smo za 1 od 23 pojma, nijedan AI pregled nas nije citirao, a ChatGPT nas je spomenuo u 2 od 32 odgovora. Tako izgleda početak i to je u redu.</p></div>
- <div class="done"><b>Gotovo kad</b><ul><li>Svih 20 pitanja ima 2 kruga u ChatGPT-u</li><li>Za svaku ključnu riječ znate ima li AI pregled i tko je izvor</li><li>Tablica ima datum mjerenja</li></ul></div>
+ <p class="small muted">Primjer je izmišljen i služi samo kao predložak. Puni predložak sa svim stupcima nalazi se uz vodič: <a href="https://serprise.agency/vodic/predlozak-pracenja.csv">serprise.agency/vodic/predlozak-pracenja.csv</a>.</p>
+ <div class="box tip"><b>Tips and tricks</b><ul><li>Stupac "Citirane domene" je najvrjedniji dio tablice. Iz njega u Koraku 3 vadite popis mjesta na kojima trebate biti.</li><li>Zapišite datum, lokaciju i jezik uz svako mjerenje. Bez toga sljedeće mjerenje nije usporedivo.</li></ul></div>
+ <div class="box mi"><b>Kako mi to radimo</b><p><span class="label l-test">Naš test</span> Isto mjerenje radimo automatski. Za Google koristimo DataForSEO (pozicije u top 20 i izvori AI pregleda za Hrvatsku), a za ChatGPT OpenAI API s uključenom pretragom i lokacijom Hrvatska, svako pitanje dvaput. Polazno mjerenje za SERPRise 1.11.2026.: u Googleovom top 20 bili smo za 1 od 23 pojma, nijedan AI pregled nas nije citirao, a ChatGPT nas je spomenuo u 2 od 32 odgovora.[@s-tracking] API nije isto što i ChatGPT u pregledniku, pa te brojke uspoređujemo samo s našim ranijim API mjerenjima.</p></div>
+ <div class="done"><b>Gotovo kad</b><ul><li>Svako pitanje ima isti broj krugova u ChatGPT-u</li><li>Za svaku ključnu riječ znate ima li AI pregled i tko je izvor</li><li>Tablica ima datum, lokaciju i jezik mjerenja</li></ul></div>
 </section>
 
 <!-- KORAK 3 -->
-<section class="page">
+<section class="page" id="k3">
  <div class="ihead"><span>LLM vidljivost u Hrvatskoj</span><b>Korak 3 od 9</b></div>
  <div class="stepno">03</div>
- <h2>Reverse engineering: što su konkurenti napravili da uđu u AI odgovor</h2>
- <p class="lead">Najbrži put do AI preporuke je kopirati ono što već radi. Konkurenti koje AI citira za vaša pitanja ostavili su trag: stranice, imenike, liste i članke. Ovaj korak ima tri razine, od besplatne do Ahrefsa. Rezultat je isti: popis mjesta gdje su oni, a vi niste.</p>
+ <h2>Reverse engineering: gdje su konkurenti, a vi niste</h2>
+ <p class="lead">Konkurenti koje AI citira za vaša pitanja ostavili su trag: stranice, imenike, liste i članke. Ovaj korak ima tri razine, od besplatne do Ahrefsa. Rezultat je isti: popis mjesta gdje su oni, a vi niste. Taj popis pokazuje prilike, a ne dokazuje što je uzrok njihova citiranja.</p>
  <div class="cost"><div><span>Trošak</span><strong>0 € ili od 129 $/mj.</strong></div><div><span>Vrijeme</span><strong>3 do 5 sati</strong></div><div><span>Alati</span><strong>Google, Claude ili ChatGPT, Ahrefs</strong></div></div>
 
  <h3>Razina 1: ručno, besplatno</h3>
  <ol class="klik">
   <li>Iz tablice iz Koraka 2 izdvojite <b>3 do 5 konkurenata</b> koji se najčešće spominju ili citiraju.</li>
-  <li>Za svako pitanje gdje je konkurent citiran otvorite <b>točno citiranu stranicu</b> (ne naslovnicu, nego URL iz izvora).</li>
-  <li>Googlajte doslovno pitanje i ključnu riječ. U AI pregledu kliknite na izvore i zapišite koje rečenice AI uzima s koje stranice.</li>
-  <li>U ChatGPT-u nakon odgovora upišite: <i>"Koje si pretrage pokrenuo da bi odgovorio i zašto si odabrao baš te izvore?"</i> Odgovor nije uvijek potpun, ali često pokaže riječi kojima je pretraživao.</li>
-  <li>Pronađite <b>gdje se konkurent spominje izvan svog weba</b>. U Google upišite: <code>"Naziv Konkurenta" -site:konkurent.hr</code>. Dobit ćete imenike, liste, članke i recenzije koji ga spominju.</li>
-  <li>Isto napravite s <code>"Naziv Konkurenta" site:hr</code> i <code>"Naziv Konkurenta" recenzije</code>.</li>
+  <li>Za svako pitanje gdje je konkurent citiran otvorite <b>točno citiranu stranicu</b> (URL iz izvora, ne naslovnicu).</li>
+  <li>Googlajte doslovno pitanje i ključnu riječ. U AI pregledu kliknite na izvore i zapišite koji dio odgovora dolazi s koje stranice.</li>
+  <li>Pronađite <b>gdje se konkurent spominje izvan svog weba</b>: <code>"Naziv Konkurenta" -site:konkurent.hr</code>. Dobit ćete imenike, liste, članke i recenzije.</li>
+  <li>Isto napravite s <code>"Naziv Konkurenta" site:hr</code> i <code>"Naziv Konkurenta" recenzije</code>. Operator <code>site:</code> ne prikazuje sve indeksirane stranice, pa je rezultat polazni popis, a ne potpun.[@g-site]</li>
  </ol>
+ <div class="box data"><b>Kako čitati podatke</b><p><span class="label l-izvor">Izvor</span> Ako pitate ChatGPT "zašto si odabrao te izvore", dobit ćete objašnjenje koje model sastavi naknadno. To je hipoteza, a ne zapis stvarnog postupka. Pouzdaniji su zapisi alata: OpenAI API uz odgovor vraća pretrage koje je pokrenuo i popis dohvaćenih izvora. Dohvaćeni izvor nije nužno citiran u odgovoru.[@openai-websearch]</p></div>
 
  <h3>Razina 2: analiza kroz Claude ili ChatGPT</h3>
- <p>Kopirajte tekst citirane stranice (Ctrl+A, Ctrl+C) i zalijepite ga u Claude ili ChatGPT s ovim upitom:</p>
+ <p>Kopirajte tekst citirane stranice i zalijepite ga u Claude ili ChatGPT s ovim upitom:</p>
 <pre>Ovo je stranica koju Google AI pregled i ChatGPT citiraju za pitanje
 "[pitanje]". Izdvoji u tablici:
-1. naslov (H1) i točne riječi iz pitanja koje se u njemu ponavljaju
-2. prvih 2-3 rečenice: odgovaraju li izravno na pitanje?
+1. naslov (H1) i koliko izravno odgovara na pitanje
+2. prve 2-3 rečenice: odgovaraju li izravno na pitanje?
 3. cijene: ima li ih, u kojem obliku (od-do, paketi, tablica)
-4. FAQ: koja pitanja, koliko ih je
+4. odgovori na česta pitanja: koja pitanja pokriva
 5. autor, datum, brojke iz stvarnih projekata, recenzije
-6. sve što izgleda kao razlog zašto je AI odabrao baš ovu stranicu
 
-Zatim usporedi s mojom stranicom [zalijepite tekst ili URL]
-i napiši 5 konkretnih razlika, poredanih po važnosti.</pre>
- <p>Ponovite za 5 do 10 citiranih stranica. Nakon pete vidjet ćete obrazac.</p>
- <div class="box data"><b>Kako čitati podatke</b><p>Kad smo rastavili 19 stranica koje ChatGPT citira za hrvatske upite o agencijama, ponavljalo se pet stvari: naziv usluge u naslovu točno riječima iz pitanja, cijene u eurima, kratak odgovor na vrhu, FAQ sa schema oznakama i brojke iz stvarnog projekta. Ako vaša analiza pokaže isto, znate što raditi u Koraku 4.</p></div>
+Zatim usporedi s mojom stranicom [zalijepite tekst]
+i napiši 5 konkretnih razlika koje bi kupcu bile korisne.</pre>
+ <p>Ponovite za 5 do 10 citiranih stranica.</p>
+ <div class="box data"><b>Kako čitati podatke</b><p><span class="label l-test">Naš test</span> Kad smo rastavili 19 stranica koje je ChatGPT citirao za hrvatske upite o agencijama, često su imale: naziv usluge u naslovu riječima bliskim pitanju, cijene u eurima, kratak odgovor na vrhu, odgovore na česta pitanja i brojke iz stvarnih projekata.[@s-test] Bez usporedne skupine stranica koje nisu citirane ne znamo koje od tih osobina uzrokuju citat.</p><p><span class="label l-izvor">Izvor</span> Google navodi da nije potrebno pisati po posebnoj formuli za AI ni pokrivati svaku varijantu riječi. Zato tražite razlike koje su korisne kupcu, a ne kopirajte svaku zajedničku osobinu.[@g-ai-guide]</p></div>
 
  <h3>Razina 3: Ahrefs</h3>
  <table>
   <tr><th>Alat u Ahrefsu</th><th>Što pokazuje</th><th>Kako koristiti</th></tr>
-  <tr><td><b>Brand Radar</b></td><td>Koliko se brendovi spominju u AI pregledima, AI načinu, ChatGPT-u, Perplexityju, Geminiju i Copilotu, i koje domene i stranice AI citira</td><td>Upišite sebe i 3 konkurenta. Otvorite "Cited domains" i "Cited pages": to je gotov popis izvora koje AI koristi u vašoj kategoriji</td></tr>
-  <tr><td><b>Site Explorer, Referring domains</b></td><td>Sve domene koje linkaju na konkurenta</td><td>Filtrirajte .hr domene. Tražite imenike, liste i portale</td></tr>
-  <tr><td><b>Link Intersect</b></td><td>Domene koje linkaju na 2 ili više konkurenata, a na vas ne</td><td>Upišite 3 konkurenta i svoj web. Rezultat je popis mjesta s najvećom šansom</td></tr>
-  <tr><td><b>Organic keywords</b></td><td>Za koje pojmove se konkurent rangira, uz filter SERP značajki</td><td>Filtrirajte "AI Overview" da vidite za koje pojmove se konkurentove stranice pojavljuju u AI pregledu</td></tr>
+  <tr><td><b>Brand Radar</b></td><td>Spomene brendova i citirane domene i stranice u AI odgovorima (AI pregledi, AI način, ChatGPT, Perplexity, Gemini, Copilot)</td><td>Upišite sebe i 3 konkurenta. "Cited domains" i "Cited pages" daju popis izvora u vašoj kategoriji</td></tr>
+  <tr><td><b>Site Explorer, Referring domains</b></td><td>Domene koje linkaju na konkurenta</td><td>Filtrirajte .hr domene. Tražite imenike, liste i portale</td></tr>
+  <tr><td><b>Link Intersect</b></td><td>Domene koje linkaju na 2 ili više konkurenata, a na vas ne</td><td>Upišite 3 konkurenta i svoj web</td></tr>
+  <tr><td><b>Organic keywords</b></td><td>Pojmovi za koje se konkurent rangira, uz filter SERP značajki</td><td>Razlikujte dva filtra: upit <i>ima</i> AI pregled i konkurentova stranica se <i>pojavljuje</i> u njemu. Samo drugi govori o citatu.[@ahrefs-aio]</td></tr>
  </table>
- <div class="box tip"><b>Tips and tricks</b><ul><li>Ahrefs ima besplatne alate bez pretplate: Ahrefs Webmaster Tools za vaš vlastiti web (nakon potvrde vlasništva) i besplatni backlink checker koji pokazuje dio linkova bilo koje domene. Za prvi popis to je često dovoljno.</li><li>Napravite tablicu "članci i liste koji spominju konkurente, a nas ne". Nadopunjujte je svaki mjesec. To je vaš popis ciljeva za Korake 5 do 7.</li><li>Brand Radar AI podaci su plaćeni dodatak na pretplatu. Ako ga nemate, Razina 1 i 2 daju 80% istog uvida, samo sporije.</li></ul></div>
+ <p><span class="label l-izvor">Izvor</span> Ahrefs Lite stoji od 129 USD mjesečno.[@ahrefs-pricing] Pristup AI indeksima u Brand Radaru naplaćuje se zasebno: prema dokumentaciji 199 USD mjesečno po indeksu ili 699 USD za sve platforme. To je odvojeno od praćenja vlastitih AI upita.[@ahrefs-br] Cijene i sadržaj paketa provjerite na dan kupnje.</p>
+ <div class="box tip"><b>Tips and tricks</b><ul><li>Ahrefs Webmaster Tools je besplatan za web čije vlasništvo potvrdite.[@ahrefs-awt] Za vaš web to je često dovoljno, za konkurente trebate Razinu 1 ili plaćeni plan.</li><li>Domain Rating je Ahrefsova metrika, a ne signal koji tražilice koriste.[@ahrefs-dr] Koristite ga za usporedbu, ne kao uvjet.</li><li>Tablicu "mjesta koja spominju konkurente, a nas ne" nadopunjujte svaki mjesec. To je vaš popis ciljeva za Korake 5 do 7.</li></ul></div>
 
  <h3>Rezultat koraka: gap lista</h3>
  <table>
@@ -90,6 +91,6 @@ i napiši 5 konkretnih razlika, poredanih po važnosti.</pre>
   <tr><td>poslovni.hr članak</td><td>Portal</td><td>B</td><td>ne</td><td>7</td></tr>
   <tr><td>/cijene/ stranica</td><td>Naš web</td><td>A, C</td><td>ne</td><td>4</td></tr>
  </table>
- <div class="box mi"><b>Kako mi to radimo</b><p>Za SERPRise smo 1.11.2026. analizirali 25 domena koje Google i ChatGPT citiraju za hrvatske pojmove o GEO optimizaciji, link buildingu i PR-u. Konkurenti su bili upisani u poslovne imenike (CompanyWall, Poslovna.hr, Fininfo), u kataloge agencija (Clutch, The Manifest, DesignRush, GoodFirms) i na liste koje ChatGPT citira (npr. tako.hr). Mi nismo bili ni na jednom. Iz te analize nastalo je 13 zadataka u našem planu.</p></div>
+ <div class="box mi"><b>Kako mi to radimo</b><p><span class="label l-test">Naš test</span> Za SERPRise smo 1.11.2026. analizirali 25 domena koje Google i ChatGPT citiraju za hrvatske pojmove o GEO optimizaciji, link buildingu i PR-u. Konkurenti su bili upisani u poslovne imenike (CompanyWall, Poslovna.hr, Fininfo), u kataloge agencija (Clutch, The Manifest, DesignRush, GoodFirms) i na liste koje je ChatGPT citirao (npr. tako.hr). Mi nismo bili ni na jednom. Iz te analize nastalo je 13 zadataka u našem planu.[@s-competitors]</p></div>
  <div class="done"><b>Gotovo kad</b><ul><li>Rastavili ste barem 5 citiranih stranica konkurenata</li><li>Imate gap listu s barem 15 mjesta</li><li>Svako mjesto ima oznaku koraka (4, 5, 6 ili 7)</li></ul></div>
 </section>

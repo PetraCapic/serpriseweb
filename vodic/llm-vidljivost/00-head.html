@@ -5,7 +5,7 @@
 <title>Kako povećati svoju LLM vidljivost u Hrvatskoj | SERPRise</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
-@page{size:A4;margin:15mm 17mm 15mm}
+@page{size:A4;margin:15mm 17mm 16mm;@bottom-right{content:counter(page);font-family:Inter,sans-serif;font-size:8pt;color:#6b7c8f;margin-bottom:6mm}@bottom-left{content:'LLM vidljivost u Hrvatskoj · SERPRise';font-family:Inter,sans-serif;font-size:7.5pt;color:#9aa8b6;margin-bottom:6mm}}
 @page cover{size:A4;margin:0}
 :root{--navy:#102b43;--red:#ba2525;--redsoft:#fbeaea;--muted:#52657a;--border:#e1e6ef;--ok:#1f9d6a;--oksoft:#e3f4ec;--blue:#eef3f9}
 *{box-sizing:border-box;margin:0;padding:0}
@@ -99,6 +99,24 @@ figcaption{font-size:8.5pt;color:var(--muted);margin-top:1.5mm}
 .endbox{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:6px;padding:5mm 6mm;margin:5mm 0}
 .endbox h3{color:#fff;margin-top:0}
 .sources li{font-size:8.6pt;word-break:break-word}
+.c{font-size:.72em;vertical-align:super;line-height:0;color:var(--red);font-weight:600;margin-left:1px;white-space:nowrap}
+.ilu{position:absolute;right:12px;top:-9px;background:#fff4dc;color:#9a6700;font-size:7.5pt;font-weight:700;padding:1px 7px;border-radius:9px}
+.chat{position:relative}
+.toc a{color:inherit;display:flex;gap:5mm;width:100%}
+.toc a span:first-child{font-family:'Space Grotesk';font-weight:700;color:var(--red);width:10mm}
+.label{display:inline-block;font-size:7.5pt;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:1px 6px;border-radius:3px;margin-right:4px;vertical-align:1px}
+.l-izvor{background:var(--blue);color:var(--navy)}.l-test{background:var(--oksoft);color:var(--ok)}.l-praksa{background:#fff4dc;color:#9a6700}
+.sources{list-style:none;margin:0}
+.sources li{font-size:8.6pt;margin-bottom:2mm;padding-left:9mm;text-indent:-9mm}
+.sources li b{color:var(--red)}
+.sources a{color:var(--navy);text-decoration:underline;font-size:8pt}
+.sources li{break-inside:avoid}
+.diag td:nth-child(2){color:var(--muted)}
+.toc li{padding:1.1mm 0;font-size:10pt}
+#metoda table td,#metoda table th{font-size:8.2pt;padding:1.1mm 2.5mm;line-height:1.35}
+#metoda p,#metoda li{font-size:8.8pt}
+#metoda h3{margin:3.5mm 0 1.5mm}
+#metoda .lead{margin-bottom:2mm}
 </style>
 </head>
 <body>
@@ -106,10 +124,11 @@ figcaption{font-size:8.5pt;color:var(--muted);margin-top:1.5mm}
 <!-- NASLOVNICA -->
 <section class="page cover">
  <div class="logo"><svg viewBox="0 0 24 24"><path d="M4 18c0 2 2 3 4 3s4-1 4-3-2-3-4-3.5S4 13 4 11s2-3 4-3 4 1 4 3" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M13 3h4.5a3.5 3.5 0 010 7H13V3zm3 7l4 6" stroke="#ff5a5a" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M20 13v4h-4" stroke="#ff5a5a" stroke-width="2.4" fill="none" stroke-linecap="round"/></svg><span><b>SERP</b><i>Rise</i></span></div>
- <span class="kicker">Vodič · korak po korak · studeni 2026.</span>
+ <span class="kicker">Vodič · korak po korak · studeni 2026. · verzija 1.1</span>
  <h1>Kako povećati svoju <em>LLM vidljivost</em> u Hrvatskoj</h1>
- <p class="sub">Imenici, vlastiti web, objave na portalima i digitalni PR, praćenje i mjerenje. Cijela kampanja za ChatGPT, Google AI preglede i Gemini u 9 koraka. Poznato i kao GEO ili AI SEO.</p>
+ <p class="sub">Imenici, vlastiti web, objave na portalima i digitalni PR, praćenje i mjerenje. Postupak u 9 koraka za ChatGPT, Google AI preglede i Gemini. Poznato i kao GEO ili AI SEO.</p>
  <div class="chat">
+  <span class="ilu">Ilustracija</span>
   <div class="q">Preporuči mi agenciju za digitalni marketing u Zagrebu</div>
   <div class="a">Evo nekoliko agencija koje se često preporučuju u Zagrebu, s recenzijama i javnim cijenama…</div>
   <div class="srcs"><span class="src">clutch.co</span><span class="src">tako.hr</span><span class="src you">vasa-tvrtka.hr</span><span class="src">poslovni.hr</span><span class="src">poslovna.hr</span></div>

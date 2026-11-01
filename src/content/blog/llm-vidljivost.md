@@ -154,6 +154,8 @@ Bez mjerenja ne znate je li išta od ovoga radilo. Ali "na kojem smo mjestu u Ch
 - **Bing Webmaster Tools, izvještaj AI Performance.** Od veljače 2026. besplatno pokazuje koliko puta su vaše stranice citirane u Copilotu i Bingovim AI sažecima, i za koja pitanja ([Bing Webmaster Blog](https://blogs.bing.com/webmaster/February-2026/Introducing-AI-Performance-in-Bing-Webmaster-Tools-Public-Preview)). To je jedini službeni izvor podataka o AI citatima koji trenutno postoji.
 - **Search Console.** Ne odvaja AI promet, ali pokazuje rastu li upiti za koje već imate stranicu.
 
+Kod nas to izgleda ovako: svaki klijent ima svoj live dashboard u kojem su na jednom mjestu mjesečni test pitanja, AI promet iz GA4 i podaci iz Search Consolea. Pozicije na Googleu i AI preglede povlačimo preko DataForSEO API-ja, a spomene i linkove preko Ahrefs API-ja, pa se vidi kako se brojke mijenjaju nakon svake promjene na webu.
+
 <div id="kviz"><div data-embed="quiz"></div></div>
 
 ## Plan za 30 dana
@@ -244,7 +246,7 @@ Izvori za svaki bot: [OpenAI](https://developers.openai.com/api/docs/bots), [Per
 
 ## Naše mjerenje
 
-Istih 35 pitanja o SEO-u i AI vidljivosti postavljamo ChatGPT-u svaki mjesec. Na početku, 30. listopada, SERPRise se pojavio u 1 od 45 odgovora, i isto 1. studenoga. Cilj je 10 od 45 do 1. veljače 2027. Rezultate objavljujemo ovdje, i kad nisu dobri.
+Isti postupak radimo i na sebi. Istih 35 pitanja o SEO-u i AI vidljivosti postavljamo ChatGPT-u svaki mjesec, preko OpenAI API-ja s web pretragom. Na početku, 30. listopada, SERPRise se pojavio u 1 od 45 odgovora, i isto 1. studenoga. Cilj je 10 od 45 do 1. veljače 2027. Rezultate objavljujemo ovdje, i kad nisu dobri.
 
 <div data-embed="tracker"></div>
 

@@ -14,6 +14,18 @@ const blog = defineCollection({
     image: z.string().optional(),
     imageAlt: z.string().optional(),
     draft: z.boolean().default(false),
+    // Istraživanje s javnim podacima: dodaje Dataset schemu i linkove na CSV datoteke (iz public/).
+    dataset: z
+      .object({
+        name: z.string(),
+        description: z.string(),
+        measured: z.coerce.date(),
+        method: z.string(),
+        license: z.string().url(),
+        files: z.array(z.object({ name: z.string(), url: z.string() })),
+        keywords: z.array(z.string()).default([]),
+      })
+      .optional(),
   }),
 });
 

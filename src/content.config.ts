@@ -14,6 +14,8 @@ const blog = defineCollection({
     image: z.string().optional(),
     imageAlt: z.string().optional(),
     draft: z.boolean().default(false),
+    // Česta pitanja na dnu članka; ujedno se objavljuju kao FAQPage schema.
+    faq: z.array(z.object({ q: z.string(), a: z.string() })).optional(),
   }),
 });
 

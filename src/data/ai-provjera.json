@@ -1,0 +1,179 @@
+{
+  "fields": [
+    {
+      "key": "usluga",
+      "label": "Usluga",
+      "hint": "koga ili što kupac traži: \"Preporuči mi ...\"",
+      "ph": "stomatologa"
+    },
+    {
+      "key": "grad",
+      "label": "Grad",
+      "hint": "s prijedlogom: u Splitu, na Hvaru",
+      "ph": "u Splitu"
+    },
+    {
+      "key": "regija",
+      "label": "Regija",
+      "hint": "s prijedlogom: u Dalmaciji",
+      "ph": "u Dalmaciji"
+    },
+    {
+      "key": "kupac",
+      "label": "Tip kupca",
+      "hint": "za koga: djecu, malu firmu",
+      "ph": "djecu"
+    },
+    {
+      "key": "proizvod",
+      "label": "Glavni proizvod ili paket",
+      "hint": "npr. implantat u jednom danu",
+      "ph": "implantat u jednom danu"
+    },
+    {
+      "key": "alternativa",
+      "label": "Alternativa",
+      "hint": "s čime vas kupac uspoređuje",
+      "ph": "most"
+    },
+    {
+      "key": "problem",
+      "label": "Problem kupca",
+      "hint": "rečenica kakvu bi kupac napisao",
+      "ph": "Boli me zub iza krunice"
+    },
+    {
+      "key": "firma",
+      "label": "Vaša firma",
+      "hint": "naziv kako ga kupci pišu",
+      "ph": ""
+    },
+    {
+      "key": "konkurent",
+      "label": "Najveći konkurent",
+      "hint": "naziv firme",
+      "ph": ""
+    }
+  ],
+  "groups": [
+    {
+      "key": "preporuka",
+      "name": "Preporuka",
+      "questions": [
+        "Preporuči mi {usluga} {grad}.",
+        "Preporuči mi {usluga} {grad} za {kupac}.",
+        "Tko u Hrvatskoj nudi {proizvod}?",
+        "Trebam {usluga} {grad}. Tko ima dobre recenzije?",
+        "Koji je najbolji izbor ako trebam {usluga} {regija}?"
+      ]
+    },
+    {
+      "key": "cijena",
+      "name": "Cijena",
+      "questions": [
+        "Koliko košta {proizvod} u Hrvatskoj?",
+        "Koliko košta {proizvod} {grad}?",
+        "Koja je prosječna cijena za {proizvod}?",
+        "Isplati li se {proizvod} ili {alternativa}?",
+        "Gdje {regija} mogu najjeftinije dobiti {proizvod}?"
+      ]
+    },
+    {
+      "key": "usporedba",
+      "name": "Usporedba",
+      "questions": [
+        "{firma} ili {konkurent}, koga odabrati?",
+        "Koje su alternative za {konkurent}?",
+        "{problem}. Što je bolje: {proizvod} ili {alternativa}?",
+        "{firma}: koje su prednosti i mane?",
+        "Kakva su iskustva s firmom {firma}?"
+      ]
+    },
+    {
+      "key": "problem",
+      "name": "Problem",
+      "questions": [
+        "{problem}, što da radim?",
+        "Kako odabrati {usluga}?",
+        "Na što paziti kad biram {usluga}?",
+        "Koliko dugo se čeka na {proizvod}?",
+        "Isplati li mi se {proizvod} u mojoj situaciji? {problem}."
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "key": "stomatolog",
+      "name": "Stomatološka ordinacija u Splitu",
+      "values": {
+        "usluga": "stomatologa",
+        "grad": "u Splitu",
+        "regija": "u Dalmaciji",
+        "kupac": "djecu",
+        "proizvod": "implantat u jednom danu",
+        "alternativa": "most",
+        "problem": "Boli me zub iza krunice"
+      },
+      "edits": {}
+    },
+    {
+      "key": "odvjetnik",
+      "name": "Odvjetnički ured u Zagrebu",
+      "values": {
+        "usluga": "odvjetnika",
+        "grad": "u Zagrebu",
+        "regija": "u Zagrebu i okolici",
+        "kupac": "razvod s djecom",
+        "proizvod": "sporazumni razvod",
+        "alternativa": "parnica",
+        "problem": "Suprug i ja se razvodimo i imamo dijete"
+      },
+      "edits": {}
+    },
+    {
+      "key": "namjestaj",
+      "name": "Webshop namještaja",
+      "values": {
+        "usluga": "webshop za namještaj",
+        "grad": "u Zagrebu",
+        "regija": "u Hrvatskoj",
+        "kupac": "mali stan",
+        "proizvod": "kauč na razvlačenje",
+        "alternativa": "kutna garnitura",
+        "problem": "Dnevni boravak mi je premali za kutnu garnituru"
+      },
+      "edits": {}
+    },
+    {
+      "key": "apartmani",
+      "name": "Apartmani na Hvaru",
+      "values": {
+        "usluga": "apartman",
+        "grad": "na Hvaru",
+        "regija": "u srednjoj Dalmaciji",
+        "kupac": "obitelj s malom djecom",
+        "proizvod": "apartman s bazenom",
+        "alternativa": "hotel",
+        "problem": "Putujemo s dvoje male djece i psom"
+      },
+      "edits": {
+        "16": "Putujemo s dvoje male djece i psom. Gdje na Hvaru odsjesti?",
+        "19": "Koliko unaprijed trebam rezervirati apartman s bazenom na Hvaru?"
+      }
+    }
+  ],
+  "platforms": [
+    {
+      "key": "aimode",
+      "name": "Google AI Mode"
+    },
+    {
+      "key": "gemini",
+      "name": "Gemini"
+    },
+    {
+      "key": "perplexity",
+      "name": "Perplexity"
+    }
+  ]
+}

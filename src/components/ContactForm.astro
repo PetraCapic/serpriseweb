@@ -176,6 +176,16 @@ const budgets = isEn ? enBudgetLabels : budgetLabels;
   // ?agency=1 (engleske stranice za agencije) unaprijed označi white label
   const agencyBox = form.querySelector<HTMLInputElement>('input[name=agency]');
   if (agencyBox && p.get('agency') === '1') agencyBox.checked = true;
+  // ?usluga=ai_vidljivost unaprijed odabere uslugu; alat za provjeru AI vidljivosti prenosi sažetak rezultata u poruku.
+  const svc = form.querySelector<HTMLSelectElement>('select[name=service]');
+  const usluga = p.get('usluga');
+  if (svc && usluga && [...svc.options].some((o) => o.value === usluga)) svc.value = usluga;
+  try {
+    const pre = sessionStorage.getItem('serprise-prefill');
+    const msg = form.querySelector<HTMLTextAreaElement>('textarea[name=message]');
+    if (pre && msg && !msg.value) msg.value = `${pre}\n\n`;
+    sessionStorage.removeItem('serprise-prefill');
+  } catch { /* sessionStorage nedostupan */ }
   ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'].forEach((k) => {
     const v = p.get(k);
     if (v) sessionStorage.setItem(k, v);

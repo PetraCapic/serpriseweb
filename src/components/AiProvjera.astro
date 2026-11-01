@@ -1,0 +1,660 @@
+---
+import data from '../data/ai-provjera.json';
+// Interaktivni alat za članak /blog/provjera-ai-vidljivosti/: generator pitanja, tablica za bilježenje,
+// rezultat s dijagnozom i graf napretka. Svaki blok se premješta na mjesto označeno u tekstu
+// (<div data-embed="ai-generator|ai-tablica|ai-rezultati|ai-napredak"></div>). Podaci ostaju u pregledniku.
+const { fields, presets, platforms } = data;
+---
+<div class="aip" data-aip hidden>
+  <section class="aip__box" data-block="ai-generator" aria-labelledby="aip-gen">
+    <p class="aip__eyebrow">Besplatan alat · korak 1</p>
+    <h3 id="aip-gen" class="aip__title">Generator pitanja</h3>
+    <p class="aip__lead">Odaberite primjer djelatnosti ili upišite svoje podatke. Pitanja se mijenjaju dok pišete. Svako pitanje možete i sami urediti klikom na tekst.</p>
+    <label class="aip__preset">
+      <span>Primjer djelatnosti</span>
+      <select data-preset>
+        {presets.map((p) => <option value={p.key}>{p.name}</option>)}
+        <option value="">Vlastita djelatnost (prazna polja)</option>
+      </select>
+    </label>
+    <div class="aip__fields">
+      {fields.map((f) => (
+        <label>
+          <span>{f.label} <small>{f.hint}</small></span>
+          <input data-field={f.key} placeholder={f.ph || `npr. ${f.label.toLowerCase()}`} autocomplete="off" />
+        </label>
+      ))}
+    </div>
+    <div class="aip__actions">
+      <button type="button" class="btn btn--primary" data-copy-all>Kopiraj sva pitanja</button>
+      <span class="aip__status" data-status role="status"></span>
+    </div>
+    <div class="aip__groups" data-questions></div>
+  </section>
+
+  <section class="aip__box" data-block="ai-tablica" aria-labelledby="aip-tab">
+    <p class="aip__eyebrow">Besplatan alat · korak 2</p>
+    <h3 id="aip-tab" class="aip__title">Tablica za bilježenje</h3>
+    <p class="aip__lead">Za svaki upis odaberite jeste li spomenuti i prepišite što vidite u odgovoru. Više naziva ili domena odvojite zarezom. Sve se sprema samo u vašem pregledniku.</p>
+    <div class="aip__opts">
+      <label>Upisa za pitanja "Preporuka"
+        <select data-runs>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+        </select>
+      </label>
+      <fieldset>
+        <legend>Dodatni stupci (neobavezno)</legend>
+        {platforms.map((p) => <label class="aip__check"><input type="checkbox" data-platform={p.key} /> {p.name}</label>)}
+      </fieldset>
+    </div>
+    <p class="aip__meta" data-estimate></p>
+    <div class="aip__scroll">
+      <table class="aip__table">
+        <thead data-thead></thead>
+        <tbody data-tbody></tbody>
+      </table>
+    </div>
+    <div class="aip__actions">
+      <button type="button" class="btn btn--ghost" data-csv>Izvoz u CSV</button>
+      <button type="button" class="btn btn--ghost" data-clear>Očisti odgovore za novo mjerenje</button>
+    </div>
+    <p class="aip__meta">CSV otvorite u Google Sheetsu: Datoteka → Uvezi → Prijenos. Isti predložak, s pitanjima koja ste upravo složili, dobit ćete i ako izvezete praznu tablicu.</p>
+  </section>
+
+  <section class="aip__box aip__box--dark" data-block="ai-rezultati" aria-labelledby="aip-res">
+    <p class="aip__eyebrow">Besplatan alat · korak 3</p>
+    <h3 id="aip-res" class="aip__title">Vaš rezultat</h3>
+    <p class="aip__lead" data-summary>Ispunite barem nekoliko redova tablice i rezultat će se pojaviti ovdje.</p>
+    <div class="aip__gauges" data-gauges></div>
+    <div class="aip__cols">
+      <div>
+        <h4>Top 5 izvora</h4>
+        <ol data-top-sources class="aip__rank"></ol>
+      </div>
+      <div>
+        <h4>Najčešći konkurenti</h4>
+        <ol data-top-comp class="aip__rank"></ol>
+      </div>
+    </div>
+    <div data-platform-res></div>
+    <h4>Dijagnoza</h4>
+    <ul class="aip__diag" data-diag></ul>
+    <div class="aip__cta">
+      <p><strong>Pošaljite nam rezultat, besplatno ga komentiramo.</strong> Sažetak tablice prenijet ćemo u poruku na kontakt formi, a vi samo dodate ime i e-mail.</p>
+      <div class="aip__actions">
+        <a href="/kontakt/?usluga=ai_vidljivost" class="btn btn--primary" data-send>Pošaljite rezultat</a>
+        <button type="button" class="btn btn--ghost-light" data-copy-summary>Kopiraj sažetak</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="aip__box" data-block="ai-napredak" aria-labelledby="aip-prog">
+    <p class="aip__eyebrow">Besplatan alat · korak 4</p>
+    <h3 id="aip-prog" class="aip__title">Napredak po mjesecima</h3>
+    <p class="aip__lead">Kad završite tablicu, spremite mjerenje pod datumom. Sljedeći mjesec očistite odgovore, ponovite ista pitanja i spremite novo mjerenje. Graf se pojavi od drugog mjerenja.</p>
+    <div class="aip__actions">
+      <label class="aip__date">Datum mjerenja <input type="date" data-date /></label>
+      <button type="button" class="btn btn--primary" data-save>Spremi mjerenje</button>
+    </div>
+    <div data-chart class="aip__chart"></div>
+    <ul data-history class="aip__history"></ul>
+  </section>
+</div>
+
+<script>
+  import data from '../data/ai-provjera.json';
+
+  type Run = { m: string; link: string; comp: string; src: string; [k: string]: string };
+  type Snap = { date: string; total: number; link: number; types: Record<string, number>; n: number };
+  type State = {
+    preset: string;
+    f: Record<string, string>;
+    edits: Record<string, string>;
+    runsPrep: number;
+    extra: Record<string, boolean>;
+    rows: Record<string, Run>;
+    history: Snap[];
+  };
+
+  const KEY = 'serprise-ai-provjera-v1';
+  const root = document.querySelector<HTMLElement>('[data-aip]');
+  if (root) init(root);
+
+  function init(root: HTMLElement) {
+    // Blokove premjesti na mjesta u tekstu članka.
+    root.querySelectorAll<HTMLElement>('[data-block]').forEach((b) => {
+      const slot = document.querySelector(`[data-embed="${b.dataset.block}"]`);
+      if (slot) slot.replaceWith(b);
+    });
+    root.hidden = false;
+
+    const $ = <T extends Element = HTMLElement>(s: string) => document.querySelector<T>(s)!;
+    const $$ = <T extends Element = HTMLElement>(s: string) => [...document.querySelectorAll<T>(s)];
+    const esc = (s: string) => s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
+    const pct = (a: number, b: number) => (b ? Math.round((a / b) * 100) : 0);
+
+    const first = data.presets[0];
+    const fresh = (): State => ({ preset: first.key, f: { ...first.values }, edits: { ...(first.edits as Record<string, string>) }, runsPrep: 4, extra: {}, rows: {}, history: [] });
+    let state: State = fresh();
+    try {
+      const saved = JSON.parse(localStorage.getItem(KEY) || 'null');
+      if (saved && typeof saved === 'object') state = { ...state, ...saved };
+    } catch { /* localStorage nedostupan ili oštećen: radi bez spremanja */ }
+    const save = () => {
+      try { localStorage.setItem(KEY, JSON.stringify(state)); } catch { /* privatni prozor */ }
+    };
+
+    // ---------- Pitanja ----------
+    const questions = () =>
+      data.groups.flatMap((g, gi) =>
+        g.questions.map((t, qi) => {
+          const n = gi * 5 + qi + 1;
+          const auto = t.replace(/\{(\w+)\}/g, (_, k) => state.f[k]?.trim() || `[${data.fields.find((x) => x.key === k)?.label.toLowerCase()}]`);
+          const text = state.edits[n] ?? auto;
+          return { n, group: g.key, groupName: g.name, text: text.charAt(0).toUpperCase() + text.slice(1), edited: n in state.edits };
+        }),
+      );
+
+    const status = $('[data-status]');
+    let statusTimer = 0;
+    const flash = (msg: string, el = status) => {
+      el.textContent = msg;
+      clearTimeout(statusTimer);
+      statusTimer = window.setTimeout(() => (el.textContent = ''), 2500);
+    };
+    const copy = async (text: string, msg = 'Kopirano') => {
+      try {
+        await navigator.clipboard.writeText(text);
+        flash(msg);
+      } catch {
+        flash('Kopiranje nije uspjelo, označite tekst ručno');
+      }
+    };
+
+    const qBox = $('[data-questions]');
+    const renderQuestions = () => {
+      const qs = questions();
+      qBox.innerHTML = data.groups
+        .map((g) => `
+          <div class="aip__group">
+            <h4>${g.name} <small>(${qs.filter((q) => q.group === g.key)[0].n}–${qs.filter((q) => q.group === g.key)[4].n})</small></h4>
+            <ol>
+              ${qs.filter((q) => q.group === g.key).map((q) => `
+                <li>
+                  <b class="aip__n">${q.n}.</b>
+                  <span class="aip__q" contenteditable="true" spellcheck="false" data-q="${q.n}">${esc(q.text)}</span>
+                  <span class="aip__qbtns">
+                    ${q.edited ? `<button type="button" class="aip__mini" data-reset="${q.n}" title="Vrati automatski tekst">Vrati</button>` : ''}
+                    <button type="button" class="aip__mini" data-copy="${q.n}">Kopiraj</button>
+                  </span>
+                </li>`).join('')}
+            </ol>
+          </div>`)
+        .join('');
+    };
+
+    const fieldInputs = $$<HTMLInputElement>('[data-field]');
+    const preset = $<HTMLSelectElement>('[data-preset]');
+    const fillFields = () => {
+      fieldInputs.forEach((i) => (i.value = state.f[i.dataset.field!] ?? ''));
+      preset.value = state.preset;
+    };
+    preset.addEventListener('change', () => {
+      const p = data.presets.find((x) => x.key === preset.value);
+      const keep = { firma: state.f.firma ?? '', konkurent: state.f.konkurent ?? '' };
+      state.preset = preset.value;
+      state.f = { ...(p ? p.values : {}), ...keep };
+      state.edits = { ...((p?.edits ?? {}) as Record<string, string>) };
+      fillFields();
+      update();
+    });
+    fieldInputs.forEach((i) =>
+      i.addEventListener('input', () => {
+        state.f[i.dataset.field!] = i.value;
+        update(false);
+      }),
+    );
+    qBox.addEventListener('input', (e) => {
+      const el = (e.target as HTMLElement).closest<HTMLElement>('[data-q]');
+      if (!el) return;
+      state.edits[el.dataset.q!] = el.textContent?.trim() ?? '';
+      save();
+      renderTable();
+    });
+    qBox.addEventListener('focusout', (e) => {
+      if ((e.target as HTMLElement).closest('[data-q]')) renderQuestions();
+    });
+    qBox.addEventListener('click', (e) => {
+      const t = e.target as HTMLElement;
+      const c = t.closest<HTMLElement>('[data-copy]');
+      if (c) copy(questions().find((q) => q.n === Number(c.dataset.copy))!.text, 'Pitanje kopirano');
+      const r = t.closest<HTMLElement>('[data-reset]');
+      if (r) {
+        delete state.edits[r.dataset.reset!];
+        update();
+      }
+    });
+    $('[data-copy-all]').addEventListener('click', () => {
+      const qs = questions();
+      const text = data.groups
+        .map((g) => `${g.name}\n` + qs.filter((q) => q.group === g.key).map((q) => `${q.n}. ${q.text}`).join('\n'))
+        .join('\n\n');
+      copy(text, 'Svih 20 pitanja kopirano');
+    });
+
+    // ---------- Tablica ----------
+    const runsFor = (group: string) => (group === 'preporuka' ? state.runsPrep : 2);
+    const plats = () => data.platforms.filter((p) => state.extra[p.key]);
+    const rowKey = (n: number, r: number) => `${n}-${r}`;
+    const getRun = (k: string): Run => state.rows[k] ?? { m: '', link: '', comp: '', src: '' };
+    const yn = (name: string, v: string, label: string) => `
+      <select data-k="${name}" aria-label="${label}">
+        <option value=""${v === '' ? ' selected' : ''}>–</option>
+        <option value="da"${v === 'da' ? ' selected' : ''}>da</option>
+        <option value="ne"${v === 'ne' ? ' selected' : ''}>ne</option>
+      </select>`;
+
+    const thead = $('[data-thead]');
+    const tbody = $('[data-tbody]');
+    const renderTable = () => {
+      const ps = plats();
+      thead.innerHTML = `<tr><th>Pitanje</th><th>Upis</th><th>Spomenuti?</th><th>Linkana stranica</th><th>Konkurenti</th><th>Izvori</th>${ps.map((p) => `<th>${p.name}: spomenuti?</th>`).join('')}</tr>`;
+      const qs = questions();
+      let html = '';
+      for (const g of data.groups) {
+        html += `<tr class="aip__grow"><th colspan="${6 + ps.length}">${g.name}</th></tr>`;
+        for (const q of qs.filter((x) => x.group === g.key)) {
+          const runs = runsFor(g.key);
+          for (let r = 1; r <= runs; r++) {
+            const k = rowKey(q.n, r);
+            const v = getRun(k);
+            html += `<tr data-row="${k}" class="${r === 1 ? 'aip__first' : ''}">
+              ${r === 1 ? `<td rowspan="${runs}" class="aip__qcell"><b>${q.n}.</b> ${esc(q.text)}</td>` : ''}
+              <td class="aip__num">${r}</td>
+              <td>${yn('m', v.m, `Pitanje ${q.n}, upis ${r}: spomenuti`)}</td>
+              <td><input data-k="link" value="${esc(v.link)}" placeholder="/usluge/" aria-label="Linkana stranica" /></td>
+              <td><input data-k="comp" value="${esc(v.comp)}" placeholder="Firma X, Firma Y" aria-label="Konkurenti" /></td>
+              <td><input data-k="src" value="${esc(v.src)}" placeholder="njuskalo.hr, trebam.hr" aria-label="Izvori" /></td>
+              ${ps.map((p) => `<td>${yn(p.key, v[p.key] ?? '', `${p.name}: spomenuti`)}</td>`).join('')}
+            </tr>`;
+          }
+        }
+      }
+      tbody.innerHTML = html;
+      const total = data.groups.reduce((s, g) => s + runsFor(g.key) * g.questions.length, 0);
+      const minutes = Math.round((total * 48) / 60 / 5) * 5;
+      $('[data-estimate]').textContent = `Ukupno ${total} upisa. Računajte oko ${minutes} minuta (procjena: oko 45 do 50 sekundi po upisu, s čitanjem izvora).`;
+    };
+    const onCell = (e: Event) => {
+      const el = e.target as HTMLInputElement | HTMLSelectElement;
+      const tr = el.closest<HTMLElement>('[data-row]');
+      if (!tr || !el.dataset.k) return;
+      const k = tr.dataset.row!;
+      state.rows[k] = { ...getRun(k), [el.dataset.k]: el.value };
+      save();
+      renderResults();
+    };
+    tbody.addEventListener('input', onCell);
+    tbody.addEventListener('change', onCell);
+
+    const runsSel = $<HTMLSelectElement>('[data-runs]');
+    runsSel.addEventListener('change', () => {
+      state.runsPrep = Number(runsSel.value);
+      update();
+    });
+    const platBoxes = $$<HTMLInputElement>('[data-platform]');
+    platBoxes.forEach((b) =>
+      b.addEventListener('change', () => {
+        state.extra[b.dataset.platform!] = b.checked;
+        update();
+      }),
+    );
+    $('[data-clear]').addEventListener('click', () => {
+      if (!confirm('Obrisati sve odgovore u tablici? Pitanja i spremljena mjerenja ostaju.')) return;
+      state.rows = {};
+      update();
+    });
+
+    const csvCell = (s: string | number) => `"${String(s).replace(/"/g, '""')}"`;
+    $('[data-csv]').addEventListener('click', () => {
+      const ps = plats();
+      const head = ['Vrsta', 'Br.', 'Pitanje', 'Upis', 'Spomenuti?', 'Linkana stranica', 'Konkurenti', 'Izvori', ...ps.map((p) => `${p.name}: spomenuti?`)];
+      const lines = [head.map(csvCell).join(',')];
+      for (const q of questions()) {
+        for (let r = 1; r <= runsFor(q.group); r++) {
+          const v = getRun(rowKey(q.n, r));
+          lines.push([q.groupName, q.n, q.text, r, v.m, v.link, v.comp, v.src, ...ps.map((p) => v[p.key] ?? '')].map(csvCell).join(','));
+        }
+      }
+      const blob = new Blob(['﻿' + lines.join('\r\n')], { type: 'text/csv;charset=utf-8' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `provjera-ai-vidljivosti-${new Date().toISOString().slice(0, 10)}.csv`;
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    });
+
+    // ---------- Izračun ----------
+    const domain = (s: string) =>
+      s.trim().toLowerCase().replace(/^https?:\/\//, '').replace(/^www\./, '').split(/[/?#\s]/)[0];
+    const split = (s: string) => s.split(/[,;\n]+/).map((x) => x.trim()).filter(Boolean);
+    const count = (items: string[][]) => {
+      const m = new Map<string, { label: string; n: number }>();
+      for (const run of items) {
+        const seen = new Set<string>();
+        for (const it of run) {
+          const key = it.toLowerCase();
+          if (seen.has(key)) continue;
+          seen.add(key);
+          const e = m.get(key) ?? { label: it, n: 0 };
+          e.n++;
+          m.set(key, e);
+        }
+      }
+      return [...m.values()].sort((a, b) => b.n - a.n);
+    };
+
+    const stats = () => {
+      const qs = questions();
+      const types: Record<string, { filled: number; m: number; link: number; q: Record<number, number> }> = {};
+      const srcRuns: string[][] = [];
+      const compRuns: string[][] = [];
+      const priceSrc: string[][] = [];
+      const plat: Record<string, { filled: number; m: number }> = {};
+      let filled = 0, mentioned = 0, linked = 0;
+      for (const g of data.groups) types[g.key] = { filled: 0, m: 0, link: 0, q: {} };
+      for (const q of qs) {
+        for (let r = 1; r <= runsFor(q.group); r++) {
+          const v = getRun(rowKey(q.n, r));
+          for (const p of plats()) {
+            const pv = v[p.key];
+            if (!pv) continue;
+            plat[p.key] ??= { filled: 0, m: 0 };
+            plat[p.key].filled++;
+            if (pv === 'da') plat[p.key].m++;
+          }
+          const s = split(v.src).map(domain).filter(Boolean);
+          if (s.length) srcRuns.push(s);
+          if (q.group === 'cijena' && s.length) priceSrc.push(s);
+          const c = split(v.comp);
+          if (c.length) compRuns.push(c);
+          if (!v.m) continue;
+          const t = types[q.group];
+          t.filled++; filled++;
+          t.q[q.n] ??= 0;
+          if (v.m === 'da') { t.m++; mentioned++; t.q[q.n]++; }
+          if (v.link.trim()) { t.link++; linked++; }
+        }
+      }
+      return { types, filled, mentioned, linked, sources: count(srcRuns), comps: count(compRuns), priceSources: count(priceSrc), plat };
+    };
+
+    const gauge = (name: string, p: number | null, sub: string) => {
+      const R = 42, C = Math.PI * R;
+      const off = p === null ? C : C * (1 - p / 100);
+      return `<div class="aip__gauge">
+        <svg viewBox="0 0 100 58" aria-hidden="true">
+          <path d="M8 50 A42 42 0 0 1 92 50" class="aip__arc-bg" />
+          <path d="M8 50 A42 42 0 0 1 92 50" class="aip__arc" style="stroke-dasharray:${C};stroke-dashoffset:${off}" />
+        </svg>
+        <strong>${p === null ? '–' : p + '%'}</strong>
+        <span>${name}</span>
+        <small>${sub}</small>
+      </div>`;
+    };
+
+    let lastSummary = '';
+    const renderResults = () => {
+      const s = stats();
+      const t = s.types;
+      $('[data-gauges]').innerHTML = data.groups
+        .map((g) => gauge(g.name, t[g.key].filled ? pct(t[g.key].m, t[g.key].filled) : null, t[g.key].filled ? `${t[g.key].m} od ${t[g.key].filled} upisa` : 'nema upisa'))
+        .join('');
+      $('[data-summary]').textContent = s.filled
+        ? `Spomenuti ste u ${s.mentioned} od ${s.filled} ispunjenih upisa (${pct(s.mentioned, s.filled)}%). Vaša stranica linkana je u ${s.linked} (${pct(s.linked, s.filled)}%).`
+        : 'Ispunite barem nekoliko redova tablice i rezultat će se pojaviti ovdje.';
+      const rank = (list: { label: string; n: number }[], empty: string) =>
+        list.length ? list.slice(0, 5).map((x) => `<li><span>${esc(x.label)}</span><b>${x.n}</b></li>`).join('') : `<li class="aip__empty">${empty}</li>`;
+      $('[data-top-sources]').innerHTML = rank(s.sources, 'Upišite izvore u tablicu');
+      $('[data-top-comp]').innerHTML = rank(s.comps, 'Upišite konkurente u tablicu');
+      const ps = plats().filter((p) => s.plat[p.key]?.filled);
+      $('[data-platform-res]').innerHTML = ps.length
+        ? `<p class="aip__plat">${ps.map((p) => `${p.name}: <b>${pct(s.plat[p.key].m, s.plat[p.key].filled)}%</b> (${s.plat[p.key].m} od ${s.plat[p.key].filled})`).join(' · ')}</p>`
+        : '';
+
+      // Dijagnoza prema sekciji "Kako čitati rezultat" i "Što napraviti nakon testa".
+      const d: string[] = [];
+      const p = (k: string) => (t[k].filled ? pct(t[k].m, t[k].filled) : null);
+      if (!s.filled) {
+        d.push('Još nema podataka. Krenite od pitanja 1 do 5, ona najviše govore o tome hoće li vas AI preporučiti kupcu.');
+      } else {
+        if (s.mentioned === 0) {
+          d.push('<b>Niste spomenuti ni u jednom upisu.</b> Prvi korak: provjerite može li AI pročitati vaš web (Ctrl+U na podstranici, pa Ctrl+F za rečenicu iz teksta). Ako teksta nema u izvornom kodu, to je prvi problem. <a href="/blog/case-study-ai-vidljivost-osmrtnice/">Case study</a> pokazuje kako to izgleda.');
+        } else if (s.linked < s.mentioned / 2) {
+          d.push(`<b>Spomenuti ste, ali vaša stranica rijetko je izvor</b> (linkana u ${s.linked} od ${s.mentioned} spomena). AI vas zna iz tuđih stranica. Prvi korak: napravite stranicu koja izravno odgovara na pitanje gdje ste spomenuti bez linka. <a href="/blog/chatgpt-citati-hrvatska/">Što ChatGPT citira</a>.`);
+        }
+        const pc = p('cijena');
+        if (pc !== null && pc < 50) {
+          const top = s.priceSources.slice(0, 3).map((x) => esc(x.label)).join(', ');
+          d.push(`<b>Za pitanja o cijeni spominju vas u ${pc}% upisa.</b> ${top ? `Izvori su ${top}. ` : ''}Ako je među njima konkurentov cjenik, AI kupcu daje tuđe cijene. Prvi korak: objavite početne cijene u eurima na svojoj stranici.`);
+        }
+        const pp = p('preporuka');
+        if (pp !== null && pp < 50) {
+          d.push(`<b>Kod preporuka ste u ${pp}% odgovora.</b> Pogledajte top izvore: liste, direktoriji i portali koji se ponavljaju mjesta su gdje trebate biti. <a href="/blog/portali-za-pr-objave/">Portali za PR objave</a>.`);
+        }
+        const rep = [11, 14, 15].filter((n) => t.usporedba.q[n] === 0);
+        if (rep.length) {
+          d.push(`<b>Za pitanja s vašim imenom (${rep.join(', ')}) AI vas ne spominje.</b> Ažurirajte Google Business Profile i profile na direktorijima, s istim nazivom, adresom i opisom kao na webu.`);
+        }
+        if (t.usporedba.filled) d.push('Pročitajte odgovore na pitanja 11, 14 i 15. Ako nešto o vama nije točno, pogledajte korake ispod naslova "Ako AI o vama piše netočno".');
+        const pr = p('problem');
+        if (pr !== null && pr < 30) {
+          d.push(`<b>Kod pitanja o problemu kupca ste u ${pr}% odgovora.</b> Napišite vodič koji odgovara na pitanja 16 do 20 vašim riječima, s vašim iskustvom i brojkama.`);
+        }
+        const rec = s.sources.filter((x) => x.n >= 2).slice(0, 3);
+        if (rec.length) d.push(`Izvori koji se ponavljaju: ${rec.map((x) => `<b>${esc(x.label)}</b> (${x.n}×)`).join(', ')}. To su stranice koje AI čita za vaše tržište.`);
+        if (d.length === 0) d.push('Dobar rezultat. Ponovite test za mjesec dana istim pitanjima i pratite trend.');
+      }
+      $('[data-diag]').innerHTML = d.map((x) => `<li>${x}</li>`).join('');
+
+      lastSummary = [
+        'Rezultat provjere AI vidljivosti (alat na serprise.agency)',
+        `Djelatnost: ${state.f.usluga || '-'} ${state.f.grad || ''}${state.f.firma ? ` · firma: ${state.f.firma}` : ''}`,
+        `Ukupno: spomenuti u ${s.mentioned}/${s.filled} upisa, linkani u ${s.linked}`,
+        ...data.groups.map((g) => `${g.name}: ${t[g.key].filled ? `${pct(t[g.key].m, t[g.key].filled)}% (${t[g.key].m}/${t[g.key].filled})` : 'nema upisa'}`),
+        `Top izvori: ${s.sources.slice(0, 5).map((x) => `${x.label} (${x.n})`).join(', ') || '-'}`,
+        `Konkurenti: ${s.comps.slice(0, 5).map((x) => `${x.label} (${x.n})`).join(', ') || '-'}`,
+      ].join('\n');
+    };
+
+    $('[data-copy-summary]').addEventListener('click', () => copy(lastSummary, 'Sažetak kopiran'));
+    $('[data-send]').addEventListener('click', () => {
+      try { sessionStorage.setItem('serprise-prefill', lastSummary); } catch { /* bez prijenosa */ }
+    });
+
+    // ---------- Napredak ----------
+    const dateIn = $<HTMLInputElement>('[data-date]');
+    dateIn.value = new Date().toISOString().slice(0, 10);
+    $('[data-save]').addEventListener('click', () => {
+      const s = stats();
+      if (!s.filled) {
+        alert('Tablica je prazna. Ispunite barem jedan red prije spremanja.');
+        return;
+      }
+      const snap: Snap = {
+        date: dateIn.value || new Date().toISOString().slice(0, 10),
+        total: pct(s.mentioned, s.filled),
+        link: pct(s.linked, s.filled),
+        n: s.filled,
+        types: Object.fromEntries(data.groups.map((g) => [g.key, pct(s.types[g.key].m, s.types[g.key].filled)])),
+      };
+      state.history = [...state.history.filter((h) => h.date !== snap.date), snap].sort((a, b) => a.date.localeCompare(b.date));
+      save();
+      renderHistory();
+    });
+    $('[data-history]').addEventListener('click', (e) => {
+      const b = (e.target as HTMLElement).closest<HTMLElement>('[data-del]');
+      if (!b) return;
+      state.history = state.history.filter((h) => h.date !== b.dataset.del);
+      save();
+      renderHistory();
+    });
+
+    const fmt = (d: string) => new Date(d + 'T12:00:00').toLocaleDateString('hr-HR', { day: 'numeric', month: 'numeric', year: 'numeric' });
+    const series = [
+      { key: 'total', name: 'Ukupno', cls: 's0' },
+      ...data.groups.map((g, i) => ({ key: g.key, name: g.name, cls: `s${i + 1}` })),
+    ];
+    const renderHistory = () => {
+      const h = state.history;
+      $('[data-history]').innerHTML = h
+        .map((x) => `<li><span>${fmt(x.date)}</span><span>ukupno <b>${x.total}%</b> · linkani ${x.link}% · ${x.n} upisa</span><button type="button" class="aip__mini" data-del="${x.date}">Obriši</button></li>`)
+        .join('');
+      const chart = $('[data-chart]');
+      if (h.length < 2) {
+        chart.innerHTML = `<p class="aip__empty">${h.length ? 'Spremljeno je jedno mjerenje. Graf se pojavi nakon drugog.' : 'Još nema spremljenih mjerenja.'}</p>`;
+        return;
+      }
+      const W = 640, H = 260, L = 40, R = 16, T = 16, B = 34;
+      const x = (i: number) => L + (i * (W - L - R)) / (h.length - 1);
+      const y = (v: number) => T + (H - T - B) * (1 - v / 100);
+      const val = (snap: Snap, k: string) => (k === 'total' ? snap.total : snap.types[k] ?? 0);
+      const grid = [0, 25, 50, 75, 100]
+        .map((v) => `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" class="aip__grid"/><text x="${L - 8}" y="${y(v) + 4}" text-anchor="end">${v}%</text>`)
+        .join('');
+      const labels = h.map((snap, i) => `<text x="${x(i)}" y="${H - 10}" text-anchor="${i === 0 ? 'start' : i === h.length - 1 ? 'end' : 'middle'}">${fmt(snap.date)}</text>`).join('');
+      const lines = series
+        .map((s) => {
+          const pts = h.map((snap, i) => `${x(i)},${y(val(snap, s.key))}`).join(' ');
+          const dots = h.map((snap, i) => `<circle cx="${x(i)}" cy="${y(val(snap, s.key))}" r="${s.key === 'total' ? 4 : 2.5}"><title>${s.name}, ${fmt(snap.date)}: ${val(snap, s.key)}%</title></circle>`).join('');
+          return `<g class="aip__line ${s.cls}"><polyline points="${pts}" fill="none"/>${dots}</g>`;
+        })
+        .join('');
+      chart.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Postotak pojavljivanja po mjerenjima">${grid}${labels}${lines}</svg>
+        <ul class="aip__legend">${series.map((s) => `<li class="${s.cls}"><i></i>${s.name}</li>`).join('')}</ul>`;
+    };
+
+    function update(full = true) {
+      save();
+      renderQuestions();
+      renderTable();
+      renderResults();
+      if (full) renderHistory();
+    }
+
+    fillFields();
+    runsSel.value = String(state.runsPrep);
+    platBoxes.forEach((b) => (b.checked = !!state.extra[b.dataset.platform!]));
+    update();
+  }
+</script>
+
+<style is:global>
+  .aip__box {
+    margin: 28px 0 36px;
+    padding: clamp(18px, 3vw, 28px);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg-2);
+  }
+  .aip__box--dark { background: var(--navy); color: #fff; border-color: var(--navy); }
+  .aip__box--dark a { color: #fff; }
+  .aip__eyebrow { margin: 0 0 4px; font-size: 0.8rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); }
+  .aip__box--dark .aip__eyebrow { color: #ff8a7a; }
+  .aip__title { margin: 0 0 8px; font-size: 1.4rem; }
+  .aip__lead { margin: 0 0 16px; color: var(--muted); }
+  .aip__box--dark .aip__lead { color: rgba(255, 255, 255, 0.82); }
+  .aip__box label { display: grid; gap: 4px; font-weight: 600; font-size: 0.9rem; }
+  .aip__box label small { font-weight: 400; color: var(--muted); }
+  .aip__box input, .aip__box select {
+    font: inherit; font-size: 0.95rem; padding: 8px 10px; border: 1px solid var(--border);
+    border-radius: 8px; background: #fff; color: var(--text); min-width: 0; width: 100%;
+  }
+  .aip__preset { margin-bottom: 14px; max-width: 420px; }
+  .aip__fields { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+  .aip__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 16px 0 8px; }
+  .aip__status { font-size: 0.9rem; color: var(--ok); }
+  .aip__groups { display: grid; gap: 8px; }
+  .aip__group h4 { margin: 14px 0 6px; }
+  .aip__group h4 small { color: var(--muted); font-weight: 400; }
+  .aip__group ol { margin: 0; padding-left: 1.6em; }
+  .aip__group ol { list-style: none; padding-left: 0; }
+  .aip__group li { display: grid; grid-template-columns: 2.2em 1fr auto; gap: 8px; align-items: start; padding: 6px 0; margin: 0; border-bottom: 1px solid var(--border); }
+  .aip__n { text-align: right; }
+  .aip__q { outline: none; border-radius: 4px; padding: 1px 3px; }
+  .aip__q:focus { background: #fff; box-shadow: 0 0 0 2px var(--accent-soft); }
+  .aip__qbtns { display: inline-flex; gap: 6px; }
+  .aip__mini {
+    font: inherit; font-size: 0.8rem; padding: 3px 10px; border-radius: 999px; cursor: pointer;
+    border: 1px solid var(--border); background: #fff; color: var(--text);
+  }
+  .aip__mini:hover { border-color: var(--accent); color: var(--accent); }
+  .aip__opts { display: flex; flex-wrap: wrap; gap: 16px 28px; align-items: flex-end; margin-bottom: 8px; }
+  .aip__opts > label { max-width: 220px; }
+  .aip__box fieldset { border: 0; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 6px 16px; }
+  .aip__box legend { font-weight: 600; font-size: 0.9rem; margin-bottom: 4px; padding: 0; }
+  .aip__box .aip__check { display: inline-flex; align-items: center; gap: 6px; font-weight: 400; }
+  .aip__check input { width: auto; }
+  .aip__meta { font-size: 0.88rem; color: var(--muted); margin: 6px 0; }
+  .aip__scroll { overflow-x: auto; background: #fff; border-radius: 10px; border: 1px solid var(--border); max-height: 70vh; overflow-y: auto; }
+  .aip__box .aip__table { display: table; margin: 0; font-size: 0.88rem; min-width: 860px; }
+  .aip__box .aip__table th, .aip__box .aip__table td { padding: 4px 6px; border-color: var(--border); vertical-align: top; }
+  .aip__box .aip__table thead th { position: sticky; top: 0; z-index: 1; background: var(--bg-2); }
+  .aip__grow th { background: var(--navy) !important; color: #fff; }
+  .aip__qcell { min-width: 220px; max-width: 280px; background: #fff; }
+  .aip__num { text-align: center; color: var(--muted); }
+  .aip__first td { border-top: 2px solid var(--border); }
+  .aip__table input, .aip__table select { padding: 5px 6px; font-size: 0.85rem; }
+  .aip__table select { min-width: 58px; }
+  .aip__gauges { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin: 8px 0 20px; }
+  .aip__gauge { text-align: center; background: rgba(255, 255, 255, 0.06); border-radius: 12px; padding: 12px 8px; display: grid; gap: 2px; }
+  .aip__gauge svg { width: 100%; max-width: 140px; margin: 0 auto; }
+  .aip__arc-bg, .aip__arc { fill: none; stroke-width: 9; stroke-linecap: round; }
+  .aip__arc-bg { stroke: rgba(255, 255, 255, 0.15); }
+  .aip__arc { stroke: #ff6b57; transition: stroke-dashoffset 0.4s ease; }
+  .aip__gauge strong { font-size: 1.5rem; margin-top: -26px; }
+  .aip__gauge small { color: rgba(255, 255, 255, 0.7); }
+  .aip__cols { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .aip__box--dark h4 { margin: 14px 0 6px; color: #fff; }
+  .aip__rank { margin: 0; padding-left: 1.4em; }
+  .aip__rank li { display: list-item; }
+  .aip__rank li b { float: right; }
+  .aip__empty { color: rgba(127, 140, 160, 0.95); list-style: none; margin-left: -1.4em; }
+  .aip__plat { font-size: 0.95rem; }
+  .aip__diag { padding-left: 1.2em; }
+  .aip__diag li { margin-bottom: 0.6em; }
+  .aip__cta { margin-top: 20px; padding: 16px 18px; border-radius: 12px; background: rgba(255, 255, 255, 0.08); }
+  .aip__cta p { margin: 0; }
+  .aip__box .btn--ghost-light { border: 1px solid rgba(255, 255, 255, 0.5); color: #fff; background: transparent; }
+  .aip__date { display: inline-grid; max-width: 200px; }
+  .aip__chart { margin: 10px 0; background: #fff; border: 1px solid var(--border); border-radius: 10px; padding: 10px; }
+  .aip__chart svg { width: 100%; height: auto; display: block; }
+  .aip__chart text { font-size: 11px; fill: var(--muted); }
+  .aip__chart .aip__grid { stroke: var(--border); }
+  .aip__chart .aip__empty { margin: 8px; color: var(--muted); }
+  .aip__chart polyline { stroke-width: 2; }
+  .aip__chart .s0 polyline { stroke-width: 3.5; }
+  .aip__box .s0 { --c: #ba2525; }
+  .aip__box .s1 { --c: #102b43; }
+  .aip__box .s2 { --c: #2f7dd1; }
+  .aip__box .s3 { --c: #1f9d6a; }
+  .aip__box .s4 { --c: #c98a12; }
+  .aip__chart .aip__line polyline { stroke: var(--c); }
+  .aip__chart .aip__line circle { fill: var(--c); }
+  .aip__legend { list-style: none; display: flex; flex-wrap: wrap; gap: 6px 16px; padding: 0; margin: 8px 0 0; font-size: 0.85rem; }
+  .aip__legend li { display: inline-flex; align-items: center; gap: 6px; margin: 0; }
+  .aip__legend i { width: 14px; height: 3px; background: var(--c); display: inline-block; }
+  .aip__history { list-style: none; padding: 0; margin: 0; }
+  .aip__history li { display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 0.92rem; }
+  .aip__history li span:first-child { font-weight: 600; min-width: 90px; }
+  @media (max-width: 640px) {
+    .aip__gauges { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .aip__cols { grid-template-columns: 1fr; }
+    .aip__qcell { min-width: 150px; }
+    .aip__group li { grid-template-columns: 1.8em 1fr; }
+    .aip__qbtns { grid-column: 2; }
+  }
+</style>

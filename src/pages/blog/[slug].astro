@@ -32,7 +32,9 @@ const schema = [
     datePublished: date.toISOString(),
     dateModified: (updated ?? date).toISOString(),
     image: new URL(image ?? '/og.png', site.url).href,
-    author: { '@type': 'Person', name: author, ...(person?.linkedin && { sameAs: [person.linkedin] }) },
+    author: person?.profile
+      ? { '@type': 'Person', '@id': `${site.url}${person.profile}#person`, name: author, url: `${site.url}${person.profile}` }
+      : { '@type': 'Person', name: author, ...(person?.linkedin && { sameAs: [person.linkedin] }) },
     publisher: { '@id': `${site.url}/#organization` },
     isPartOf: { '@id': `${site.url}/blog/#blog` },
   },
@@ -54,7 +56,7 @@ const schema = [
       <nav class="muted crumbs" aria-label="Putanja"><a href="/blog/">Blog</a></nav>
       <h1>{title}</h1>
       <p class="muted article__meta">
-        {author} · <time datetime={date.toISOString()}>{formatDate(date)}</time>{updated && <> · ažurirano <time datetime={updated.toISOString()}>{formatDate(updated)}</time></>} · {readingTime(post.body)} min čitanja
+        {person?.profile ? <a href={person.profile} rel="author">{author}</a> : author} · <time datetime={date.toISOString()}>{formatDate(date)}</time>{updated && <> · ažurirano <time datetime={updated.toISOString()}>{formatDate(updated)}</time></>} · {readingTime(post.body)} min čitanja
       </p>
       {image && <img src={image} alt={imageAlt ?? ''} class="article__img" />}
       <Content />

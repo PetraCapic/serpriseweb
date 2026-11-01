@@ -56,7 +56,7 @@ import { team } from '../lib/site';
             ) : (
               <div class="member__photo member__initials" aria-hidden="true">{m.name.split(' ').map((w) => w[0]).join('')}</div>
             )}
-            <h3>{m.name}</h3>
+            <h3>{m.profile ? <a href={m.profile}>{m.name}</a> : m.name}</h3>
             <p class="eyebrow member__role">{m.role}</p>
             <p class="muted">{m.bio}</p>
             {m.linkedin && (

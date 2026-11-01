@@ -41,6 +41,7 @@ const orgSchema = {
     addressLocality: 'Žaborić',
     addressCountry: 'HR',
   },
+  founder: { '@id': `${site.url}/autor/jure-kljajic/#person` },
   sameAs: [site.linkedin, site.instagram],
 };
 const schemas = [orgSchema, ...(schema ? (Array.isArray(schema) ? schema : [schema]) : [])];

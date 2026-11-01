@@ -1,0 +1,119 @@
+---
+import Base from '../../layouts/Base.astro';
+import { site, team } from '../../lib/site';
+import { getPosts, formatDate } from '../../lib/blog';
+
+// Stranica autora: činjenice o osobi za čitatelje i AI asistente (Person schema, sameAs).
+const person = team.find((m) => m.profile === '/autor/jure-kljajic/')!;
+const url = `${site.url}${person.profile}`;
+const posts = (await getPosts()).filter((p) => p.data.author === person.name);
+const description =
+  'Jure Kljajić je SEO stručnjak s 9 godina iskustva i osnivač agencije SERPRise. Bavi se link buildingom, digitalnim PR-om i vidljivošću tvrtki u odgovorima ChatGPT-a i drugih AI asistenata.';
+const knowsAbout = [
+  'SEO',
+  'Link building',
+  'Digitalni PR',
+  'LLM vidljivost (AI vidljivost)',
+  'Generative Engine Optimization (GEO)',
+  'Google Analytics 4',
+];
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfilePage',
+  '@id': `${url}#profile`,
+  url,
+  name: `${person.name}, autor`,
+  inLanguage: 'hr',
+  mainEntity: {
+    '@type': 'Person',
+    '@id': `${url}#person`,
+    name: person.name,
+    url,
+    image: `${site.url}${person.photo}`,
+    jobTitle: 'Osnivač i SEO strateg',
+    description,
+    worksFor: { '@id': `${site.url}/#organization` },
+    knowsAbout,
+    knowsLanguage: ['hr', 'en'],
+    nationality: { '@type': 'Country', name: 'Hrvatska' },
+    sameAs: [person.linkedin],
+  },
+};
+---
+
+<Base title={`${person.name}, SEO stručnjak i osnivač SERPRisea`} description={description} schema={schema} ogType="profile" image={person.photo}>
+  <section class="section">
+    <div class="container author">
+      <nav class="muted crumbs" aria-label="Putanja"><a href="/o-nama/">O nama</a></nav>
+      <header class="author__head">
+        <img src={person.photo} alt={person.name} width="160" height="160" class="author__photo" />
+        <div>
+          <span class="eyebrow">Autor</span>
+          <h1>{person.name}</h1>
+          <p class="author__role">SEO stručnjak i osnivač agencije SERPRise</p>
+          <a href={person.linkedin} target="_blank" rel="noopener me" class="author__in">
+            <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.56V9h3.56v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0z"/></svg>
+            LinkedIn profil
+          </a>
+        </div>
+      </header>
+
+      <div class="prose">
+        <p class="author__lead">{description}</p>
+
+        <h2>Ukratko</h2>
+        <dl class="facts">
+          <div><dt>Ime</dt><dd>{person.name}</dd></div>
+          <div><dt>Uloga</dt><dd>Osnivač i SEO strateg, <a href="/o-nama/">SERPRise</a> ({site.legalName})</dd></div>
+          <div><dt>Iskustvo</dt><dd>9 godina u SEO-u</dd></div>
+          <div><dt>Područja rada</dt><dd>{knowsAbout.join(', ')}</dd></div>
+          <div><dt>Tržišta</dt><dd>Hrvatska i regija, Ujedinjeno Kraljevstvo, SAD i EU (white label za agencije)</dd></div>
+          <div><dt>Kontakt</dt><dd><a href={`mailto:${site.email}`}>{site.email}</a></dd></div>
+        </dl>
+
+        <h2>Čime se bavi</h2>
+        <p>Jure vodi strategiju kampanja u SERPRiseu. Klijentima postavlja plan link buildinga i objava na portalima, bira portale prema autoritetu, prometu i temi te prati kako se objave odražavaju na pozicije na Googleu.</p>
+        <p>Drugi dio posla je LLM vidljivost: kako tvrtka ulazi u odgovore ChatGPT-a, Geminija i Perplexityja. Za to postavlja pitanja koja postavljaju kupci, bilježi koje stranice AI asistenti citiraju i mjeri promet s AI alata u Google Analyticsu 4. Rezultate tih mjerenja objavljuje na <a href="/blog/">blogu</a>.</p>
+        <p>Klijentima je prva osoba za kontakt. Na LinkedInu piše o link buildingu i AI pretraživanju.</p>
+
+        {posts.length > 0 && (
+          <>
+            <h2>Članci i istraživanja</h2>
+            <ul class="author__posts">
+              {posts.map((p) => (
+                <li>
+                  <a href={`/blog/${p.id}/`}>{p.data.title}</a>
+                  <span class="muted"> · <time datetime={p.data.date.toISOString()}>{formatDate(p.data.date)}</time></span>
+                </li>
+              ))}
+            </ul>
+          </>
+        )}
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .author { max-width: 780px; }
+  .crumbs { font-size: 0.9rem; margin-bottom: 12px; }
+  .author__head { display: flex; gap: 28px; align-items: center; margin-bottom: 28px; }
+  .author__photo { width: 160px; height: 160px; flex: none; border-radius: 50%; object-fit: cover; object-position: top; background: var(--grad); }
+  .author__head h1 { margin: 6px 0 4px; font-size: clamp(2rem, 4vw, 2.8rem); }
+  .author__role { margin: 0 0 12px; color: var(--muted); font-size: 1.05rem; }
+  .author__in { display: inline-flex; align-items: center; gap: 8px; font-weight: 600; color: #0a66c2; }
+  .author__lead { font-size: 1.12rem; }
+  .facts { display: grid; gap: 0; margin: 0 0 1.6em; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .facts div { display: grid; grid-template-columns: 170px 1fr; gap: 16px; padding: 12px 16px; border-top: 1px solid var(--border); }
+  .facts div:first-child { border-top: 0; }
+  .facts dt { color: var(--muted); font-size: 0.9rem; }
+  .facts dd { margin: 0; }
+  .author__posts { padding-left: 1.2em; }
+  .author__posts li { margin-bottom: 0.5em; }
+  @media (max-width: 640px) {
+    .author__head { flex-direction: column; align-items: flex-start; gap: 16px; }
+    .author__photo { width: 112px; height: 112px; }
+    .facts div { grid-template-columns: 1fr; gap: 2px; }
+  }
+</style>

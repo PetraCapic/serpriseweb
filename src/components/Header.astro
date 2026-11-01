@@ -1,5 +1,5 @@
 ---
-import { nav, adminUrl } from '../lib/site';
+import { nav } from '../lib/site';
 import { enNav, altFor } from '../lib/en';
 import Logo from './Logo.astro';
 import { getPosts } from '../lib/blog';
@@ -30,10 +30,6 @@ const switchHref = isEn ? (alt?.hr ?? '/') : (alt?.en ?? '/en/');
         ))
       }
       <a href={switchHref} class="header__lang" hreflang={isEn ? 'hr' : 'en'} lang={isEn ? 'hr' : 'en'} aria-label={isEn ? 'Hrvatska verzija' : 'English version'}>{isEn ? 'HR' : 'EN'}</a>
-      <a href={adminUrl} class="header__login" rel="nofollow">
-        <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 7V5a3.5 3.5 0 0 1 7 0v2M3.5 7h9v7h-9z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" /></svg>
-        {isEn ? 'Log in' : 'Prijava'}
-      </a>
       <a href={isEn ? '/en/contact/' : '/kontakt/'} class="btn btn--primary header__cta">{isEn ? 'Free audit' : 'Besplatna analiza'}</a>
     </nav>
   </div>
@@ -90,11 +86,6 @@ const switchHref = isEn ? (alt?.hr ?? '/') : (alt?.en ?? '/en/');
     border: 1px solid var(--border);
     border-radius: 999px;
     padding: 3px 10px;
-  }
-  .header__login {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
   }
   .header__cta {
     padding: 10px 18px;

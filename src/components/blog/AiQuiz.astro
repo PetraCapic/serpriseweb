@@ -1,0 +1,267 @@
+---
+import quiz from '../../data/ai-kviz.json';
+// Kviz "Koliko ste spremni za AI odgovore?": 10 da/ne pitanja, ocjena 0 do 100 po svakoj od 4 točke,
+// radar graf i 3 najvažnija sljedeća koraka. Opcionalno: rezultat na e-mail (lead u admin + /api/vodic).
+// Pitanja i koraci: src/data/ai-kviz.json. U članku: <div data-embed="quiz"></div>
+const { pillars, questions } = quiz;
+const C = 130, R = 92; // središte i polumjer radara (viewBox 260x260)
+const angle = (i: number) => -Math.PI / 2 + (i * 2 * Math.PI) / pillars.length;
+const pt = (i: number, r: number) => `${(C + Math.cos(angle(i)) * r).toFixed(1)},${(C + Math.sin(angle(i)) * r).toFixed(1)}`;
+---
+<section class="wg quiz" data-quiz aria-labelledby="quiz-title">
+  <p class="wg__eyebrow">Kviz · 2 minute</p>
+  <h3 id="quiz-title" class="wg__title">Koliko ste spremni za AI odgovore?</h3>
+  <p class="wg__lead">Deset pitanja s da ili ne. Dobit ćete ocjenu za svaku od četiri točke iz ovog vodiča i tri sljedeća koraka.</p>
+
+  <form class="quiz__form" novalidate>
+    <ol class="quiz__qs">
+      {questions.map((q, i) => (
+        <li class="quiz__q" data-pillar={q.pillar}>
+          <fieldset>
+            <legend><span class="quiz__tag">{pillars.find((p) => p.id === q.pillar)?.name}</span>{q.q}</legend>
+            <p class="quiz__hint">{q.hint}</p>
+            <div class="quiz__yn">
+              <label><input type="radio" name={q.id} value="1" required /> Da</label>
+              <label><input type="radio" name={q.id} value="0" /> Ne / ne znam</label>
+            </div>
+          </fieldset>
+        </li>
+      ))}
+    </ol>
+    <div class="quiz__bar"><span class="quiz__progress">0 / {questions.length}</span><button type="submit" class="btn btn--primary">Pokaži rezultat</button></div>
+    <p class="quiz__status" role="status" aria-live="polite"></p>
+  </form>
+
+  <div class="quiz__result" hidden tabindex="-1">
+    <div class="quiz__grid">
+      <div class="quiz__radar">
+        <svg viewBox="-80 0 420 260" role="img" aria-label="Radar graf ocjene po četiri točke">
+          {[25, 50, 75, 100].map((v) => (
+            <polygon class="quiz__ring" points={pillars.map((_, i) => pt(i, (R * v) / 100)).join(' ')} />
+          ))}
+          {pillars.map((_, i) => <line class="quiz__axis" x1={C} y1={C} x2={pt(i, R).split(',')[0]} y2={pt(i, R).split(',')[1]} />)}
+          <polygon class="quiz__area" points={pillars.map(() => `${C},${C}`).join(' ')} />
+          {pillars.map((p, i) => {
+            const [x, y] = pt(i, R + 18).split(',').map(Number);
+            return <text class="quiz__lbl" x={x} y={y + 4} text-anchor={Math.abs(x - C) < 5 ? 'middle' : x > C ? 'start' : 'end'}>{p.name}</text>;
+          })}
+          {pillars.map((p) => <circle class="quiz__dot" r="5" cx={C} cy={C} data-dot={p.id} />)}
+        </svg>
+      </div>
+      <div>
+        <p class="quiz__total"><strong>0</strong>/100 ukupno</p>
+        <ul class="quiz__scores">
+          {pillars.map((p) => (
+            <li data-score={p.id}><a href={p.anchor}>{p.name}</a><span class="quiz__meter"><span></span></span><b>0</b></li>
+          ))}
+        </ul>
+      </div>
+    </div>
+    <h4 class="quiz__h">Tri najvažnija sljedeća koraka</h4>
+    <ol class="quiz__steps"></ol>
+    <p class="quiz__done-all" hidden>Na sva pitanja ste odgovorili s da. Sljedeći korak je mjeriti svaki mjesec i pratiti koga ChatGPT citira umjesto vas.</p>
+
+    <details class="quiz__mail">
+      <summary>Pošalji mi rezultat na e-mail</summary>
+      <form class="quiz__mailform" novalidate>
+        <div class="quiz__row">
+          <label>Ime<input name="firstName" required autocomplete="given-name" maxlength="60" /></label>
+          <label>E-mail<input name="email" type="email" required autocomplete="email" maxlength="200" /></label>
+        </div>
+        <input name="fax" tabindex="-1" autocomplete="off" class="quiz__hp" aria-hidden="true" />
+        <label class="quiz__consent"><input type="checkbox" name="consent" required /> Slažem se da SERPRise spremi moj e-mail i rezultat kviza i javi mi se u vezi AI vidljivosti. <a href="/pravila-privatnosti/">Pravila privatnosti</a></label>
+        <button type="submit" class="btn btn--primary">Pošalji rezultat</button>
+        <p class="quiz__mailstatus" role="status" aria-live="polite"></p>
+      </form>
+    </details>
+    <button type="button" class="quiz__again">Ispočetka</button>
+  </div>
+  <script type="application/json" data-quiz-data set:html={JSON.stringify(quiz)} />
+</section>
+
+<script>
+  import { supabase } from '../../lib/supabase';
+
+  type Q = { id: string; pillar: string; priority: number; step: string; link: string; linkText: string };
+  type P = { id: string; name: string };
+  const esc = (s: string) => s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!);
+
+  document.querySelectorAll<HTMLElement>('[data-quiz]').forEach((el) => {
+    const slot = document.querySelector('[data-embed="quiz"]');
+    if (slot) slot.replaceWith(el);
+    const { pillars, questions } = JSON.parse(el.querySelector('[data-quiz-data]')!.textContent!) as { pillars: P[]; questions: Q[] };
+    const form = el.querySelector<HTMLFormElement>('.quiz__form')!;
+    const result = el.querySelector<HTMLElement>('.quiz__result')!;
+    const progress = el.querySelector<HTMLElement>('.quiz__progress')!;
+    const status = el.querySelector<HTMLElement>('.quiz__status')!;
+    const startedAt = Date.now();
+    let answers: Record<string, boolean> = {};
+    let scores: Record<string, number> = {};
+
+    const count = () => questions.filter((q) => form.querySelector(`input[name="${q.id}"]:checked`)).length;
+    form.addEventListener('change', () => (progress.textContent = `${count()} / ${questions.length}`));
+
+    const C = 130, R = 92;
+    const at = (i: number, r: number) => {
+      const a = -Math.PI / 2 + (i * 2 * Math.PI) / pillars.length;
+      return [C + Math.cos(a) * r, C + Math.sin(a) * r];
+    };
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const missing = questions.find((q) => !form.querySelector(`input[name="${q.id}"]:checked`));
+      if (missing) {
+        status.textContent = `Odgovorite na sva pitanja (${count()} od ${questions.length}).`;
+        form.querySelector<HTMLInputElement>(`input[name="${missing.id}"]`)!.focus();
+        return;
+      }
+      status.textContent = '';
+      answers = Object.fromEntries(questions.map((q) => [q.id, form.querySelector<HTMLInputElement>(`input[name="${q.id}"]:checked`)!.value === '1']));
+      scores = Object.fromEntries(
+        pillars.map((p) => {
+          const qs = questions.filter((q) => q.pillar === p.id);
+          return [p.id, Math.round((qs.filter((q) => answers[q.id]).length / qs.length) * 100)];
+        }),
+      );
+      const total = Math.round(Object.values(answers).filter(Boolean).length * (100 / questions.length));
+
+      // Radar
+      const pts = pillars.map((p, i) => at(i, (R * scores[p.id]) / 100));
+      el.querySelector('.quiz__area')!.setAttribute('points', pts.map((p) => p.map((n) => n.toFixed(1)).join(',')).join(' '));
+      pillars.forEach((p, i) => {
+        const d = el.querySelector(`[data-dot="${p.id}"]`)!;
+        d.setAttribute('cx', pts[i][0].toFixed(1));
+        d.setAttribute('cy', pts[i][1].toFixed(1));
+        const row = el.querySelector<HTMLElement>(`[data-score="${p.id}"]`)!;
+        row.querySelector('b')!.textContent = String(scores[p.id]);
+        row.querySelector<HTMLElement>('.quiz__meter span')!.style.width = `${scores[p.id]}%`;
+      });
+      el.querySelector('.quiz__total strong')!.textContent = String(total);
+
+      // Tri najvažnija koraka: pitanja s "ne", po prioritetu
+      const todo = questions.filter((q) => !answers[q.id]).sort((a, b) => a.priority - b.priority).slice(0, 3);
+      el.querySelector('.quiz__steps')!.innerHTML = todo
+        .map((q) => `<li>${esc(q.step)} <a href="${esc(q.link)}">${esc(q.linkText)} →</a></li>`)
+        .join('');
+      el.querySelector<HTMLElement>('.quiz__done-all')!.hidden = todo.length > 0;
+
+      form.hidden = true;
+      result.hidden = false;
+      result.focus();
+      result.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      window.dataLayer?.push({ event: 'ai_kviz_rezultat', ai_kviz_ukupno: total });
+    });
+
+    el.querySelector('.quiz__again')!.addEventListener('click', () => {
+      form.reset();
+      progress.textContent = `0 / ${questions.length}`;
+      result.hidden = true;
+      form.hidden = false;
+      form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    // Rezultat na e-mail: lead u admin (tablica leads) + e-mail preko iste funkcije kao besplatni vodič
+    const mail = el.querySelector<HTMLFormElement>('.quiz__mailform')!;
+    const mailStatus = el.querySelector<HTMLElement>('.quiz__mailstatus')!;
+    mail.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!mail.checkValidity()) {
+        mail.reportValidity();
+        return;
+      }
+      const data = new FormData(mail);
+      const val = (k: string) => String(data.get(k) ?? '').trim();
+      const btn = mail.querySelector('button')!;
+      if (data.get('fax') || Date.now() - startedAt < 5000) {
+        mailStatus.textContent = 'Hvala! Rezultat je na putu.';
+        return;
+      }
+      btn.disabled = true;
+      mailStatus.textContent = 'Šaljem...';
+      const summary = pillars.map((p) => `${p.name}: ${scores[p.id]}/100`).join(', ');
+      const no = questions.filter((q) => !answers[q.id]).map((q) => q.id).join(', ');
+      if (supabase) {
+        const { error } = await supabase.from('leads').insert({
+          name: val('firstName').slice(0, 120),
+          email: val('email'),
+          company: '',
+          service: 'ai_vidljivost',
+          message: `Kviz "Koliko ste spremni za AI odgovore?": ${summary}. Odgovori "ne": ${no || 'nijedan'}.`,
+          consent: true,
+          source_page: '/blog/llm-vidljivost/ (kviz)',
+          utm: null,
+        });
+        if (error) console.error(error);
+      }
+      let sent = false;
+      try {
+        const res = await fetch('/api/vodic', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ kind: 'kviz', email: val('email'), firstName: val('firstName'), answers }),
+        });
+        if (res.ok) sent = Boolean((await res.json()).sent);
+      } catch (err) {
+        console.error(err);
+      }
+      mailStatus.textContent = sent
+        ? `Poslano na ${val('email')}. Ako ne stigne za nekoliko minuta, provjerite mapu Promocije ili Neželjena pošta.`
+        : 'Hvala! Zaprimili smo rezultat i javit ćemo vam se na e-mail u roku jednog radnog dana.';
+      window.dataLayer?.push({ event: 'generate_lead', lead_source: 'ai_kviz' });
+    });
+  });
+
+  declare global {
+    interface Window { dataLayer?: unknown[] }
+  }
+</script>
+
+<style>
+  .quiz__form { scroll-margin-top: 90px; }
+  .quiz__qs { margin: 18px 0 0 !important; padding: 0 !important; list-style: none; counter-reset: q; display: grid; gap: 10px; }
+  .quiz__q { margin: 0 !important; counter-increment: q; }
+  .quiz__q fieldset { border: 1px solid var(--border); border-radius: 12px; padding: 14px 16px; margin: 0; }
+  .quiz__q legend { padding: 0; font-weight: 600; color: var(--navy); display: contents; }
+  .quiz__q legend::before { content: counter(q) '. '; color: var(--accent); }
+  .quiz__tag { display: block; font: 700 0.7rem var(--font-display); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+  .quiz__hint { margin: 4px 0 10px; font-size: 0.85rem; color: var(--muted); line-height: 1.45; }
+  .quiz__yn { display: flex; gap: 8px; flex-wrap: wrap; }
+  .quiz__yn label { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--border); border-radius: 999px; padding: 6px 14px; cursor: pointer; font-size: 0.9rem; }
+  .quiz__yn label:has(input:checked) { border-color: var(--accent); background: var(--accent-soft); color: var(--navy); font-weight: 600; }
+  .quiz__yn input { accent-color: var(--accent); }
+  .quiz__bar { position: sticky; bottom: 10px; display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-top: 14px; background: #fff; border: 1px solid var(--border); border-radius: 999px; padding: 8px 8px 8px 18px; box-shadow: var(--shadow); }
+  .quiz__progress { font: 600 0.9rem var(--font-display); color: var(--muted); }
+  .quiz__status { color: var(--accent); font-size: 0.9rem; min-height: 1.2em; margin: 8px 0 0; }
+  .quiz__result { margin-top: 18px; outline: none; scroll-margin-top: 90px; }
+  .quiz__grid { display: grid; grid-template-columns: minmax(220px, 300px) 1fr; gap: 24px; align-items: center; }
+  .quiz__radar svg { width: 100%; height: auto; overflow: visible; }
+  .quiz__ring { fill: none; stroke: var(--border); stroke-width: 1; }
+  .quiz__axis { stroke: var(--border); stroke-width: 1; }
+  .quiz__area { fill: rgba(186, 37, 37, 0.18); stroke: var(--accent); stroke-width: 2; stroke-linejoin: round; transition: all 0.6s; }
+  .quiz__dot { fill: var(--accent); stroke: #fff; stroke-width: 2; }
+  .quiz__lbl { fill: var(--navy); font: 600 13px var(--font); }
+  .quiz__total { margin: 0 0 8px; color: var(--muted); }
+  .quiz__total strong { font: 700 2.4rem var(--font-display); color: var(--navy); }
+  .quiz__scores { list-style: none; margin: 0 !important; padding: 0 !important; display: grid; gap: 8px; }
+  .quiz__scores li { margin: 0 !important; display: grid; grid-template-columns: 1fr 1fr 34px; align-items: center; gap: 10px; font-size: 0.92rem; }
+  .quiz__scores b { text-align: right; color: var(--navy); }
+  .quiz__meter { height: 8px; background: var(--bg-2); border-radius: 999px; overflow: hidden; }
+  .quiz__meter span { display: block; height: 100%; width: 0; background: var(--navy); border-radius: inherit; transition: width 0.6s; }
+  .quiz__h { margin: 22px 0 8px; font-size: 1.05rem; }
+  .quiz__steps li { margin-bottom: 8px; }
+  .quiz__mail { margin-top: 16px; border-top: 1px solid var(--border); padding-top: 12px; }
+  .quiz__mail summary { cursor: pointer; font-weight: 600; color: var(--accent); }
+  .quiz__mailform { display: grid; gap: 12px; margin-top: 12px; }
+  .quiz__row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .quiz__mailform label { display: grid; gap: 4px; font-size: 0.9rem; font-weight: 500; }
+  .quiz__mailform input:not([type='checkbox']) { font: inherit; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; }
+  .quiz__mailform .quiz__consent { grid-template-columns: auto 1fr; font-weight: 400; font-size: 0.82rem; color: var(--muted); align-items: start; }
+  .quiz__mailform button { justify-self: start; }
+  .quiz__hp { position: absolute; left: -9999px; }
+  .quiz__mailstatus { font-size: 0.9rem; color: var(--muted); margin: 0; }
+  .quiz__again { margin-top: 14px; border: 0; background: none; color: var(--muted); text-decoration: underline; cursor: pointer; font: inherit; font-size: 0.9rem; padding: 0; }
+  @media (max-width: 640px) {
+    .quiz__grid, .quiz__row { grid-template-columns: 1fr; }
+    .quiz__radar { max-width: 280px; margin: 0 auto; }
+  }
+</style>

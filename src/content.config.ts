@@ -14,6 +14,12 @@ const blog = defineCollection({
     image: z.string().optional(),
     imageAlt: z.string().optional(),
     draft: z.boolean().default(false),
+    // Pillar/hub članci: teme (schema "about"), članci clustera (schema "hasPart", slugovi) i FAQ (FAQPage + vidljiv blok na dnu).
+    about: z.array(z.object({ name: z.string(), sameAs: z.string().url().optional() })).optional(),
+    hasPart: z.array(z.string()).optional(),
+    faq: z.array(z.object({ q: z.string(), a: z.string() })).optional(),
+    // Izvori na dnu članka (vidljiv popis + schema "citation").
+    sources: z.array(z.object({ name: z.string(), url: z.string().url() })).optional(),
   }),
 });
 

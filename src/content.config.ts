@@ -20,6 +20,8 @@ const blog = defineCollection({
     faq: z.array(z.object({ q: z.string(), a: z.string() })).optional(),
     // Izvori na dnu članka (vidljiv popis + schema "citation").
     sources: z.array(z.object({ name: z.string(), url: z.string().url() })).optional(),
+    // Koraci za HowTo schemu (isti koraci moraju biti i vidljivi u članku).
+    howto: z.object({ name: z.string(), steps: z.array(z.string()) }).optional(),
   }),
 });
 

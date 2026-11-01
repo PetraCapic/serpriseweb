@@ -133,6 +133,8 @@ Isti smjer pokazuje i istraživanje koje je pojmu GEO dalo ime. Tim s Princetona
 
 **Keyword stuffing** (nabijanje ključnih riječi) prošao je lošije od neizmijenjenog teksta, oko −9 %. Brojke su iz tablice 1 rada, za metriku vidljivosti prilagođene poziciji u odgovoru. Zaključak za praksu: brojka iz vašeg projekta i link na izvor vrijede više od još jednog ponavljanja ključne riječi.
 
+Koje riječi ChatGPT stvarno pretražuje za pitanje vašeg kupca možete vidjeti sami, u Chromeu. Postupak i što iz pretraga pročitati: [Metoda: kako vidjeti što ChatGPT pretražuje](/blog/chatgpt-pretrage/).
+
 ### 3. Spominju li vas drugi
 
 Za pitanje "koje su najbolje agencije" ChatGPT ne citira stranicu agencije nego tuđe liste, direktorije (Clutch, trebam.hr) i stranice konferencija. Za lokalne usluge to su lokalni portali i stranice gradova.

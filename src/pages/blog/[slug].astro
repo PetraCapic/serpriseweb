@@ -8,6 +8,7 @@ import AiQuiz from '../../components/blog/AiQuiz.astro';
 import ClusterMap from '../../components/blog/ClusterMap.astro';
 import AnswerFlow from '../../components/blog/AnswerFlow.astro';
 import GlossaryTips from '../../components/blog/GlossaryTips.astro';
+import Ga4AiKanal from '../../components/Ga4AiKanal.astro';
 import { getPosts, formatDate, readingTime } from '../../lib/blog';
 import { site, team } from '../../lib/site';
 
@@ -27,6 +28,8 @@ const person = team.find((m) => m.name === author);
 const has = (name: string) => Boolean(post.body?.includes(`data-embed="${name}"`));
 const hasLeaderboard = has('leaderboard');
 const hasTerms = Boolean(post.body?.includes('data-term="'));
+const hasGa4 = Boolean(post.body?.includes('data-embed="ga4-'));
+const { howto } = post.data;
 
 const schema = [
   {
@@ -57,16 +60,6 @@ const schema = [
     }),
     ...(sources && { citation: sources.map((s) => ({ '@type': 'CreativeWork', name: s.name, url: s.url })) }),
   },
-  ...(faq
-    ? [
-        {
-          '@context': 'https://schema.org',
-          '@type': 'FAQPage',
-          '@id': `${url}#faq`,
-          mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
-        },
-      ]
-    : []),
   {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
@@ -76,6 +69,22 @@ const schema = [
       { '@type': 'ListItem', position: 3, name: title, item: url },
     ],
   },
+  ...(faq?.length
+    ? [{
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+      }]
+    : []),
+  ...(howto
+    ? [{
+        '@context': 'https://schema.org',
+        '@type': 'HowTo',
+        name: howto.name,
+        inLanguage: 'hr',
+        step: howto.steps.map((text, i) => ({ '@type': 'HowToStep', position: i + 1, text, url: `${url}#kanal-u-7-koraka` })),
+      }]
+    : []),
 ];
 ---
 
@@ -95,7 +104,8 @@ const schema = [
       {has('cluster-map') && <ClusterMap />}
       {has('answer-flow') && <AnswerFlow />}
       {hasTerms && <GlossaryTips />}
-      {faq && (
+      {/* Vidljiv FAQ iz frontmattera, osim ako ga članak već ima u tekstu */}
+      {faq && !post.body?.includes('## Česta pitanja') && (
         <section class="article__faq" id="cesta-pitanja">
           <h2>Česta pitanja</h2>
           {faq.map((f) => (
@@ -114,6 +124,7 @@ const schema = [
           </ol>
         </section>
       )}
+      {hasGa4 && <Ga4AiKanal />}
     </div>
   </article>
 

@@ -33,7 +33,15 @@ const blog = defineCollection({
     // Izvori na dnu članka (vidljiv popis + schema "citation").
     sources: z.array(z.object({ name: z.string(), url: z.string().url() })).optional(),
     // Koraci za HowTo schemu (isti koraci moraju biti i vidljivi u članku).
-    howto: z.object({ name: z.string(), steps: z.array(z.string()) }).optional(),
+    howto: z
+      .object({
+        name: z.string(),
+        steps: z.array(z.string()),
+        // Sidro vidljivog postupka u članku (HowToStep url) i trajanje u ISO 8601 (npr. PT45M).
+        anchor: z.string().optional(),
+        totalTime: z.string().optional(),
+      })
+      .optional(),
   }),
 });
 

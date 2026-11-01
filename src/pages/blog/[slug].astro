@@ -10,6 +10,7 @@ import ClusterMap from '../../components/blog/ClusterMap.astro';
 import AnswerFlow from '../../components/blog/AnswerFlow.astro';
 import GlossaryTips from '../../components/blog/GlossaryTips.astro';
 import Ga4AiKanal from '../../components/Ga4AiKanal.astro';
+import AiProvjera from '../../components/AiProvjera.astro';
 import { getPosts, formatDate, readingTime } from '../../lib/blog';
 import { site, team } from '../../lib/site';
 
@@ -114,7 +115,8 @@ const schema = [
         '@type': 'HowTo',
         name: howto.name,
         inLanguage: 'hr',
-        step: howto.steps.map((text, i) => ({ '@type': 'HowToStep', position: i + 1, text, url: `${url}#kanal-u-7-koraka` })),
+        ...(howto.totalTime && { totalTime: howto.totalTime }),
+        step: howto.steps.map((text, i) => ({ '@type': 'HowToStep', position: i + 1, text, url: `${url}#${howto.anchor ?? 'kanal-u-7-koraka'}` })),
       }]
     : []),
 ];
@@ -137,6 +139,7 @@ const schema = [
       {has('cluster-map') && <ClusterMap />}
       {has('answer-flow') && <AnswerFlow />}
       {hasTerms && <GlossaryTips />}
+      {has('ai-generator') && <AiProvjera />}
       {/* Vidljiv FAQ iz frontmattera, osim ako ga članak već ima u tekstu */}
       {faq && !post.body?.includes('## Česta pitanja') && (
         <section class="article__faq" id="cesta-pitanja">

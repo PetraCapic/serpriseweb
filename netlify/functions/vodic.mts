@@ -39,7 +39,7 @@ export default async (req: Request) => {
 
 hvala što ste preuzeli vodič "Kako povećati svoju LLM vidljivost u Hrvatskoj".
 
-Vodič (PDF, 28 stranica) preuzmite ovdje:
+Vodič (PDF, 33 stranice) preuzmite ovdje:
 ${link}
 
 Ako želite da za vaša pitanja napravimo Korake 2 i 3 iz vodiča (tko je citiran umjesto vas i gdje ste vi), samo odgovorite na ovaj e-mail.

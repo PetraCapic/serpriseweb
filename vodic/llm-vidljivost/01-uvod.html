@@ -2,105 +2,119 @@
 <section class="page newpage">
  <div class="ihead"><span>LLM vidljivost u Hrvatskoj</span><b>Sadržaj</b></div>
  <h2>Što je u vodiču</h2>
- <p class="lead">Devet koraka redom kojim se kampanja stvarno postavlja. Svaki korak ima upute, cijenu i popis "Gotovo kad" za kvačice.</p>
+ <p class="lead">Devet koraka redom kojim se kampanja postavlja. Svaki korak ima upute, okvirni trošak i popis "Gotovo kad". Verzija 1.1, studeni 2026.; javni izvori provjereni 1.11.2026.</p>
  <ul class="toc">
-  <li><span>00</span><span>Uvod: što je LLM vidljivost i gdje je Hrvatska danas</span></li>
-  <li><span>01</span><span>Odaberite pitanja i ključne riječi</span></li>
-  <li><span>02</span><span>Napravite polazno mjerenje</span></li>
-  <li><span>03</span><span>Reverse engineering: što su konkurenti napravili</span></li>
-  <li><span>04</span><span>Pripremite vlastiti web</span></li>
-  <li><span>05</span><span>Besplatni poslovni imenici i profili</span></li>
-  <li><span>06</span><span>Liste "najboljih" i strukovni katalozi</span></li>
-  <li><span>07</span><span>Objave na hrvatskim portalima i digitalni PR</span></li>
-  <li><span>08</span><span>Postavite praćenje</span></li>
-  <li><span>09</span><span>Mjerite rezultate i čitajte podatke</span></li>
-  <li><span>+</span><span>Plan za 90 dana i izvori</span></li>
+  <li><a href="#uvod"><span>00</span><span>Uvod: što je LLM vidljivost i što znamo o Hrvatskoj</span></a></li>
+  <li><a href="#k1"><span>01</span><span>Odaberite pitanja i ključne riječi</span></a></li>
+  <li><a href="#k2"><span>02</span><span>Napravite polazno mjerenje</span></a></li>
+  <li><a href="#k3"><span>03</span><span>Reverse engineering: gdje su konkurenti, a vi niste</span></a></li>
+  <li><a href="#k4"><span>04</span><span>Pripremite vlastiti web</span></a></li>
+  <li><a href="#k5"><span>05</span><span>Poslovni imenici i profili</span></a></li>
+  <li><a href="#k6"><span>06</span><span>Liste "najboljih" i strukovni katalozi</span></a></li>
+  <li><a href="#k7"><span>07</span><span>Objave na hrvatskim portalima i digitalni PR</span></a></li>
+  <li><a href="#k8"><span>08</span><span>Postavite praćenje</span></a></li>
+  <li><a href="#k9"><span>09</span><span>Mjerite rezultate i čitajte podatke</span></a></li>
+  <li><a href="#plan"><span>+</span><span>Plan za 90 dana, Kako smo mjerili, Izvori</span></a></li>
  </ul>
- <h3>Kako čitati okvire</h3>
+ <h3>Tri vrste tvrdnji</h3>
+ <p><span class="label l-izvor">Izvor</span> Činjenica iz službene dokumentacije ili objavljenog istraživanja. Uz nju je broj izvora u uglatim zagradama, a popis s linkovima je na kraju vodiča.</p>
+ <p><span class="label l-test">Naš test</span> Nalaz iz našeg mjerenja na konkretnom uzorku i datumu. Ne vrijedi kao opće pravilo. Metoda je u prilogu "Kako smo mjerili".</p>
+ <p><span class="label l-praksa">Praksa</span> Naša preporuka iz rada. To je savjet, a ne dokazani faktor ili uvjet za AI citiranje.</p>
  <div class="legend">
-  <div class="box tip"><b>Tips and tricks</b><p>Kratki trik koji štedi vrijeme ili sprječava čestu grešku.</p></div>
-  <div class="box mi"><b>Kako mi to radimo</b><p>Naš stvarni postupak i alati, za SERPRise i za klijente.</p></div>
-  <div class="box data"><b>Kako čitati podatke</b><p>Što je dobar, loš i normalan rezultat, i što tada napraviti.</p></div>
-  <div class="box svc"><b>Naša usluga</b><p>Mjesta gdje vam možemo uštedjeti vrijeme. Sve ostalo možete sami.</p></div>
+  <div class="box tip"><b>Tips and tricks</b><p>Kratak savjet koji štedi vrijeme ili sprječava čestu grešku.</p></div>
+  <div class="box mi"><b>Kako mi to radimo</b><p>Naš postupak, za SERPRise i za klijente.</p></div>
+  <div class="box data"><b>Kako čitati podatke</b><p>Mogući razlozi za rezultat i kako ih provjeriti.</p></div>
+  <div class="box svc"><b>Naša usluga</b><p>Gdje vam možemo uštedjeti vrijeme. Sve ostalo možete sami.</p></div>
  </div>
- <p class="small muted" style="margin-top:6mm">Autor: Jure Kljajić, osnivač agencije SERPRise. Sve brojke za Hrvatsku su iz naših mjerenja od listopada i studenog 2026. i uz svaku piše kad je izmjerena. Cijene alata su sa službenih cjenika na dan 1.11.2026. i mogu se promijeniti.</p>
 </section>
 
 <!-- UVOD -->
-<section class="page newpage">
+<section class="page newpage" id="uvod">
  <div class="ihead"><span>LLM vidljivost u Hrvatskoj</span><b>Uvod</b></div>
  <div class="stepno">00</div>
- <h2>Što je LLM vidljivost i gdje je Hrvatska danas</h2>
- <p class="lead">LLM vidljivost znači da vas AI alati spominju i preporučuju kad kupac pita za ono što prodajete. Isto se zove GEO, AEO, AI SEO ili LLM optimizacija. Naziv nije važan, cilj je isti.</p>
+ <h2>Što je LLM vidljivost i što znamo o Hrvatskoj</h2>
+ <p class="lead">LLM vidljivost znači da vas AI alati spominju, preporučuju ili citiraju kad kupac pita za ono što prodajete. Isto se zove GEO, AEO, AI SEO ili LLM optimizacija.</p>
 
- <h3>Četiri mjesta na kojima vas kupac danas traži</h3>
+ <h3>Koliko ljudi u Hrvatskoj koristi generativni AI</h3>
+ <p><span class="label l-izvor">Izvor</span> Prema Eurostatu, u 2025. je 27,5% stanovnika Hrvatske u dobi od 16 do 74 godine koristilo alate generativne umjetne inteligencije u tri mjeseca prije istraživanja. Prosjek EU bio je 32,7%.[@eurostat] To pokazuje doseg AI alata, ali ne i koliko kupaca preko njih bira tvrtku ili uslugu.</p>
+
+ <h3>Gdje vas kupac može sresti</h3>
  <table>
-  <tr><th>Gdje</th><th>Kako izgleda</th><th>Odakle uzima izvore</th></tr>
-  <tr><td><b>Google AI pregled</b> (AI Overview)</td><td>Sažetak iznad običnih rezultata, s linkovima na izvore</td><td>Iz Googleova indeksa, iste stranice koje Google inače rangira</td></tr>
-  <tr><td><b>Google AI način</b> (AI Mode)</td><td>Razgovor unutar Googlea, kao ChatGPT</td><td>Također iz Googleova indeksa, uz više pretraga u pozadini</td></tr>
-  <tr><td><b>ChatGPT</b></td><td>Odgovor s izvorima kad je uključena pretraga</td><td>Iz vlastitih pretraga, Binga i OpenAI-jeva indeksa</td></tr>
-  <tr><td><b>Gemini, Perplexity, Copilot</b></td><td>Slično ChatGPT-u</td><td>Gemini iz Googlea, Copilot iz Binga</td></tr>
+  <tr><th>Gdje</th><th>Kako izgleda</th><th>Što znamo o izvorima</th></tr>
+  <tr><td><b>Google AI pregled</b> (AI Overview)</td><td>Sažetak iznad običnih rezultata, s linkovima</td><td>Stranica mora biti indeksirana i podobna za prikaz s isječkom[@g-ai-features]</td></tr>
+  <tr><td><b>Google AI način</b> (AI Mode)</td><td>Razgovor unutar Googlea</td><td>Isti uvjeti kao za AI pregled[@g-ai-features]</td></tr>
+  <tr><td><b>ChatGPT</b> s pretragom</td><td>Odgovor s izvorima</td><td>Za prikaz u pretrazi OpenAI koristi crawler OAI-SearchBot[@openai-bots]</td></tr>
+  <tr><td><b>Microsoft Copilot</b></td><td>Odgovor s izvorima</td><td>Citate prikazuje Bing Webmaster Tools[@bing-ai]</td></tr>
  </table>
- <p>Google kaže da za AI preglede i AI način "nema dodatnih zahtjeva". Stranica mora biti indeksirana i smjeti se prikazati u Googleu s isječkom teksta. Oba načina rade takozvani "query fan-out": jedno pitanje pretvore u više pretraga po podtemama i spoje rezultate. Zato je dobar SEO i dalje temelj LLM vidljivosti.</p>
+ <p><span class="label l-izvor">Izvor</span> Google navodi da za AI preglede i AI način nema dodatnih zahtjeva ni posebne optimizacije, a vrijede iste temeljne SEO prakse. Ispunjeni uvjeti omogućuju da se stranica razmatra, ali ne jamče citiranje. Oba načina <i>mogu</i> koristiti "query fan-out": više povezanih pretraga po podtemama.[@g-ai-features] Google također navodi da nisu potrebni posebni AI tekstovi, datoteke ni schema.[@g-ai-guide]</p>
 
- <h3>Što smo izmjerili u Hrvatskoj</h3>
- <p>U listopadu 2026. postavili smo ChatGPT-u 35 hrvatskih pitanja o SEO-u i AI vidljivosti, ukupno 45 odgovora. Tri nalaza oblikuju cijeli ovaj vodič:</p>
+ <h3>Što smo vidjeli u svom testu</h3>
+ <p><span class="label l-test">Naš test</span> U listopadu 2026. postavili smo ChatGPT-u preko API-ja 35 hrvatskih pitanja o SEO-u i AI vidljivosti, ukupno 45 odgovora.[@s-test] Na tom uzorku:</p>
  <ol>
-  <li><b>Opća pitanja ChatGPT pretražuje na engleskom.</b> "Što je GEO optimizacija" postaje "Generative Engine Optimization meaning". Odgovor citira Semrush i Google, ne hrvatske blogove.</li>
-  <li><b>Pitanja s "Hrvatska", gradom ili cijenom pretražuje na hrvatskom</b> i citira hrvatske stranice. Upravo ta pitanja postavlja netko tko želi kupiti.</li>
-  <li><b>Autoritet domene gotovo ne odlučuje.</b> Stranice s Domain Ratingom od 0 do 6 citirane su u 14 od 45 odgovora. Citirane su uslužne stranice, cjenici, liste agencija i direktoriji, a ne veliki blog članci.</li>
+  <li>Za opća pitanja bez lokalnog dijela ChatGPT je pretraživao na engleskom i citirao strane izvore.</li>
+  <li>Za pitanja s "Hrvatska", gradom ili cijenom pretraživao je na hrvatskom i citirao hrvatske stranice.</li>
+  <li>Stranice s Ahrefsovim Domain Ratingom od 0 do 6 citirane su u 14 od 45 odgovora. Dakle, nizak DR nije spriječio citiranje. To ne znači da autoritet nije važan: DR je Ahrefsova metrika, a ne potvrđeni signal tražilica.[@ahrefs-dr]</li>
+  <li>Citirane su uglavnom uslužne stranice, cjenici, liste i direktoriji.</li>
  </ol>
- <div class="box data"><b>Kako čitati podatke</b><p>Testirali smo preko OpenAI API-ja s uključenom pretragom i lokacijom Zagreb. To nije 100% isto kao ChatGPT u pregledniku, pa brojke pokazuju smjer, a ne točnu sliku. Isti test ponovili smo 1. studenog i na vrhu su opet bile većinom iste domene.</p></div>
+ <div class="box data"><b>Kako čitati podatke</b><p>Ovo su opažanja jednog uzorka, ne pravila o tome na kojem jeziku AI traži izvore. API nije isto što i ChatGPT u pregledniku, a pitanja nisu bila jednako ponovljena (25 jednom, 10 dvaput). Metoda i ograničenja su u prilogu "Kako smo mjerili".</p></div>
 
- <h3>Što to znači za vas</h3>
- <p>Za hrvatsku tvrtku LLM vidljivost se gradi na tri mjesta:</p>
+ <h3>Prikaz, citat i klik nisu isto</h3>
+ <p><span class="label l-izvor">Izvor</span> Pew Research Center analizirao je pretraživanje 900 odraslih Amerikanaca u ožujku 2025. (68.879 Google pretraga). Kad se pojavio AI sažetak, korisnici su kliknuli običan rezultat u 8% posjeta, a bez sažetka u 15%. Link unutar sažetka kliknut je u 1% posjeta.[@pew] Uzorak je iz SAD-a i nije hrvatski CTR, ali pokazuje zašto u Koraku 9 odvojeno mjerimo prikaz, citat i posjet.</p>
+
+ <h3>Gdje se gradi vidljivost</h3>
  <ul>
-  <li><b>Vaš web</b> mora imati stranicu koja izravno odgovara na kupčevo pitanje (Korak 4).</li>
-  <li><b>Imenici i liste</b> moraju znati da postojite. To možete sami i besplatno (Koraci 5 i 6).</li>
-  <li><b>Treće strane</b>, prije svega hrvatski portali i mediji, moraju o vama pisati. Bez toga AI rijetko preporuča tvrtku na pitanje "tko je najbolji" (Korak 7).</li>
+  <li><b>Vaš web</b>: jasne stranice o uslugama, dostupne tražilicama (Korak 4).</li>
+  <li><b>Imenici i liste</b>: točni poslovni podaci na mjestima koja se pojavljuju u odgovorima (Koraci 5 i 6).</li>
+  <li><b>Treće strane</b>: članci i mediji koji spominju vaš brend (Korak 7).</li>
  </ul>
- <div class="box tip"><b>Tips and tricks</b><p>Krenite od Googlea. Google AI pregledi i AI način vuku iz istog indeksa kao obična pretraga. Ono što radite za Google pomaže i ChatGPT-u, ali obrnuto ne vrijedi uvijek.</p></div>
+ <p><span class="label l-izvor">Izvor</span> Ahrefs je na 75.000 brendova (svibanj 2025.) izmjerio Spearmanovu korelaciju od 0,664 između broja spomena brenda na webu i vidljivosti u Google AI pregledima, a 0,218 za broj backlinkova.[@ahrefs-75k] Korelacija ne dokazuje uzrok i ne odnosi se automatski na ChatGPT ili Hrvatsku, ali je razlog da pratite spomene, a ne samo linkove.</p>
 </section>
 
 <!-- KORAK 1 -->
-<section class="page">
+<section class="page" id="k1">
  <div class="ihead"><span>LLM vidljivost u Hrvatskoj</span><b>Korak 1 od 9</b></div>
  <div class="stepno">01</div>
  <h2>Odaberite pitanja i ključne riječi</h2>
- <p class="lead">Na Googleu ljudi upisuju ključne riječi. U ChatGPT-u pišu cijele rečenice. Za LLM kampanju trebate oboje: popis od 20 pitanja i za svako pitanje 1 do 2 ključne riječi.</p>
+ <p class="lead">Na Googleu ljudi često upisuju ključne riječi, a u ChatGPT-u pišu rečenice. Za kampanju trebate oboje: popis od oko 20 pitanja i uz svako 1 do 2 ključne riječi.</p>
  <div class="cost"><div><span>Trošak</span><strong>0 €</strong></div><div><span>Vrijeme</span><strong>1 do 2 sata</strong></div><div><span>Alati</span><strong>Google, Keyword Planner, ChatGPT</strong></div></div>
 
  <h3>Četiri vrste pitanja</h3>
  <table>
-  <tr><th>Vrsta</th><th>Primjer (stomatolog u Splitu)</th><th>Koliko ih uzeti</th></tr>
+  <tr><th>Vrsta</th><th>Primjer (stomatolog u Splitu)</th><th>Koliko</th></tr>
   <tr><td><b>Preporuka</b></td><td>Preporuči mi stomatologa u Splitu za djecu.</td><td>5 do 6</td></tr>
   <tr><td><b>Usporedba</b></td><td>Implantati ili most, što je bolje i gdje u Splitu?</td><td>4 do 5</td></tr>
   <tr><td><b>Cijena</b></td><td>Koliko košta implantat u Hrvatskoj 2026.?</td><td>4 do 5</td></tr>
   <tr><td><b>Problem</b></td><td>Boli me zub nakon plombe, kome se javiti u Splitu u subotu?</td><td>4 do 5</td></tr>
  </table>
- <p>Svako pitanje mora imati grad, "Hrvatska" ili cijenu. Kao što smo vidjeli u uvodu, tada AI pretražuje hrvatske izvore i tu se možete pojaviti.</p>
+ <p><span class="label l-praksa">Praksa</span> Za lokalne usluge dodajte grad, "Hrvatska" ili cijenu, jer tako pitaju kupci i jer smo u testu za takva pitanja vidjeli hrvatske izvore.[@s-test] Za druge modele poslovanja pitanja izgledaju drugačije:</p>
+ <table>
+  <tr><th>Poslovanje</th><th>Primjer pitanja</th><th>Naglasak</th></tr>
+  <tr><td>Lokalne usluge</td><td>Preporuči mi frizera u Zadru koji radi nedjeljom.</td><td>Lokacija, radno vrijeme, recenzije</td></tr>
+  <tr><td>B2B i agencije</td><td>Koja agencija u Hrvatskoj radi SEO za web shopove?</td><td>Specijalizacija, reference, studije slučaja</td></tr>
+  <tr><td>Web trgovina</td><td>Gdje kupiti trail tenisice s dostavom u Hrvatskoj?</td><td>Proizvod, cijena, dostupnost, dostava, povrat</td></tr>
+  <tr><td>SaaS i izvoz</td><td>Best invoicing software for Croatian companies</td><td>Jezik ciljnog tržišta, integracije, usporedbe</td></tr>
+ </table>
 
- <h3>Odakle uzeti pitanja, klik po klik</h3>
+ <h3>Odakle uzeti pitanja</h3>
  <ol class="klik">
-  <li><b>Vaš inbox i telefon.</b> Zapišite 10 pitanja koja kupci najčešće postavljaju prije kupnje. To su najbolja pitanja jer su stvarna.</li>
-  <li><b>Google "Ljudi također pitaju".</b> Upišite glavnu uslugu i grad u Google. Otvorite sva pitanja u okviru "Ljudi također pitaju" i prepišite ona koja ima smisla.</li>
-  <li><b>Google prijedlozi.</b> U tražilicu upišite uslugu i razmak, pa "koliko", "najbolji", "ili" i prepišite prijedloge.</li>
-  <li><b>ChatGPT.</b> Upišite: "Ja sam [usluga] u [grad]. Napiši 30 pitanja koja moji kupci postavljaju ChatGPT-u prije nego što odaberu tvrtku, na hrvatskom, kako ih pišu obični ljudi." Izbacite pitanja koja ne zvuče prirodno.</li>
-  <li><b>Konkurenti.</b> Pogledajte FAQ sekcije triju konkurenata. Pitanja na koja oni odgovaraju vjerojatno postavljaju i vaši kupci.</li>
+  <li><b>Vaš inbox i telefon.</b> Zapišite 10 pitanja koja kupci postavljaju prije kupnje.</li>
+  <li><b>Google "Ljudi također pitaju".</b> Upišite uslugu i grad i prepišite relevantna pitanja.</li>
+  <li><b>Google prijedlozi.</b> Upišite uslugu i razmak, pa "koliko", "najbolji", "ili".</li>
+  <li><b>ChatGPT.</b> "Ja sam [usluga] u [grad]. Napiši 30 pitanja koja moji kupci postavljaju prije nego odaberu tvrtku, na hrvatskom, kako ih pišu obični ljudi." Izbacite neprirodna.</li>
+  <li><b>Konkurenti.</b> Pogledajte FAQ sekcije triju konkurenata.</li>
  </ol>
 
- <h3>Ključne riječi i volumen u Hrvatskoj</h3>
+ <h3>Ključne riječi i volumen</h3>
  <ol class="klik">
-  <li>Otvorite <b>Google Ads, Alati, Planer ključnih riječi</b> (besplatno uz Google Ads račun, ne morate pokrenuti oglas).</li>
-  <li>Odaberite "Pregled volumena pretraživanja i prognoza", zalijepite ključne riječi, lokacija <b>Hrvatska</b>, jezik <b>hrvatski</b>.</li>
-  <li>Bez aktivne kampanje Planer prikazuje raspone (npr. 10 do 100). To je dovoljno za odabir.</li>
-  <li>Uz svako pitanje upišite ključnu riječ s najvećim volumenom.</li>
+  <li><b>Google Ads, Alati, Planer ključnih riječi</b> (besplatno uz Google Ads račun).</li>
+  <li>"Pregled volumena pretraživanja i prognoza", lokacija <b>Hrvatska</b>, jezik <b>hrvatski</b>.</li>
+  <li>Bez aktivne kampanje Planer prikazuje raspone. Za odabir je to dovoljno.</li>
  </ol>
- <div class="box data"><b>Kako čitati podatke</b><p>Ne odbacujte pojmove s malim volumenom. Za uslužne pojmove u Hrvatskoj volumeni su mali: prema Ahrefsu (28.10.2026.) "geo optimizacija" ima oko 30 pretraga mjesečno, a "llm optimizacija" oko 10. Ali tko to upiše, želi kupiti. Informativni pojmovi imaju puno više pretraga ("ai način" oko 12.000 mjesečno), ali rijetko donose kupca.</p></div>
+ <div class="box data"><b>Kako čitati podatke</b><p><span class="label l-test">Naš test</span> Prema Ahrefsu (Hrvatska, 28.10.2026.) "geo optimizacija" ima oko 30 pretraga mjesečno, "llm optimizacija" oko 10, a "ai način" oko 12.000.[@s-ahrefs-vol] Mali volumen ne znači da pojam ne vrijedi, ali ne znači ni da je svaki tko ga upiše kupac: namjeru procijenite iz rezultata na Googleu. Volumen na Googleu nije volumen pitanja u ChatGPT-u.</p></div>
 
  <h3>Brend pitanja i kategorijska pitanja</h3>
- <p>"Što je [vaša tvrtka]?" je brend pitanje. Na njega AI uglavnom odgovara s vašeg weba. "Najbolji stomatolog u Splitu" je kategorijsko pitanje. Na njega AI odgovara iz lista, imenika, recenzija i članaka. U popisu od 20 pitanja neka bude najviše 3 brend pitanja. Ostalo su kategorijska, jer tamo dolaze novi kupci.</p>
- <div class="box tip"><b>Tips and tricks</b><ul><li>Pitajte nove kupce "kako ste nas našli" i dodajte polje "Ako ste pitali ChatGPT, što ste upisali?". Tvrtke koje rastu preko AI-ja tako dobivaju točna pitanja svojih kupaca.</li><li>Ne pišite pitanja kao ključne riječi. "SEO agencija Zagreb" nije pitanje. "Preporuči mi SEO agenciju u Zagrebu koja radi i za web shopove" jest.</li></ul></div>
- <div class="box mi"><b>Kako mi to radimo</b><p>Za SERPRise pratimo 23 ključne riječi na Googleu i 16 kupovnih pitanja u ChatGPT-u. Pitanja smo složili iz upita koje dobivamo mailom i iz Planera, a svako pitanje ima grad ili "Hrvatska". Popis je u admin sučelju uz svaki pojam i ne mijenjamo ga između mjerenja, da usporedba ima smisla.</p></div>
- <div class="done"><b>Gotovo kad</b><ul><li>Imate 20 pitanja u tablici, podijeljenih u 4 vrste</li><li>Svako pitanje ima grad, "Hrvatska" ili cijenu</li><li>Uz svako pitanje je ključna riječ i okvirni volumen</li></ul></div>
+ <p><span class="label l-praksa">Praksa</span> "Što je [vaša tvrtka]?" je brend pitanje. "Najbolji stomatolog u Splitu" je kategorijsko. Za kategorijska pitanja odgovor se češće oslanja na tuđe izvore, pa neka u popisu od 20 pitanja većina bude kategorijska.</p>
+ <div class="box tip"><b>Tips and tricks</b><ul><li>U kontakt formu dodajte "Kako ste nas pronašli?" i polje "Ako ste pitali AI alat, što ste upisali?". Tako dobivate stvarna pitanja kupaca.</li><li>"SEO agencija Zagreb" je ključna riječ. "Preporuči mi SEO agenciju u Zagrebu koja radi za web shopove" je pitanje.</li></ul></div>
+ <div class="box mi"><b>Kako mi to radimo</b><p>Za SERPRise pratimo 23 ključne riječi na Googleu i 16 kupovnih pitanja u ChatGPT-u.[@s-tracking] Popis ne mijenjamo između mjerenja, da usporedba ima smisla.</p></div>
+ <div class="done"><b>Gotovo kad</b><ul><li>Imate oko 20 pitanja u tablici, podijeljenih u 4 vrste</li><li>Pitanja odgovaraju vašem modelu poslovanja</li><li>Uz svako pitanje je ključna riječ i okvirni volumen</li></ul></div>
 </section>

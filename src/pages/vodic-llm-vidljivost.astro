@@ -5,19 +5,19 @@ import { site } from '../lib/site';
 const koraci = [
   ['01', 'Odaberite pitanja i ključne riječi', '20 pitanja u 4 vrste, kako ih pišu hrvatski kupci, i volumen u Hrvatskoj.'],
   ['02', 'Napravite polazno mjerenje', 'ChatGPT, Google AI pregled i AI način, s tablicom za bilježenje.'],
-  ['03', 'Reverse engineering konkurenata', 'Ručno, kroz Claude ili ChatGPT i u Ahrefsu: zašto AI citira njih, a ne vas.'],
-  ['04', 'Pripremite vlastiti web', '7 elemenata uslužne stranice, schema i tehnička provjera za AI crawlere.'],
-  ['05', 'Besplatni imenici i profili', 'Koje imenike upisati, što upisati i kako skupiti recenzije.'],
-  ['06', 'Liste "najboljih"', 'Kako doći na liste koje ChatGPT citira, s predloškom e-maila.'],
-  ['07', 'Portali i digitalni PR', 'Kako odabrati portal, što mora pisati u članku i kako izgleda PR kampanja.'],
+  ['03', 'Reverse engineering konkurenata', 'Ručno, kroz Claude ili ChatGPT i u Ahrefsu: gdje su konkurenti, a vi niste.'],
+  ['04', 'Pripremite vlastiti web', 'Uslužne stranice, schema i tehnička provjera: koje AI botove pustiti, a koje ne.'],
+  ['05', 'Poslovni imenici i profili', 'Koje imenike upisati, što upisati i kako tražiti recenzije u skladu s pravilima.'],
+  ['06', 'Liste "najboljih"', 'Kako doći na liste koje se pojavljuju u AI odgovorima, s predloškom e-maila.'],
+  ['07', 'Portali i digitalni PR', 'Kako odabrati portal, što napisati u članku i kako izgleda PR kampanja.'],
   ['08', 'Postavite praćenje', 'GA4 kanal za AI posjete, Search Console, Bing Webmaster Tools.'],
-  ['09', 'Mjerite i čitajte podatke', 'Pet brojki mjesečno i što napraviti kad se ne mijenjaju.'],
+  ['09', 'Mjerite i čitajte podatke', 'Pet vrsta rezultata, mogući razlozi i kako ih provjeriti.'],
 ];
 ---
 
 <Base
   title="Besplatni vodič: kako povećati LLM vidljivost u Hrvatskoj"
-  description="Besplatni PDF vodič od 28 stranica: kako postaviti kampanju za ChatGPT, Google AI preglede i Gemini u 9 koraka. Imenici, portali, digitalni PR, praćenje i mjerenje."
+  description="Besplatni PDF vodič od 33 stranice: kako postaviti kampanju za ChatGPT, Google AI preglede i Gemini u 9 koraka. Imenici, portali, digitalni PR, praćenje i mjerenje."
   schema={{
     '@context': 'https://schema.org',
     '@type': 'DigitalDocument',
@@ -27,23 +27,25 @@ const koraci = [
     author: { '@type': 'Person', name: 'Jure Kljajić', url: `${site.url}/autor/jure-kljajic/` },
     publisher: { '@id': `${site.url}/#organization` },
     datePublished: '2026-11-01',
+    dateModified: '2026-11-01',
+    version: '1.1',
     isAccessibleForFree: true,
   }}
 >
   <section class="vhero">
     <div class="container vhero__grid">
       <div>
-        <span class="eyebrow">Besplatni vodič · PDF, 28 stranica</span>
+        <span class="eyebrow">Besplatni vodič · PDF, 33 stranice</span>
         <h1>Kako povećati svoju <span class="grad-text">LLM vidljivost</span> u Hrvatskoj</h1>
         <p class="lead">
           Cijela kampanja za ChatGPT, Google AI preglede i Gemini u 9 koraka, klik po klik. Što možete sami i besplatno,
           kako analizirati konkurente, kako postaviti praćenje i kako čitati rezultate.
         </p>
         <ul class="checklist">
-          <li>Brojke iz naših testova na 45 ChatGPT odgovora za hrvatska pitanja</li>
+          <li>Svaka tvrdnja s izvorom: 35 izvora s linkovima, uz metodu našeg testa na 45 ChatGPT odgovora</li>
           <li>Popis besplatnih imenika i predložak e-maila za liste "najboljih"</li>
           <li>Gotov upit za Claude ili ChatGPT koji rastavlja stranice konkurenata</li>
-          <li>Regex za GA4 i plan za 90 dana na jednoj stranici</li>
+          <li>Regex za GA4, radni predložak za praćenje i plan za 90 dana</li>
         </ul>
       </div>
 

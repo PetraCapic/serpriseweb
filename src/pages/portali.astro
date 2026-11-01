@@ -72,7 +72,7 @@ const countryNames: Record<string, string> = { ba: 'BiH', rs: 'Srbija', si: 'Slo
       </div>
 
       <p class="meta muted">
-        Prikazano <strong id="count">{portals.length}</strong> od {portals.length} portala · Podaci: Ahrefs, {updated} Promet je procjena organskog prometa iz Googlea.
+        Prikazano <strong id="count">{Math.min(25, portals.length)}</strong> od <span id="total">{portals.length}</span> portala · Podaci: Ahrefs, {updated} Promet je procjena organskog prometa iz Googlea.
       </p>
 
       <div class="table-wrap">
@@ -88,8 +88,8 @@ const countryNames: Record<string, string> = { ba: 'BiH', rs: 'Srbija', si: 'Slo
             </tr>
           </thead>
           <tbody id="rows">
-            {portals.map((p) => (
-              <tr data-d={p.d} data-c={p.c} data-dr={p.dr} data-t={p.t} data-kw={p.kw} data-rd={p.rd}>
+            {portals.map((p, i) => (
+              <tr data-d={p.d} data-c={p.c} data-dr={p.dr} data-t={p.t} data-kw={p.kw} data-rd={p.rd} hidden={i >= 25}>
                 <td class="col-check">
                   <input type="checkbox" value={p.d} aria-label={`Odaberi ${p.d}`} />
                 </td>
@@ -110,6 +110,9 @@ const countryNames: Record<string, string> = { ba: 'BiH', rs: 'Srbija', si: 'Slo
           </tbody>
         </table>
         <p id="empty" class="empty muted" hidden>Nijedan portal ne odgovara filtrima.</p>
+      </div>
+      <div class="more" id="more" hidden>
+        <button type="button" class="btn btn--ghost" id="more-btn">Učitaj još portala</button>
       </div>
     </div>
   </section>
@@ -182,6 +185,10 @@ const countryNames: Record<string, string> = { ba: 'BiH', rs: 'Srbija', si: 'Slo
   const fmt = new Intl.NumberFormat('hr-HR');
   const plural = (n: number) => (n % 10 === 1 && n % 100 !== 11 ? 'portal' : 'portala');
 
+  // Prikazujemo po 25 portala da se brzo dođe do obrasca za upit.
+  const PAGE = 25;
+  let limit = PAGE;
+
   function applyFilters() {
     const text = q.value.trim().toLowerCase();
     const minDr = Number(dr.value);
@@ -197,11 +204,13 @@ const countryNames: Record<string, string> = { ba: 'BiH', rs: 'Srbija', si: 'Slo
         (!cat.value || r.dataset.c === cat.value) &&
         Number(r.dataset.dr) >= minDr &&
         Number(r.dataset.t) >= minT;
-      r.hidden = !ok;
       if (ok) shown++;
+      r.hidden = !ok || shown > limit;
       tbody.appendChild(r);
     }
-    $('count').textContent = String(shown);
+    $('count').textContent = String(Math.min(shown, limit));
+    $('total').textContent = String(shown);
+    $('more').hidden = shown <= limit;
     $('empty').hidden = shown > 0;
   }
 
@@ -252,7 +261,16 @@ const countryNames: Record<string, string> = { ba: 'BiH', rs: 'Srbija', si: 'Slo
     const r = t.closest('tr');
     if (r) toggle(r.dataset.d!, !selected.has(r.dataset.d!));
   });
-  [q, cat, dr, tr, sort].forEach((el) => el.addEventListener('input', applyFilters));
+  [q, cat, dr, tr, sort].forEach((el) =>
+    el.addEventListener('input', () => {
+      limit = PAGE;
+      applyFilters();
+    })
+  );
+  $('more-btn').addEventListener('click', () => {
+    limit += PAGE;
+    applyFilters();
+  });
   $('clear').addEventListener('click', () => {
     selected.clear();
     renderSelection();
@@ -395,6 +413,7 @@ const countryNames: Record<string, string> = { ba: 'BiH', rs: 'Srbija', si: 'Slo
   .basket { position: fixed; left: 0; right: 0; bottom: 0; z-index: 40; background: var(--navy); color: #fff; box-shadow: 0 -8px 24px rgba(16, 43, 67, 0.25); }
   .basket__inner { display: flex; align-items: center; gap: 16px; padding-block: 12px; }
   .basket__inner > span { margin-right: auto; }
+  .more { display: flex; justify-content: center; margin-top: 20px; }
   .basket__clear { background: transparent; border: 0; color: rgba(255, 255, 255, 0.75); font: inherit; cursor: pointer; text-decoration: underline; }
   :global(body.has-basket) { padding-bottom: 72px; }
 

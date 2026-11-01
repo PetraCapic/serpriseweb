@@ -63,6 +63,27 @@ Tablica `leads` i pravilo da web smije samo upisati upit dolaze iz migracije `dr
 
 Podaci su u `src/data/portali.json` (DR, organski promet, ključne riječi i referring domains iz Ahrefsa; kategorije su ručno dodijeljene u polju `c`). Cijene i kontakti portala se namjerno ne objavljuju. Upit s odabranim portalima sprema se u `leads` (usluga `link_building_pr`, `source_page` = `/portali/`), s popisom portala u poruci.
 
-## Blog
+## Blog (/blog/)
 
-Članci su Markdown datoteke u `src/content/blog/` (naziv datoteke = URL, npr. `google-ai-nacin.md` → `/blog/google-ai-nacin/`). Polja u zaglavlju i primjer su u `src/content/blog/_predlozak.md`; datoteke koje počinju s `_` se ne objavljuju, kao ni one s `draft: true`. Slike idu u `public/blog/`. Svaki commit na `main` Netlify automatski objavi. Poveznica „Blog“ u izborniku pojavljuje se tek kad postoji prvi objavljeni članak.
+Svaki članak je jedna Markdown datoteka u `src/content/blog/`. Ime datoteke je URL: `src/content/blog/ga4-ai-kanal.md` postaje `/blog/ga4-ai-kanal/`.
+
+```markdown
+---
+title: Naslov članka
+description: Jedna rečenica do 170 znakova (meta description i opis na popisu članaka).
+date: 2026-10-31
+# neobavezno:
+updated: 2026-11-05
+author: Jure Kljajić        # zadano; mora odgovarati imenu iz `team` u src/lib/site.ts za LinkedIn u schemi
+image: /blog/ga4-ai-kanal/naslovna.png   # datoteka u public/, idealno 1200x630
+imageAlt: Opis slike
+draft: true                 # ne objavljuje se dok je true
+---
+
+Tekst članka u Markdownu. Slike članka stavi u public/blog/<ime-clanka>/.
+```
+
+- Članci s `draft: true` ili datumom u budućnosti se ne prikazuju.
+- Link "Blog" u izborniku i podnožju te `/blog/` u sitemapu pojavljuju se tek kad postoji barem jedan objavljen članak.
+- Svaki članak ima BlogPosting i BreadcrumbList schemu, `og:type` article i sliku za dijeljenje.
+- Objava: spajanje u `main` pokreće Netlify deploy.

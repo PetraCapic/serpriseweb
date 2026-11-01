@@ -1,0 +1,288 @@
+---
+import Base from '../../layouts/Base.astro';
+import Faq from '../../components/Faq.astro';
+import Cta from '../../components/Cta.astro';
+import Clients from '../../components/Clients.astro';
+import Markets from '../../components/en/Markets.astro';
+import EuEdge from '../../components/en/EuEdge.astro';
+import Niches from '../../components/en/Niches.astro';
+import { en, enClients } from '../../lib/en';
+
+const faq = [
+  {
+    q: 'Do you work white label?',
+    a: 'Yes, and it is a big part of what we do. We work behind SEO and link building agencies across Europe and the US. Your client never sees our name: reports are unbranded or carry your logo, and all communication goes through you.',
+  },
+  {
+    q: 'Which markets and languages do you cover?',
+    a: 'Our database has 15,000+ sites worldwide, with the strongest coverage in the UK, US, Germany and the rest of the EU, plus deep coverage of Croatia and the Balkans. Content is written in the language of the publisher, by native speakers.',
+  },
+  {
+    q: 'Are your links safe?',
+    a: 'We only use real publishers with real readers and organic traffic. No PBNs, link farms, hacked sites or automated tools. You approve every publisher before anything goes live.',
+  },
+  {
+    q: 'Do you accept grey niches like casino or crypto?',
+    a: 'Yes. We place links for iGaming, casino, betting and crypto on publishers that openly accept these topics, in line with local advertising rules.',
+  },
+  {
+    q: 'How do invoicing and VAT work?',
+    a: 'We are an EU company based in Croatia and invoice in EUR. EU businesses with a valid VAT ID receive an invoice under the reverse charge mechanism, so no Croatian VAT is added. UK and US clients are invoiced without VAT.',
+  },
+  {
+    q: 'Do I need to sign a long-term contract?',
+    a: 'No. You can order single placements, run monthly packages or book a one-off digital PR campaign. We keep partners with results, not contracts.',
+  },
+];
+const compare = [
+  ['No salary or payroll', 'Fixed monthly salary, even in quiet months.', 'Not on your payroll, you pay only for the work you order.'],
+  ['No taxes or contributions', 'Contributions, benefits, sick leave and holidays.', 'None. One invoice in EUR, reverse charge in the EU.'],
+  ['No hiring or training', 'Weeks of recruiting, then months before a new hire is productive.', 'Start this week. We already do this every day.'],
+  ['No one to manage', 'Someone has to brief, check and motivate.', 'You get results, not tasks to supervise.'],
+  ['A live list of every link', 'Spreadsheets you have to chase.', 'Every placement in a live list, updated as links go live.'],
+  ['Specialised and proven', 'One person juggling SEO, content and outreach.', 'A dedicated link building team with a track record.'],
+  ['15,000+ publishers', 'A contact list built from scratch.', 'Publishers across the UK, US, Germany and other EU markets.'],
+  ['Native language outreach', 'Usually one or two languages.', 'Native speakers for every market.'],
+  ['Scale up or down monthly', 'Hard to scale up, costly to scale down.', 'Change volume any month, no contracts.'],
+];
+const compareVisible = 5;
+---
+
+<Base
+  lang="en"
+  title="White-label link building & digital PR for agencies | SERPRise"
+  description="EU-based link building, digital PR and LLM visibility partner for agencies, marketing teams and in-house SEO teams. 15,000+ real publishers in the UK, US, Germany and other EU markets."
+  schema={{
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+  }}
+>
+  <section class="hero">
+    <div class="container hero__grid">
+      <div>
+        <span class="eyebrow">Link building · LLM visibility · Digital PR</span>
+        <h1>The link building team <span class="grad-text">behind your SEO results.</span></h1>
+        <p class="lead">
+          We help agencies, marketing teams and in-house SEO teams scale link building, digital PR and LLM visibility. Real publishers, 15,000+ sites
+          across the UK, US, Germany and other EU markets, delivered under your brand or ours.
+        </p>
+        <div class="btn-row">
+          <a href="/en/contact/" class="btn btn--primary">{en.cta}</a>
+          <a href="/en/white-label-link-building/" class="btn btn--ghost">White label for agencies</a>
+        </div>
+        <ul class="hero__facts">
+          <li><strong>15,000+</strong> publishers worldwide</li>
+          <li><strong>100%</strong> white label</li>
+          <li><strong>EU</strong> company, EUR invoicing</li>
+        </ul>
+      </div>
+
+      <div class="perks">
+        <div class="perks__head">
+          <span>Why outsource to us</span>
+          <span class="perks__col">In-house</span>
+          <span class="perks__col perks__col--us">SERPRise</span>
+        </div>
+        {compare.map(([label, inhouse, us], i) => (
+          <details class:list={['perk', { 'perk--extra': i >= compareVisible }]}>
+            <summary>
+              <span class="perk__label">{label}</span>
+              <i class="perk__no" aria-label="In-house: no">✕</i>
+              <i class="perk__yes" aria-label="SERPRise: yes">✓</i>
+            </summary>
+            <div class="perk__body">
+              <p><strong>In-house:</strong> {inhouse}</p>
+              <p><strong>SERPRise:</strong> {us}</p>
+            </div>
+          </details>
+        ))}
+        <button type="button" class="perks__more" aria-expanded="false">+ {compare.length - compareVisible} more benefits</button>
+        <p class="perks__note">Tap a row to compare.</p>
+      </div>
+    </div>
+  </section>
+
+  <Clients title="Brands we've worked with" items={enClients} moreLabel="Show more" />
+
+  <section class="section">
+    <div class="container">
+      <span class="eyebrow">Who we work with</span>
+      <h2>An extra link building team, when you need one</h2>
+      <div class="grid grid--3" style="margin-top:32px">
+        <div class="card">
+          <div class="icon">◈</div>
+          <h3>SEO & link building agencies</h3>
+          <p class="muted">Outsource placements and outreach under your brand. Scale delivery without hiring, keep your margins and your client relationship.</p>
+        </div>
+        <div class="card">
+          <div class="icon">◎</div>
+          <h3>Marketing & growth teams</h3>
+          <p class="muted">Get authority links and media mentions that support your content, product launches and expansion into new markets.</p>
+        </div>
+        <div class="card">
+          <div class="icon">⌂</div>
+          <h3>In-house SEO teams</h3>
+          <p class="muted">Your team owns the strategy, we handle the time-consuming part: prospecting, outreach, content and getting links live.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--alt" id="services">
+    <div class="container">
+      <span class="eyebrow">Services</span>
+      <h2>Links and mentions that move Google rankings and AI answers</h2>
+      <div class="grid grid--3" style="margin-top:32px">
+        <a href="/en/link-building/" class="card card--link service">
+          <div class="icon">⛓</div>
+          <h3>Link building & digital PR</h3>
+          <p class="muted">Editorial placements on real publishers and data-led PR campaigns that journalists actually want to cover.</p>
+          <ul class="checklist">
+            <li>Hand-picked publishers, approved by you</li>
+            <li>Native-language content</li>
+            <li>Digital PR for news-level links</li>
+          </ul>
+          <span class="service__more">Learn more →</span>
+        </a>
+        <a href="/en/white-label-link-building/" class="card card--link service">
+          <div class="icon">◧</div>
+          <h3>White-label link building packages</h3>
+          <p class="muted">Flexible packages for agencies: pay per placement, monthly link packages or full campaigns, all delivered under your name.</p>
+          <ul class="checklist">
+            <li>Agency rates</li>
+            <li>Unbranded or co-branded reports</li>
+            <li>No minimum commitment</li>
+          </ul>
+          <span class="service__more">See packages →</span>
+        </a>
+        <a href="/en/llm-visibility/" class="card card--link service">
+          <div class="icon">✦</div>
+          <h3>LLM visibility</h3>
+          <p class="muted">Get your brand, or your clients' brands, mentioned and recommended by ChatGPT, Gemini, Perplexity and Google AI Overviews.</p>
+          <ul class="checklist">
+            <li>AI visibility audit</li>
+            <li>Mentions on sources LLMs cite</li>
+            <li>Monthly AI share-of-voice tracking</li>
+          </ul>
+          <span class="service__more">Learn more →</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <Markets />
+
+  <EuEdge />
+
+  <Niches />
+
+  <section class="section section--alt">
+    <div class="container">
+      <span class="eyebrow">How it works</span>
+      <h2>From brief to live links in four steps</h2>
+      <div class="steps" style="margin-top:32px">
+        <div class="card">
+          <h3>Brief</h3>
+          <p class="muted">Send us the target site, market, anchor ideas and budget. Or ask for a free link gap audit first.</p>
+        </div>
+        <div class="card">
+          <h3>Publisher list</h3>
+          <p class="muted">We propose relevant publishers with metrics. You approve, swap or remove any of them.</p>
+        </div>
+        <div class="card">
+          <h3>Content & outreach</h3>
+          <p class="muted">Native speakers write the content, we handle editors and publishing deadlines.</p>
+        </div>
+        <div class="card">
+          <h3>Report</h3>
+          <p class="muted">Every live link with URL, metrics and anchor, in a report you can forward to your client as is.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container why">
+      <div>
+        <span class="eyebrow">Why SERPRise</span>
+        <h2>A specialist partner, not a link marketplace</h2>
+        <p class="lead">We are a small team that does one thing: links and mentions that hold up. You talk to the people doing the work, not a ticket system.</p>
+      </div>
+      <ul class="checklist why__list">
+        <li><strong>Real publishers only.</strong> Sites with editorial standards, real readers and organic traffic. No PBNs, no link farms.</li>
+        <li><strong>You approve everything.</strong> Every publisher and every article is yours to approve before it goes live.</li>
+        <li><strong>Transparent metrics.</strong> DR, organic traffic and referring domains for every site, from Ahrefs.</li>
+        <li><strong>Honest advice.</strong> If a link will not help your client, we will tell you instead of selling it.</li>
+      </ul>
+    </div>
+  </section>
+
+  <Faq items={faq} title="Frequently asked questions" />
+  <Cta
+    title="See which links your client is missing"
+    text="Send us a domain and its top 3 competitors. We will compare their link profiles and suggest the first publishers, free and without obligation."
+    button={en.cta}
+    href="/en/contact/"
+  />
+  <script>
+    document.querySelectorAll('.perks__more').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        btn.closest('.perks')?.classList.add('is-open');
+        btn.setAttribute('aria-expanded', 'true');
+      });
+    });
+  </script>
+</Base>
+
+<style>
+  .hero {
+    padding: clamp(48px, 8vw, 96px) 0 clamp(56px, 8vw, 100px);
+    background: radial-gradient(ellipse at 85% 10%, rgba(186, 37, 37, 0.08), transparent 50%),
+      radial-gradient(ellipse at 0% 100%, rgba(16, 43, 67, 0.06), transparent 50%);
+  }
+  .hero__grid { display: grid; grid-template-columns: 1.15fr 1fr; gap: 56px; align-items: center; }
+  .hero__facts { list-style: none; padding: 0; margin: 28px 0 0; display: flex; flex-wrap: wrap; gap: 10px 28px; color: var(--muted); font-size: 0.95rem; }
+  .hero__facts strong { color: var(--text); font-family: var(--font-display); }
+  .service .checklist { margin-top: 16px; }
+  .service__more { font-weight: 600; color: var(--accent); }
+  .why { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+  .why__list li { margin-bottom: 18px; }
+  .perks {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    box-shadow: 0 30px 60px -30px rgba(16, 43, 67, 0.35);
+    padding: 8px 8px 14px;
+    font-size: 0.95rem;
+  }
+  .perks__head, .perk summary { display: grid; grid-template-columns: 1fr 72px 72px 16px; align-items: center; gap: 4px; }
+  .perks__head { padding: 10px 12px; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); font-weight: 600; border-bottom: 1px solid var(--border); }
+  .perks__col { text-align: center; white-space: nowrap; }
+  .perks__col--us { color: var(--ok); }
+  .perk { border-bottom: 1px solid var(--border); }
+  .perk summary { list-style: none; cursor: pointer; padding: 10px 12px; border-radius: 10px; }
+  .perk summary::-webkit-details-marker { display: none; }
+  .perk summary::after { content: '▾'; color: var(--muted); font-size: 0.8rem; transition: transform 0.2s; justify-self: end; }
+  .perk[open] summary::after { transform: rotate(180deg); }
+  .perk summary:hover { background: #f6f8fb; }
+  .perk__label { font-weight: 600; }
+  .perk__no, .perk__yes { justify-self: center; width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; font-style: normal; font-size: 0.78rem; font-weight: 700; }
+  .perk__no { background: #fdecec; color: #d64545; }
+  .perk__yes { background: #d6f2e4; color: var(--ok); }
+  .perk__body { padding: 0 12px 12px; font-size: 0.88rem; color: var(--muted); }
+  .perk__body p { margin: 4px 0; }
+  .perk__body strong { color: var(--text); font-weight: 600; }
+  .perks:not(.is-open) .perk--extra { display: none; }
+  .perks.is-open .perks__more { display: none; }
+  .perks__more { display: block; margin: 12px auto 0; background: none; border: 1px solid var(--border); border-radius: 999px; padding: 7px 16px; font: inherit; font-size: 0.85rem; font-weight: 600; color: var(--accent); cursor: pointer; }
+  .perks__note { margin: 8px 0 0; text-align: center; font-size: 0.78rem; color: var(--muted); }
+  @media (max-width: 900px) {
+    .hero__grid, .why { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 480px) {
+    .perks__head, .perk summary { grid-template-columns: 1fr 50px 54px 12px; padding-inline: 8px; }
+    .perks__head { font-size: 0.6rem; letter-spacing: 0.03em; }
+    .perk__label { font-size: 0.92rem; }
+  }
+</style>

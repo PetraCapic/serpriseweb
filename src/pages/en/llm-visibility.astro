@@ -1,0 +1,143 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import Clients from '../../components/Clients.astro';
+import Faq from '../../components/Faq.astro';
+import Cta from '../../components/Cta.astro';
+import { site } from '../../lib/site';
+import { enClients } from '../../lib/en';
+
+const faq = [
+  {
+    q: 'What is the difference between SEO and LLM visibility?',
+    a: 'Classic SEO targets positions in Google results. LLM visibility (also called GEO, generative engine optimization, or AI SEO) targets being mentioned and recommended inside AI answers. The foundations overlap: good content, a technically sound site and mentions on credible sources. Measurement and optimization are different.',
+  },
+  {
+    q: 'Can you guarantee ChatGPT will recommend my brand?',
+    a: 'No, and nobody can honestly promise that, because AI answers depend on the model, the prompt and the moment. What we can do is systematically increase how often and how accurately a brand is mentioned, and measure it transparently every month.',
+  },
+  {
+    q: 'Which AI tools do you track?',
+    a: 'By default ChatGPT, Google AI Overviews and AI Mode, Gemini, Perplexity and Microsoft Copilot. We test prompts in English, German and other languages depending on the markets that matter to you.',
+  },
+  {
+    q: 'Can agencies resell LLM visibility?',
+    a: 'Yes. We deliver audits, mention building and monthly AI share-of-voice reports white label, so you can add LLM visibility to your service list without building the capability in-house.',
+  },
+  {
+    q: 'How long until we see results?',
+    a: 'The initial audit and strategy take 2 to 3 weeks. After that we work monthly, without a long-term contract. First shifts in AI answers usually show within 1 to 2 months.',
+  },
+];
+---
+
+<Base
+  lang="en"
+  title="LLM visibility: get recommended by ChatGPT, Gemini & AI Overviews"
+  description="LLM visibility (GEO, AI SEO) for brands and agencies: get mentioned and recommended by ChatGPT, Gemini, Perplexity and Google AI Overviews. Audits, mention building and AI share-of-voice tracking, also white label."
+  schema={[
+    {
+      '@context': 'https://schema.org',
+      '@type': 'Service',
+      name: 'LLM visibility',
+      alternateName: ['LLM optimization', 'AI SEO', 'Generative Engine Optimization', 'GEO'],
+      serviceType: 'Generative Engine Optimization',
+      provider: { '@id': `${site.url}/#organization` },
+      areaServed: ['GB', 'US', 'DE', 'EU'],
+      inLanguage: 'en',
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+    },
+  ]}
+>
+  <PageHero
+    eyebrow="LLM visibility · GEO · AI SEO"
+    title="Get recommended by <span class='grad-text'>ChatGPT, Gemini and Google AI</span>"
+    lead="Buyers increasingly don't search, they ask. If an AI assistant doesn't mention a brand when someone asks about its category, it recommends a competitor. We change that for brands and for agencies' clients."
+    ctaLabel="Get a free AI visibility check"
+    ctaHref="/en/contact/"
+  />
+
+  <Clients title="Brands we've worked with" items={enClients} moreLabel="Show more" />
+
+  <section class="section">
+    <div class="container grid grid--2 intro">
+      <div>
+        <h2>What is LLM visibility?</h2>
+        <p>
+          LLM visibility measures how often and how accurately large language models such as ChatGPT, Gemini and Perplexity, and Google's AI
+          Overviews, mention a brand. LLM optimization is the work that increases it.
+        </p>
+        <p>
+          It is also called <strong>GEO</strong> (generative engine optimization) or <strong>AI SEO</strong>. Because LLMs lean heavily on what
+          trusted third-party sites say, link building and digital PR are at the core of how we do it.
+        </p>
+      </div>
+      <div class="card">
+        <h3>Examples of prompts we track</h3>
+        <ul class="checklist">
+          <li>"What is the best project management tool for small agencies?"</li>
+          <li>"Which online furniture stores in the UK deliver fastest?"</li>
+          <li>"Welche Krankenversicherung ist die beste für Selbstständige?"</li>
+          <li>"Recommend a yacht charter company in Croatia"</li>
+        </ul>
+        <p class="muted">For every brand we define 30 to 100 prompts its real customers ask, in every relevant language.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--alt">
+    <div class="container">
+      <span class="eyebrow">What we do</span>
+      <h2>How we grow AI visibility</h2>
+      <div class="grid grid--3" style="margin-top:32px">
+        <div class="card">
+          <div class="icon">01</div>
+          <h3>AI visibility audit</h3>
+          <p class="muted">We test key prompts across all major AI tools and record who gets mentioned, in which order, and which sources the AI relies on.</p>
+        </div>
+        <div class="card">
+          <div class="icon">02</div>
+          <h3>Mentions on cited sources</h3>
+          <p class="muted">AI trusts what others say. Through <a href="/en/link-building/">link building and digital PR</a> we earn mentions on the publishers, comparisons and reviews LLMs cite.</p>
+        </div>
+        <div class="card">
+          <div class="icon">03</div>
+          <h3>Brand as an entity</h3>
+          <p class="muted">We align how the brand is described across its site, Google profile, LinkedIn, directories and media, so AI knows exactly who it is and what it does.</p>
+        </div>
+        <div class="card">
+          <div class="icon">04</div>
+          <h3>Content AI quotes</h3>
+          <p class="muted">We restructure pages to give clear, verifiable answers: comparisons, pricing, FAQs, guides and data that models like to cite.</p>
+        </div>
+        <div class="card">
+          <div class="icon">05</div>
+          <h3>Technical readiness</h3>
+          <p class="muted">Structured data (schema), access for AI crawlers, llms.txt, speed and a clean site structure.</p>
+        </div>
+        <div class="card">
+          <div class="icon">06</div>
+          <h3>Monthly tracking</h3>
+          <p class="muted">AI share of voice, new mentions and competitor comparison, month after month. Available as an unbranded report for agencies.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Faq items={faq} title="Frequently asked questions" />
+  <Cta
+    title="Let's see what AI says about your brand today"
+    text="Send us a website and its 3 main services. We'll test the prompts for free and show where the brand is mentioned, and where competitors are."
+    button="Get a free AI visibility check"
+    href="/en/contact/"
+  />
+</Base>
+
+<style>
+  .intro { align-items: start; gap: 40px; }
+  .icon { font-family: var(--font-display); font-weight: 700; font-size: 1rem; }
+</style>

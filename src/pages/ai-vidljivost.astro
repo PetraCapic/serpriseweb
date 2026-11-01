@@ -5,7 +5,12 @@ import Clients from '../components/Clients.astro';
 import Faq from '../components/Faq.astro';
 import Cta from '../components/Cta.astro';
 import { site } from '../lib/site';
+import { getPosts } from '../lib/blog';
 
+// Članci iz LLM klastera koje linkamo s uslužne stranice (redom: vodič, istraživanje, provjera, case study).
+const clusterIds = ['llm-vidljivost', 'chatgpt-citati-hrvatska', 'provjera-ai-vidljivosti', 'case-study-ai-vidljivost-osmrtnice'];
+const posts = await getPosts();
+const clusterPosts = clusterIds.map((id) => posts.find((p) => p.id === id)).filter((p) => p !== undefined);
 const faq = [
   {
     q: 'Koja je razlika između SEO-a i LLM optimizacije?',
@@ -57,7 +62,7 @@ const faq = [
     lead="Kupci sve češće ne pretražuju, nego pitaju. Ako AI asistent na pitanje iz vaše branše ne spomene vaš brend, preporučit će konkurenciju. LLM optimizacijom mijenjamo to."
   />
 
-  <Clients title="Brendovi s kojima radimo" />
+  <Clients title="Brendovi s kojima smo surađivali" />
 
   <section class="section">
     <div class="container grid grid--2 intro">
@@ -142,6 +147,24 @@ const faq = [
     </div>
   </section>
 
+  {
+    clusterPosts.length > 0 && (
+      <section class="section section--alt">
+        <div class="container">
+          <span class="eyebrow">Iz bloga</span>
+          <h2>Više o LLM optimizaciji</h2>
+          <div class="grid grid--2" style="margin-top:32px">
+            {clusterPosts.map((post) => (
+              <a href={`/blog/${post.id}/`} class="card card--link">
+                <h3>{post.data.title}</h3>
+                <p class="muted">{post.data.description}</p>
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
   <Faq items={faq} />
   <Cta title="Provjerimo što AI danas kaže o vama" text="Pošaljite nam web i 3 glavne usluge. Besplatno ćemo testirati upite na hrvatskom i pokazati gdje se spominjete vi, a gdje konkurencija." />
 </Base>

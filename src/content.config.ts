@@ -1,22 +1,18 @@
-import { defineCollection } from 'astro:content';
+import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
-import { z } from 'astro/zod';
 
-// Blog članci su Markdown datoteke u src/content/blog/. Naziv datoteke je URL (slug).
-// Datoteke koje počinju s "_" (npr. _predlozak.md) se ne objavljuju.
+// Članci bloga: jedna .md datoteka po članku u src/content/blog/. Ime datoteke je URL (/blog/ime-datoteke/).
 const blog = defineCollection({
-  loader: glob({ pattern: '[^_]*.md', base: './src/content/blog' }),
+  loader: glob({ pattern: '**/*.md', base: './src/content/blog' }),
   schema: z.object({
-    title: z.string().max(70),
+    title: z.string(),
     description: z.string().max(170),
-    pubDate: z.coerce.date(),
-    updatedDate: z.coerce.date().optional(),
+    date: z.coerce.date(),
+    updated: z.coerce.date().optional(),
     author: z.string().default('Jure Kljajić'),
-    keyword: z.string().optional(),
-    tags: z.array(z.string()).default([]),
+    // Slika iz public/ (npr. /blog/ime-clanka/naslovna.png), koristi se za og:image i na vrhu članka.
     image: z.string().optional(),
     imageAlt: z.string().optional(),
-    faq: z.array(z.object({ q: z.string(), a: z.string() })).default([]),
     draft: z.boolean().default(false),
   }),
 });

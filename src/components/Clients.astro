@@ -1,15 +1,18 @@
 ---
-import { clients } from '../lib/site';
-import portali from '../data/portali.json';
-interface Props { title?: string; portalsCta?: boolean }
-const { title = 'Vjeruju nam hrvatski brendovi', portalsCta = false } = Astro.props;
+import { clients as allClients } from '../lib/site';
+interface Props { title?: string; items?: typeof allClients; moreLabel?: string }
+const { title = 'Brendovi s kojima smo surađivali', items: clients = allClients, moreLabel = 'Učitaj još' } = Astro.props;
+// Prvih ~60% logotipa je odmah vidljivo, ostali se otvaraju na "Učitaj još".
+const visible = Math.ceil(clients.length * 0.6);
+// Na mobitelu je odmah vidljivo manje logotipa.
+const visibleMobile = 12;
 ---
-<section class="clients" aria-labelledby="clients-title">
+<section class="clients" aria-labelledby="clients-title" data-clients>
   <div class="container">
     <p id="clients-title" class="clients__title">{title}</p>
     <ul class="clients__list">
-      {clients.map((c) => (
-        <li title={c.name}>
+      {clients.map((c, i) => (
+        <li title={c.name} class={i >= visible ? 'is-extra' : i >= visibleMobile ? 'is-extra-m' : undefined}>
           {c.logo ? (
             <img src={c.logo} alt={c.name} width={c.width} height={c.height} loading="lazy" decoding="async" />
           ) : (
@@ -18,30 +21,51 @@ const { title = 'Vjeruju nam hrvatski brendovi', portalsCta = false } = Astro.pr
         </li>
       ))}
     </ul>
-    <p class="clients__more muted">i još mnogo tvrtki iz osiguranja, nekretnina, nautike, trgovine, modne i beauty industrije.</p>
-    {portalsCta && (
-      <div class="clients__cta">
-        <a href="/portali/" class="btn btn--ghost">Pogledaj {portali.portals.length} portala na kojima objavljujemo</a>
+    {visible < clients.length && (
+      <div class="clients__more">
+        <button type="button" class="btn btn--ghost" data-clients-more>{moreLabel}</button>
       </div>
     )}
   </div>
 </section>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-clients]').forEach((section) => {
+    const btn = section.querySelector<HTMLButtonElement>('[data-clients-more]');
+    btn?.addEventListener('click', () => {
+      section.classList.add('is-open');
+      btn.parentElement?.remove();
+    });
+  });
+</script>
+
 <style>
-  .clients { padding: 40px 0 44px; border-block: 1px solid var(--border); background: var(--bg-2); }
+  .clients { padding: 40px 0 44px; border-block: 1px solid var(--border); background: var(--bg-2); overflow: hidden; }
   .clients__title { text-align: center; font-size: 0.8rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 26px; }
   .clients__list { list-style: none; margin: 0 auto; padding: 0; max-width: 1040px; display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 26px 42px; }
   .clients__list li { display: flex; align-items: center; height: 56px; }
+  .clients__list li.is-extra { display: none; }
+  .is-open .clients__list li.is-extra { display: flex; animation: clients-in 0.4s ease both; }
   .clients__list img,
   .clients__list span { filter: grayscale(1); opacity: 0.65; transition: filter 0.2s, opacity 0.2s; }
   .clients__list li:hover img,
   .clients__list li:hover span { filter: none; opacity: 1; }
   .clients__list img { height: auto; max-width: 100%; }
   .clients__list span { font-family: var(--font-display); font-weight: 700; font-size: 1.15rem; letter-spacing: -0.01em; color: var(--navy); white-space: nowrap; }
-  .clients__cta { display: flex; justify-content: center; margin-top: 22px; }
-  .clients__more { text-align: center; font-size: 0.9rem; margin: 26px 0 0; }
+  .clients__more { display: flex; justify-content: center; margin-top: 26px; }
+
+  /* Kad su otvoreni svi, zadnji red blijedi prema dnu, kao da popis ide dalje */
+  .is-open .clients__list { mask-image: linear-gradient(180deg, #000 calc(100% - 110px), transparent); -webkit-mask-image: linear-gradient(180deg, #000 calc(100% - 110px), transparent); }
+  @keyframes clients-in { from { opacity: 0; transform: translateY(8px); } }
+  @media (prefers-reduced-motion: reduce) {
+    .is-open .clients__list li.is-extra { animation: none; }
+  }
+
   @media (max-width: 640px) {
     .clients__list { gap: 18px 28px; }
     .clients__list li { height: 48px; }
     .clients__list img { transform: scale(0.85); }
+    .clients__list li.is-extra-m { display: none; }
+    .is-open .clients__list li.is-extra-m { display: flex; }
   }
 </style>

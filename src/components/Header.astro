@@ -1,19 +1,27 @@
 ---
 import { nav, adminUrl } from '../lib/site';
+import { enNav, altFor } from '../lib/en';
 import Logo from './Logo.astro';
 import { getPosts } from '../lib/blog';
+interface Props { lang?: 'hr' | 'en' }
+const { lang = 'hr' } = Astro.props;
+const isEn = lang === 'en';
 const path = Astro.url.pathname;
-// Blog se u izborniku pojavljuje tek kad postoji barem jedan objavljeni članak.
-const items = (await getPosts()).length ? [...nav.slice(0, 3), { href: '/blog/', label: 'Blog' }, ...nav.slice(3)] : nav;
+const alt = altFor(path);
+// Blog je u izborniku tek kad ima barem jedan objavljen članak.
+const hasPosts = (await getPosts()).length > 0;
+const items = isEn ? enNav : nav.filter((i) => i.href !== '/blog/' || hasPosts);
+// Jezični prekidač vodi na odgovarajuću stranicu na drugom jeziku, inače na početnu.
+const switchHref = isEn ? (alt?.hr ?? '/') : (alt?.en ?? '/en/');
 ---
 
 <header class="header">
   <div class="container header__inner">
-    <a href="/" class="header__logo" aria-label="SERPRise – početna"><Logo /></a>
-    <button class="header__toggle" aria-expanded="false" aria-controls="main-nav" aria-label="Izbornik">
+    <a href={isEn ? '/en/' : '/'} class="header__logo" aria-label={isEn ? 'SERPRise – home' : 'SERPRise – početna'}><Logo /></a>
+    <button class="header__toggle" aria-expanded="false" aria-controls="main-nav" aria-label={isEn ? 'Menu' : 'Izbornik'}>
       <span></span><span></span><span></span>
     </button>
-    <nav id="main-nav" class="header__nav" aria-label="Glavni izbornik">
+    <nav id="main-nav" class="header__nav" aria-label={isEn ? 'Main menu' : 'Glavni izbornik'}>
       {
         items.map((item) => (
           <a href={item.href} aria-current={path.startsWith(item.href) ? 'page' : undefined}>
@@ -21,11 +29,12 @@ const items = (await getPosts()).length ? [...nav.slice(0, 3), { href: '/blog/',
           </a>
         ))
       }
+      <a href={switchHref} class="header__lang" hreflang={isEn ? 'hr' : 'en'} lang={isEn ? 'hr' : 'en'} aria-label={isEn ? 'Hrvatska verzija' : 'English version'}>{isEn ? 'HR' : 'EN'}</a>
       <a href={adminUrl} class="header__login" rel="nofollow">
         <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d="M4.5 7V5a3.5 3.5 0 0 1 7 0v2M3.5 7h9v7h-9z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" /></svg>
-        Prijava
+        {isEn ? 'Log in' : 'Prijava'}
       </a>
-      <a href="/kontakt/" class="btn btn--primary header__cta">Besplatna analiza</a>
+      <a href={isEn ? '/en/contact/' : '/kontakt/'} class="btn btn--primary header__cta">{isEn ? 'Free audit' : 'Besplatna analiza'}</a>
     </nav>
   </div>
 </header>
@@ -74,6 +83,14 @@ const items = (await getPosts()).length ? [...nav.slice(0, 3), { href: '/blog/',
   .header__nav a[aria-current='page'] {
     color: var(--text);
   }
+  .header__lang {
+    font-size: 0.8rem !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.06em;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 3px 10px;
+  }
   .header__login {
     display: inline-flex;
     align-items: center;
@@ -121,6 +138,11 @@ const items = (await getPosts()).length ? [...nav.slice(0, 3), { href: '/blog/',
       padding: 14px 0;
       border-bottom: 1px solid var(--border);
       font-size: 1.05rem;
+    }
+    .header__lang {
+      border: 0 !important;
+      border-radius: 0;
+      padding: 14px 0 !important;
     }
     .header__cta {
       margin-top: 16px;

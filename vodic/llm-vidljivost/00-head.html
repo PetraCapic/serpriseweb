@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+<meta charset="utf-8">
+<title>Kako povećati svoju LLM vidljivost u Hrvatskoj | SERPRise</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+@page{size:A4;margin:15mm 17mm 15mm}
+@page cover{size:A4;margin:0}
+:root{--navy:#102b43;--red:#ba2525;--redsoft:#fbeaea;--muted:#52657a;--border:#e1e6ef;--ok:#1f9d6a;--oksoft:#e3f4ec;--blue:#eef3f9}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{font-family:Inter,sans-serif;color:var(--navy);font-size:10.4pt;line-height:1.55}
+h1,h2,h3,h4,.disp{font-family:'Space Grotesk',Inter,sans-serif}
+a{color:var(--red);text-decoration:none}
+.page{position:relative;margin-top:12mm}
+.cover,.end{break-after:page;margin-top:0}
+.end{break-before:page}
+.page.newpage{break-before:page;margin-top:0}
+.ihead{break-after:avoid}
+h2,h3,h4{break-after:avoid}
+.stepno{break-after:avoid}
+.page:last-child{page-break-after:auto}
+
+/* cover */
+.cover{page:cover;width:210mm;background:var(--navy);color:#fff;padding:22mm 20mm 18mm;display:flex;flex-direction:column;overflow:hidden;height:297mm}
+.cover::before{content:"";position:absolute;right:-60mm;top:-50mm;width:180mm;height:180mm;border-radius:50%;border:2px solid rgba(255,255,255,.07)}
+.cover::after{content:"";position:absolute;right:-25mm;top:-15mm;width:115mm;height:115mm;border-radius:50%;border:2px solid rgba(186,37,37,.4)}
+.logo{font-family:'Space Grotesk';font-weight:700;font-size:20pt;display:flex;align-items:center;gap:8px;position:relative;z-index:1}
+.logo b{color:#fff}.logo i{font-style:normal;color:#ff5a5a}
+.logo svg{width:30px;height:30px}
+.kicker{margin-top:26mm;align-self:flex-start;background:var(--red);font-size:9pt;font-weight:700;letter-spacing:.14em;text-transform:uppercase;padding:6px 11px;border-radius:2px;position:relative;z-index:1}
+.cover h1{font-size:44pt;line-height:1.04;margin-top:10mm;letter-spacing:-.01em;position:relative;z-index:1}
+.cover h1 em{font-style:normal;color:#ff6b6b}
+.cover .sub{font-size:13pt;line-height:1.5;color:#c6d3e1;margin-top:8mm;max-width:150mm}
+.chat{margin-top:14mm;background:#fff;color:var(--navy);border-radius:10px;padding:14px 16px;font-size:10.5pt;box-shadow:0 8px 24px rgba(0,0,0,.25)}
+.chat .q{background:#f1f4f8;border-radius:14px;padding:8px 12px;margin-left:auto;width:fit-content}
+.chat .a{margin-top:9px;color:#29425a}
+.srcs{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
+.src{border:1px solid var(--border);border-radius:12px;padding:2px 9px;font-size:9pt;color:var(--muted)}
+.src.you{border-color:var(--red);background:var(--redsoft);color:var(--red);font-weight:700}
+.steps{margin-top:auto;display:flex;gap:5px}
+.steps span{flex:1;height:30px;border-radius:2px;background:rgba(255,255,255,.08);font-size:10pt;font-weight:700;display:flex;align-items:center;justify-content:center;color:#9fb3c8}
+.cfoot{display:flex;justify-content:space-between;align-items:flex-end;margin-top:9mm;font-size:10pt;color:#c6d3e1}
+.cfoot strong{color:#fff;font-size:12pt;display:block}
+/* inner */
+.ihead{display:flex;justify-content:space-between;font-size:8.5pt;color:var(--muted);border-bottom:1px solid var(--border);padding-bottom:7px;margin-bottom:10mm}
+.ihead b{color:var(--red)}
+.stepno{font-family:'Space Grotesk';font-size:48pt;font-weight:700;color:var(--red);line-height:1}
+h2{font-size:24pt;line-height:1.12;margin:4mm 0 4mm;letter-spacing:-.01em}
+h3{font-size:13.5pt;margin:7mm 0 2.5mm}
+h4{font-size:11pt;margin:4mm 0 1.5mm}
+p{margin:0 0 3mm}
+.lead{font-size:12pt;color:#29425a;margin-bottom:5mm}
+ul,ol{margin:0 0 3.5mm 5.5mm}
+li{margin-bottom:1.4mm}
+ol.klik{counter-reset:k;list-style:none;margin-left:0}
+ol.klik>li{counter-increment:k;padding-left:9mm;position:relative;margin-bottom:2.2mm}
+ol.klik>li::before{content:counter(k);position:absolute;left:0;top:0;width:6mm;height:6mm;border-radius:50%;background:var(--navy);color:#fff;font-size:8.5pt;font-weight:700;display:flex;align-items:center;justify-content:center}
+table{width:100%;border-collapse:collapse;font-size:9pt;margin:2.5mm 0 4.5mm;break-inside:avoid}
+th{background:var(--navy);color:#fff;text-align:left;padding:6px 7px;font-weight:600}
+td{border-bottom:1px solid var(--border);padding:5.5px 7px;vertical-align:top}
+tr:nth-child(even) td{background:#fafbfd}
+.tag{display:inline-block;font-size:7.5pt;font-weight:700;padding:1px 7px;border-radius:9px;white-space:nowrap}
+.free{background:var(--oksoft);color:var(--ok)}.paid{background:var(--redsoft);color:var(--red)}.mid{background:#fff4dc;color:#9a6700}
+.box{border-radius:5px;padding:4mm 5mm;margin:3mm 0 5mm;break-inside:avoid}
+.box>b:first-child{display:block;font-size:8.5pt;letter-spacing:.1em;text-transform:uppercase;margin-bottom:1.5mm}
+.box p:last-child,.box ul:last-child{margin-bottom:0}
+.tip{background:#fff8e6;border-left:4px solid #e0a100}.tip>b:first-child{color:#9a6700}
+.mi{background:var(--blue);border-left:4px solid var(--navy)}.mi>b:first-child{color:var(--navy)}
+.data{background:var(--oksoft);border-left:4px solid var(--ok)}.data>b:first-child{color:var(--ok)}
+.svc{background:var(--redsoft);border-left:4px solid var(--red)}.svc>b:first-child{color:var(--red)}
+.done{border:1.5px solid var(--navy);border-radius:5px;padding:4mm 5mm;margin-top:5mm;break-inside:avoid}
+.done>b{font-size:8.5pt;letter-spacing:.1em;text-transform:uppercase}
+.done ul{list-style:none;margin:2mm 0 0}
+.done li{padding-left:6mm;position:relative}
+.done li::before{content:"";position:absolute;left:0;top:1.3mm;width:3mm;height:3mm;border:1.4px solid var(--navy);border-radius:1px}
+.cost{display:flex;gap:4mm;margin:0 0 5mm;font-size:9pt}
+.cost div{flex:1;border:1px solid var(--border);border-radius:5px;padding:2.5mm 3.5mm}
+.cost span{display:block;font-size:7.5pt;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.cost strong{font-family:'Space Grotesk';font-size:11pt}
+code,.mono{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:8.6pt}
+pre{background:var(--navy);color:#dbe6f1;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:8.4pt;padding:4mm 5mm;border-radius:5px;white-space:pre-wrap;margin:2mm 0 4.5mm;line-height:1.5;break-inside:avoid}
+figure{margin:3mm 0 5mm;break-inside:avoid}
+figure img{width:100%;border:1px solid var(--border);border-radius:5px;display:block}
+figcaption{font-size:8.5pt;color:var(--muted);margin-top:1.5mm}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:5mm}
+.toc{list-style:none;margin:0}
+.toc li{display:flex;gap:5mm;padding:1.8mm 0;border-bottom:1px solid var(--border);font-size:11pt}
+.toc li span:first-child{font-family:'Space Grotesk';font-weight:700;color:var(--red);width:10mm}
+.legend{display:grid;grid-template-columns:1fr 1fr;gap:3mm;margin-top:4mm}
+.legend .box{margin:0}
+.muted{color:var(--muted)}
+.small{font-size:8.5pt}
+.end{background:var(--navy);color:#fff}
+.end h2{color:#fff}
+.end p{color:#c6d3e1}
+.end a{color:#ff8a8a}
+.endbox{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:6px;padding:5mm 6mm;margin:5mm 0}
+.endbox h3{color:#fff;margin-top:0}
+.sources li{font-size:8.6pt;word-break:break-word}
+</style>
+</head>
+<body>
+
+<!-- NASLOVNICA -->
+<section class="page cover">
+ <div class="logo"><svg viewBox="0 0 24 24"><path d="M4 18c0 2 2 3 4 3s4-1 4-3-2-3-4-3.5S4 13 4 11s2-3 4-3 4 1 4 3" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M13 3h4.5a3.5 3.5 0 010 7H13V3zm3 7l4 6" stroke="#ff5a5a" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M20 13v4h-4" stroke="#ff5a5a" stroke-width="2.4" fill="none" stroke-linecap="round"/></svg><span><b>SERP</b><i>Rise</i></span></div>
+ <span class="kicker">Vodič · korak po korak · studeni 2026.</span>
+ <h1>Kako povećati svoju <em>LLM vidljivost</em> u Hrvatskoj</h1>
+ <p class="sub">Imenici, vlastiti web, objave na portalima i digitalni PR, praćenje i mjerenje. Cijela kampanja za ChatGPT, Google AI preglede i Gemini u 9 koraka. Poznato i kao GEO ili AI SEO.</p>
+ <div class="chat">
+  <div class="q">Preporuči mi agenciju za digitalni marketing u Zagrebu</div>
+  <div class="a">Evo nekoliko agencija koje se često preporučuju u Zagrebu, s recenzijama i javnim cijenama…</div>
+  <div class="srcs"><span class="src">clutch.co</span><span class="src">tako.hr</span><span class="src you">vasa-tvrtka.hr</span><span class="src">poslovni.hr</span><span class="src">poslovna.hr</span></div>
+ </div>
+ <div class="steps" style="margin-top:auto"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span></div>
+ <div class="cfoot"><div><strong>Jure Kljajić</strong>osnivač, SERPRise</div><div>serprise.agency</div></div>
+</section>

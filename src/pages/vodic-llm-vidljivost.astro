@@ -1,0 +1,250 @@
+---
+import Base from '../layouts/Base.astro';
+import { site } from '../lib/site';
+
+const koraci = [
+  ['01', 'Odaberite pitanja i ključne riječi', '20 pitanja u 4 vrste, kako ih pišu hrvatski kupci, i volumen u Hrvatskoj.'],
+  ['02', 'Napravite polazno mjerenje', 'ChatGPT, Google AI pregled i AI način, s tablicom za bilježenje.'],
+  ['03', 'Reverse engineering konkurenata', 'Ručno, kroz Claude ili ChatGPT i u Ahrefsu: zašto AI citira njih, a ne vas.'],
+  ['04', 'Pripremite vlastiti web', '7 elemenata uslužne stranice, schema i tehnička provjera za AI crawlere.'],
+  ['05', 'Besplatni imenici i profili', 'Koje imenike upisati, što upisati i kako skupiti recenzije.'],
+  ['06', 'Liste "najboljih"', 'Kako doći na liste koje ChatGPT citira, s predloškom e-maila.'],
+  ['07', 'Portali i digitalni PR', 'Kako odabrati portal, što mora pisati u članku i kako izgleda PR kampanja.'],
+  ['08', 'Postavite praćenje', 'GA4 kanal za AI posjete, Search Console, Bing Webmaster Tools.'],
+  ['09', 'Mjerite i čitajte podatke', 'Pet brojki mjesečno i što napraviti kad se ne mijenjaju.'],
+];
+---
+
+<Base
+  title="Besplatni vodič: kako povećati LLM vidljivost u Hrvatskoj"
+  description="Besplatni PDF vodič od 28 stranica: kako postaviti kampanju za ChatGPT, Google AI preglede i Gemini u 9 koraka. Imenici, portali, digitalni PR, praćenje i mjerenje."
+  schema={{
+    '@context': 'https://schema.org',
+    '@type': 'DigitalDocument',
+    name: 'Kako povećati svoju LLM vidljivost u Hrvatskoj',
+    inLanguage: 'hr',
+    encodingFormat: 'application/pdf',
+    author: { '@type': 'Person', name: 'Jure Kljajić', url: `${site.url}/autor/jure-kljajic/` },
+    publisher: { '@id': `${site.url}/#organization` },
+    datePublished: '2026-11-01',
+    isAccessibleForFree: true,
+  }}
+>
+  <section class="vhero">
+    <div class="container vhero__grid">
+      <div>
+        <span class="eyebrow">Besplatni vodič · PDF, 28 stranica</span>
+        <h1>Kako povećati svoju <span class="grad-text">LLM vidljivost</span> u Hrvatskoj</h1>
+        <p class="lead">
+          Cijela kampanja za ChatGPT, Google AI preglede i Gemini u 9 koraka, klik po klik. Što možete sami i besplatno,
+          kako analizirati konkurente, kako postaviti praćenje i kako čitati rezultate.
+        </p>
+        <ul class="checklist">
+          <li>Brojke iz naših testova na 45 ChatGPT odgovora za hrvatska pitanja</li>
+          <li>Popis besplatnih imenika i predložak e-maila za liste "najboljih"</li>
+          <li>Gotov upit za Claude ili ChatGPT koji rastavlja stranice konkurenata</li>
+          <li>Regex za GA4 i plan za 90 dana na jednoj stranici</li>
+        </ul>
+      </div>
+
+      <div class="card vform" id="preuzmi">
+        <h2>Pošaljite mi vodič</h2>
+        <p class="muted">Vodič stiže na vaš e-mail za nekoliko minuta.</p>
+        <form id="vodic-form" novalidate>
+          <label>Naziv tvrtke *<input name="company" required minlength="2" maxlength="160" autocomplete="organization" /></label>
+          <div class="vform__row">
+            <label>Ime *<input name="firstName" required maxlength="60" autocomplete="given-name" /></label>
+            <label>Prezime *<input name="lastName" required maxlength="60" autocomplete="family-name" /></label>
+          </div>
+          <label>E-mail *<input name="email" type="email" required maxlength="200" autocomplete="email" /></label>
+          <label class="hp" aria-hidden="true">Ne ispunjavati<input name="fax" tabindex="-1" autocomplete="off" /></label>
+          <label class="vform__consent">
+            <input type="checkbox" name="consent" required />
+            <span>Pristajem da SERPRise obradi moje podatke radi slanja vodiča i javljanja u vezi s AI vidljivošću, u skladu s <a href="/pravila-privatnosti/">pravilima privatnosti</a>. *</span>
+          </label>
+          <button type="submit" class="btn btn--primary">Pošalji mi besplatni vodič</button>
+          <p class="vform__status" role="status" aria-live="polite"></p>
+        </form>
+        <div class="vform__done" hidden>
+          <h2>Hvala!</h2>
+          <p class="vform__done-mail">Vodič smo poslali na <b class="vform__email"></b>. Ako ga ne vidite za nekoliko minuta, provjerite mapu Promocije ili Neželjena pošta.</p>
+          <p class="vform__done-link" hidden>Vodič možete preuzeti odmah:</p>
+          <a class="btn btn--primary vform__dl" href="/vodic/llm-vidljivost-hrvatska.pdf" target="_blank" rel="noopener" hidden>Preuzmi PDF</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--alt">
+    <div class="container">
+      <span class="eyebrow">Što je unutra</span>
+      <h2>9 koraka, redom kojim se kampanja stvarno postavlja</h2>
+      <div class="grid grid--3 koraci">
+        {koraci.map(([n, t, d]) => (
+          <div class="card">
+            <div class="icon">{n}</div>
+            <h3>{t}</h3>
+            <p class="muted">{d}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <span class="eyebrow">Pogled u vodič</span>
+      <h2>Upute, cijene i kvačice za svaki korak</h2>
+      <p class="lead">Svaki korak ima trošak i vrijeme, upute klik po klik, okvire "Tips and tricks" i "Kako mi to radimo" te popis "Gotovo kad".</p>
+      <div class="pages">
+        <img src="/vodic/stranica-reverse-engineering.webp" alt="Stranica vodiča: reverse engineering konkurenata" width="640" height="906" loading="lazy" />
+        <img src="/vodic/stranica-imenici.webp" alt="Stranica vodiča: besplatni poslovni imenici" width="640" height="906" loading="lazy" />
+        <img src="/vodic/stranica-pracenje.webp" alt="Stranica vodiča: postavljanje praćenja u Search Consoleu i Bingu" width="640" height="906" loading="lazy" />
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--alt">
+    <div class="container grid grid--2 autor">
+      <div>
+        <span class="eyebrow">Autor</span>
+        <h2>Jure Kljajić, osnivač SERPRisea</h2>
+        <p>Vodič je napisan iz onoga što radimo za SERPRise i za klijente: mjesečni testovi u ChatGPT-u i Google AI pregledima, katalog od 335 hrvatskih portala i case study portala koji je u 12 dana od tehničke promjene dobio 67 posjeta s ChatGPT-a.</p>
+        <p><a href="/autor/jure-kljajic/">Više o autoru</a> · <a href="/blog/llm-vidljivost/">Članci o LLM vidljivosti</a></p>
+      </div>
+      <div class="card">
+        <h3>Ne želite sve raditi sami?</h3>
+        <p class="muted">Imenike i praćenje možete sami. Objave na hrvatskim portalima i digitalni PR radimo kao uslugu, na portalima koje AI stvarno citira za vaša pitanja.</p>
+        <div class="btn-row">
+          <a href="/portali/" class="btn btn--ghost">Katalog portala</a>
+          <a href="/ai-vidljivost/" class="btn btn--ghost">AI vidljivost</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<script>
+  import { supabase } from '../lib/supabase';
+
+  const form = document.getElementById('vodic-form') as HTMLFormElement;
+  const status = form.querySelector('.vform__status') as HTMLElement;
+  const button = form.querySelector('button[type=submit]') as HTMLButtonElement;
+  const done = document.querySelector('.vform__done') as HTMLElement;
+  const startedAt = Date.now();
+
+  const showDone = (email: string, sent: boolean) => {
+    form.hidden = true;
+    done.hidden = false;
+    (done.querySelector('.vform__email') as HTMLElement).textContent = email;
+    if (!sent) {
+      (done.querySelector('.vform__done-mail') as HTMLElement).hidden = true;
+      (done.querySelector('.vform__done-link') as HTMLElement).hidden = false;
+    }
+    (done.querySelector('.vform__dl') as HTMLElement).hidden = sent;
+    (window as any).dataLayer?.push({ event: 'vodic_preuzimanje' });
+  };
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+    const data = new FormData(form);
+    const val = (k: string) => String(data.get(k) ?? '').trim();
+    const email = val('email');
+    // Bot: skriveno polje ili manje od 3 sekunde
+    if (data.get('fax') || Date.now() - startedAt < 3000) {
+      showDone(email, true);
+      return;
+    }
+    button.disabled = true;
+    status.textContent = 'Šaljem...';
+
+    const params = new URLSearchParams(window.location.search);
+    const utm: Record<string, string> = {};
+    ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content'].forEach((k) => {
+      const v = params.get(k) || sessionStorage.getItem(k);
+      if (v) utm[k] = v;
+    });
+
+    // 1) Lead u admin (tablica leads, isti put kao kontakt forma)
+    if (supabase) {
+      const { error } = await supabase.from('leads').insert({
+        name: `${val('firstName')} ${val('lastName')}`.slice(0, 120),
+        email,
+        company: val('company'),
+        service: 'ai_vidljivost',
+        message: 'Preuzimanje besplatnog vodiča "Kako povećati svoju LLM vidljivost u Hrvatskoj".',
+        consent: true,
+        source_page: (document.referrer ? `/vodic-llm-vidljivost/ ← ${document.referrer}` : '/vodic-llm-vidljivost/').slice(0, 300),
+        utm: Object.keys(utm).length ? utm : null,
+      });
+      if (error) console.error(error);
+    }
+
+    // 2) Vodič na e-mail. Ako slanje ne uspije, odmah pokažemo link.
+    let sent = false;
+    try {
+      const res = await fetch('/api/vodic', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ email, firstName: val('firstName') }),
+      });
+      if (res.ok) sent = Boolean((await res.json()).sent);
+    } catch (err) {
+      console.error(err);
+    }
+    showDone(email, sent);
+  });
+</script>
+
+<style>
+  .vhero {
+    padding: clamp(40px, 7vw, 88px) 0;
+    background: radial-gradient(ellipse at 90% 0%, rgba(186, 37, 37, 0.08), transparent 50%), var(--bg);
+    border-bottom: 1px solid var(--border);
+  }
+  .vhero__grid {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: clamp(28px, 5vw, 64px);
+    align-items: start;
+  }
+  .vform h2 { font-size: 1.5rem; margin-bottom: 4px; }
+  .vform form { display: grid; gap: 14px; margin-top: 16px; }
+  .vform__row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .vform label { display: grid; gap: 6px; font-weight: 500; font-size: 0.95rem; }
+  .vform input:not([type='checkbox']) {
+    font: inherit;
+    padding: 11px 13px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: #fff;
+    color: var(--text);
+  }
+  .vform input:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .vform .vform__consent { grid-template-columns: auto 1fr; align-items: start; font-weight: 400; font-size: 0.85rem; color: var(--muted); }
+  .vform .hp { position: absolute; left: -9999px; }
+  .vform__status { font-size: 0.9rem; color: var(--muted); min-height: 1em; margin: 0; }
+  .vform__done .btn { margin-top: 8px; }
+  .koraci { margin-top: 32px; grid-template-columns: repeat(3, 1fr); }
+  @media (max-width: 860px) { .koraci { grid-template-columns: 1fr; } }
+  .pages {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 32px;
+  }
+  .pages img { width: 100%; height: auto; border-radius: 6px; box-shadow: 0 12px 30px rgba(16, 43, 67, 0.16); }
+  .autor { align-items: center; }
+  @media (max-width: 860px) {
+    .vhero__grid { grid-template-columns: 1fr; }
+    .pages { grid-template-columns: 1fr 1fr; }
+    .pages img:last-child { display: none; }
+  }
+  @media (max-width: 520px) {
+    .vform__row { grid-template-columns: 1fr; }
+  }
+</style>

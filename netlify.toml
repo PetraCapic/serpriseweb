@@ -96,3 +96,9 @@
   from = "/prefab-homes-website-with-100k-clicks-serprise-agency/*"
   to = "/"
   status = 301
+
+# Besplatni vodič: PDF se ne indeksira (dolazi preko forme na /vodic-llm-vidljivost/)
+[[headers]]
+  for = "/vodic/*.pdf"
+  [headers.values]
+    X-Robots-Tag = "noindex"

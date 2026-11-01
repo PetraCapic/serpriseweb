@@ -4,6 +4,7 @@ import PageHero from '../components/PageHero.astro';
 import Clients from '../components/Clients.astro';
 import Faq from '../components/Faq.astro';
 import Cta from '../components/Cta.astro';
+import VodicCta from '../components/VodicCta.astro';
 import { site } from '../lib/site';
 import { getPosts } from '../lib/blog';
 
@@ -165,6 +166,8 @@ const faq = [
       </section>
     )
   }
+  <VodicCta alt />
+
   <Faq items={faq} />
   <Cta title="Provjerimo što AI danas kaže o vama" text="Pošaljite nam web i 3 glavne usluge. Besplatno ćemo testirati upite na hrvatskom i pokazati gdje se spominjete vi, a gdje konkurencija." />
 </Base>

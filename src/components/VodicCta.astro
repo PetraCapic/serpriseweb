@@ -1,0 +1,39 @@
+---
+// Poziv na preuzimanje besplatnog vodiča (naslovnica, /ai-vidljivost/).
+interface Props { alt?: boolean }
+const { alt = false } = Astro.props;
+---
+<section class:list={['section', { 'section--alt': alt }]}>
+  <div class="container vodic-cta">
+    <a href="/vodic-llm-vidljivost/" class="vodic-cta__img" tabindex="-1" aria-hidden="true">
+      <img src="/vodic/naslovnica.webp" alt="" width="640" height="906" loading="lazy" />
+    </a>
+    <div>
+      <span class="eyebrow">Besplatni vodič · PDF, 28 stranica</span>
+      <h2>Kako povećati svoju LLM vidljivost u Hrvatskoj</h2>
+      <p class="lead">Cijela kampanja u 9 koraka: pitanja i ključne riječi, analiza konkurenata, besplatni imenici, objave na portalima, praćenje i mjerenje. Sve klik po klik.</p>
+      <div class="btn-row">
+        <a href="/vodic-llm-vidljivost/" class="btn btn--primary">Preuzmi besplatni vodič</a>
+      </div>
+    </div>
+  </div>
+</section>
+<style>
+  .vodic-cta {
+    display: grid;
+    grid-template-columns: minmax(180px, 280px) 1fr;
+    gap: clamp(28px, 5vw, 64px);
+    align-items: center;
+  }
+  .vodic-cta__img img {
+    width: 100%;
+    height: auto;
+    border-radius: 6px;
+    box-shadow: 0 18px 40px rgba(16, 43, 67, 0.22);
+    transform: rotate(-2deg);
+  }
+  @media (max-width: 720px) {
+    .vodic-cta { grid-template-columns: 1fr; }
+    .vodic-cta__img { max-width: 220px; }
+  }
+</style>

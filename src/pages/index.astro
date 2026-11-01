@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import Faq from '../components/Faq.astro';
 import Cta from '../components/Cta.astro';
+import VodicCta from '../components/VodicCta.astro';
 import Clients from '../components/Clients.astro';
 
 const faq = [
@@ -166,6 +167,8 @@ const faq = [
       </ul>
     </div>
   </section>
+
+  <VodicCta alt />
 
   <Faq items={faq} />
   <Cta />

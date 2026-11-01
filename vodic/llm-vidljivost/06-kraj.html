@@ -1,5 +1,6 @@
 <!-- PLAN 90 DANA -->
-<section class="page newpage" id="plan">
+<section class="page" id="plan">
+ <div style="break-inside:avoid">
  <div class="ihead"><span>LLM vidljivost u Hrvatskoj</span><b>Plan za 90 dana</b></div>
  <h2>Plan za 90 dana</h2>
  <p class="lead">Redoslijed ovisi o stanju projekta: najprije tehnička dostupnost, zatim sadržaj i relevantni izvori, pa učinak na upite. Tjedni su okvirni.</p>
@@ -11,6 +12,7 @@
   <tr><td><b>4. Izvori</b><br><span class="small muted">4. do 8. tjedan</span></td><td>Dokument s podacima, imenici za koje ispunjavate uvjete, neutralni zahtjevi za recenzije. Upiti listama i katalozima. Odabir relevantnih portala i prve objave. Ideja za podatkovnu priču.</td><td>Gap lista ima status za svako mjesto</td><td>5, 6, 7</td></tr>
   <tr><td><b>5. Učinak</b><br><span class="small muted">1. u mjesecu, 12. tjedan</span></td><td>Mjesečni test i pet vrsta rezultata. Bilješka o promjenama. U 12. tjednu usporedba s polazištem i plan za iduća 3 mjeseca.</td><td>Znate koji rezultat se pomaknuo, a koji nije, i imate moguće razloge</td><td>9</td></tr>
  </table>
+ </div>
  <p class="small muted">Primjer rasporeda objava (npr. 2 mjesečno) prilagodite budžetu i rezultatima mjerenja. Nije obvezna kvota.</p>
  <h3>Radni predložak</h3>
  <p>Tablica za praćenje sa stupcima: ID pitanja, pitanje, namjera, platforma/model, datum, lokacija, jezik, krug, pretraga pokrenuta, spomen, preporuka, citirani URL vašeg weba, citirani URL treće strane, konkurenti, dokaz (snimka ili link), bilješka o promjeni. Uz mjesečni pregled dodajte kvalificirane upite i prihod ako ih imate. Preuzmite: <a href="https://serprise.agency/vodic/predlozak-pracenja.csv">serprise.agency/vodic/predlozak-pracenja.csv</a> (otvara se u Excelu i Google Sheetsu).</p>
@@ -34,12 +36,13 @@
  <h3>Test 35 pitanja (30.10.2026.)</h3>
  <table>
   <tr><th style="width:30%">Stavka</th><th>Vrijednost</th></tr>
-  <tr><td>Sučelje</td><td>OpenAI Responses API s alatom web_search, ne ChatGPT u pregledniku. Zapisi pretrage i citati iz API odgovora.[@openai-websearch]</td></tr>
+  <tr><td>Sučelje</td><td>OpenAI Responses API s alatom web_search, ne ChatGPT u pregledniku.[@openai-websearch]</td></tr>
+  <tr><td>Model</td><td>Nije zabilježen. Sirovi odgovori nisu spremljeni; spremljeni su parovi pitanje i citirani URL. Zato se ne može naknadno potvrditi je li pretraga pokrenuta u svakom odgovoru</td></tr>
   <tr><td>Lokacija i jezik</td><td>Približna lokacija Zagreb, Hrvatska; pitanja na hrvatskom</td></tr>
   <tr><td>Kontekst</td><td>Svaki poziv je zaseban zahtjev, bez povijesti razgovora</td></tr>
   <tr><td>Pitanja</td><td>35 pitanja o SEO-u, GEO optimizaciji i AI vidljivosti u Hrvatskoj, kako ih piše vlasnik firme ili marketing voditelj</td></tr>
   <tr><td>Ponavljanja</td><td>25 pitanja jednom, 10 kupovnih pitanja dvaput: ukupno 45 odgovora. Ponavljanja nisu jednaka, pa ukupni rezultati više teže kupovnim pitanjima</td></tr>
-  <tr><td>Definicije</td><td>Kako brojimo: <b>Spomen</b>: naziv brenda u tekstu odgovora. <b>Citat</b>: URL u anotacijama odgovora. <b>Domena</b>: jedinstveni host citiranog URL-a, bez "www". "Citirano u N odgovora" broji odgovore, ne linkove</td></tr>
+  <tr><td>Definicije</td><td><b>Citat</b>: URL u anotacijama odgovora. Spomen brenda u tekstu za ovaj test zabilježen je samo kao ukupan zbroj, ne po odgovoru. <b>Domena</b>: jedinstveni host citiranog URL-a, bez "www". "Citirano u N odgovora" broji odgovore, ne linkove</td></tr>
   <tr><td>Domain Rating</td><td>Ahrefs, 30.10.2026. DR je Ahrefsova metrika, ne signal tražilica[@ahrefs-dr]</td></tr>
   <tr><td>Analiza stranica</td><td>19 citiranih stranica pregledano ručno; bez usporedne skupine necitiranih stranica</td></tr>
   <tr><td>Ponovljeni test</td><td>Isti test 1.11.2026.: na vrhu su većinom bile iste domene. Metriku preklapanja nismo računali, pa ne navodimo postotak</td></tr>
@@ -49,12 +52,13 @@
   <tr><th style="width:30%">Stavka</th><th>Vrijednost</th></tr>
   <tr><td>Google</td><td>DataForSEO, Google Hrvatska, hrvatski jezik, desktop, top 20 i izvori AI pregleda; 23 pojma</td></tr>
   <tr><td>ChatGPT</td><td>OpenAI Responses API, model gpt-5-mini, web_search s lokacijom Hrvatska; 16 pitanja, svako dvaput (32 odgovora)</td></tr>
-  <tr><td>Spomen</td><td>Naziv domene u tekstu ili citiranom URL-u</td></tr>
+  <tr><td>Polazna metrika (1.11.2026.)</td><td>"Spomen ili citat": naziv domene u tekstu ili u citiranom URL-u. Spaja spomen i citat; u 2 od 32 odgovora, od toga u jednom serprise.agency kao citirani izvor</td></tr>
+  <tr><td>Od 1.12.2026.</td><td><b>Spomen</b>: naziv brenda ili unaprijed definirana varijanta u tekstu odgovora. <b>Citat</b>: poveznica na našu domenu kao izvor. <b>Preporuka</b>: odgovor predlaže brend za konkretnu potrebu. <b>Pretraga</b>: potvrđena zapisom <code>web_search_call</code>. Uz rezultat: broj uspješnih testova i broj s potvrđenom pretragom</td></tr>
  </table>
  <h3>Podaci iz GA4 i studije slučaja</h3>
  <ul>
   <li>GA4 osmrtnica.com.hr, dimenzija Session source, 1.10.2025. do 31.10.2026.; pravila identifikacije u tablici u Koraku 8.[@s-ga4]</li>
-  <li>Dnevne sesije s chatgpt.com, 1. do 31.10.2026.. Dnevni izvoz čuvamo uz studiju slučaja.[@s-case]</li>
+  <li>Dnevne sesije s chatgpt.com, 1. do 31.10.2026. Dnevni izvoz čuvamo uz studiju slučaja.[@s-case]</li>
   <li>Volumeni ključnih riječi: Ahrefs Keywords Explorer, Hrvatska, 28.10.2026.; procjena za Google, ne za ChatGPT.[@s-ahrefs-vol]</li>
  </ul>
  <h3>Ograničenja</h3>

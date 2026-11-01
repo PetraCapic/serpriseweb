@@ -1,0 +1,14 @@
+{
+  "_opis": "Kratke definicije za tooltipove u člancima. U markdownu: <span data-term=\"geo\">GEO</span>. Komponenta: src/components/blog/GlossaryTips.astro",
+  "llm-vidljivost": "Koliko često vas ChatGPT, Gemini, Perplexity i Googleovi AI odgovori spominju ili linkaju. Mjeri se promptovima i GA4.",
+  "geo": "Generative engine optimization: optimizacija da vas generativne tražilice (ChatGPT, Perplexity, AI Mode) citiraju u odgovoru.",
+  "aeo": "Answer engine optimization: optimizacija za izravne odgovore, od featured snippeta i AI pregleda do glasovnih asistenata.",
+  "ai-seo": "Isto što i GEO. Naziv se češće koristi u ponudama agencija.",
+  "llms-txt": "Datoteka s opisom weba za AI alate. Google je ne koristi, a nema dokaza da donosi citate.",
+  "ai-overview": "AI pregled: sažetak koji Google generira iznad rezultata pretrage, s linkovima na izvore.",
+  "ai-mode": "AI način: Googleova pretraga u obliku razgovora. Od veljače 2026. radi i na hrvatskom.",
+  "grounding": "Kad AI prije odgovora pretraži web i odgovor složi iz pronađenih stranica, umjesto samo iz onoga što je naučio u treningu.",
+  "fan-out": "Query fan-out: AI jedno pitanje razloži na više pretraga (često i na engleskom) i spoji rezultate.",
+  "citat": "Citat: AI uz odgovor navede link na vašu stranicu kao izvor.",
+  "spomen": "Spomen: AI napiše ime vaše tvrtke, s linkom ili bez njega."
+}

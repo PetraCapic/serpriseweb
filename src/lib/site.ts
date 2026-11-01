@@ -25,13 +25,15 @@ export const nav = [
 ];
 
 // Tim za stranicu O nama. photo je u public/tim/ (kvadrat, npr. 480x480).
-export const team: { name: string; role: string; bio: string; linkedin?: string; photo?: string }[] = [
+// profile je stranica autora (/autor/...), na nju vode potpisi na blogu.
+export const team: { name: string; role: string; bio: string; linkedin?: string; photo?: string; profile?: string }[] = [
   {
     name: 'Jure Kljajić',
     role: 'Osnivač i SEO strateg',
     bio: 'Jure gradi poveznice za brendove kojima pozicije na Googleu moraju donositi prihod. Na LinkedInu ga prati više od 11.000 ljudi s kojima dijeli iskustva iz link buildinga i AI pretraživanja. Klijentima je prva osoba za kontakt i postavlja strategiju svake kampanje.',
     linkedin: 'https://www.linkedin.com/in/jurekljajic/',
     photo: '/tim/jure-kljajic.webp',
+    profile: '/autor/jure-kljajic/',
   },
   {
     name: 'Petra Capić',

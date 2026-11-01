@@ -1,0 +1,132 @@
+---
+import data from '../../data/llm-tracker.json';
+// Javni tracker "Naše mjerenje": SERPRise u ChatGPT odgovorima kroz vrijeme.
+// Podaci: src/data/llm-tracker.json (jedini izvor; isti widget koriste svi članci).
+// U članku: <div data-embed="tracker"></div>
+const { answers, target, targetDate, points, method } = data;
+const day = (s: string) => new Date(`${s}T00:00:00Z`).getTime();
+const fmt = (s: string) => new Date(`${s}T00:00:00Z`).toLocaleDateString('hr-HR', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }).replace(/\.$/, '');
+const fmtShort = (s: string) => new Date(`${s}T00:00:00Z`).toLocaleDateString('hr-HR', { day: 'numeric', month: 'numeric', timeZone: 'UTC' });
+
+// Os X: od prvog mjerenja do roka cilja. Os Y: 0 do malo iznad cilja (ne do 45, inače se ništa ne vidi).
+const W = 640, H = 260, L = 40, R = 24, T = 20, B = 36;
+const x0 = day(points[0].date), x1 = day(targetDate);
+const yMax = Math.max(target + 2, ...points.map((p) => p.hits + 1));
+const sx = (d: string) => L + ((day(d) - x0) / (x1 - x0)) * (W - L - R);
+const sy = (v: number) => T + (1 - v / yMax) * (H - T - B);
+const ticks = Array.from({ length: Math.floor(yMax / 2) + 1 }, (_, i) => i * 2);
+// Mjesečne oznake na osi X (prvi u mjesecu)
+const months: string[] = [];
+{
+  const d = new Date(x0);
+  d.setUTCDate(1);
+  d.setUTCMonth(d.getUTCMonth() + 1);
+  while (d.getTime() <= x1) {
+    months.push(d.toISOString().slice(0, 10));
+    d.setUTCMonth(d.getUTCMonth() + 1);
+  }
+}
+const last = points[points.length - 1];
+const line = points.map((p, i) => `${i ? 'L' : 'M'}${sx(p.date).toFixed(1)},${sy(p.hits).toFixed(1)}`).join(' ');
+const pct = (n: number) => Math.round((n / answers) * 100);
+---
+<section class="wg trk" data-tracker aria-labelledby="trk-title">
+  <p class="wg__eyebrow">Naše mjerenje · javno</p>
+  <h3 id="trk-title" class="wg__title">SERPRise u ChatGPT odgovorima: {last.hits} od {answers}, cilj {target} od {answers}</h3>
+  <p class="wg__lead">Istih 35 pitanja, 45 odgovora, svaki mjesec. Rok za cilj: {fmt(targetDate)}. Objavljujemo i kad rezultat nije dobar.</p>
+
+  <div class="trk__stats">
+    <div><strong>{last.hits}/{answers}</strong><span>zadnje mjerenje ({fmtShort(last.date)})</span></div>
+    <div><strong>{pct(last.hits)}%</strong><span>udio odgovora</span></div>
+    <div><strong>{target}/{answers}</strong><span>cilj ({pct(target)}%)</span></div>
+  </div>
+
+  <div class="trk__chart">
+    <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-labelledby="trk-title trk-desc">
+      <desc id="trk-desc">Linijski graf broja ChatGPT odgovora u kojima je SERPRise citiran, po mjerenju. {points.map((p) => `${fmt(p.date)}: ${p.hits} od ${answers}`).join('; ')}. Cilj: {target} od {answers} do {fmt(targetDate)}.</desc>
+      {ticks.map((t) => (
+        <g class="trk__grid">
+          <line x1={L} x2={W - R} y1={sy(t)} y2={sy(t)} />
+          <text x={L - 8} y={sy(t) + 4} text-anchor="end">{t}</text>
+        </g>
+      ))}
+      {months.map((m) => (
+        <text class="trk__xl" x={sx(m)} y={H - 12} text-anchor="middle">{fmtShort(m)}</text>
+      ))}
+      <line class="trk__goal" x1={L} x2={W - R} y1={sy(target)} y2={sy(target)} />
+      <text class="trk__goal-l" x={W - R} y={sy(target) - 8} text-anchor="end">cilj {target}/{answers}</text>
+      <path class="trk__path-to" d={`M${sx(last.date)},${sy(last.hits)} L${sx(targetDate)},${sy(target)}`} />
+      <circle class="trk__target" cx={sx(targetDate)} cy={sy(target)} r="6" />
+      <path class="trk__line" d={line} />
+      {points.map((p) => (
+        <g class="trk__pt" tabindex="0" data-tip={`${fmt(p.date)}: ${p.hits} od ${answers} odgovora${p.note ? ` · ${p.note}` : ''}`}>
+          <circle class="trk__hit" cx={sx(p.date)} cy={sy(p.hits)} r="16" />
+          <circle class="trk__dot" cx={sx(p.date)} cy={sy(p.hits)} r="5" />
+        </g>
+      ))}
+    </svg>
+    <div class="trk__tip" role="status" hidden></div>
+  </div>
+
+  <details class="trk__table">
+    <summary>Prikaži tablicu</summary>
+    <table>
+      <thead><tr><th>Datum</th><th>Odgovora s SERPRiseom</th><th>Napomena</th></tr></thead>
+      <tbody>
+        {points.map((p) => <tr><td>{fmt(p.date)}</td><td>{p.hits} od {answers}</td><td>{p.note ?? ''}</td></tr>)}
+        <tr><td>{fmt(targetDate)}</td><td>cilj: {target} od {answers}</td><td></td></tr>
+      </tbody>
+    </table>
+  </details>
+  <p class="wg__note">{method}</p>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-tracker]').forEach((el) => {
+    // Komponenta se renderira ispod članka i premješta na mjesto označeno u tekstu.
+    const slot = document.querySelector('[data-embed="tracker"]');
+    if (slot) slot.replaceWith(el);
+    const tip = el.querySelector<HTMLElement>('.trk__tip')!;
+    const wrap = el.querySelector<HTMLElement>('.trk__chart')!;
+    const show = (g: SVGGElement) => {
+      const dot = g.querySelector('.trk__dot')!.getBoundingClientRect();
+      const box = wrap.getBoundingClientRect();
+      tip.textContent = g.dataset.tip ?? '';
+      tip.hidden = false;
+      tip.style.left = `${dot.left - box.left + dot.width / 2}px`;
+      tip.style.top = `${dot.top - box.top}px`;
+    };
+    el.querySelectorAll<SVGGElement>('.trk__pt').forEach((g) => {
+      g.addEventListener('mouseenter', () => show(g));
+      g.addEventListener('focus', () => show(g));
+      g.addEventListener('mouseleave', () => (tip.hidden = true));
+      g.addEventListener('blur', () => (tip.hidden = true));
+    });
+  });
+</script>
+
+<style>
+  .trk__stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 18px 0 8px; }
+  .trk__stats div { background: var(--bg-2); border-radius: 12px; padding: 12px 14px; display: grid; }
+  .trk__stats strong { font: 700 1.5rem var(--font-display); color: var(--navy); }
+  .trk__stats span { font-size: 0.8rem; color: var(--muted); }
+  .trk__chart { position: relative; }
+  .trk__chart svg { width: 100%; height: auto; display: block; overflow: visible; }
+  .trk__grid line { stroke: var(--border); stroke-width: 1; }
+  .trk__grid text, .trk__xl { fill: var(--muted); font: 12px var(--font); }
+  .trk__goal { stroke: var(--accent); stroke-width: 1.5; stroke-dasharray: 5 5; }
+  .trk__goal-l { fill: var(--accent); font: 600 12px var(--font); }
+  .trk__path-to { stroke: var(--muted); stroke-width: 1.5; stroke-dasharray: 2 5; fill: none; }
+  .trk__target { fill: #fff; stroke: var(--accent); stroke-width: 2; }
+  .trk__line { stroke: var(--navy); stroke-width: 2; fill: none; stroke-linejoin: round; }
+  .trk__dot { fill: var(--navy); stroke: #fff; stroke-width: 2; }
+  .trk__hit { fill: transparent; }
+  .trk__pt { cursor: default; outline: none; }
+  .trk__pt:focus-visible .trk__dot { stroke: var(--accent); stroke-width: 3; }
+  .trk__tip { position: absolute; transform: translate(-50%, calc(-100% - 10px)); background: var(--navy); color: #fff; font-size: 0.8rem; padding: 6px 10px; border-radius: 8px; white-space: nowrap; pointer-events: none; }
+  .trk__table summary { cursor: pointer; font-size: 0.9rem; color: var(--muted); margin-top: 8px; }
+  @media (max-width: 560px) {
+    .trk__stats { grid-template-columns: 1fr 1fr; }
+    .trk__stats div:last-child { grid-column: span 2; }
+  }
+</style>

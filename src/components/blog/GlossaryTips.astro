@@ -1,0 +1,51 @@
+---
+import glosar from '../../data/glosar.json';
+// Tooltipovi za pojmove u tekstu članka: <span data-term="geo">GEO</span>.
+// Bez JS-a pojam ostaje običan tekst; definicije su i u tablici "Nazivi koje ćete sretati".
+const terms = Object.fromEntries(Object.entries(glosar).filter(([k]) => !k.startsWith('_')));
+---
+<script type="application/json" data-glosar set:html={JSON.stringify(terms)} />
+<div class="gtip" role="tooltip" id="gtip" hidden></div>
+
+<script>
+  const data = JSON.parse(document.querySelector('[data-glosar]')?.textContent || '{}') as Record<string, string>;
+  const tip = document.getElementById('gtip');
+  if (tip) {
+    let current: HTMLElement | null = null;
+    const show = (el: HTMLElement) => {
+      current = el;
+      tip.textContent = data[el.dataset.term!] ?? '';
+      tip.hidden = false;
+      const r = el.getBoundingClientRect();
+      const w = Math.min(300, window.innerWidth - 24);
+      tip.style.width = `${w}px`;
+      const left = Math.max(12, Math.min(r.left + r.width / 2 - w / 2, window.innerWidth - w - 12));
+      tip.style.left = `${left + window.scrollX}px`;
+      const below = r.top < tip.offsetHeight + 16;
+      tip.style.top = `${(below ? r.bottom + 8 : r.top - tip.offsetHeight - 8) + window.scrollY}px`;
+    };
+    const hide = () => {
+      current = null;
+      tip.hidden = true;
+    };
+    document.querySelectorAll<HTMLElement>('.article [data-term]').forEach((el) => {
+      if (!data[el.dataset.term!]) return;
+      el.classList.add('term');
+      el.tabIndex = 0;
+      el.setAttribute('aria-describedby', 'gtip');
+      el.addEventListener('mouseenter', () => show(el));
+      el.addEventListener('mouseleave', hide);
+      el.addEventListener('focus', () => show(el));
+      el.addEventListener('blur', hide);
+      // Na mobitelu: dodir otvara/zatvara
+      el.addEventListener('click', () => (current === el ? hide() : show(el)));
+    });
+    document.addEventListener('keydown', (e) => e.key === 'Escape' && hide());
+  }
+</script>
+
+<style is:global>
+  .term { text-decoration: underline dotted var(--accent); text-decoration-thickness: 1.5px; text-underline-offset: 3px; cursor: help; }
+  .term:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+  .gtip { position: absolute; z-index: 50; background: var(--navy); color: #fff; font-size: 0.85rem; line-height: 1.45; padding: 10px 12px; border-radius: 10px; box-shadow: var(--shadow); pointer-events: none; }
+</style>

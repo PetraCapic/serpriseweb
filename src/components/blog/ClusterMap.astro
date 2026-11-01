@@ -1,0 +1,105 @@
+---
+// Klikabilna mapa članaka o AI vidljivosti. Svaki čvor je link; opis se vidi na hover/fokus.
+// Na uskim ekranima umjesto SVG-a prikazuje se obični popis linkova (isti sadržaj).
+// U članku: <div data-embed="cluster-map"></div>
+type Node = { href: string; label: string[]; desc: string; x: number; y: number; group: number };
+const groups = [
+  { n: 1, name: 'Čitljivost', x: 205, y: 120, anchor: '#1-može-li-ai-uopće-pročitati-vašu-stranicu' },
+  { n: 2, name: 'Stranica koja odgovara', x: 515, y: 120, anchor: '#2-imate-li-stranicu-koja-odgovara-točno-na-pitanje' },
+  { n: 3, name: 'Spomeni', x: 205, y: 340, anchor: '#3-spominju-li-vas-drugi' },
+  { n: 4, name: 'Mjerenje', x: 515, y: 340, anchor: '#4-mjerite-li' },
+];
+const nodes: Node[] = [
+  { href: '/blog/case-study-ai-vidljivost-osmrtnice/', label: ['Case study:', 'portal za osmrtnice'], desc: 'Jedna tehnička promjena: posjeti s ChatGPT-a sa 6 na 67 u 12 dana.', x: 95, y: 40, group: 1 },
+  { href: '/blog/chatgpt-pretrage/', label: ['Što ChatGPT', 'stvarno pretražuje'], desc: 'Kako u Chromeu vidjeti pretrage koje ChatGPT pokrene u pozadini.', x: 625, y: 40, group: 2 },
+  { href: '/blog/chatgpt-citati-hrvatska/', label: ['Koje stranice', 'ChatGPT citira'], desc: 'Istraživanje: 35 hrvatskih pitanja, 45 odgovora, citirane i stranice s DR 0.', x: 650, y: 200, group: 2 },
+  { href: '/blog/portali-za-pr-objave/', label: ['335 portala', 'za PR objave'], desc: 'Koje portale AI citira, DR, promet i oznaka sponzorirano.', x: 95, y: 420, group: 3 },
+  { href: '/blog/provjera-ai-vidljivosti/', label: ['Provjera', 'u 20 pitanja'], desc: 'Gotov popis pitanja i tablica za mjesečno bilježenje.', x: 625, y: 420, group: 4 },
+  { href: '/blog/ga4-ai-kanal/', label: ['GA4 kanal', 'za AI promet'], desc: 'Regex i 7 koraka da GA4 pokaže sve posjete s AI alata.', x: 650, y: 280, group: 4 },
+  { href: '/vodic-llm-vidljivost/', label: ['Besplatni vodič', '(PDF, 9 koraka)'], desc: 'Cijeli postupak od izbora pitanja do mjerenja, na e-mail.', x: 70, y: 230, group: 0 },
+];
+const hub = { x: 360, y: 230 };
+const all = [
+  ...groups.map((g) => ({ href: g.anchor, label: [`${g.n}. ${g.name}`], desc: '' })),
+  ...nodes,
+];
+---
+<figure class="wg cmap" data-cmap>
+  <p class="wg__eyebrow">Mapa vodiča</p>
+  <h3 class="wg__title">Kako su članci o AI vidljivosti povezani</h3>
+  <p class="wg__lead">Kliknite članak. Četiri točke u sredini vode na poglavlja ovog vodiča.</p>
+  <div class="cmap__wrap">
+    <svg viewBox="0 0 720 460" aria-label="Mapa članaka o AI vidljivosti">
+      <g class="cmap__edges" aria-hidden="true">
+        {groups.map((g) => <line x1={hub.x} y1={hub.y} x2={g.x} y2={g.y} />)}
+        {nodes.map((n) => {
+          const g = groups.find((x) => x.n === n.group) ?? hub;
+          return <line class="cmap__edge2" x1={g.x} y1={g.y} x2={n.x} y2={n.y} />;
+        })}
+      </g>
+      <g class="cmap__hub" aria-hidden="true">
+        <circle cx={hub.x} cy={hub.y} r="58" />
+        <text x={hub.x} y={hub.y - 4} text-anchor="middle">AI vidljivost</text>
+        <text x={hub.x} y={hub.y + 16} text-anchor="middle" class="cmap__sub">ovaj vodič</text>
+      </g>
+      {groups.map((g) => (
+        <a href={g.anchor} class="cmap__node cmap__node--group" data-desc={`Poglavlje ${g.n} ovog vodiča`}>
+          <rect x={g.x - 80} y={g.y - 20} width="160" height="40" rx="20" />
+          <text x={g.x} y={g.y + 5} text-anchor="middle">{g.n}. {g.name}</text>
+        </a>
+      ))}
+      {nodes.map((n) => (
+        <a href={n.href} class="cmap__node" data-desc={n.desc}>
+          <rect x={n.x - 66} y={n.y - 24} width="132" height="48" rx="10" />
+          <text x={n.x} y={n.y - 3} text-anchor="middle">{n.label[0]}</text>
+          <text x={n.x} y={n.y + 14} text-anchor="middle">{n.label[1]}</text>
+        </a>
+      ))}
+    </svg>
+    <p class="cmap__tip" aria-live="polite">Prijeđite mišem preko članka za opis.</p>
+  </div>
+  <ul class="cmap__list">
+    {nodes.map((n) => (
+      <li><a href={n.href}>{n.label.join(' ')}</a> <span class="muted">{n.desc}</span></li>
+    ))}
+  </ul>
+</figure>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-cmap]').forEach((el) => {
+    const slot = document.querySelector('[data-embed="cluster-map"]');
+    if (slot) slot.replaceWith(el);
+    const tip = el.querySelector<HTMLElement>('.cmap__tip')!;
+    const def = tip.textContent;
+    el.querySelectorAll<SVGAElement>('.cmap__node').forEach((a) => {
+      const on = () => (tip.textContent = a.dataset.desc || def);
+      a.addEventListener('mouseenter', on);
+      a.addEventListener('focus', on);
+      a.addEventListener('mouseleave', () => (tip.textContent = def));
+    });
+  });
+</script>
+
+<style>
+  .cmap { margin: 2em 0; }
+  .cmap__wrap svg { width: 100%; height: auto; display: block; }
+  .cmap__edges line { stroke: var(--border); stroke-width: 2; }
+  .cmap__edges .cmap__edge2 { stroke-dasharray: 4 4; }
+  .cmap__hub circle { fill: var(--navy); }
+  .cmap__hub text { fill: #fff; font: 700 15px var(--font-display); }
+  .cmap__hub .cmap__sub { font: 12px var(--font); fill: rgba(255, 255, 255, 0.75); }
+  .cmap__node rect { fill: #fff; stroke: var(--border); stroke-width: 1.5; transition: stroke 0.15s, fill 0.15s; }
+  .cmap__node text { fill: var(--navy); font: 600 12.5px var(--font); }
+  .cmap__node--group rect { fill: var(--accent-soft); stroke: var(--accent); }
+  .cmap__node--group text { fill: var(--accent); font: 700 13px var(--font-display); }
+  .cmap__node:hover rect, .cmap__node:focus rect { stroke: var(--accent); stroke-width: 2.5; }
+  .cmap__node:focus { outline: none; }
+  .cmap__node:focus-visible rect { stroke-width: 3; }
+  .cmap__tip { margin: 8px 0 0; min-height: 1.6em; color: var(--muted); font-size: 0.92rem; text-align: center; }
+  .cmap__list { display: none; margin: 12px 0 0; }
+  .cmap__list span { font-size: 0.9rem; }
+  @media (max-width: 640px) {
+    .cmap__wrap { display: none; }
+    .cmap__list { display: block; }
+  }
+</style>

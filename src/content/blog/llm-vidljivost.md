@@ -44,6 +44,8 @@ Citirane hrvatske stranice za kupovna pitanja imale su pet zajedničkih stvari:
 
 Jedna stranica po usluzi. Blog članak o "trendovima" ne zamjenjuje uslužnu stranicu.
 
+Koje riječi ChatGPT stvarno pretražuje za pitanje vašeg kupca možete vidjeti sami, u Chromeu. Postupak i što iz pretraga pročitati: [Što ChatGPT stvarno pretražuje kad netko pita za vašu uslugu](/blog/chatgpt-pretrage/).
+
 ### 3. Spominju li vas drugi
 
 Za pitanje "koje su najbolje agencije" ChatGPT ne citira stranicu agencije nego tuđe liste, direktorije (Clutch, trebam.hr) i stranice konferencija. Za lokalne usluge to su lokalni portali i stranice gradova. Profil na direktoriju i jedan članak na portalu koji AI već citira često vrijede više od deset novih blog članaka na vlastitom webu. Popis portala s DR-om i oznakom sponzoriranog sadržaja je u članku [Hrvatski portali za PR objave](/blog/portali-za-pr-objave/).

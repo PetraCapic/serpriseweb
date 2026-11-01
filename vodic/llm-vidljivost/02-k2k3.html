@@ -8,14 +8,14 @@
 
  <h3>ChatGPT, klik po klik</h3>
  <ol class="klik">
-  <li>Otvorite chatgpt.com i uključite <b>privremeni chat</b> (Temporary Chat). Takav razgovor ne ulazi u povijest i iz njega se ne stvaraju nova sjećanja. Ako imate uključenu personalizaciju, privremeni chat i dalje može čitati postojeću memoriju, pa je za test isključite ili koristite račun bez povijesti.[@openai-temp]</li>
-  <li>Provjerite je li uključena <b>pretraga weba</b>. Odgovor mora imati izvore (linkove ili gumb "Izvori"). Ako izvora nema, pretraga se nije pokrenula: zapišite to kao poseban ishod, ne kao "nije spomenut".</li>
+  <li>Prije prve poruke otvorite <b>privremeni chat</b> (Temporary Chat) i odaberite <b>Unpersonalized</b>. Personalizirani privremeni chat može koristiti postojeću memoriju, a nepersonalizirani ne koristi memoriju, prilagođene upute ni dodatke. Tako smanjujete utjecaj personalizacije na test.[@openai-temp]</li>
+  <li>Provjerite je li <b>pretraga pokrenuta</b>. U korisničkom sučelju gledajte oznaku aktivnosti pretraživanja; u API testovima zapis poziva alata (<code>web_search_call</code>).[@openai-websearch] Izostanak izvora u odgovoru nije dovoljan dokaz da pretrage nije bilo. Ako pretragu ne možete potvrditi, zabilježite "pretraga nepotvrđena".</li>
   <li>Upišite prvo pitanje točno kako je u tablici.</li>
-  <li>Zapišite pet stvari: spomen (da/ne), preporuka (da/ne), citat vašeg weba (URL), citat tuđe stranice koja govori o vama (URL) i koje su domene izvori.</li>
+  <li>Bilježite odvojeno: <b>spomen</b> (naziv brenda ili unaprijed definirana varijanta naziva u tekstu odgovora), <b>preporuka</b> (odgovor predlaže vaš brend za konkretnu potrebu), <b>citat</b> (odgovor sadrži poveznicu na vašu domenu kao izvor), citat tuđe stranice koja govori o vama i koje su domene izvori.</li>
   <li>Otvorite novi privremeni chat i <b>isto pitanje postavite još jednom</b>. Zapišite i drugi odgovor.</li>
   <li>Ponovite za sva pitanja. Svako pitanje postavite <b>jednak broj puta</b> (npr. dvaput), da nijedno ne teži više u ukupnom rezultatu.</li>
  </ol>
- <div class="box data"><b>Kako čitati podatke</b><p><span class="label l-praksa">Praksa</span> Isto pitanje postavljeno dvaput često ne vraća iste izvore. Zato ne zaključujte iz jednog odgovora. Rezultat računajte po pitanju (u koliko od dva kruga ste spomenuti), pa tek onda zbrojite. Kod 40 odgovora jedan odgovor više ili manje mijenja udio za 2,5 postotna boda, pa male promjene nisu signal.</p></div>
+ <div class="box data"><b>Kako čitati podatke</b><p><span class="label l-praksa">Praksa</span> Isto pitanje postavljeno dvaput često ne vraća iste izvore. Zato ne zaključujte iz jednog odgovora. Rezultat računajte po pitanju (u koliko od dva kruga ste spomenuti), pa tek onda zbrojite. Kod 40 odgovora jedan odgovor više ili manje mijenja udio za 2,5 postotna boda, pa male promjene same po sebi nisu dovoljan dokaz pomaka. Uz rezultat uvijek navedite nazivnik: koliko je testova uspješno provedeno i koliko ih je imalo potvrđenu pretragu.</p></div>
 
  <h3>Google AI pregled i AI način</h3>
  <ol class="klik">
@@ -35,7 +35,7 @@
  </table>
  <p class="small muted">Primjer je izmišljen i služi samo kao predložak. Puni predložak sa svim stupcima nalazi se uz vodič: <a href="https://serprise.agency/vodic/predlozak-pracenja.csv">serprise.agency/vodic/predlozak-pracenja.csv</a>.</p>
  <div class="box tip"><b>Tips and tricks</b><ul><li>Stupac "Citirane domene" je najvrjedniji dio tablice. Iz njega u Koraku 3 vadite popis mjesta na kojima trebate biti.</li><li>Zapišite datum, lokaciju i jezik uz svako mjerenje. Bez toga sljedeće mjerenje nije usporedivo.</li></ul></div>
- <div class="box mi"><b>Kako mi to radimo</b><p><span class="label l-test">Naš test</span> Isto mjerenje radimo automatski. Za Google koristimo DataForSEO (pozicije u top 20 i izvori AI pregleda za Hrvatsku), a za ChatGPT OpenAI API s uključenom pretragom i lokacijom Hrvatska, svako pitanje dvaput. Polazno mjerenje za SERPRise 1.11.2026.: u Googleovom top 20 bili smo za 1 od 23 pojma, nijedan AI pregled nas nije citirao, a ChatGPT nas je spomenuo u 2 od 32 odgovora.[@s-tracking] API nije isto što i ChatGPT u pregledniku, pa te brojke uspoređujemo samo s našim ranijim API mjerenjima.</p></div>
+ <div class="box mi"><b>Kako mi to radimo</b><p><span class="label l-test">Naš test</span> Isto mjerenje radimo automatski. Za Google koristimo DataForSEO (pozicije u top 20 i izvori AI pregleda za Hrvatsku), a za ChatGPT OpenAI API s uključenom pretragom i lokacijom Hrvatska, svako pitanje dvaput. Polazno mjerenje za SERPRise 1.11.2026.: u Googleovom top 20 bili smo za 1 od 23 pojma, nijedan AI pregled nas nije citirao, a u ChatGPT-u smo imali spomen ili citat u 2 od 32 odgovora; u jednom od njih serprise.agency je bio citirani izvor.[@s-tracking] Ta polazna metrika spaja spomen i citat; od prosinca ih bilježimo odvojeno. API nije isto što i ChatGPT u pregledniku, pa te brojke uspoređujemo samo s našim ranijim API mjerenjima.</p></div>
  <div class="done"><b>Gotovo kad</b><ul><li>Svako pitanje ima isti broj krugova u ChatGPT-u</li><li>Za svaku ključnu riječ znate ima li AI pregled i tko je izvor</li><li>Tablica ima datum, lokaciju i jezik mjerenja</li></ul></div>
 </section>
 
@@ -57,7 +57,7 @@
  </ol>
  <div class="box data"><b>Kako čitati podatke</b><p><span class="label l-izvor">Izvor</span> Ako pitate ChatGPT "zašto si odabrao te izvore", dobit ćete objašnjenje koje model sastavi naknadno. To je hipoteza, a ne zapis stvarnog postupka. Pouzdaniji su zapisi alata: OpenAI API uz odgovor vraća pretrage koje je pokrenuo i popis dohvaćenih izvora. Dohvaćeni izvor nije nužno citiran u odgovoru.[@openai-websearch]</p></div>
 
- <h3>Razina 2: analiza kroz Claude ili ChatGPT</h3>
+ <h3 class="pb">Razina 2: analiza kroz Claude ili ChatGPT</h3>
  <p>Kopirajte tekst citirane stranice i zalijepite ga u Claude ili ChatGPT s ovim upitom:</p>
 <pre>Ovo je stranica koju Google AI pregled i ChatGPT citiraju za pitanje
 "[pitanje]". Izdvoji u tablici:

@@ -1,5 +1,5 @@
 <!-- KORAK 8 -->
-<section class="page" id="k8">
+<section class="page newpage" id="k8">
  <div class="ihead"><span>LLM vidljivost u Hrvatskoj</span><b>Korak 8 od 9</b></div>
  <div class="stepno">08</div>
  <h2>Postavite praćenje</h2>
@@ -8,7 +8,7 @@
 
  <h3>1. GA4: kanal za AI posjete</h3>
  <p><span class="label l-izvor">Izvor</span> GA4 ima ugrađeni kanal <b>AI Assistant</b>. Posjeti iz Googleovih AI pregleda i AI načina ne ulaze u njega, nego u Organic Search, pa taj kanal nije ukupan broj posjeta iz svih AI iskustava.[@ga4-default]</p>
- <p><span class="label l-test">Naš test</span> Na portalu osmrtnica.com.hr od 1.10.2025. do 31.10.2026. ugrađeni kanal obuhvatio je 136 od 319 sesija (42,6%) koje smo prema pravilima iz tablice ispod identificirali kao AI promet. Ostale su bile u Unassigned i Referral.[@s-ga4] Nalaz se odnosi na taj web i to razdoblje.</p>
+ <p><span class="label l-test">Naš test</span> Na portalu osmrtnica.com.hr od 1.10.2025. do 31.10.2026. ugrađeni kanal obuhvatio je 136 od 319 sesija (42,6%) koje smo prema pravilima iz tablice ispod identificirali kao AI promet. Ostale su bile u kanalima Referral i Unassigned (Unassigned je ishod kad sesija ne zadovoljava nijedno pravilo).[@s-ga4,ga4-default] Nalaz se odnosi na taj web i to razdoblje.</p>
  <table>
   <tr><th>Izvor sesije (pravilo identifikacije)</th><th>Sesija</th></tr>
   <tr><td>chatgpt.com</td><td>273</td></tr>
@@ -22,16 +22,18 @@
  <ol class="klik">
   <li>Prije promjene u <b>Reports, Acquisition, Traffic acquisition</b> zapišite broj sesija po kanalu za zadnjih 90 dana. Trebat će vam za provjeru.</li>
   <li>GA4, <b>Admin</b>, <b>Data display</b>, <b>Channel groups</b>, <b>Create new channel group</b>, ime "Default + AI". GA4 kopira zadane kanale, uključujući AI Assistant.</li>
-  <li>Otvorite kanal <b>AI Assistant</b> u novoj grupi i proširite njegov uvjet (ili ga zamijenite novim kanalom "AI asistenti"), da isti promet ne ostane razdvojen u dva AI kanala. Uvjet: <b>Session source</b>, <b>matches regex</b>:</li>
+  <li>Otvorite kanal <b>AI Assistant</b> u novoj grupi i zadržite njegovo postojeće pravilo. Dodajte novi uvjet s <b>OR</b>: dimenzija <b>Source</b>, <b>matches regex</b>, i zalijepite regex ispod (jedan redak). Tako kanal zadržava promet koji ugrađeno pravilo već prepoznaje, a isti promet ne ostaje razdvojen u dva AI kanala.</li>
  </ol>
-<pre>^(chatgpt\.com|chat\.openai\.com|perplexity|(www\.)?perplexity\.ai|copilot\.com|copilot\.microsoft\.com|gemini|gemini\.google\.com|claude\.ai)$</pre>
+<pre class="nowrap">^(chatgpt\.com|chat\.openai\.com|(www\.)?perplexity(\.ai)?|copilot(\.microsoft)?\.com|gemini(\.google\.com)?|claude\.ai)$</pre>
+ <p class="small muted">Isti regex kao tekst za kopiranje: <a href="https://serprise.agency/vodic/ga4-ai-regex.txt">serprise.agency/vodic/ga4-ai-regex.txt</a>.</p>
+ <p class="small muted">Točno podudaranje smanjuje pogrešne rezultate, ali kampanju čiji je izvor točno "gemini" ili "perplexity" i dalje će svrstati u AI kanal. Ako takvu kampanju imate, u regexu zamijenite <code>perplexity(\.ai)?</code> s <code>perplexity\.ai</code> i <code>gemini(\.google\.com)?</code> s <code>gemini\.google\.com</code>.</p>
  <ol class="klik" start="4" style="counter-reset:k 3">
-  <li>Kanal postavite <b>iznad</b> kanala Referral i Unassigned. GA4 sesiju dodjeljuje prvom kanalu čije uvjete zadovoljava.[@ga4-custom]</li>
-  <li>Spremite grupu. U Traffic acquisition kao primarnu dimenziju odaberite novu grupu na razini sesije ("Session Default + AI"), da uspoređujete sesije sa sesijama.</li>
-  <li><b>Provjera</b>: zbroj sesija svih kanala mora biti isti kao prije promjene. Ako nije, neki uvjet hvata promet dvaput ili ga ispušta.</li>
+  <li>Kanal postavite <b>iznad Referrala</b>. GA4 sesiju dodjeljuje prvom kanalu čije uvjete zadovoljava, pa preklapanje pravila mijenja kanal kojem se sesija pripisuje, ali je ne broji dvaput.[@ga4-custom]</li>
+  <li>Spremite grupu. Sesijski opseg birate tek u izvještaju: u Traffic acquisition kao primarnu dimenziju odaberite novu grupu na razini sesije ("Session Default + AI").</li>
+  <li><b>Provjera</b>: za isto razdoblje, filtre i sesijski opseg usporedite ukupne sesije i njihovu raspodjelu po kanalima, prije i poslije promjene. Preklapanje pravila može promijeniti kanal kojem se sesija pripisuje. Ako se ukupni broj razlikuje, provjerite filtre, opseg i ograničenja prikaza izvještaja.</li>
   <li>Upit, poziv ili kupnju označite kao <b>Key event</b>, da uz posjete vidite i upite s AI alata.</li>
  </ol>
- <div class="box data"><b>Kako čitati podatke</b><p><span class="label l-izvor">Izvor</span> Promjene u prilagođenoj grupi kanala vide se u izvještajima i za ranije podatke, ali promjena primarne grupe kanala i publika nema isti retroaktivni učinak.[@ga4-custom] Regex ne može vratiti izvor koji GA4 nije zabilježio: klik iz aplikacije ili link bez referrera dolazi kao Direct. Zbroj je zato broj <i>prepoznatih</i> AI sesija, ne svih stvarnih AI posjeta. Kratke riječi poput "gemini" i "copilot" mogu pogoditi i nepovezane izvore (npr. kampanju istog imena); zato regex traži točan izvor.</p></div>
+ <div class="box data"><b>Kako čitati podatke</b><p><span class="label l-izvor">Izvor</span> Promjene u prilagođenoj grupi kanala vide se u izvještajima i za ranije podatke, ali promjena primarne grupe kanala i publika nema isti retroaktivni učinak.[@ga4-custom] Regex ne može vratiti izvor koji GA4 nije zabilježio: klik iz aplikacije ili link bez referrera može završiti kao Direct ako nema drugih podataka o izvoru. Zbroj je zato broj <i>prepoznatih</i> AI sesija, ne svih stvarnih AI posjeta. Kratke riječi poput "gemini" i "copilot" mogu pogoditi i nepovezane izvore (npr. kampanju istog imena); zato regex traži točan izvor.</p></div>
 
  <h3>2. Search Console: izvještaj o generativnoj AI</h3>
  <ol class="klik">
@@ -56,7 +58,7 @@
  <h3>5. Pitajte kupce</h3>
  <p>U kontakt formu dodajte izbornik "Kako ste nas pronašli?" s opcijom "ChatGPT ili drugi AI alat" i polje "Što ste upisali?". Tako saznajete stvarna pitanja koja su kupca dovela.</p>
  <div class="box mi"><b>Kako mi to radimo</b><p>U našem admin sučelju je kartica "Ciljani pojmovi": za svaki pojam pozicija na Googleu, ima li AI pregled i citira li nas, i spominje li nas ChatGPT, uz promjenu iz mjeseca u mjesec. Mjerenje se pokreće automatski svakog prvog u mjesecu.[@s-tracking] Klijenti isti pregled dobivaju u svom dashboardu.</p></div>
- <div class="done"><b>Gotovo kad</b><ul><li>GA4 ima jedan AI kanal iznad Referrala i Unassigned, a zbroj sesija se nije promijenio</li><li>Search Console i Bing Webmaster Tools su postavljeni</li><li>Mjesečni test je u kalendaru za 1. u mjesecu</li><li>Kontakt forma pita kako ste nas pronašli</li></ul></div>
+ <div class="done"><b>Gotovo kad</b><ul><li>GA4 ima jedan AI kanal iznad Referrala, a ukupne sesije za isto razdoblje odgovaraju stanju prije promjene</li><li>Search Console i Bing Webmaster Tools su postavljeni</li><li>Mjesečni test je u kalendaru za 1. u mjesecu</li><li>Kontakt forma pita kako ste nas pronašli</li></ul></div>
 </section>
 
 <!-- KORAK 9 -->
@@ -77,14 +79,14 @@
   <tr><td><b>5. Poslovni rezultat</b></td><td>Kvalificirani upit, rezervacija, prodaja ili prihod</td><td>GA4 Key events, CRM, kontakt forma</td></tr>
  </table>
  <p><span class="label l-praksa">Praksa</span> PR članak može donijeti spomen bez citata vašeg weba. Citat vaše informativne stranice ne mora značiti preporuku vaše usluge. Zato svaki rezultat brojite zasebno, s nazivnikom: npr. "spomen u 6 od 40 odgovora (15%), preporuka u 3 od 40".</p>
- <p class="small"><span class="label l-test">Naš test</span> Primjer: za osmrtnica.com.hr 1.11.2026. postavili smo 12 pitanja po jednom. Portal je spomenut u 5 od 12 odgovora (41,7%), a citiran s linkom u 3 od 12 (25%).[@s-case] To je jednokratni test, ne isti postupak kao mjerenje s dva kruga po pitanju.</p>
+ <p class="small"><span class="label l-test">Naš test</span> Primjer: za osmrtnica.com.hr 1.11.2026. postavili smo 12 pitanja po jednom, preko OpenAI API-ja s web pretragom i lokacijom Zagreb; model nije zabilježen. Portal je spomenut u 5 od 12 odgovora (41,7%), a citiran s linkom u 3 od 12 (25%).[@s-case] To je jednokratni test, ne isti postupak kao mjerenje s dva kruga po pitanju.</p>
 
  <h3>Kako čitati rezultate</h3>
  <table class="diag">
   <tr><th>Što vidite</th><th>Mogući razlozi</th><th>Kako provjeriti</th></tr>
   <tr><td>Udio spomena mijenja se iz mjeseca u mjesec za nekoliko postotnih bodova</td><td>Odgovori se razlikuju između postavljanja; mali uzorak (kod 40 odgovora jedan odgovor = 2,5 boda)</td><td>Gledajte trend kroz 3 mjeseca i rezultat po pitanju, ne ukupni postotak jednog mjeseca</td></tr>
   <tr><td>Spomenuti ste, ali bez linka na vaš web</td><td>Odgovor se oslanja na tuđe izvore; vaša stranica ne odgovara na pitanje, nije dostupna ili nije indeksirana</td><td>Pogledajte citirane izvore; usporedite sadržaj; provjerite indeksiranost i robots.txt (Korak 4)</td></tr>
-  <tr><td>Rastu AI impresije u Search Consoleu, a klikovi ne</td><td>Prikaz ne znači posjet; promjena prikaza ili upita</td><td>Pogledajte koje stranice i upiti rastu; dodajte na stranicu ono zbog čega se vrijedi kliknuti (kalkulator, ponuda, rezervacija)</td></tr>
+  <tr><td>Rastu AI impresije u Search Consoleu, a klikovi ne</td><td>Prikaz ne znači posjet; promjena vrste prikaza ili upita</td><td>U Generative AI izvještaju provjerite koje stranice dobivaju više prikaza (izvještaj nema dimenziju upita).[@gsc-genai] Upite analizirajte u standardnom izvještaju Učinak, uz napomenu da ti podaci nisu izdvojeni samo za AI prikaze. Iz ukupnih klikova i AI impresija ne računajte CTR AI rezultata.</td></tr>
   <tr><td>Brend pitanja da, kategorijska ne</td><td>Malo spomena na trećim stranama za tu kategoriju</td><td>Ponovite Korak 3 za kategorijska pitanja; usporedite gap listu</td></tr>
   <tr><td>Google da, ChatGPT ne</td><td>Botovi za pretragu blokirani; sadržaj nije u HTML-u; drugačiji izvori</td><td>robots.txt i Cloudflare za OAI-SearchBot; test izvornog koda; usporedite citirane domene</td></tr>
   <tr><td>Malo AI posjeta, ali s upitima</td><td>Mali kanal s upitima vrijednima praćenja</td><td>Pratite Key events po kanalu; pitajte kupce što su upisali</td></tr>

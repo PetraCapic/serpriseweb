@@ -3,8 +3,15 @@ import { render } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import Cta from '../../components/Cta.astro';
 import LlmLeaderboard from '../../components/LlmLeaderboard.astro';
+import ChatgptCitati from '../../components/ChatgptCitati.astro';
+import LlmTracker from '../../components/blog/LlmTracker.astro';
+import AiQuiz from '../../components/blog/AiQuiz.astro';
+import ClusterMap from '../../components/blog/ClusterMap.astro';
+import AnswerFlow from '../../components/blog/AnswerFlow.astro';
+import GlossaryTips from '../../components/blog/GlossaryTips.astro';
+import Ga4AiKanal from '../../components/Ga4AiKanal.astro';
+import AiProvjera from '../../components/AiProvjera.astro';
 import PortaliClanak from '../../components/PortaliClanak.astro';
-import Faq from '../../components/Faq.astro';
 import { getPosts, formatDate, readingTime } from '../../lib/blog';
 import { site, team } from '../../lib/site';
 
@@ -15,12 +22,18 @@ export async function getStaticPaths() {
 
 const { post } = Astro.props;
 const { Content } = await render(post);
-const { title, description, date, updated, author, image, imageAlt, faq } = post.data;
+const { title, description, date, updated, author, image, imageAlt, dataset, about, hasPart, faq, sources } = post.data;
+const allPosts = hasPart ? await getPosts() : [];
+const parts = (hasPart ?? []).map((slug) => allPosts.find((p) => p.id === slug)).filter((p) => p !== undefined);
 const url = `${site.url}/blog/${post.id}/`;
 const person = team.find((m) => m.name === author);
 // Interaktivni dodaci pojedinih članaka; u tekstu ih označava <div data-embed="..."></div>.
-const hasLeaderboard = post.body?.includes('data-embed="leaderboard"');
-const hasPortali = post.body?.includes('data-embed="portali-');
+const has = (name: string) => Boolean(post.body?.includes(`data-embed="${name}"`));
+const hasLeaderboard = has('leaderboard');
+const hasTerms = Boolean(post.body?.includes('data-term="'));
+const hasGa4 = Boolean(post.body?.includes('data-embed="ga4-'));
+const { howto } = post.data;
+const hasCitati = Boolean(post.body?.includes('data-embed="citati-'));
 
 const schema = [
   {
@@ -40,6 +53,16 @@ const schema = [
       : { '@type': 'Person', name: author, ...(person?.linkedin && { sameAs: [person.linkedin] }) },
     publisher: { '@id': `${site.url}/#organization` },
     isPartOf: { '@id': `${site.url}/blog/#blog` },
+    ...(about && { about: about.map((a) => ({ '@type': 'Thing', ...a })) }),
+    ...(parts.length && {
+      hasPart: parts.map((p) => ({
+        '@type': 'BlogPosting',
+        '@id': `${site.url}/blog/${p.id}/#article`,
+        headline: p.data.title,
+        url: `${site.url}/blog/${p.id}/`,
+      })),
+    }),
+    ...(sources && { citation: sources.map((s) => ({ '@type': 'CreativeWork', name: s.name, url: s.url })) }),
   },
   {
     '@context': 'https://schema.org',
@@ -50,11 +73,51 @@ const schema = [
       { '@type': 'ListItem', position: 3, name: title, item: url },
     ],
   },
+  ...(dataset
+    ? [
+        {
+          '@context': 'https://schema.org',
+          '@type': 'Dataset',
+          '@id': `${url}#dataset`,
+          name: dataset.name,
+          description: dataset.description,
+          url,
+          inLanguage: 'hr',
+          keywords: dataset.keywords,
+          license: dataset.license,
+          isAccessibleForFree: true,
+          datePublished: date.toISOString().slice(0, 10),
+          dateModified: (updated ?? date).toISOString().slice(0, 10),
+          temporalCoverage: dataset.measured.toISOString().slice(0, 10),
+          spatialCoverage: { '@type': 'Place', name: 'Hrvatska' },
+          measurementTechnique: dataset.method,
+          creator: { '@id': `${site.url}/#organization` },
+          publisher: { '@id': `${site.url}/#organization` },
+          isBasedOn: `${url}#article`,
+          distribution: dataset.files.map((f) => ({
+            '@type': 'DataDownload',
+            name: f.name,
+            encodingFormat: 'text/csv',
+            contentUrl: new URL(f.url, site.url).href,
+          })),
+        },
+      ]
+    : []),
   ...(faq?.length
     ? [{
         '@context': 'https://schema.org',
         '@type': 'FAQPage',
         mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })),
+      }]
+    : []),
+  ...(howto
+    ? [{
+        '@context': 'https://schema.org',
+        '@type': 'HowTo',
+        name: howto.name,
+        inLanguage: 'hr',
+        ...(howto.totalTime && { totalTime: howto.totalTime }),
+        step: howto.steps.map((text, i) => ({ '@type': 'HowToStep', position: i + 1, text, url: `${url}#${howto.anchor ?? 'kanal-u-7-koraka'}` })),
       }]
     : []),
 ];
@@ -66,25 +129,88 @@ const schema = [
       <nav class="muted crumbs" aria-label="Putanja"><a href="/blog/">Blog</a></nav>
       <h1>{title}</h1>
       <p class="muted article__meta">
-        {person?.profile ? <a href={person.profile} rel="author">{author}</a> : author} · <time datetime={date.toISOString()}>{formatDate(date)}</time>{updated && <> · ažurirano <time datetime={updated.toISOString()}>{formatDate(updated)}</time></>} · {readingTime(post.body)} min čitanja
+        {person?.profile ? <a href={person.profile} rel="author">{author}</a> : author} · objavljeno <time datetime={date.toISOString()}>{formatDate(date)}</time>{updated && <> · <strong class="article__upd">Zadnje ažurirano: <time datetime={updated.toISOString()}>{formatDate(updated)}</time></strong></>} · {readingTime(post.body)} min čitanja
       </p>
       {image && <img src={image} alt={imageAlt ?? ''} class="article__img" />}
       <Content />
       {hasLeaderboard && <LlmLeaderboard />}
-      {hasPortali && <PortaliClanak />}
+      {hasCitati && <ChatgptCitati />}
+      {has('tracker') && <LlmTracker />}
+      {has('quiz') && <AiQuiz />}
+      {has('cluster-map') && <ClusterMap />}
+      {has('answer-flow') && <AnswerFlow />}
+      {hasTerms && <GlossaryTips />}
+      {has('ai-generator') && <AiProvjera />}
+      {post.body?.includes('data-embed="portali-') && <PortaliClanak />}
+      {/* Vidljiv FAQ iz frontmattera, osim ako ga članak već ima u tekstu */}
+      {faq && !post.body?.includes('## Česta pitanja') && (
+        <section class="article__faq" id="cesta-pitanja">
+          <h2>Česta pitanja</h2>
+          {faq.map((f) => (
+            <details>
+              <summary>{f.q}</summary>
+              <p>{f.a}</p>
+            </details>
+          ))}
+        </section>
+      )}
+      {sources && (
+        <section class="article__sources" id="izvori">
+          <h2>Izvori</h2>
+          <ol>
+            {sources.map((s) => <li><a href={s.url} target="_blank" rel="noopener">{s.name}</a></li>)}
+          </ol>
+        </section>
+      )}
+      {hasGa4 && <Ga4AiKanal />}
     </div>
   </article>
-
-  {faq && faq.length > 0 && <Faq items={faq} />}
 
   <Cta />
 </Base>
 
+<script>
+  // Gumb "Kopiraj" na svakom bloku koda u članku.
+  document.querySelectorAll<HTMLPreElement>('.article pre').forEach((pre) => {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'copy-btn';
+    b.textContent = 'Kopiraj';
+    b.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(pre.querySelector('code')?.innerText ?? pre.innerText);
+        b.textContent = 'Kopirano';
+      } catch {
+        b.textContent = 'Označite i kopirajte ručno';
+      }
+      setTimeout(() => (b.textContent = 'Kopiraj'), 2000);
+    });
+    const wrap = document.createElement('div');
+    wrap.className = 'code-wrap';
+    pre.replaceWith(wrap);
+    wrap.append(b, pre);
+  });
+</script>
+
 <style>
   .article { margin: 0 auto; }
+  .article :global(.code-wrap) { position: relative; }
+  .article :global(.copy-btn) { position: absolute; top: 10px; right: 10px; z-index: 1; border: 0; border-radius: 8px; padding: 6px 12px; background: var(--accent); color: #fff; font: 600 0.8rem var(--font); cursor: pointer; }
   .article h1 { font-size: clamp(2rem, 4.2vw, 3rem); }
   .crumbs { font-size: 0.9rem; margin-bottom: 12px; }
   .article__meta { font-size: 0.95rem; }
+  .article__upd { font-weight: 600; color: var(--navy); }
+  .article__faq details { border-bottom: 1px solid var(--border); padding: 14px 0; }
+  .article__faq summary { cursor: pointer; font-weight: 600; color: var(--navy); }
+  .article__faq details p { margin: 10px 0 0; color: var(--muted); }
+  .article__sources ol { font-size: 0.9rem; }
+  .article__sources a { word-break: break-word; }
+  /* Interaktivni dodaci (kviz, tracker, mapa, dijagram) */
+  .article :global(.wg) { margin: 2em 0; padding: clamp(18px, 3vw, 28px); border: 1px solid var(--border); border-radius: var(--radius); background: #fff; box-shadow: 0 10px 30px rgba(16, 43, 67, 0.06); }
+  .article :global(.wg__eyebrow) { margin: 0 0 6px; color: var(--accent); font: 700 0.75rem var(--font-display); letter-spacing: 0.1em; text-transform: uppercase; }
+  .article :global(.wg__title) { margin: 0 0 6px; font-size: 1.35rem; }
+  .article :global(.wg__lead) { margin: 0; color: var(--muted); font-size: 0.95rem; }
+  .article :global(.wg__note) { margin: 12px 0 0; color: var(--muted); font-size: 0.8rem; }
   .article__img { border-radius: 14px; margin: 24px 0 32px; width: 100%; height: auto; }
   .article :global(h3) { margin-top: 1.4em; }
   .article :global(ol), .article :global(ul) { padding-left: 1.3em; }

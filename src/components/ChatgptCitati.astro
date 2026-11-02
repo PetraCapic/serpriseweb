@@ -1,0 +1,370 @@
+---
+import data from '../data/llm-leaderboard.json';
+// Interaktivni dodaci istraživanja /blog/chatgpt-citati-hrvatska/. Podaci su isti kao za leaderboard
+// (src/data/llm-leaderboard.json). Svaki dio se premješta na svoje mjesto u tekstu:
+//   <div data-embed="citati-scatter"></div>   graf DR / broj citata
+//   <div data-embed="citati-donut"></div>     vrste citiranih stranica
+//   <div data-embed="citati-samoprocjena"></div>
+//   <div data-embed="citati-flip"></div>      ispred tablice pretraga: pretvara je u kartice
+//   <div data-embed="citati-tablica"></div>   ispred tablice domena: dodaje sortiranje i filter
+// Bez JavaScripta grafovi ostaju na dnu članka (SVG), a tablice ostaju obične tablice.
+
+const { answers, entries } = data;
+type Kind = 'usluzna' | 'naslovnica' | 'cjenik' | 'case' | 'lista' | 'direktorij' | 'stari-url';
+const kindLabel: Record<Kind, string> = {
+  usluzna: 'Uslužna stranica',
+  naslovnica: 'Naslovnica ili O nama',
+  cjenik: 'Cjenik',
+  case: 'Case study',
+  lista: 'Lista agencija',
+  direktorij: 'Direktorij',
+  'stari-url': 'Stari URL',
+};
+
+// Scatter: tri skupine (više boja u raspršenom grafu nije čitljivo), točna vrsta je u oznaci i tooltipu.
+const group = (k: Kind) => (k === 'lista' || k === 'direktorij' ? 'izvor' : k === 'case' ? 'case' : 'agencija');
+const groups = [
+  { id: 'agencija', label: 'Stranica agencije (usluga, cjenik, naslovnica)', color: 'var(--c1)' },
+  { id: 'izvor', label: 'Lista ili direktorij', color: 'var(--c2)' },
+  { id: 'case', label: 'Case study', color: 'var(--c3)' },
+];
+const W = 640, H = 340, L = 44, R = 24, T = 16, B = 46;
+const yMax = 7;
+const x = (dr: number) => L + (dr / 100) * (W - L - R);
+const y = (c: number) => H - B - (c / yMax) * (H - T - B);
+// Ručni položaj oznaka da se ne preklapaju (dx, dy, poravnanje).
+const labelPos: Record<string, [number, number, 'start' | 'end']> = {
+  'glarodigital.com.hr': [10, -12, 'start'],
+  'linkgrid.hr': [0, 0, 'start'],
+  'digitalmatrix.hr': [-4, 22, 'start'],
+  'assemblio.hr': [-10, -13, 'start'],
+  'tsunami-digital.com': [-6, 22, 'start'],
+  'igrow.at': [8, -11, 'start'],
+  'clutch.co': [-12, 4, 'end'],
+};
+const pts = entries
+  .filter((e) => e.dr !== null)
+  .map((e) => {
+    const same = entries.filter((o) => o.dr === e.dr && o.cites === e.cites && o.dr !== null);
+    // Domene s istim DR-om i brojem citata malo razmaknemo vodoravno da se obje vide.
+    const dodge = same.length > 1 ? (same.indexOf(e) - (same.length - 1) / 2) * 9 : 0;
+    const lp = labelPos[e.domain] ?? [10, 4, 'start'];
+    const label = e.domain === 'glarodigital.com.hr' ? 'glarodigital.com.hr i linkgrid.hr (oba DR 0)' : e.domain === 'linkgrid.hr' ? '' : e.domain;
+    return { ...e, cx: x(e.dr as number) + dodge, cy: y(e.cites), g: group(e.kind as Kind), lp, label };
+  });
+const color = (g: string) => groups.find((x) => x.id === g)!.color;
+
+// Donut: zbroj citata po vrsti stranice među domenama iz tablice.
+const donutCats = [
+  { id: 'usluzna', label: 'Uslužne stranice', kinds: ['usluzna'], color: 'var(--c1)' },
+  { id: 'izvor', label: 'Liste i direktoriji', kinds: ['lista', 'direktorij'], color: 'var(--c2)' },
+  { id: 'case', label: 'Case study', kinds: ['case'], color: 'var(--c3)' },
+  { id: 'naslovnica', label: 'Naslovnica ili O nama', kinds: ['naslovnica'], color: 'var(--c4)' },
+  { id: 'cjenik', label: 'Cjenik', kinds: ['cjenik'], color: 'var(--c5)' },
+].map((c) => {
+  const items = entries.filter((e) => c.kinds.includes(e.kind));
+  return { ...c, value: items.reduce((s, e) => s + e.cites, 0), domains: items.map((e) => e.domain) };
+});
+const total = donutCats.reduce((s, c) => s + c.value, 0);
+const nDomains = entries.filter((e) => e.kind !== 'stari-url').length;
+const Rd = 70, C = 2 * Math.PI * Rd, gap = 3;
+let acc = 0;
+const arcs = donutCats.map((c) => {
+  const len = (c.value / total) * C;
+  const a = { ...c, dash: `${Math.max(len - gap, 0)} ${C}`, offset: -acc, pct: Math.round((c.value / total) * 100) };
+  acc += len;
+  return a;
+});
+
+const checks = [
+  { t: 'Naziv usluge u naslovu stranice, istim riječima kojima kupac pita', next: 'Promijenite H1 i title u riječi iz pitanja kupca, npr. "SEO agencija Zagreb" umjesto "Naše usluge".' },
+  { t: 'Cijene u eurima, barem početne', next: 'Dodajte sekciju "Početne cijene" s barem jednim iznosom u eurima. Bez nje ChatGPT za pitanje o cijeni citira tuđi cjenik.' },
+  { t: 'Kratak odgovor na vrhu (2 do 3 rečenice)', next: 'Na vrh stavite blok "Ukratko": što radite, za koga i od koliko eura. Predložak je u članku ispod.' },
+  { t: 'FAQ s FAQPage schemom i Service schema s cijenom', next: 'Dodajte 4 do 6 pitanja koja kupci stvarno postavljaju, s FAQPage schemom, i Service schemu s Offer cijenom (primjer koda je u članku).' },
+  { t: 'Brojke iz stvarnog projekta', next: 'Dodajte jedan konkretan rezultat klijenta s brojkom i rokom, npr. "s 2. stranice na 1. za 3 mjeseca".' },
+];
+---
+<div class="cc" data-cc hidden>
+  <figure class="cc__card" data-citati="scatter" aria-labelledby="cc-sc-t">
+    <p class="cc__eyebrow">Graf · DR i citati</p>
+    <h3 id="cc-sc-t" class="cc__title">Domain Rating ne određuje tko je citiran</h3>
+    <p class="cc__lead">Svaka točka je domena iz tablice. Vodoravno je DR (0 do 100), okomito broj od {answers} odgovora u kojima je citirana.</p>
+    <ul class="cc__legend">
+      {groups.map((g) => <li><span style={`background:${g.color}`}></span>{g.label}</li>)}
+    </ul>
+    <div class="cc__plot">
+      <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label="Raspršeni graf: domene s DR 0 citirane su jednako često kao Clutch s DR 91">
+        {[0, 1, 2, 3, 4, 5, 6, 7].map((c) => (
+          <g>
+            <line x1={L} x2={W - R} y1={y(c)} y2={y(c)} class={c === 0 ? 'cc__axis' : 'cc__grid'} />
+            <text x={L - 10} y={y(c) + 4} text-anchor="end" class="cc__tick">{c}</text>
+          </g>
+        ))}
+        {[0, 20, 40, 60, 80, 100].map((d) => <text x={x(d)} y={H - B + 18} text-anchor="middle" class="cc__tick">{d}</text>)}
+        <text x={(L + W - R) / 2} y={H - 6} text-anchor="middle" class="cc__axislabel">Domain Rating (Ahrefs)</text>
+        <text x={12} y={T + 4} class="cc__axislabel" transform={`rotate(-90 12 ${T + 4})`} text-anchor="end">Odgovora s citatom</text>
+        {pts.map((p) => (
+          <g class="cc__pt" tabindex="0" role="img" aria-label={`${p.domain}: DR ${p.dr}, citirana u ${p.cites} od ${answers} odgovora. ${p.page}.`}
+            data-tip={`<strong>${p.domain}</strong><br>DR ${String(p.dr).replace('.', ',')} · ${p.cites} od ${answers} odgovora<br>${kindLabel[p.kind as Kind]}: ${p.page}`}>
+            <circle cx={p.cx} cy={p.cy} r="16" class="cc__hit" />
+            <circle cx={p.cx} cy={p.cy} r="6.5" fill={color(p.g)} class="cc__dot" />
+            {p.label && <text x={p.cx + p.lp[0]} y={p.cy + p.lp[1]} text-anchor={p.lp[2]} class="cc__lbl">{p.label}</text>}
+          </g>
+        ))}
+      </svg>
+      <div class="cc__tip" role="status" hidden></div>
+    </div>
+    <figcaption class="cc__note">Mjereno 30. listopada 2026. DR iz Ahrefsa. Prikazane su domene iz tablice (citirane barem 4 puta) i tako.hr; ostale citirane domene imaju manje citata. SERPRise nije prikazan jer za stari URL nemamo DR.</figcaption>
+  </figure>
+
+  <figure class="cc__card" data-citati="donut" aria-labelledby="cc-do-t">
+    <p class="cc__eyebrow">Graf · vrste stranica</p>
+    <h3 id="cc-do-t" class="cc__title">Što ChatGPT citira kad netko traži agenciju</h3>
+    <p class="cc__lead">Zbroj citata {nDomains} najčešće citiranih domena, po vrsti stranice koja je citirana.</p>
+    <div class="cc__donut">
+      <svg viewBox="0 0 200 200" role="img" aria-label={`Od ${total} citata: ${arcs.map((a) => `${a.label} ${a.value}`).join(', ')}, blog članci 0.`}>
+        <g transform="rotate(-90 100 100)">
+          {arcs.map((a) => (
+            <circle cx="100" cy="100" r={Rd} fill="none" stroke={a.color} stroke-width="26" stroke-dasharray={a.dash} stroke-dashoffset={a.offset} class="cc__arc" tabindex="0"
+              data-tip={`<strong>${a.label}</strong><br>${a.value} od ${total} citata (${a.pct} %)<br>${a.domains.join(', ')}`} />
+          ))}
+        </g>
+        <text x="100" y="96" text-anchor="middle" class="cc__big">0</text>
+        <text x="100" y="118" text-anchor="middle" class="cc__small">blog članaka</text>
+      </svg>
+      <ul class="cc__dlegend">
+        {arcs.map((a) => <li><span style={`background:${a.color}`}></span>{a.label}<b>{a.value}</b><small>{a.pct} %</small></li>)}
+        <li class="is-zero"><span></span>Blog članci<b>0</b><small>0 %</small></li>
+      </ul>
+      <div class="cc__tip" role="status" hidden></div>
+    </div>
+    <figcaption class="cc__note">Ukupno {total} citata: jedna domena može biti citirana u više odgovora. Mjereno 30. listopada 2026.</figcaption>
+  </figure>
+
+  <section class="cc__card cc__self" data-citati="samoprocjena" aria-labelledby="cc-se-t">
+    <p class="cc__eyebrow">Samoprocjena · 1 minuta</p>
+    <h3 id="cc-se-t" class="cc__title">Ima li vaša uslužna stranica 5 stvari koje ChatGPT citira?</h3>
+    <p class="cc__lead">Otvorite svoju glavnu uslužnu stranicu i označite što na njoj već postoji.</p>
+    <form class="cc__checks" onsubmit="return false">
+      {checks.map((c, i) => (
+        <label><input type="checkbox" data-i={i} /> <span>{c.t}</span></label>
+      ))}
+    </form>
+    <div class="cc__result" aria-live="polite">
+      <p class="cc__score"><strong data-score>0</strong> / 5</p>
+      <p data-verdict>Označite što vaša stranica ima.</p>
+      <ol data-next>
+        {checks.map((c, i) => <li data-i={i}>{c.next}</li>)}
+      </ol>
+      <a class="btn btn--primary" href="/kontakt/?usluga=ai-vidljivost">Želite da provjerimo umjesto vas?</a>
+    </div>
+  </section>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-cc]').forEach((root) => {
+    // Premjesti grafove i samoprocjenu na mjesta u tekstu; bez mjesta ostaju na dnu.
+    root.querySelectorAll<HTMLElement>('[data-citati]').forEach((el) => {
+      const slot = document.querySelector(`[data-embed="citati-${el.dataset.citati}"]`);
+      if (slot) slot.replaceWith(el);
+    });
+    root.hidden = false;
+
+    // Tooltip za točke grafa i dijelove donuta (miš, dodir i tipkovnica).
+    document.querySelectorAll<HTMLElement>('.cc__plot, .cc__donut').forEach((box) => {
+      const tip = box.querySelector<HTMLElement>('.cc__tip')!;
+      const show = (t: Element) => {
+        const r = (t as SVGGraphicsElement).getBoundingClientRect();
+        const b = box.getBoundingClientRect();
+        tip.innerHTML = (t as HTMLElement).dataset.tip!;
+        tip.hidden = false;
+        const left = Math.min(Math.max(r.left + r.width / 2 - b.left, 90), b.width - 90);
+        tip.style.left = `${left}px`;
+        tip.style.top = `${r.top - b.top}px`;
+      };
+      box.querySelectorAll('[data-tip]').forEach((t) => {
+        t.addEventListener('mouseenter', () => show(t));
+        t.addEventListener('focus', () => show(t));
+        t.addEventListener('click', () => show(t));
+        t.addEventListener('mouseleave', () => (tip.hidden = true));
+        t.addEventListener('blur', () => (tip.hidden = true));
+      });
+    });
+
+    // Samoprocjena.
+    const self = document.querySelector<HTMLElement>('[data-citati="samoprocjena"]');
+    if (self) {
+      const boxes = [...self.querySelectorAll<HTMLInputElement>('input[type=checkbox]')];
+      const score = self.querySelector('[data-score]')!;
+      const verdict = self.querySelector('[data-verdict]')!;
+      const next = [...self.querySelectorAll<HTMLLIElement>('[data-next] li')];
+      const update = () => {
+        const n = boxes.filter((b) => b.checked).length;
+        score.textContent = String(n);
+        boxes.forEach((b, i) => (next[i].hidden = b.checked));
+        verdict.textContent =
+          n === 5
+            ? 'Stranica ima sve što smo vidjeli kod citiranih stranica. Sljedeći korak su spomeni izvan vašeg weba: liste, direktoriji i portali.'
+            : n >= 3
+              ? 'Dobra osnova. Za svaki prazan kvadratić sljedeći korak je:'
+              : 'ChatGPT ovakvu stranicu teško uzima kao izvor. Krenite redom:';
+      };
+      boxes.forEach((b) => b.addEventListener('change', update));
+      update();
+    }
+
+    // Tablica pretraga: kartice "pitaš na hrvatskom, ChatGPT pretražuje na engleskom".
+    const flipSlot = document.querySelector('[data-embed="citati-flip"]');
+    const flipTable = flipSlot?.nextElementSibling;
+    if (flipSlot && flipTable?.tagName === 'TABLE') {
+      const rows = [...flipTable.querySelectorAll('tbody tr')].map((tr) => [...tr.children].map((td) => td.textContent!.trim()));
+      const wrap = document.createElement('div');
+      wrap.className = 'cc-flip';
+      wrap.innerHTML =
+        '<p class="cc-flip__hint">Kliknite karticu da vidite što je ChatGPT stvarno pretražio.</p><div class="cc-flip__grid"></div>';
+      const grid = wrap.querySelector('.cc-flip__grid')!;
+      rows.forEach(([hr, en]) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'cc-flip__card';
+        b.setAttribute('aria-pressed', 'false');
+        b.innerHTML = `<span class="cc-flip__inner"><span class="cc-flip__face"><small>Pitanje na hrvatskom</small><span></span></span><span class="cc-flip__face cc-flip__back"><small>ChatGPT je pretražio</small><span lang="en"></span></span></span>`;
+        const faces = b.querySelectorAll('.cc-flip__face > span');
+        faces[0].textContent = hr;
+        faces[1].textContent = en;
+        b.addEventListener('click', () => b.setAttribute('aria-pressed', String(b.getAttribute('aria-pressed') !== 'true')));
+        grid.appendChild(b);
+      });
+      flipSlot.replaceWith(wrap);
+      flipTable.classList.add('cc-visually-hidden');
+    }
+
+    // Tablica domena: sortiranje po citatima i DR-u, filter po vrsti stranice. Tablica ostaje u HTML-u.
+    const tSlot = document.querySelector('[data-embed="citati-tablica"]');
+    const table = tSlot?.nextElementSibling as HTMLTableElement | null | undefined;
+    if (tSlot && table?.tagName === 'TABLE') {
+      const heads = [...table.querySelectorAll('thead th')].map((th) => th.textContent!.trim());
+      const col = (name: string) => heads.findIndex((h) => h.toLowerCase().startsWith(name));
+      const ci = col('odgovora'), di = col('dr'), ki = col('vrsta');
+      const tbody = table.tBodies[0];
+      const rows = [...tbody.rows];
+      const num = (r: HTMLTableRowElement, i: number) => Number(r.cells[i].textContent!.replace(',', '.')) || 0;
+      const bar = document.createElement('div');
+      bar.className = 'cc-tbar';
+      const kinds = [...new Set(rows.map((r) => r.cells[ki]?.textContent!.trim()).filter(Boolean))];
+      bar.innerHTML = `<label>Vrsta stranice <select><option value="">Sve</option>${kinds.map((k) => `<option>${k}</option>`).join('')}</select></label><span class="cc-tbar__n"></span>`;
+      tSlot.replaceWith(bar);
+      const sel = bar.querySelector('select')!;
+      const count = bar.querySelector('.cc-tbar__n')!;
+      let sortBy = ci, dir = -1;
+      const ths = table.querySelectorAll<HTMLTableCellElement>('thead th');
+      [ci, di].forEach((i) => {
+        const th = ths[i];
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'cc-sort';
+        b.textContent = th.textContent;
+        th.textContent = '';
+        th.appendChild(b);
+        b.addEventListener('click', () => {
+          dir = sortBy === i ? -dir : -1;
+          sortBy = i;
+          apply();
+        });
+      });
+      const apply = () => {
+        rows.sort((a, b) => dir * (num(a, sortBy) - num(b, sortBy)) || num(b, ci) - num(a, ci));
+        let n = 0;
+        rows.forEach((r) => {
+          r.hidden = !!sel.value && r.cells[ki].textContent!.trim() !== sel.value;
+          if (!r.hidden) n++;
+          tbody.appendChild(r);
+        });
+        ths.forEach((th, i) => th.setAttribute('aria-sort', i === sortBy ? (dir < 0 ? 'descending' : 'ascending') : 'none'));
+        count.textContent = `${n} od ${rows.length} domena`;
+      };
+      sel.addEventListener('change', apply);
+      apply();
+    }
+  });
+</script>
+
+<style>
+  .cc, .cc__card, :global(.cc-flip), :global(.cc-tbar) {
+    /* Kategorijske boje (provjerene na daltonizam za ovaj redoslijed). */
+    --c1: #2a78d6;
+    --c2: #eb6834;
+    --c3: #1baf7a;
+    --c4: #eda100;
+    --c5: #e87ba4;
+  }
+  .cc__card { margin: 2em 0; padding: 26px; border: 1px solid var(--border); border-radius: var(--radius); background: #fff; box-shadow: 0 10px 30px rgba(16, 43, 67, 0.06); }
+  .cc__eyebrow { margin: 0 0 6px !important; color: var(--accent); font: 700 0.75rem var(--font-display); letter-spacing: 0.1em; text-transform: uppercase; }
+  .cc__title { margin: 0 0 6px !important; font-size: 1.35rem; }
+  .cc__lead { margin: 0 0 14px !important; color: var(--muted); font-size: 0.95rem; }
+  .cc__note { margin-top: 12px; font-size: 0.8rem; color: var(--muted); }
+  .cc__legend, .cc__dlegend { list-style: none; padding: 0 !important; margin: 0 0 8px !important; display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 0.85rem; color: var(--muted); }
+  .cc__legend li, .cc__dlegend li { margin: 0 !important; display: inline-flex; align-items: center; gap: 7px; }
+  .cc__legend span, .cc__dlegend span { width: 11px; height: 11px; border-radius: 50%; flex: none; }
+  .cc__plot, .cc__donut { position: relative; }
+  .cc__plot svg { width: 100%; height: auto; display: block; overflow: visible; }
+  .cc__grid { stroke: var(--border); stroke-width: 1; pointer-events: none; }
+  .cc__axis { stroke: #9aa8b8; stroke-width: 1; }
+  .cc__tick { font: 500 11px var(--font); fill: var(--muted); }
+  .cc__axislabel { font: 600 11px var(--font); fill: var(--muted); }
+  .cc__lbl { font: 600 11.5px var(--font); fill: var(--navy); pointer-events: none; }
+  .cc__hit { fill: transparent; }
+  .cc__dot { stroke: #fff; stroke-width: 2; transition: r 0.15s; }
+  .cc__pt { cursor: pointer; outline: none; }
+  .cc__pt:hover .cc__dot, .cc__pt:focus-visible .cc__dot { r: 9; }
+  .cc__pt:focus-visible .cc__hit { stroke: var(--navy); stroke-width: 1.5; }
+  .cc__tip { position: absolute; transform: translate(-50%, calc(-100% - 12px)); background: var(--navy); color: #fff; padding: 8px 12px; border-radius: 10px; font-size: 0.8rem; line-height: 1.45; width: max-content; max-width: 240px; pointer-events: none; z-index: 2; box-shadow: 0 6px 18px rgba(16, 43, 67, 0.25); }
+  .cc__donut { display: grid; grid-template-columns: minmax(160px, 220px) 1fr; gap: 24px; align-items: center; }
+  .cc__donut svg { width: 100%; height: auto; }
+  .cc__arc { cursor: pointer; outline: none; transition: stroke-width 0.15s; }
+  .cc__arc:hover, .cc__arc:focus-visible { stroke-width: 32; }
+  .cc__big { font: 700 40px var(--font-display); fill: var(--navy); pointer-events: none; }
+  .cc__small { font: 600 12px var(--font); fill: var(--muted); pointer-events: none; }
+  .cc__dlegend { display: grid; gap: 8px; font-size: 0.95rem; color: var(--navy); }
+  .cc__dlegend li { display: grid !important; grid-template-columns: 12px 1fr auto 44px; gap: 10px; }
+  .cc__dlegend b { font-family: var(--font-display); }
+  .cc__dlegend small { color: var(--muted); text-align: right; }
+  .cc__dlegend .is-zero { color: var(--accent); font-weight: 600; }
+  .cc__dlegend .is-zero span { border: 2px dashed var(--accent); box-sizing: border-box; }
+  .cc__self { background: var(--bg-2); }
+  .cc__checks { display: grid; gap: 10px; margin-bottom: 18px; }
+  .cc__checks label { display: flex; gap: 12px; align-items: flex-start; padding: 12px 14px; background: #fff; border: 1px solid var(--border); border-radius: 12px; cursor: pointer; font-size: 0.97rem; }
+  .cc__checks input { width: 20px; height: 20px; margin-top: 2px; accent-color: var(--accent); flex: none; }
+  .cc__score { margin: 0 !important; font-family: var(--font-display); color: var(--muted); }
+  .cc__score strong { font-size: 2.4rem; color: var(--navy); }
+  .cc__result ol { margin: 8px 0 18px; }
+  .cc__result li[hidden] { display: none; }
+
+  :global(.cc-visually-hidden) { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  :global(.cc-flip) { margin: 1.4em 0; }
+  :global(.cc-flip__hint) { font-size: 0.85rem; color: var(--muted); margin: 0 0 10px !important; }
+  :global(.cc-flip__grid) { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+  :global(.cc-flip__card) { border: 0; padding: 0; background: none; perspective: 900px; cursor: pointer; font: inherit; text-align: left; min-height: 150px; }
+  :global(.cc-flip__inner) { position: relative; display: block; height: 100%; min-height: 150px; transition: transform 0.5s; transform-style: preserve-3d; }
+  :global(.cc-flip__card[aria-pressed='true'] .cc-flip__inner) { transform: rotateY(180deg); }
+  :global(.cc-flip__face) { position: absolute; inset: 0; display: flex; flex-direction: column; gap: 8px; padding: 16px; border-radius: 14px; border: 1px solid var(--border); background: #fff; color: var(--navy); font-weight: 600; backface-visibility: hidden; }
+  :global(.cc-flip__face small) { font: 700 0.7rem var(--font-display); letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+  :global(.cc-flip__back) { transform: rotateY(180deg); background: var(--navy); color: #fff; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-weight: 500; font-size: 0.92rem; }
+  :global(.cc-flip__back small) { color: #ffb4a8; font-family: var(--font-display); }
+  :global(.cc-flip__card:focus-visible .cc-flip__face) { outline: 2px solid var(--accent); outline-offset: 2px; }
+  :global(.cc-tbar) { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; margin: 1.2em 0 -0.6em; font-size: 0.9rem; color: var(--muted); }
+  :global(.cc-tbar select) { margin-left: 6px; font: inherit; padding: 6px 10px; border-radius: 8px; border: 1px solid var(--border); color: var(--navy); background: #fff; }
+  :global(.cc-sort) { border: 0; background: none; font: inherit; font-weight: 700; color: var(--navy); cursor: pointer; padding: 0; white-space: nowrap; }
+  :global(.cc-sort::after) { content: ' ↕'; color: var(--muted); font-weight: 400; }
+  :global(th[aria-sort='descending'] .cc-sort::after) { content: ' ↓'; color: var(--accent); }
+  :global(th[aria-sort='ascending'] .cc-sort::after) { content: ' ↑'; color: var(--accent); }
+  @media (max-width: 640px) {
+    .cc__card { padding: 18px 14px; }
+    .cc__donut { grid-template-columns: 1fr; justify-items: center; }
+    .cc__donut svg { max-width: 220px; }
+    .cc__dlegend { width: 100%; }
+    .cc__plot { overflow-x: auto; margin: 0 -6px; padding: 0 6px; }
+    .cc__plot svg { min-width: 560px; }
+  }
+  @media (prefers-reduced-motion: reduce) { :global(.cc-flip__inner) { transition: none; } }
+</style>

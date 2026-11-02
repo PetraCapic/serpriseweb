@@ -11,6 +11,7 @@ import AnswerFlow from '../../components/blog/AnswerFlow.astro';
 import GlossaryTips from '../../components/blog/GlossaryTips.astro';
 import Ga4AiKanal from '../../components/Ga4AiKanal.astro';
 import AiProvjera from '../../components/AiProvjera.astro';
+import PortaliClanak from '../../components/PortaliClanak.astro';
 import { getPosts, formatDate, readingTime } from '../../lib/blog';
 import { site, team } from '../../lib/site';
 
@@ -140,6 +141,7 @@ const schema = [
       {has('answer-flow') && <AnswerFlow />}
       {hasTerms && <GlossaryTips />}
       {has('ai-generator') && <AiProvjera />}
+      {post.body?.includes('data-embed="portali-') && <PortaliClanak />}
       {/* Vidljiv FAQ iz frontmattera, osim ako ga članak već ima u tekstu */}
       {faq && !post.body?.includes('## Česta pitanja') && (
         <section class="article__faq" id="cesta-pitanja">

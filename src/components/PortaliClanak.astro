@@ -1,0 +1,520 @@
+---
+// Interaktivni dodaci za članak /blog/portali-za-pr-objave/.
+// U tekstu članka ih označava <div data-embed="portali-..."></div>; skripta na dnu premješta svaki widget na to mjesto.
+// Bez JavaScripta widgeti ostaju na kraju članka, s podacima u običnom HTML-u.
+// Podaci: src/data/portali.json (Ahrefs), src/data/portali-zupanije.json (županije), src/data/hr-zupanije.json (karta).
+import data from '../data/portali.json';
+import zData from '../data/portali-zupanije.json';
+import map from '../data/hr-zupanije.json';
+
+type Portal = { d: string; dr: number; t: number; kw: number; rd: number; c: string; z: string | null; s: boolean | null };
+const portals = data.portals as Portal[];
+const categories = data.categories as Record<string, string>;
+const zup = zData.zupanija as Record<string, string>;
+const cited = new Set(zData.cited);
+const counties = map.counties as { id: string; name: string; d: string; cx: number; cy: number }[];
+const countyName = Object.fromEntries(counties.map((c) => [c.id, c.name])) as Record<string, string>;
+countyName.BA = 'BiH';
+
+const fmt = new Intl.NumberFormat('hr-HR');
+const compact = new Intl.NumberFormat('hr-HR', { notation: 'compact', maximumFractionDigits: 1 });
+const oznaka = (s: boolean | null) => (s === true ? 'označeno' : s === false ? 'bez oznake' : 'nije provjereno');
+const oznakaKey = (s: boolean | null) => (s === true ? 'da' : s === false ? 'ne' : 'nepoznato');
+const regija = (p: Portal) => (zup[p.d] ? countyName[zup[p.d]] : p.c === 'regija' ? 'Regionalni, više županija' : 'Nacionalni');
+
+// ---------- Donut: 335 portala prema oznaci ----------
+const nDa = portals.filter((p) => p.s === true).length;
+const nNe = portals.filter((p) => p.s === false).length;
+const nNp = portals.length - nDa - nNe;
+const donut = [
+  { label: 'Plaćeni članak označava kao sponzorirani', n: nDa, color: '#102b43' },
+  { label: 'Objavljuje bez oznake', n: nNe, color: '#4f86c6' },
+  { label: 'Nismo provjerili', n: nNp, color: '#b9c3cf' },
+];
+const R = 70;
+const C = 2 * Math.PI * R;
+const GAP = 2;
+let acc = 0;
+const arcs = donut.map((s) => {
+  const len = (s.n / portals.length) * C;
+  const arc = { ...s, dash: `${Math.max(0, len - GAP)} ${C - Math.max(0, len - GAP)}`, offset: -acc, pct: Math.round((s.n / portals.length) * 100) };
+  acc += len;
+  return arc;
+});
+
+// ---------- Scatter: DR vs organski promet (log) ----------
+const SW = 640, SH = 380, PL = 56, PR = 16, PT = 16, PB = 44;
+const xS = (dr: number) => PL + (dr / 100) * (SW - PL - PR);
+const yMin = 2, yMax = 7; // 100 do 10.000.000 posjeta
+const yS = (t: number) => PT + (1 - (Math.log10(Math.max(t, 100)) - yMin) / (yMax - yMin)) * (SH - PT - PB);
+const isGap = (p: Portal) => p.dr >= 50 && p.t < 2000;
+const gapCount = portals.filter(isGap).length;
+const labelled = new Set(['ictbusiness.info', 'ecommerce.hr', 'ebit.hr', '24sata.hr', 'direktno.hr']);
+const yTicks = [100, 1000, 10000, 100000, 1000000, 10000000];
+
+// ---------- Mini katalog: 40 portala ----------
+const by = (f: (p: Portal) => boolean, n: number, must: string[] = []) => {
+  const m = portals.filter((p) => must.includes(p.d));
+  const rest = portals.filter((p) => f(p) && !must.includes(p.d)).sort((a, b) => b.t - a.t);
+  return [...m, ...rest.slice(0, Math.max(0, n - m.length))];
+};
+const mini = [
+  ...by((p) => p.c === 'vijesti' && !p.z, 8),
+  ...by((p) => (p.c === 'biznis' || p.c === 'tech') && !p.z, 9, ['ictbusiness.info', 'ecommerce.hr', 'ebit.hr']),
+  ...by((p) => p.c === 'regija' && !p.z, 13, ['rijekadanas.com', 'kaportal.net.hr', 'sibenik.in', 'likemetkovic.hr']),
+  ...by((p) => p.c === 'lifestyle' && !p.z, 5),
+  ...by((p) => p.c === 'zdravlje' && !p.z, 2),
+  ...by((p) => p.c === 'dom' && !p.z, 1),
+  ...by((p) => p.c === 'putovanja' && !p.z, 1),
+  ...by((p) => p.c === 'gastro' && !p.z, 1),
+].filter((p, i, a) => a.findIndex((x) => x.d === p.d) === i);
+const miniCats = [...new Set(mini.map((p) => p.c))];
+const miniRegions = [...new Set(mini.map(regija))].sort((a, b) => (a === 'Nacionalni' ? -1 : b === 'Nacionalni' ? 1 : a.localeCompare(b, 'hr')));
+
+// ---------- Karta ----------
+const regional = portals.filter((p) => zup[p.d]);
+const perCounty: Record<string, Portal[]> = {};
+for (const p of regional) (perCounty[zup[p.d]] ??= []).push(p);
+for (const k in perCounty) perCounty[k].sort((a, b) => b.t - a.t);
+const unassigned = portals.filter((p) => p.c === 'regija' && !zup[p.d]).sort((a, b) => b.t - a.t);
+const ramp = (n: number) => (n === 0 ? '#eef1f5' : n <= 2 ? '#c9d7e8' : n <= 5 ? '#8fb0d6' : n <= 8 ? '#4f86c6' : '#1f4f86');
+const listOrder = [...counties].sort((a, b) => a.name.localeCompare(b.name, 'hr'));
+
+// ---------- Odabir u 3 klika: kompaktni podaci za skriptu ----------
+const pickData = portals
+  .filter((p) => !p.z || zup[p.d] === 'BA')
+  .map((p) => [p.d, p.dr, p.t, p.c, zup[p.d] ?? '', p.s === true ? 1 : p.s === false ? 0 : -1, cited.has(p.d) ? 1 : 0]);
+const pickJson = JSON.stringify({ p: pickData, cat: categories, zn: countyName });
+---
+
+<div class="pw" data-portali-widgets>
+  <!-- e) Donut -->
+  <figure class="pw-card pw-donut" data-mount="portali-oznake" aria-labelledby="pw-donut-t">
+    <figcaption>
+      <p class="pw-eyebrow">Katalog · {portals.length} portala</p>
+      <h3 id="pw-donut-t" class="pw-title">Kako portali označavaju plaćene članke</h3>
+    </figcaption>
+    <div class="pw-donut__body">
+      <svg viewBox="0 0 200 200" role="img" aria-label={`${nDa} označava, ${nNe} bez oznake, ${nNp} nije provjereno`}>
+        <circle cx="100" cy="100" r={R} fill="none" stroke="#eef1f5" stroke-width="26" />
+        {arcs.map((a) => (
+          <circle class="pw-arc" cx="100" cy="100" r={R} fill="none" stroke={a.color} stroke-width="26"
+            stroke-dasharray={a.dash} stroke-dashoffset={a.offset} transform="rotate(-90 100 100)">
+            <title>{a.label}: {a.n} portala ({a.pct} %)</title>
+          </circle>
+        ))}
+        <text x="100" y="96" text-anchor="middle" class="pw-donut__big">{portals.length}</text>
+        <text x="100" y="118" text-anchor="middle" class="pw-donut__small">portala</text>
+      </svg>
+      <ul class="pw-legend">
+        {arcs.map((a) => (
+          <li><span class="pw-swatch" style={`background:${a.color}`}></span><strong>{a.n}</strong> <span class="pw-muted">({a.pct} %)</span> {a.label}</li>
+        ))}
+      </ul>
+    </div>
+    <p class="pw-note">Stanje tržišta, ne preporuka. Plaćeni članak bez oznake protivan je propisima o zaštiti potrošača (vidi okvir niže). Izvor: SERPRise katalog, listopad 2026.</p>
+  </figure>
+
+  <!-- d) Scatter DR vs promet -->
+  <figure class="pw-card" data-mount="portali-scatter" aria-labelledby="pw-sc-t">
+    <figcaption>
+      <p class="pw-eyebrow">DR i promet · {portals.length} portala</p>
+      <h3 id="pw-sc-t" class="pw-title">Visok DR ne znači da portal ima čitatelje</h3>
+      <p class="pw-lead">Svaka točka je portal. Promet je na logaritamskoj skali. U crvenom polju je {gapCount} portala s DR 50+ i manje od 2.000 organskih posjeta mjesečno.</p>
+    </figcaption>
+    <div class="pw-sc" data-sc>
+      <svg viewBox={`0 0 ${SW} ${SH}`} role="img" aria-label="Raspršeni graf: Domain Rating prema organskom prometu">
+        <rect x={xS(50)} y={yS(2000)} width={xS(100) - xS(50)} height={yS(100) - yS(2000)} class="pw-sc__zone" rx="4" />
+        {yTicks.map((t) => (
+          <g>
+            <line x1={PL} x2={SW - PR} y1={yS(t)} y2={yS(t)} class="pw-grid" />
+            <text x={PL - 8} y={yS(t) + 4} text-anchor="end" class="pw-axis">{compact.format(t)}</text>
+          </g>
+        ))}
+        {[0, 20, 40, 60, 80, 100].map((d) => (
+          <text x={xS(d)} y={SH - PB + 18} text-anchor="middle" class="pw-axis">{d}</text>
+        ))}
+        <text x={(SW + PL) / 2} y={SH - 6} text-anchor="middle" class="pw-axis pw-axis--t">Domain Rating (Ahrefs)</text>
+        <text x="14" y={(SH - PB) / 2} text-anchor="middle" class="pw-axis pw-axis--t" transform={`rotate(-90 14 ${(SH - PB) / 2})`}>Organski promet / mj.</text>
+        {portals.map((p) => (
+          <circle cx={xS(p.dr)} cy={yS(p.t)} r="4.5" class:list={['pw-dot', { 'is-gap': isGap(p) }]}
+            data-tip={`${p.d} · DR ${p.dr} · ${fmt.format(p.t)} posjeta/mj.`} tabindex="-1">
+            <title>{p.d}: DR {p.dr}, {fmt.format(p.t)} posjeta/mj.</title>
+          </circle>
+        ))}
+        {portals.filter((p) => labelled.has(p.d)).map((p) => (
+          <text x={xS(p.dr) + (p.dr > 70 ? -8 : 8)} y={yS(p.t) + 4} text-anchor={p.dr > 70 ? 'end' : 'start'} class="pw-sc__lbl">{p.d}</text>
+        ))}
+      </svg>
+      <div class="pw-tip" data-tip-box hidden></div>
+    </div>
+    <ul class="pw-legend pw-legend--row">
+      <li><span class="pw-swatch pw-swatch--dot" style="background:#4f86c6"></span>Portal</li>
+      <li><span class="pw-swatch pw-swatch--dot" style="background:#ba2525"></span>DR 50+ i manje od 2.000 posjeta/mj.</li>
+    </ul>
+    <p class="pw-note">Izvor: Ahrefs (DR i procjena organskog prometa), 28. listopada 2026. Katalog ne uključuje portale s manje od 100 posjeta.</p>
+  </figure>
+
+  <!-- a) Mini katalog -->
+  <section class="pw-card" data-mount="portali-katalog" aria-labelledby="pw-k-t" data-mini>
+    <p class="pw-eyebrow">Mini katalog · {mini.length} od {portals.length} portala</p>
+    <h3 id="pw-k-t" class="pw-title">Pretražite i filtrirajte portale</h3>
+    <div class="pw-filters" role="search">
+      <label class="pw-f pw-f--q"><span>Traži</span><input type="search" data-f="q" placeholder="npr. rijeka, bug" autocomplete="off" /></label>
+      <label class="pw-f"><span>Kategorija</span>
+        <select data-f="c"><option value="">Sve</option>{miniCats.map((c) => <option value={c}>{categories[c]}</option>)}</select></label>
+      <label class="pw-f"><span>Regija</span>
+        <select data-f="r"><option value="">Sve</option>{miniRegions.map((r) => <option value={r}>{r}</option>)}</select></label>
+      <label class="pw-f"><span>DR</span>
+        <select data-f="dr"><option value="">Svi</option><option value="0-29">do 29</option><option value="30-49">30 do 49</option><option value="50-69">50 do 69</option><option value="70-100">70+</option></select></label>
+      <label class="pw-f"><span>Promet / mj.</span>
+        <select data-f="t"><option value="">Svi</option><option value="0-999">do 1.000</option><option value="1000-9999">1.000 do 10.000</option><option value="10000-99999">10.000 do 100.000</option><option value="100000-1e12">100.000+</option></select></label>
+      <label class="pw-f"><span>Oznaka</span>
+        <select data-f="s"><option value="">Sve</option><option value="da">označeno</option><option value="ne">bez oznake</option><option value="nepoznato">nije provjereno</option></select></label>
+    </div>
+    <p class="pw-muted pw-count" aria-live="polite">Prikazano <strong data-count>{mini.length}</strong> od {mini.length}</p>
+    <div class="pw-table">
+      <table>
+        <thead><tr><th scope="col">Portal</th><th scope="col">Kategorija</th><th scope="col">Regija</th><th scope="col" class="num">DR</th><th scope="col" class="num">Promet / mj.</th><th scope="col">Oznaka</th></tr></thead>
+        <tbody>
+          {mini.map((p) => (
+            <tr data-d={p.d} data-c={p.c} data-r={regija(p)} data-dr={p.dr} data-t={p.t} data-s={oznakaKey(p.s)}>
+              <td><strong>{p.d}</strong>{cited.has(p.d) && <span class="pw-badge" title="Citiran u našem ChatGPT testu lokalnih pitanja">AI citat</span>}</td>
+              <td>{categories[p.c]}</td>
+              <td>{regija(p)}</td>
+              <td class="num">{p.dr}</td>
+              <td class="num">{fmt.format(p.t)}</td>
+              <td>{oznaka(p.s)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <p class="pw-muted" data-empty hidden>Nijedan portal ne odgovara filtrima. Probajte u punom katalogu.</p>
+    </div>
+    <p class="pw-actions"><a class="btn btn--primary" href="/portali/">Pogledaj svih {portals.length} →</a></p>
+  </section>
+
+  <!-- b) Odaberi portal u 3 klika -->
+  <section class="pw-card" data-mount="portali-odabir" aria-labelledby="pw-o-t" data-pick>
+    <p class="pw-eyebrow">Alat · 3 klika</p>
+    <h3 id="pw-o-t" class="pw-title">Odaberite portal u 3 klika</h3>
+    <form class="pw-pick" data-pick-form>
+      <fieldset>
+        <legend>1. Što vam je cilj?</legend>
+        <label><input type="radio" name="cilj" value="link" required /> Link za Google</label>
+        <label><input type="radio" name="cilj" value="promet" /> Promet i čitatelji</label>
+        <label><input type="radio" name="cilj" value="ai" /> AI vidljivost</label>
+      </fieldset>
+      <fieldset>
+        <legend>2. Kakav je vaš posao?</legend>
+        <label><input type="radio" name="posao" value="b2b" required /> B2B usluga</label>
+        <label><input type="radio" name="posao" value="lokalno" /> Lokalna usluga</label>
+        <label><input type="radio" name="posao" value="webshop" /> Webshop</label>
+        <label><input type="radio" name="posao" value="lifestyle" /> Lifestyle brend</label>
+      </fieldset>
+      <fieldset>
+        <legend>3. Gdje su vaši kupci?</legend>
+        <select name="regija" aria-label="Regija">
+          <option value="">Cijela Hrvatska</option>
+          {listOrder.map((c) => <option value={c.id}>{c.name}</option>)}
+        </select>
+      </fieldset>
+      <button type="submit" class="btn btn--primary">Predloži portale</button>
+    </form>
+    <div class="pw-pick__out" data-pick-out aria-live="polite" hidden>
+      <ol class="pw-pick__list" data-pick-list></ol>
+      <p class="pw-note">Prijedlog je automatski, iz podataka u katalogu (DR, promet, kategorija, regija i ChatGPT citati iz našeg testa). Cijenu i dostupnost potvrđujemo u ponudi.</p>
+      <p class="pw-actions"><a class="btn btn--primary" href="/portali/#upit" data-pick-cta>Pošaljite nam brief</a></p>
+    </div>
+    <noscript><p class="pw-muted">Alat radi uz JavaScript. Svi portali su i u <a href="/portali/">katalogu</a>.</p></noscript>
+    <script type="application/json" data-pick-data set:html={pickJson} />
+  </section>
+
+  <!-- c) Karta Hrvatske -->
+  <section class="pw-card" data-mount="portali-karta" aria-labelledby="pw-m-t" data-map>
+    <p class="pw-eyebrow">Karta · regionalni portali</p>
+    <h3 id="pw-m-t" class="pw-title">Regionalni portali po županijama</h3>
+    <p class="pw-lead">Kliknite županiju. <span class="pw-star">★</span> označava županiju s portalom koji je ChatGPT citirao u našem testu lokalnih pitanja.</p>
+    <div class="pw-map">
+      <svg viewBox={`0 0 ${map.w} ${map.h}`} role="group" aria-label="Karta županija">
+        {counties.map((c) => (
+          <path d={c.d} fill={ramp(perCounty[c.id]?.length ?? 0)} class="pw-county" data-county={c.id}
+            tabindex="0" role="button" aria-label={`${c.name}: ${perCounty[c.id]?.length ?? 0} portala`}>
+            <title>{c.name}: {perCounty[c.id]?.length ?? 0} portala</title>
+          </path>
+        ))}
+        {counties.filter((c) => perCounty[c.id]?.some((p) => cited.has(p.d))).map((c) => (
+          <text x={c.cx} y={c.cy + 6} text-anchor="middle" class="pw-map__star" aria-hidden="true">★</text>
+        ))}
+      </svg>
+      <div class="pw-map__panel">
+        <p class="pw-muted pw-hint" data-map-hint>Odaberite županiju na karti ili s popisa.</p>
+        <select data-map-select aria-label="Županija">
+          <option value="">Sve županije</option>
+          {listOrder.map((c) => <option value={c.id}>{c.name} ({perCounty[c.id]?.length ?? 0})</option>)}
+        </select>
+        <div class="pw-map__lists">
+          {listOrder.map((c) => (
+            <section data-list={c.id}>
+              <h4>{c.name}</h4>
+              {perCounty[c.id]?.length ? (
+                <ul>{perCounty[c.id].map((p) => (
+                  <li><strong>{p.d}</strong> <span class="pw-muted">DR {p.dr} · {fmt.format(p.t)}/mj.</span>{cited.has(p.d) && <span class="pw-badge">AI citat</span>}</li>
+                ))}</ul>
+              ) : <p class="pw-muted">U katalogu još nemamo regionalni portal za ovu županiju. Nacionalni portali pokrivaju i nju.</p>}
+            </section>
+          ))}
+          <section data-list="BA">
+            <h4>BiH (regionalni portali s publikom u Hrvatskoj)</h4>
+            <ul>{(perCounty.BA ?? []).map((p) => <li><strong>{p.d}</strong> <span class="pw-muted">DR {p.dr} · {fmt.format(p.t)}/mj.</span></li>)}</ul>
+          </section>
+          <section data-list="X">
+            <h4>Regionalni portali bez jedne županije</h4>
+            <ul>{unassigned.map((p) => <li><strong>{p.d}</strong> <span class="pw-muted">DR {p.dr} · {fmt.format(p.t)}/mj.</span></li>)}</ul>
+          </section>
+        </div>
+      </div>
+    </div>
+    <ul class="pw-legend pw-legend--row" aria-label="Broj portala u županiji">
+      <li><span class="pw-swatch" style="background:#eef1f5"></span>0</li>
+      <li><span class="pw-swatch" style="background:#c9d7e8"></span>1 do 2</li>
+      <li><span class="pw-swatch" style="background:#8fb0d6"></span>3 do 5</li>
+      <li><span class="pw-swatch" style="background:#4f86c6"></span>6 do 8</li>
+      <li><span class="pw-swatch" style="background:#1f4f86"></span>9+</li>
+    </ul>
+    <p class="pw-note">Županiju smo portalu dodijelili prema sjedištu i temi portala. novilist.hr je nacionalni dnevnik, a na karti je uz Primorsko-goransku jer ga ChatGPT citira za riječka pitanja. Granice: Natural Earth.</p>
+  </section>
+</div>
+
+<script>
+  // Premjesti widgete na mjesta označena u tekstu članka.
+  document.querySelectorAll<HTMLElement>('[data-mount]').forEach((el) => {
+    const slot = document.querySelector(`[data-embed="${el.dataset.mount}"]`);
+    if (slot) slot.replaceWith(el);
+  });
+  const fmt = new Intl.NumberFormat('hr-HR');
+
+  // ---------- Scatter tooltip ----------
+  const sc = document.querySelector<HTMLElement>('[data-sc]');
+  if (sc) {
+    const tip = sc.querySelector<HTMLElement>('[data-tip-box]')!;
+    sc.addEventListener('pointermove', (e) => {
+      const t = (e.target as Element).closest<SVGCircleElement>('circle[data-tip]');
+      if (!t) { tip.hidden = true; return; }
+      const box = sc.getBoundingClientRect();
+      tip.textContent = t.dataset.tip!;
+      tip.hidden = false;
+      const x = e.clientX - box.left;
+      tip.style.left = `${Math.min(x + 12, box.width - tip.offsetWidth - 4)}px`;
+      tip.style.top = `${e.clientY - box.top - 36}px`;
+    });
+    sc.addEventListener('pointerleave', () => (tip.hidden = true));
+  }
+
+  // ---------- Mini katalog ----------
+  const mini = document.querySelector<HTMLElement>('[data-mini]');
+  if (mini) {
+    const rows = Array.from(mini.querySelectorAll<HTMLTableRowElement>('tbody tr'));
+    const f = (k: string) => mini.querySelector<HTMLInputElement | HTMLSelectElement>(`[data-f="${k}"]`)!.value;
+    const inRange = (v: number, r: string) => { if (!r) return true; const [a, b] = r.split('-').map(Number); return v >= a && v <= b; };
+    const apply = () => {
+      const q = f('q').trim().toLowerCase();
+      let n = 0;
+      for (const r of rows) {
+        const d = r.dataset;
+        const ok = (!q || d.d!.includes(q) || d.r!.toLowerCase().includes(q)) && (!f('c') || d.c === f('c')) && (!f('r') || d.r === f('r'))
+          && inRange(Number(d.dr), f('dr')) && inRange(Number(d.t), f('t')) && (!f('s') || d.s === f('s'));
+        r.hidden = !ok;
+        if (ok) n++;
+      }
+      mini.querySelector('[data-count]')!.textContent = String(n);
+      mini.querySelector<HTMLElement>('[data-empty]')!.hidden = n > 0;
+    };
+    mini.addEventListener('input', apply);
+    mini.addEventListener('change', apply);
+  }
+
+  // ---------- Karta ----------
+  const mapEl = document.querySelector<HTMLElement>('[data-map]');
+  if (mapEl) {
+    const lists = Array.from(mapEl.querySelectorAll<HTMLElement>('[data-list]'));
+    const sel = mapEl.querySelector<HTMLSelectElement>('[data-map-select]')!;
+    const paths = Array.from(mapEl.querySelectorAll<SVGPathElement>('[data-county]'));
+    const show = (id: string) => {
+      lists.forEach((l) => (l.hidden = !!id && l.dataset.list !== id));
+      paths.forEach((p) => p.classList.toggle('is-active', p.dataset.county === id));
+      sel.value = id;
+    };
+    show(''); // bez odabira prikazuje sve (isto kao bez JS-a), ali s ograničenom visinom
+    mapEl.classList.add('is-js');
+    const pick = (id: string) => show(id);
+    paths.forEach((p) => {
+      p.addEventListener('click', () => pick(p.dataset.county!));
+      p.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(p.dataset.county!); } });
+    });
+    sel.addEventListener('change', () => show(sel.value));
+  }
+
+  // ---------- Odaberi portal u 3 klika ----------
+  const pickEl = document.querySelector<HTMLElement>('[data-pick]');
+  if (pickEl) {
+    type Row = [string, number, number, string, string, number, number];
+    const { p: all, cat, zn } = JSON.parse(pickEl.querySelector('[data-pick-data]')!.textContent!) as { p: Row[]; cat: Record<string, string>; zn: Record<string, string> };
+    const form = pickEl.querySelector<HTMLFormElement>('[data-pick-form]')!;
+    const out = pickEl.querySelector<HTMLElement>('[data-pick-out]')!;
+    const list = pickEl.querySelector<HTMLOListElement>('[data-pick-list]')!;
+    const cta = pickEl.querySelector<HTMLAnchorElement>('[data-pick-cta]')!;
+    const fits: Record<string, string[]> = {
+      b2b: ['biznis', 'tech', 'vijesti'],
+      lokalno: ['regija', 'vijesti'],
+      webshop: ['lifestyle', 'dom', 'zdravlje', 'tech', 'roditelji', 'gastro'],
+      lifestyle: ['lifestyle', 'zdravlje', 'putovanja', 'gastro', 'roditelji'],
+    };
+    let picked: string[] = [];
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const fd = new FormData(form);
+      const goal = String(fd.get('cilj') || 'link');
+      const biz = String(fd.get('posao') || 'b2b');
+      const reg = String(fd.get('regija') || '');
+      const lg = (t: number) => Math.log10(Math.max(t, 100));
+      const cand = all.filter(([, dr, t, c, z]) => {
+        if (z === 'BA') return false;
+        if (!fits[biz].includes(c)) return false;
+        if (c === 'regija' && reg && z !== reg) return false; // tuđa regija ne pomaže lokalnoj usluzi
+        if (c === 'regija' && !reg && biz !== 'lokalno') return false;
+        return goal === 'link' ? t >= 300 : t >= 1000;
+      });
+      const score = ([, dr, t, c, z, , ci]: Row) => {
+        let s = goal === 'link' ? dr + lg(t) * 4 : goal === 'promet' ? lg(t) * 20 + dr * 0.2 : lg(t) * 6 + dr * 0.3 + ci * 40;
+        if (reg && z === reg) s += goal === 'promet' ? 15 : 30;
+        if (biz === 'lokalno' && c === 'regija') s += 20;
+        if (fits[biz][0] === c) s += 8;
+        return s;
+      };
+      const top = cand.sort((a, b) => score(b) - score(a)).slice(0, 5);
+      picked = top.map((r) => r[0]);
+      list.innerHTML = '';
+      for (const [d, dr, t, c, z, s, ci] of top) {
+        const why: string[] = [];
+        if (c === 'regija' && zn[z]) why.push(`regionalni portal, ${zn[z]}`); else why.push(z && zn[z] ? `${cat[c]}, ${zn[z]}` : cat[c]);
+        why.push(`DR ${dr}`, `${fmt.format(t)} organskih posjeta/mj.`);
+        if (ci) why.push('ChatGPT ga je citirao u našem testu lokalnih pitanja');
+        if (dr >= 50 && t < 2000) why.push('visok DR uz malo prometa: vrijedi za link, ne za čitatelje');
+        if (s === 1) why.push('plaćene članke jasno označava');
+        const li = document.createElement('li');
+        const b = document.createElement('strong');
+        b.textContent = d;
+        const sp = document.createElement('span');
+        sp.textContent = ` ${why.join(' · ')}`;
+        li.append(b, sp);
+        list.append(li);
+      }
+      if (!top.length) {
+        const li = document.createElement('li');
+        li.textContent = 'Za ovu kombinaciju nemamo dovoljno portala u katalogu. Pošaljite brief pa ćemo predložiti ručno.';
+        list.append(li);
+      }
+      out.hidden = false;
+    });
+
+    // Prijedlog prebacuje u košaricu kataloga (/portali/ čita isti ključ) pa se tamo šalje upit.
+    cta.addEventListener('click', () => {
+      try {
+        const KEY = 'serprise-portali';
+        const prev = JSON.parse(localStorage.getItem(KEY) || '[]') as string[];
+        localStorage.setItem(KEY, JSON.stringify([...new Set([...prev, ...picked])]));
+      } catch {}
+    });
+  }
+</script>
+
+<style>
+  .pw { display: contents; }
+  .pw-card { border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin: 1.6em 0; background: var(--surface); position: relative; }
+  .pw-eyebrow { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin: 0 0 4px; font-weight: 600; }
+  .pw-title { margin: 0 0 6px; font-size: 1.2rem; }
+  .pw-lead { margin: 0 0 12px; color: var(--muted); font-size: 0.95rem; }
+  .pw-note { font-size: 0.82rem; color: var(--muted); margin: 12px 0 0; }
+  .pw-muted { color: var(--muted); }
+  .pw-legend { list-style: none; padding: 0 !important; margin: 0; display: grid; gap: 8px; font-size: 0.95rem; }
+  .pw-legend li { margin: 0; }
+  .pw-legend--row { display: flex; flex-wrap: wrap; gap: 6px 16px; margin-top: 8px; font-size: 0.85rem; color: var(--muted); }
+  .pw-swatch { display: inline-block; width: 12px; height: 12px; border-radius: 3px; margin-right: 6px; vertical-align: -1px; }
+  .pw-swatch--dot { border-radius: 50%; }
+  .pw-badge { display: inline-block; margin-left: 6px; font-size: 0.72rem; font-weight: 600; padding: 1px 6px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); vertical-align: 1px; }
+  .pw-actions { margin: 14px 0 0; }
+
+  /* donut */
+  .pw-donut__body { display: grid; grid-template-columns: 180px 1fr; gap: 20px; align-items: center; }
+  .pw-donut svg { width: 100%; height: auto; }
+  .pw-arc { transition: stroke-width 0.15s; }
+  .pw-arc:hover { stroke-width: 30; }
+  .pw-donut__big { font: 700 34px var(--font-display); fill: var(--text); }
+  .pw-donut__small { font-size: 13px; fill: var(--muted); }
+  @media (max-width: 560px) { .pw-donut__body { grid-template-columns: 1fr; } .pw-donut svg { max-width: 200px; margin: 0 auto; } }
+
+  /* scatter */
+  .pw-sc { position: relative; }
+  .pw-sc svg { width: 100%; height: auto; display: block; }
+  .pw-grid { stroke: var(--border); stroke-width: 1; }
+  .pw-axis { font-size: 11px; fill: var(--muted); }
+  .pw-axis--t { font-size: 12px; }
+  .pw-sc__zone { fill: var(--accent-soft); }
+  .pw-dot { fill: #4f86c6; fill-opacity: 0.55; stroke: #fff; stroke-width: 1; }
+  .pw-dot.is-gap { fill: #ba2525; fill-opacity: 0.9; }
+  .pw-dot:hover { fill-opacity: 1; stroke: var(--text); stroke-width: 1.5; }
+  .pw-sc__lbl { font-size: 11px; font-weight: 600; fill: var(--text); paint-order: stroke; stroke: #fff; stroke-width: 3px; }
+  .pw-tip { position: absolute; pointer-events: none; background: var(--navy); color: #fff; font-size: 0.8rem; padding: 4px 8px; border-radius: 6px; white-space: nowrap; }
+
+  /* mini katalog */
+  .pw-filters { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 10px 0; }
+  .pw-f { display: grid; gap: 4px; font-size: 0.8rem; color: var(--muted); font-weight: 500; }
+  .pw-f input, .pw-f select, .pw-pick select { font: inherit; font-size: 0.95rem; color: var(--text); padding: 8px 10px; border: 1px solid var(--border); border-radius: 8px; background: #fff; width: 100%; }
+  .pw-count { font-size: 0.85rem; margin: 6px 0; }
+  .pw-table { max-height: 460px; overflow: auto; border: 1px solid var(--border); border-radius: 10px; }
+  .pw-table table { margin: 0 !important; display: table !important; font-size: 0.9rem !important; }
+  .pw-table th { position: sticky; top: 0; z-index: 1; }
+  .pw-table td, .pw-table th { border-width: 0 0 1px 0 !important; white-space: nowrap; }
+  .pw-table .num { text-align: right !important; font-variant-numeric: tabular-nums; }
+  .pw-table [data-empty] { padding: 12px; margin: 0; }
+  @media (max-width: 640px) { .pw-filters { grid-template-columns: 1fr 1fr; } .pw-f--q { grid-column: 1 / -1; } .pw-table th:nth-child(2), .pw-table td:nth-child(2), .pw-table th:nth-child(3), .pw-table td:nth-child(3) { display: none; } }
+
+  /* odabir */
+  .pw-pick { display: grid; gap: 14px; }
+  .pw-pick fieldset { border: 0; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+  .pw-pick legend { font-weight: 600; margin-bottom: 8px; width: 100%; }
+  .pw-pick label { display: inline-flex; gap: 6px; align-items: center; border: 1px solid var(--border); border-radius: 999px; padding: 6px 14px; cursor: pointer; font-size: 0.95rem; }
+  .pw-pick label:has(input:checked) { border-color: var(--accent); background: var(--accent-soft); }
+  .pw-pick input[type='radio'] { accent-color: var(--accent); }
+  .pw-pick select { max-width: 320px; }
+  .pw-pick button { justify-self: start; }
+  .pw-pick__out { margin-top: 16px; border-top: 1px solid var(--border); padding-top: 14px; }
+  .pw-pick__list li { margin-bottom: 8px; }
+  .pw-pick__list span { color: var(--muted); font-size: 0.92rem; }
+
+  /* karta */
+  .pw-map { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 20px; align-items: start; }
+  .pw-map svg { width: 100%; height: auto; }
+  .pw-county { stroke: #fff; stroke-width: 1; cursor: pointer; transition: opacity 0.15s; }
+  .pw-county:focus { outline: none; }
+  .pw-county:hover, .pw-county:focus-visible { stroke: var(--text); stroke-width: 1.5; outline: none; }
+  .pw-county.is-active { stroke: var(--accent); stroke-width: 2.5; }
+  .pw-map__star { fill: var(--accent); font-size: 16px; pointer-events: none; paint-order: stroke; stroke: #fff; stroke-width: 2px; }
+  .pw-star { color: var(--accent); }
+  .pw-map__panel select { margin-bottom: 10px; }
+  .pw-hint { font-size: 0.9rem; margin: 0 0 8px; }
+  .pw-map__lists { max-height: 420px; overflow: auto; }
+  .pw-map__lists h4 { margin: 10px 0 4px; font-size: 1rem; }
+  .pw-map__lists ul { list-style: none; padding: 0 !important; margin: 0; }
+  .pw-map__lists li { font-size: 0.9rem; margin: 0 0 4px; }
+  .pw-map__panel [data-map-select] { font: inherit; padding: 8px 10px; border: 1px solid var(--border); border-radius: 8px; width: 100%; }
+  @media (max-width: 720px) { .pw-map { grid-template-columns: 1fr; } }
+</style>
+
+<style is:global>
+  .article .pw-legal { border: 1px solid var(--border); border-left: 4px solid var(--navy); background: var(--bg-2); border-radius: 12px; padding: 4px 20px 12px; margin: 1.6em 0; }
+  .article .pw-legal h3 { margin-top: 0.9em; }
+  .article .pw-legal p:last-child { font-size: 0.9rem; color: var(--muted); }
+</style>

@@ -52,6 +52,10 @@
   to = "/en/white-label-link-building/"
   status = 301
 [[redirects]]
+  from = "/expired-domain/*"
+  to = "/en/link-building/"
+  status = 301
+[[redirects]]
   from = "/services/*"
   to = "/"
   status = 301

@@ -194,6 +194,7 @@ const totalSites = countries.reduce((n, c) => n + c.sites.length + c.more, 0);
 </Base>
 
 <script>
+  import { trackLead } from '../../lib/track';
   import { supabase } from '../../lib/supabase';
 
   const rows = [...document.querySelectorAll<HTMLTableRowElement>('#rows tr')];
@@ -421,7 +422,9 @@ const totalSites = countries.reduce((n, c) => n + c.sites.length + c.more, 0);
       setStatus('Something went wrong. Please try again or email us.');
       return;
     }
-    window.location.href = '/en/thank-you/';
+    trackLead('publishers_en', { publishers: selected.size }, () => {
+      window.location.href = '/en/thank-you/';
+    });
   });
 
   apply();

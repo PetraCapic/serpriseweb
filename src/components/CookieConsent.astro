@@ -1,0 +1,96 @@
+---
+// Traka za privolu kolačića (Google Consent Mode v2). Zadano je sve odbijeno (u Base.astro, prije GTM-a);
+// GA4 i Meta Pixel u GTM-u čekaju privolu. Izbor se pamti u localStorage ('consent': 'granted' | 'denied').
+interface Props { lang?: 'hr' | 'en' }
+const { lang = 'hr' } = Astro.props;
+const t =
+  lang === 'en'
+    ? {
+        text: 'We use cookies to measure visits (Google Analytics) and ad performance (Meta). Nothing is tracked until you accept.',
+        more: 'Privacy policy',
+        accept: 'Accept all',
+        reject: 'Necessary only',
+      }
+    : {
+        text: 'Koristimo kolačiće za mjerenje posjeta (Google Analytics) i uspješnosti oglasa (Meta). Ništa ne pratimo dok ne prihvatite.',
+        more: 'Pravila privatnosti',
+        accept: 'Prihvati sve',
+        reject: 'Samo nužni',
+      };
+---
+
+<div class="cc" id="cc" role="dialog" aria-live="polite" aria-label={lang === 'en' ? 'Cookie consent' : 'Privola za kolačiće'} hidden>
+  <p class="cc__text">{t.text} <a href="/pravila-privatnosti/#kolacici">{t.more}</a></p>
+  <div class="cc__btns">
+    <button type="button" class="btn btn--ghost cc__btn" data-cc="denied">{t.reject}</button>
+    <button type="button" class="btn btn--primary cc__btn" data-cc="granted">{t.accept}</button>
+  </div>
+</div>
+
+<script>
+  declare global {
+    interface Window { dataLayer?: unknown[]; gtag?: (...args: unknown[]) => void; openCookieSettings?: () => void }
+  }
+  const box = document.getElementById('cc') as HTMLElement;
+  let saved: string | null = null;
+  try {
+    saved = localStorage.getItem('consent');
+  } catch {}
+  if (saved !== 'granted' && saved !== 'denied') box.hidden = false;
+
+  const apply = (v: 'granted' | 'denied') => {
+    try {
+      localStorage.setItem('consent', v);
+    } catch {}
+    window.gtag?.('consent', 'update', {
+      ad_storage: v,
+      ad_user_data: v,
+      ad_personalization: v,
+      analytics_storage: v,
+    });
+    window.dataLayer?.push({ event: 'consent_update', consent: v });
+    box.hidden = true;
+  };
+  box.querySelectorAll<HTMLButtonElement>('[data-cc]').forEach((b) =>
+    b.addEventListener('click', () => apply(b.dataset.cc as 'granted' | 'denied')),
+  );
+  window.openCookieSettings = () => {
+    box.hidden = false;
+  };
+  document.querySelectorAll('[data-cookie-settings]').forEach((a) =>
+    a.addEventListener('click', (e) => {
+      e.preventDefault();
+      box.hidden = false;
+    }),
+  );
+</script>
+
+<style>
+  .cc {
+    position: fixed;
+    left: 16px;
+    right: 16px;
+    bottom: 16px;
+    z-index: 1000;
+    max-width: 720px;
+    margin: 0 auto;
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    padding: 16px 18px;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: 0 12px 40px rgba(16, 43, 67, 0.18);
+  }
+  .cc[hidden] { display: none; }
+  .cc__text { margin: 0; font-size: 0.9rem; color: var(--text); }
+  .cc__text a { white-space: nowrap; }
+  .cc__btns { display: flex; gap: 8px; flex-shrink: 0; }
+  .cc__btn { padding: 10px 16px; font-size: 0.9rem; }
+  @media (max-width: 640px) {
+    .cc { flex-direction: column; align-items: stretch; }
+    .cc__btns { justify-content: stretch; }
+    .cc__btn { flex: 1; }
+  }
+</style>

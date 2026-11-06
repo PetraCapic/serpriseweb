@@ -127,6 +127,7 @@ const koraci = [
 </Base>
 
 <script>
+  import { trackLead } from '../lib/track';
   import { supabase } from '../lib/supabase';
 
   const form = document.getElementById('vodic-form') as HTMLFormElement;
@@ -199,6 +200,7 @@ const koraci = [
       console.error(err);
     }
     showDone(email, sent);
+    trackLead('vodic');
   });
 </script>
 

@@ -29,6 +29,7 @@ const hasPosts = (await getPosts()).length > 0;
       <ul>
         <li><a href={enNav[4].href}>{enNav[4].label}</a></li>
         <li><a href="/pravila-privatnosti/" hreflang="hr">Privacy policy (HR)</a></li>
+        <li><a href="#" data-cookie-settings>Cookie settings</a></li>
         <li><a href="/" hreflang="hr" lang="hr">Hrvatski</a></li>
       </ul>
     </div>
@@ -66,6 +67,7 @@ const hasPosts = (await getPosts()).length > 0;
       <ul>
         {nav.slice(3).filter((n) => n.href !== '/blog/' || hasPosts).map((n) => <li><a href={n.href}>{n.label}</a></li>)}
         <li><a href="/pravila-privatnosti/">Pravila privatnosti</a></li>
+        <li><a href="#" data-cookie-settings>Postavke kolačića</a></li>
       </ul>
     </div>
     <div>

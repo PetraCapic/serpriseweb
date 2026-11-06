@@ -96,6 +96,7 @@ const budgets = isEn ? enBudgetLabels : budgetLabels;
 </form>
 
 <script>
+  import { trackLead } from '../lib/track';
   import { supabase } from '../lib/supabase';
 
   const form = document.getElementById('contact-form') as HTMLFormElement;
@@ -168,7 +169,9 @@ const budgets = isEn ? enBudgetLabels : budgetLabels;
       setStatus(txt.failed);
       return;
     }
-    window.location.href = txt.thanks;
+    trackLead(document.documentElement.lang === 'en' ? 'kontakt_en' : 'kontakt', { service: str('service') ?? 'nisam_siguran', budget: str('budget') }, () => {
+      window.location.href = txt.thanks;
+    });
   });
 
   // Zapamti UTM parametre za ovu posjetu

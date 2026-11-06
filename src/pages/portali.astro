@@ -164,6 +164,7 @@ const countryNames: Record<string, string> = { ba: 'BiH', rs: 'Srbija', si: 'Slo
 </Base>
 
 <script>
+  import { trackLead } from '../lib/track';
   import { supabase } from '../lib/supabase';
 
   const KEY = 'serprise-portali';
@@ -347,7 +348,9 @@ const countryNames: Record<string, string> = { ba: 'BiH', rs: 'Srbija', si: 'Slo
     try {
       localStorage.removeItem(KEY);
     } catch {}
-    window.location.href = '/hvala/';
+    trackLead('portali', { portals: selected.size }, () => {
+      window.location.href = '/hvala/';
+    });
   });
 </script>
 

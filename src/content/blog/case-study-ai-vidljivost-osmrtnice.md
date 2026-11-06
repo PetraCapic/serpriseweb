@@ -2,13 +2,14 @@
 title: "Case study: kako je portal za osmrtnice ušao u odgovore ChatGPT-a"
 description: "Portal s 35.000 klikova mjesečno ChatGPT-u je slao praznu stranicu. Nakon jedne tehničke promjene posjeti s ChatGPT-a narasli su sa 6 na 67 u 12 dana."
 date: 2026-11-01
+updated: 2026-11-06
 image: /blog/case-study-ai-vidljivost-osmrtnice/naslovna.png
 imageAlt: "Case study AI vidljivosti: portal za osmrtnice, 67 posjeta s ChatGPT-a u 12 dana"
 ---
 
 U 19 dana prije promjene portal osmrtnica.com.hr dobio je 6 posjeta s ChatGPT-a. U 12 dana poslije dobio ih je 67. U istom tjednu klikovi s Googlea porasli su s 5.479 na 10.569.
 
-Nismo pisali nove tekstove, nismo kupovali linkove i nismo mijenjali dizajn. Promijenili smo samo ono što crawleri dobiju kad otvore stranicu. Ovo je točan popis promjena, brojke iz Search Consolea, GA4, Ahrefsa i DataForSEO-a te ono što još ne znamo.
+Nismo pisali nove tekstove i nismo mijenjali dizajn. Glavna promjena bila je ono što crawleri dobiju kad otvore stranicu. U istom razdoblju portal je dobivao i linkove s hrvatskih portala (link building i PR objave), pa rast ne pripisujemo samo jednoj promjeni. Ovo je točan popis promjena, brojke iz Search Consolea, GA4, Ahrefsa i DataForSEO-a te ono što još ne znamo.
 
 ## Polazna točka: 35.000 klikova i prazan HTML
 

@@ -135,6 +135,9 @@ const koraci = [
   const button = form.querySelector('button[type=submit]') as HTMLButtonElement;
   const done = document.querySelector('.vform__done') as HTMLElement;
   const startedAt = Date.now();
+  // Lijevak vodiča u GA4: vodic_form_start (prvi klik u formu) -> generate_lead (lead_source: vodic) -> file_download (PDF).
+  // Tko ima form_start bez generate_lead, odustao je.
+  form.addEventListener('focusin', () => (window as any).dataLayer?.push({ event: 'vodic_form_start' }), { once: true });
 
   const showDone = (email: string, sent: boolean) => {
     form.hidden = true;
@@ -200,7 +203,7 @@ const koraci = [
       console.error(err);
     }
     showDone(email, sent);
-    trackLead('vodic');
+    trackLead('vodic', { email_sent: sent });
   });
 </script>
 

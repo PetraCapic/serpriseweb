@@ -122,6 +122,12 @@ const totalSites = countries.reduce((n, c) => n + c.sites.length + c.more, 0);
         </table>
         <p id="empty" class="empty muted" hidden>No publishers match these filters.</p>
       </div>
+      <nav class="pager" id="pager" aria-label="Publisher pages" hidden>
+        <button type="button" class="btn btn--ghost pager__btn" data-dir="-1">← Previous</button>
+        <span class="pager__info muted"></span>
+        <button type="button" class="btn btn--ghost pager__btn" data-dir="1">Next →</button>
+      </nav>
+      <p class="to-form"><a href="#enquiry">Ticked what you need? Send your enquiry below ↓</a></p>
 
       <div class="more" id="more" hidden>
         <div class="more__head">
@@ -144,7 +150,12 @@ const totalSites = countries.reduce((n, c) => n + c.sites.length + c.more, 0);
           </table>
           <p id="more-empty" class="empty muted" hidden>No more publishers match this search.</p>
         </div>
-        <button type="button" class="btn btn--ghost more__btn" id="more-btn" hidden>Show more</button>
+        <nav class="pager" id="more-pager" aria-label="More publisher pages" hidden>
+          <button type="button" class="btn btn--ghost pager__btn" data-dir="-1">← Previous</button>
+          <span class="pager__info muted"></span>
+          <button type="button" class="btn btn--ghost pager__btn" data-dir="1">Next →</button>
+        </nav>
+        <p class="to-form"><a href="#enquiry">Send your enquiry below ↓</a></p>
       </div>
 
       <div class="card soon" id="soon" hidden>
@@ -154,6 +165,11 @@ const totalSites = countries.reduce((n, c) => n + c.sites.length + c.more, 0);
       </div>
     </div>
   </section>
+
+  <a href="#enquiry" class="selbar" id="selbar" hidden>
+    <span><strong data-sel-count>0</strong> selected</span>
+    <span class="selbar__cta">Send enquiry ↓</span>
+  </a>
 
   <section id="enquiry" class="section section--alt">
     <div class="container inquiry">
@@ -217,11 +233,28 @@ const totalSites = countries.reduce((n, c) => n + c.sites.length + c.more, 0);
   const moreRows = document.getElementById('more-rows')!;
   const moreCount = document.getElementById('more-count')!;
   const moreEmpty = document.getElementById('more-empty')!;
-  const moreBtn = document.getElementById('more-btn') as HTMLButtonElement;
-  const PAGE = 50;
+  const PAGE = 25;
   let more: Record<string, string[]> | null = null;
   let moreList: string[] = [];
-  let shown = 0;
+  let morePage = 0;
+
+  // 25 rows per page, so the enquiry form below stays within reach
+  const pagerFor = (id: string, onMove: (dir: number) => void) => {
+    const el = document.getElementById(id)!;
+    el.querySelectorAll<HTMLButtonElement>('[data-dir]').forEach((b) => b.addEventListener('click', () => onMove(Number(b.dataset.dir))));
+    return (page: number, total: number) => {
+      const pages = Math.max(1, Math.ceil(total / PAGE));
+      el.hidden = total <= PAGE;
+      const from = total ? page * PAGE + 1 : 0;
+      el.querySelector('.pager__info')!.textContent = `${fmt.format(from)}–${fmt.format(Math.min(total, (page + 1) * PAGE))} of ${fmt.format(total)} · page ${page + 1} of ${pages}`;
+      const [prev, next] = el.querySelectorAll<HTMLButtonElement>('[data-dir]');
+      prev.disabled = page === 0;
+      next.disabled = page >= pages - 1;
+    };
+  };
+  const keepInView = (el: HTMLElement) => {
+    if (el.getBoundingClientRect().top < 0) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
   const fake = (d: string, i: number) => {
     let h = i * 31;
     for (const ch of d) h = (h * 33 + ch.charCodeAt(0)) % 99991;
@@ -261,27 +294,28 @@ const totalSites = countries.reduce((n, c) => n + c.sites.length + c.more, 0);
     req.append(tag);
     return row;
   };
+  const morePager = pagerFor('more-pager', (dir) => {
+    morePage += dir;
+    renderMore(false);
+    keepInView(moreBox);
+  });
   const renderMore = (reset: boolean) => {
     if (!more) return;
     const country = tabs.find((t) => t.dataset.cc === cc)?.querySelector('strong')?.textContent ?? '';
     if (reset) {
       const term = q.value.trim().toLowerCase();
       moreList = (more[cc] ?? []).filter((d) => !term || d.includes(term));
-      moreRows.innerHTML = '';
-      shown = 0;
+      morePage = 0;
     }
     const frag = document.createDocumentFragment();
-    moreList.slice(shown, shown + PAGE).forEach((d) => frag.append(moreRow(d, country)));
-    moreRows.append(frag);
-    shown = Math.min(shown + PAGE, moreList.length);
+    moreList.slice(morePage * PAGE, (morePage + 1) * PAGE).forEach((d) => frag.append(moreRow(d, country)));
+    moreRows.replaceChildren(frag);
     moreCount.textContent = fmt.format(moreList.length);
     moreBox.querySelector('[data-more-country]')!.textContent = country;
     moreEmpty.hidden = moreList.length > 0;
-    moreBtn.hidden = shown >= moreList.length;
-    moreBtn.textContent = `Show more (${fmt.format(moreList.length - shown)} left)`;
+    morePager(morePage, moreList.length);
     moreBox.hidden = !(more[cc] ?? []).length;
   };
-  moreBtn.addEventListener('click', () => renderMore(false));
   fetch('/data/publishers-more.json')
     .then((r) => (r.ok ? r.json() : null))
     .then((json) => {
@@ -290,12 +324,24 @@ const totalSites = countries.reduce((n, c) => n + c.sites.length + c.more, 0);
     })
     .catch(() => {});
 
+  let matches: HTMLTableRowElement[] = [];
+  let page = 0;
+  const mainPager = pagerFor('pager', (dir) => {
+    page += dir;
+    paint();
+    keepInView(wrap);
+  });
+  const paint = () => {
+    const visible = new Set(matches.slice(page * PAGE, (page + 1) * PAGE));
+    for (const r of rows) r.hidden = !visible.has(r);
+    mainPager(page, matches.length);
+  };
   const apply = () => {
     const term = q.value.trim().toLowerCase();
     const minDr = Number(dr.value);
     const minT = Number(tr.value);
-    let n = 0;
     let inCountry = 0;
+    matches = [];
     for (const r of rows) {
       const own = r.dataset.cc === cc;
       if (own) inCountry++;
@@ -305,10 +351,12 @@ const totalSites = countries.reduce((n, c) => n + c.sites.length + c.more, 0);
         (!cat.value || r.dataset.c === cat.value) &&
         Number(r.dataset.dr) >= minDr &&
         Number(r.dataset.t) >= minT;
-      r.hidden = !show;
-      if (show) n++;
+      if (show) matches.push(r);
     }
-    count.textContent = String(n);
+    const n = matches.length;
+    page = 0;
+    paint();
+    count.textContent = fmt.format(n);
     empty.hidden = n > 0;
     const hasList = inCountry > 0;
     wrap.hidden = !hasList;
@@ -334,6 +382,13 @@ const totalSites = countries.reduce((n, c) => n + c.sites.length + c.more, 0);
   const pickedEmpty = document.getElementById('picked-empty')!;
   const pickedCount = document.querySelector('[data-picked-count]')!;
   const selected = new Map<string, string>();
+  // Sticky "Send enquiry" bar while publishers are ticked and the form is not on screen
+  const selbar = document.getElementById('selbar')!;
+  let formInView = false;
+  new IntersectionObserver(([e]) => {
+    formInView = e.isIntersecting;
+    selbar.hidden = selected.size === 0 || formInView;
+  }).observe(document.getElementById('enquiry')!);
   const render = () => {
     picked.innerHTML = '';
     selected.forEach((country, d) => {
@@ -343,6 +398,8 @@ const totalSites = countries.reduce((n, c) => n + c.sites.length + c.more, 0);
     });
     pickedCount.textContent = String(selected.size);
     pickedEmpty.hidden = selected.size > 0;
+    selbar.hidden = selected.size === 0 || formInView;
+    selbar.querySelector('[data-sel-count]')!.textContent = String(selected.size);
   };
   const onPick = (e: Event) => {
     const box = e.target as HTMLInputElement;
@@ -465,7 +522,15 @@ const totalSites = countries.reduce((n, c) => n + c.sites.length + c.more, 0);
   #more-rows :global(.col-check) { width: 40px; }
   #more-rows :global(.blur) { filter: blur(5px); user-select: none; color: var(--muted); }
   #more-rows :global(.tag) { display: inline-block; font-size: 0.75rem; padding: 2px 8px; border-radius: 999px; background: rgba(200, 40, 40, 0.08); color: var(--accent); font-weight: 600; }
-  .more__btn { margin: 16px auto 0; display: block; }
+  .pager { display: flex; align-items: center; justify-content: center; gap: 14px; margin-top: 14px; flex-wrap: wrap; }
+  .pager[hidden] { display: none; }
+  .pager__btn { padding: 8px 14px; font-size: 0.9rem; }
+  .pager__btn:disabled { opacity: 0.4; cursor: default; }
+  .pager__info { font-size: 0.9rem; }
+  .to-form { text-align: center; margin: 14px 0 0; font-weight: 600; }
+  .selbar { position: fixed; left: 50%; bottom: 16px; transform: translateX(-50%); z-index: 50; display: flex; align-items: center; gap: 16px; padding: 10px 10px 10px 18px; border-radius: 999px; background: var(--navy); color: #fff; text-decoration: none; box-shadow: 0 10px 30px rgba(16, 43, 67, 0.3); white-space: nowrap; }
+  .selbar[hidden] { display: none; }
+  .selbar__cta { background: var(--accent); color: #fff; font-weight: 600; padding: 8px 16px; border-radius: 999px; }
   .soon { text-align: center; padding: 40px 24px; }
   .soon p { max-width: 620px; margin: 0 auto 20px; }
   .inquiry { display: grid; grid-template-columns: 1fr 1.2fr; gap: 32px; align-items: start; }

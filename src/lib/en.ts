@@ -12,6 +12,7 @@ export const enNav = [
   { href: '/en/white-label-link-building/', label: 'White label' },
   { href: '/en/llm-visibility/', label: 'LLM visibility' },
   { href: '/en/publishers/', label: 'Publishers' },
+  { href: '/en/blog/', label: 'Blog' },
   { href: '/en/contact/', label: 'Contact' },
 ];
 
@@ -21,6 +22,7 @@ export const alternates: [hr: string, en: string][] = [
   ['/link-building-digitalni-pr/', '/en/link-building/'],
   ['/ai-vidljivost/', '/en/llm-visibility/'],
   ['/kontakt/', '/en/contact/'],
+  ['/blog/', '/en/blog/'],
 ];
 
 export const altFor = (path: string) => {

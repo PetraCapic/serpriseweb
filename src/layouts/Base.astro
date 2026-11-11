@@ -14,10 +14,12 @@ interface Props {
   lang?: 'hr' | 'en';
   ogType?: 'website' | 'article';
   image?: string;
+  // Par stranica HR/EN kad nije u popisu alternates iz lib/en.ts (npr. članci bloga).
+  alternates?: { hr: string; en: string };
 }
 
-const { title, description, noindex = false, schema, lang = 'hr', ogType = 'website', image = '/og.png' } = Astro.props;
-const alt = altFor(Astro.url.pathname);
+const { title, description, noindex = false, schema, lang = 'hr', ogType = 'website', image = '/og.png', alternates } = Astro.props;
+const alt = alternates ?? altFor(Astro.url.pathname);
 const canonical = new URL(Astro.url.pathname, site.url).href;
 const fullTitle = title.includes(site.name) ? title : `${title} | ${site.name}`;
 
@@ -106,7 +108,7 @@ const schemas = [orgSchema, ...(schema ? (Array.isArray(schema) ? schema : [sche
   <body>
     <noscript><iframe src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`} height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <a class="skip-link" href="#main">{lang === 'en' ? 'Skip to content' : 'Preskoči na sadržaj'}</a>
-    <Header lang={lang} />
+    <Header lang={lang} alt={alt} />
     <main id="main">
       <slot />
     </main>

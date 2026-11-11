@@ -2,7 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import PageHero from '../../components/PageHero.astro';
 import Cta from '../../components/Cta.astro';
-import { getPosts, formatDate, readingTime } from '../../lib/blog';
+import { getPosts, formatDate, readingTime, postUrl } from '../../lib/blog';
 import { site } from '../../lib/site';
 
 const posts = await getPosts();
@@ -37,7 +37,7 @@ const posts = await getPosts();
         ) : (
           <div class="grid posts">
             {posts.map((p) => (
-              <a href={`/blog/${p.id}/`} class="card card--link post">
+              <a href={postUrl(p)} class="card card--link post">
                 {p.data.image && <img src={p.data.image} alt={p.data.imageAlt ?? ''} loading="lazy" class="post__img" />}
                 <p class="muted post__meta">
                   <time datetime={p.data.date.toISOString()}>{formatDate(p.data.date)}</time> · {readingTime(p.body)} min čitanja

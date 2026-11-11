@@ -1,12 +1,13 @@
 import type { APIRoute } from 'astro';
-import { getPosts, readingTime } from '../../lib/blog';
+import { getPosts, readingTime, postUrl } from '../../lib/blog';
 import { site } from '../../lib/site';
 
 // Popis objavljenih članaka za interni SEO dashboard na admin.serprise.agency (čita ga pri svakom otvaranju).
 export const GET: APIRoute = async () => {
-  const posts = (await getPosts()).map((post) => ({
+  const posts = (await getPosts('all')).map((post) => ({
     slug: post.id,
-    url: `${site.url}/blog/${post.id}/`,
+    lang: post.data.lang,
+    url: `${site.url}${postUrl(post)}`,
     title: post.data.title,
     description: post.data.description,
     date: post.data.date.toISOString().slice(0, 10),

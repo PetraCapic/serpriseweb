@@ -78,6 +78,9 @@ author: Jure Kljajić        # zadano; mora odgovarati imenu iz `team` u src/lib
 image: /blog/ga4-ai-kanal/naslovna.png   # datoteka u public/, idealno 1200x630
 imageAlt: Opis slike
 draft: true                 # ne objavljuje se dok je true
+lang: en                    # engleski članak: ide na /en/blog/, ne na /blog/ (zadano hr)
+path: /stari/url/           # vlastiti URL, npr. stari WordPress URL koji još ima linkove i promet
+translation: ime-datoteke   # isti članak na drugom jeziku (hreflang i prekidač HR/EN)
 ---
 
 Tekst članka u Markdownu. Slike članka stavi u public/blog/<ime-clanka>/.

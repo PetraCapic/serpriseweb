@@ -1,0 +1,14 @@
+---
+// Članci s vlastitim URL-om iz frontmattera (path), npr. stari URL-ovi s WordPress weba koji još imaju linkove.
+import Article from '../components/blog/Article.astro';
+import { getPosts } from '../lib/blog';
+
+export async function getStaticPaths() {
+  const posts = (await getPosts('all')).filter((p) => p.data.path);
+  return posts.map((post) => ({ params: { path: post.data.path!.slice(1, -1) }, props: { post } }));
+}
+
+const { post } = Astro.props;
+---
+
+<Article post={post} />

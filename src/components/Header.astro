@@ -3,11 +3,11 @@ import { nav } from '../lib/site';
 import { enNav, altFor } from '../lib/en';
 import Logo from './Logo.astro';
 import { getPosts } from '../lib/blog';
-interface Props { lang?: 'hr' | 'en' }
-const { lang = 'hr' } = Astro.props;
+interface Props { lang?: 'hr' | 'en'; alt?: { hr: string; en: string } | null }
+const { lang = 'hr', alt: altProp } = Astro.props;
 const isEn = lang === 'en';
 const path = Astro.url.pathname;
-const alt = altFor(path);
+const alt = altProp ?? altFor(path);
 // Blog je u izborniku tek kad ima barem jedan objavljen članak.
 const hasPosts = (await getPosts()).length > 0;
 const items = isEn ? enNav : nav.filter((i) => i.href !== '/blog/' || hasPosts);

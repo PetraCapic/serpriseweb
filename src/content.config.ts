@@ -14,6 +14,12 @@ const blog = defineCollection({
     image: z.string().optional(),
     imageAlt: z.string().optional(),
     draft: z.boolean().default(false),
+    // Jezik članka. Engleski članci nisu na hrvatskom popisu /blog/, nego na /en/blog/.
+    lang: z.enum(['hr', 'en']).default('hr'),
+    // Vlastiti URL (npr. stari URL s WordPress weba koji ima promet i linkove), umjesto /blog/<ime-datoteke>/.
+    path: z.string().regex(/^\/.+\/$/).optional(),
+    // Ime datoteke istog članka na drugom jeziku (hreflang i prekidač HR/EN).
+    translation: z.string().optional(),
     // Istraživanje s javnim podacima: dodaje Dataset schemu i linkove na CSV datoteke (iz public/).
     dataset: z
       .object({

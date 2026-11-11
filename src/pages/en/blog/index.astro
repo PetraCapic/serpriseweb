@@ -1,0 +1,70 @@
+---
+import Base from '../../../layouts/Base.astro';
+import PageHero from '../../../components/PageHero.astro';
+import Cta from '../../../components/Cta.astro';
+import { getPosts, formatDate, readingTime, postUrl } from '../../../lib/blog';
+import { site } from '../../../lib/site';
+
+const posts = await getPosts('en');
+---
+
+<Base
+  title="Blog"
+  description="Practical guides on link building, expired domains, redirects and digital PR. Steps, settings and numbers you can apply today."
+  lang="en"
+  noindex={posts.length === 0}
+  schema={{
+    '@context': 'https://schema.org',
+    '@type': 'Blog',
+    '@id': `${site.url}/en/blog/#blog`,
+    name: `${site.name} blog`,
+    url: `${site.url}/en/blog/`,
+    inLanguage: 'en',
+    publisher: { '@id': `${site.url}/#organization` },
+  }}
+>
+  <PageHero
+    eyebrow="Blog"
+    title="Link building and technical SEO, <span class='grad-text'>step by step</span>"
+    lead="No generic advice. Just the settings, checks and numbers you can apply to your own site today."
+    cta={false}
+  />
+
+  <section class="section">
+    <div class="container">
+      {
+        posts.length === 0 ? (
+          <p class="muted">First articles are coming soon.</p>
+        ) : (
+          <div class="grid posts">
+            {posts.map((p) => (
+              <a href={postUrl(p)} class="card card--link post">
+                {p.data.image && <img src={p.data.image} alt={p.data.imageAlt ?? ''} loading="lazy" class="post__img" />}
+                <p class="muted post__meta">
+                  <time datetime={p.data.date.toISOString()}>{formatDate(p.data.date, 'en')}</time> · {readingTime(p.body)} min read
+                </p>
+                <h2 class="post__title">{p.data.title}</h2>
+                <p>{p.data.description}</p>
+              </a>
+            ))}
+          </div>
+        )
+      }
+    </div>
+  </section>
+
+  <Cta
+    title="Need links that move rankings?"
+    text="We build links and digital PR for agencies and in-house teams across the UK, US and EU. Tell us your site and we will send a free link gap audit."
+    button="Get a free link gap audit"
+    href="/en/contact/"
+  />
+</Base>
+
+<style>
+  .posts { grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
+  .post { color: var(--text); text-decoration: none; display: flex; flex-direction: column; }
+  .post__img { border-radius: 10px; margin-bottom: 16px; aspect-ratio: 1200 / 630; object-fit: cover; width: 100%; }
+  .post__meta { font-size: 0.85rem; margin-bottom: 8px; }
+  .post__title { font-size: 1.3rem; margin-bottom: 0.4em; }
+</style>

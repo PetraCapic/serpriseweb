@@ -9,24 +9,98 @@ import data from '../data/llm-leaderboard.json';
 //   <div data-embed="citati-tablica"></div>   ispred tablice domena: dodaje sortiranje i filter
 // Bez JavaScripta grafovi ostaju na dnu članka (SVG), a tablice ostaju obične tablice.
 
-const { answers, entries } = data;
+interface Props { lang?: 'hr' | 'en' }
+const { lang = 'hr' } = Astro.props;
+const en = lang === 'en';
+const { answers } = data;
+const entries = data.entries.map((e) => (en ? { ...e, page: e.page_en } : e));
 type Kind = 'usluzna' | 'naslovnica' | 'cjenik' | 'case' | 'lista' | 'direktorij' | 'stari-url';
-const kindLabel: Record<Kind, string> = {
-  usluzna: 'Uslužna stranica',
-  naslovnica: 'Naslovnica ili O nama',
-  cjenik: 'Cjenik',
-  case: 'Case study',
-  lista: 'Lista agencija',
-  direktorij: 'Direktorij',
-  'stari-url': 'Stari URL',
-};
+const kindLabel: Record<Kind, string> = en
+  ? {
+      usluzna: 'Service page',
+      naslovnica: 'Homepage or About us',
+      cjenik: 'Price list',
+      case: 'Case study',
+      lista: 'Agency list',
+      direktorij: 'Directory',
+      'stari-url': 'Old URL',
+    }
+  : {
+      usluzna: 'Uslužna stranica',
+      naslovnica: 'Naslovnica ili O nama',
+      cjenik: 'Cjenik',
+      case: 'Case study',
+      lista: 'Lista agencija',
+      direktorij: 'Direktorij',
+      'stari-url': 'Stari URL',
+    };
+// Tekstovi komponente (hr ostaje kao prije, en za /en/blog/chatgpt-citations-croatia/).
+const t = en
+  ? {
+      gAgency: 'Agency page (service, price list, homepage)', gSource: 'List or directory', gCase: 'Case study',
+      bothDr0: 'glarodigital.com.hr and linkgrid.hr (both DR 0)',
+      dService: 'Service pages', dSource: 'Lists and directories', dCase: 'Case study', dHome: 'Homepage or About us', dPrice: 'Price list',
+      scEyebrow: 'Chart · DR and citations', scTitle: 'Domain Rating does not decide who gets cited',
+      scLead: `Each dot is a domain from the table. Horizontally is DR (0 to 100), vertically the number of the ${answers} answers in which it was cited.`,
+      scAria: 'Scatter chart: domains with DR 0 are cited as often as Clutch with DR 91',
+      scY: 'Answers with a citation',
+      ptAria: (d: string, dr: number | null, c: number) => `${d}: DR ${dr}, cited in ${c} of ${answers} answers.`,
+      ptTip: (dr: number | null, c: number) => `DR ${dr} · ${c} of ${answers} answers`,
+      scNote: 'Measured on 30 October 2026. DR from Ahrefs. Shown are the domains from the table (cited at least 4 times) and tako.hr; the other cited domains have fewer citations. SERPRise is not shown because we have no DR for the old URL.',
+      doEyebrow: 'Chart · page types', doTitle: 'What ChatGPT cites when someone looks for an agency',
+      doLead: (n: number) => `Total citations of the ${n} most frequently cited domains, by the type of page cited.`,
+      doAria: (tot: number, parts: string) => `Of ${tot} citations: ${parts}, blog posts 0.`,
+      doTip: (v: number, tot: number, pct: number) => `${v} of ${tot} citations (${pct}%)`,
+      pct: (n: number) => `${n}%`,
+      blogPosts: 'blog posts', blogPostsCap: 'Blog posts',
+      doNote: (tot: number) => `${tot} citations in total: one domain can be cited in several answers. Measured on 30 October 2026.`,
+      seEyebrow: 'Self-assessment · 1 minute', seTitle: 'Does your service page have the 5 things ChatGPT cites?',
+      seLead: 'Open your main service page and tick what is already on it.',
+      seVerdict0: 'Tick what your page has.', seCta: 'Would you like us to check it for you?', seHref: '/en/contact/',
+    }
+  : {
+      gAgency: 'Stranica agencije (usluga, cjenik, naslovnica)', gSource: 'Lista ili direktorij', gCase: 'Case study',
+      bothDr0: 'glarodigital.com.hr i linkgrid.hr (oba DR 0)',
+      dService: 'Uslužne stranice', dSource: 'Liste i direktoriji', dCase: 'Case study', dHome: 'Naslovnica ili O nama', dPrice: 'Cjenik',
+      scEyebrow: 'Graf · DR i citati', scTitle: 'Domain Rating ne određuje tko je citiran',
+      scLead: `Svaka točka je domena iz tablice. Vodoravno je DR (0 do 100), okomito broj od ${answers} odgovora u kojima je citirana.`,
+      scAria: 'Raspršeni graf: domene s DR 0 citirane su jednako često kao Clutch s DR 91',
+      scY: 'Odgovora s citatom',
+      ptAria: (d: string, dr: number | null, c: number) => `${d}: DR ${dr}, citirana u ${c} od ${answers} odgovora.`,
+      ptTip: (dr: number | null, c: number) => `DR ${String(dr).replace('.', ',')} · ${c} od ${answers} odgovora`,
+      scNote: 'Mjereno 30. listopada 2026. DR iz Ahrefsa. Prikazane su domene iz tablice (citirane barem 4 puta) i tako.hr; ostale citirane domene imaju manje citata. SERPRise nije prikazan jer za stari URL nemamo DR.',
+      doEyebrow: 'Graf · vrste stranica', doTitle: 'Što ChatGPT citira kad netko traži agenciju',
+      doLead: (n: number) => `Zbroj citata ${n} najčešće citiranih domena, po vrsti stranice koja je citirana.`,
+      doAria: (tot: number, parts: string) => `Od ${tot} citata: ${parts}, blog članci 0.`,
+      doTip: (v: number, tot: number, pct: number) => `${v} od ${tot} citata (${pct} %)`,
+      pct: (n: number) => `${n} %`,
+      blogPosts: 'blog članaka', blogPostsCap: 'Blog članci',
+      doNote: (tot: number) => `Ukupno ${tot} citata: jedna domena može biti citirana u više odgovora. Mjereno 30. listopada 2026.`,
+      seEyebrow: 'Samoprocjena · 1 minuta', seTitle: 'Ima li vaša uslužna stranica 5 stvari koje ChatGPT citira?',
+      seLead: 'Otvorite svoju glavnu uslužnu stranicu i označite što na njoj već postoji.',
+      seVerdict0: 'Označite što vaša stranica ima.', seCta: 'Želite da provjerimo umjesto vas?', seHref: '/kontakt/?usluga=ai-vidljivost',
+    };
+// Tekstovi za klijentsku skriptu; za hrvatski se atribut ne ispisuje (skripta ima hrvatske zadane vrijednosti).
+const clientText = en
+  ? JSON.stringify({
+      verdict5: 'Your page has everything we saw on the cited pages. The next step is mentions outside your website: lists, directories and news sites.',
+      verdict3: 'A good foundation. For every empty box, the next step is:',
+      verdict0: 'ChatGPT will struggle to use a page like this as a source. Start from the top:',
+      flipHint: 'Click a card to see what ChatGPT actually searched.',
+      flipFront: 'Question in Croatian',
+      flipBack: 'ChatGPT searched',
+      colCites: 'answers', colDr: 'dr', colKind: 'page type',
+      kindLabel: 'Page type', all: 'All',
+      count: '{n} of {total} domains',
+    })
+  : undefined;
 
 // Scatter: tri skupine (više boja u raspršenom grafu nije čitljivo), točna vrsta je u oznaci i tooltipu.
 const group = (k: Kind) => (k === 'lista' || k === 'direktorij' ? 'izvor' : k === 'case' ? 'case' : 'agencija');
 const groups = [
-  { id: 'agencija', label: 'Stranica agencije (usluga, cjenik, naslovnica)', color: 'var(--c1)' },
-  { id: 'izvor', label: 'Lista ili direktorij', color: 'var(--c2)' },
-  { id: 'case', label: 'Case study', color: 'var(--c3)' },
+  { id: 'agencija', label: t.gAgency, color: 'var(--c1)' },
+  { id: 'izvor', label: t.gSource, color: 'var(--c2)' },
+  { id: 'case', label: t.gCase, color: 'var(--c3)' },
 ];
 const W = 640, H = 340, L = 44, R = 24, T = 16, B = 46;
 const yMax = 7;
@@ -49,18 +123,18 @@ const pts = entries
     // Domene s istim DR-om i brojem citata malo razmaknemo vodoravno da se obje vide.
     const dodge = same.length > 1 ? (same.indexOf(e) - (same.length - 1) / 2) * 9 : 0;
     const lp = labelPos[e.domain] ?? [10, 4, 'start'];
-    const label = e.domain === 'glarodigital.com.hr' ? 'glarodigital.com.hr i linkgrid.hr (oba DR 0)' : e.domain === 'linkgrid.hr' ? '' : e.domain;
+    const label = e.domain === 'glarodigital.com.hr' ? t.bothDr0 : e.domain === 'linkgrid.hr' ? '' : e.domain;
     return { ...e, cx: x(e.dr as number) + dodge, cy: y(e.cites), g: group(e.kind as Kind), lp, label };
   });
 const color = (g: string) => groups.find((x) => x.id === g)!.color;
 
 // Donut: zbroj citata po vrsti stranice među domenama iz tablice.
 const donutCats = [
-  { id: 'usluzna', label: 'Uslužne stranice', kinds: ['usluzna'], color: 'var(--c1)' },
-  { id: 'izvor', label: 'Liste i direktoriji', kinds: ['lista', 'direktorij'], color: 'var(--c2)' },
-  { id: 'case', label: 'Case study', kinds: ['case'], color: 'var(--c3)' },
-  { id: 'naslovnica', label: 'Naslovnica ili O nama', kinds: ['naslovnica'], color: 'var(--c4)' },
-  { id: 'cjenik', label: 'Cjenik', kinds: ['cjenik'], color: 'var(--c5)' },
+  { id: 'usluzna', label: t.dService, kinds: ['usluzna'], color: 'var(--c1)' },
+  { id: 'izvor', label: t.dSource, kinds: ['lista', 'direktorij'], color: 'var(--c2)' },
+  { id: 'case', label: t.dCase, kinds: ['case'], color: 'var(--c3)' },
+  { id: 'naslovnica', label: t.dHome, kinds: ['naslovnica'], color: 'var(--c4)' },
+  { id: 'cjenik', label: t.dPrice, kinds: ['cjenik'], color: 'var(--c5)' },
 ].map((c) => {
   const items = entries.filter((e) => c.kinds.includes(e.kind));
   return { ...c, value: items.reduce((s, e) => s + e.cites, 0), domains: items.map((e) => e.domain) };
@@ -76,7 +150,13 @@ const arcs = donutCats.map((c) => {
   return a;
 });
 
-const checks = [
+const checks = en ? [
+  { t: 'The service name in the page title, in the same words the customer asks with', next: 'Change the H1 and title to the words from the customer\'s question, e.g. "SEO agency Zagreb" instead of "Our services".' },
+  { t: 'Prices in euros, at least starting prices', next: 'Add a "Starting prices" section with at least one amount in euros. Without it, ChatGPT cites someone else\'s price list for a question about price.' },
+  { t: 'A short answer at the top (2 to 3 sentences)', next: 'Put a "Summary" block at the top: what you do, for whom and from how many euros. The template is in the article below.' },
+  { t: 'An FAQ with FAQPage schema and Service schema with a price', next: 'Add 4 to 6 questions your customers actually ask, with FAQPage schema, and Service schema with an Offer price (example code is in the article).' },
+  { t: 'Numbers from a real project', next: 'Add one concrete client result with a number and a timeframe, e.g. "from page 2 to page 1 in 3 months".' },
+] : [
   { t: 'Naziv usluge u naslovu stranice, istim riječima kojima kupac pita', next: 'Promijenite H1 i title u riječi iz pitanja kupca, npr. "SEO agencija Zagreb" umjesto "Naše usluge".' },
   { t: 'Cijene u eurima, barem početne', next: 'Dodajte sekciju "Početne cijene" s barem jednim iznosom u eurima. Bez nje ChatGPT za pitanje o cijeni citira tuđi cjenik.' },
   { t: 'Kratak odgovor na vrhu (2 do 3 rečenice)', next: 'Na vrh stavite blok "Ukratko": što radite, za koga i od koliko eura. Predložak je u članku ispod.' },
@@ -84,16 +164,16 @@ const checks = [
   { t: 'Brojke iz stvarnog projekta', next: 'Dodajte jedan konkretan rezultat klijenta s brojkom i rokom, npr. "s 2. stranice na 1. za 3 mjeseca".' },
 ];
 ---
-<div class="cc" data-cc hidden>
+<div class="cc" data-cc data-i18n={clientText} hidden>
   <figure class="cc__card" data-citati="scatter" aria-labelledby="cc-sc-t">
-    <p class="cc__eyebrow">Graf · DR i citati</p>
-    <h3 id="cc-sc-t" class="cc__title">Domain Rating ne određuje tko je citiran</h3>
-    <p class="cc__lead">Svaka točka je domena iz tablice. Vodoravno je DR (0 do 100), okomito broj od {answers} odgovora u kojima je citirana.</p>
+    <p class="cc__eyebrow">{t.scEyebrow}</p>
+    <h3 id="cc-sc-t" class="cc__title">{t.scTitle}</h3>
+    <p class="cc__lead">{t.scLead}</p>
     <ul class="cc__legend">
       {groups.map((g) => <li><span style={`background:${g.color}`}></span>{g.label}</li>)}
     </ul>
     <div class="cc__plot">
-      <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label="Raspršeni graf: domene s DR 0 citirane su jednako često kao Clutch s DR 91">
+      <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={t.scAria}>
         {[0, 1, 2, 3, 4, 5, 6, 7].map((c) => (
           <g>
             <line x1={L} x2={W - R} y1={y(c)} y2={y(c)} class={c === 0 ? 'cc__axis' : 'cc__grid'} />
@@ -102,10 +182,10 @@ const checks = [
         ))}
         {[0, 20, 40, 60, 80, 100].map((d) => <text x={x(d)} y={H - B + 18} text-anchor="middle" class="cc__tick">{d}</text>)}
         <text x={(L + W - R) / 2} y={H - 6} text-anchor="middle" class="cc__axislabel">Domain Rating (Ahrefs)</text>
-        <text x={12} y={T + 4} class="cc__axislabel" transform={`rotate(-90 12 ${T + 4})`} text-anchor="end">Odgovora s citatom</text>
+        <text x={12} y={T + 4} class="cc__axislabel" transform={`rotate(-90 12 ${T + 4})`} text-anchor="end">{t.scY}</text>
         {pts.map((p) => (
-          <g class="cc__pt" tabindex="0" role="img" aria-label={`${p.domain}: DR ${p.dr}, citirana u ${p.cites} od ${answers} odgovora. ${p.page}.`}
-            data-tip={`<strong>${p.domain}</strong><br>DR ${String(p.dr).replace('.', ',')} · ${p.cites} od ${answers} odgovora<br>${kindLabel[p.kind as Kind]}: ${p.page}`}>
+          <g class="cc__pt" tabindex="0" role="img" aria-label={`${t.ptAria(p.domain, p.dr, p.cites)} ${p.page}.`}
+            data-tip={`<strong>${p.domain}</strong><br>${t.ptTip(p.dr, p.cites)}<br>${kindLabel[p.kind as Kind]}: ${p.page}`}>
             <circle cx={p.cx} cy={p.cy} r="16" class="cc__hit" />
             <circle cx={p.cx} cy={p.cy} r="6.5" fill={color(p.g)} class="cc__dot" />
             {p.label && <text x={p.cx + p.lp[0]} y={p.cy + p.lp[1]} text-anchor={p.lp[2]} class="cc__lbl">{p.label}</text>}
@@ -114,37 +194,37 @@ const checks = [
       </svg>
       <div class="cc__tip" role="status" hidden></div>
     </div>
-    <figcaption class="cc__note">Mjereno 30. listopada 2026. DR iz Ahrefsa. Prikazane su domene iz tablice (citirane barem 4 puta) i tako.hr; ostale citirane domene imaju manje citata. SERPRise nije prikazan jer za stari URL nemamo DR.</figcaption>
+    <figcaption class="cc__note">{t.scNote}</figcaption>
   </figure>
 
   <figure class="cc__card" data-citati="donut" aria-labelledby="cc-do-t">
-    <p class="cc__eyebrow">Graf · vrste stranica</p>
-    <h3 id="cc-do-t" class="cc__title">Što ChatGPT citira kad netko traži agenciju</h3>
-    <p class="cc__lead">Zbroj citata {nDomains} najčešće citiranih domena, po vrsti stranice koja je citirana.</p>
+    <p class="cc__eyebrow">{t.doEyebrow}</p>
+    <h3 id="cc-do-t" class="cc__title">{t.doTitle}</h3>
+    <p class="cc__lead">{t.doLead(nDomains)}</p>
     <div class="cc__donut">
-      <svg viewBox="0 0 200 200" role="img" aria-label={`Od ${total} citata: ${arcs.map((a) => `${a.label} ${a.value}`).join(', ')}, blog članci 0.`}>
+      <svg viewBox="0 0 200 200" role="img" aria-label={t.doAria(total, arcs.map((a) => `${a.label} ${a.value}`).join(', '))}>
         <g transform="rotate(-90 100 100)">
           {arcs.map((a) => (
             <circle cx="100" cy="100" r={Rd} fill="none" stroke={a.color} stroke-width="26" stroke-dasharray={a.dash} stroke-dashoffset={a.offset} class="cc__arc" tabindex="0"
-              data-tip={`<strong>${a.label}</strong><br>${a.value} od ${total} citata (${a.pct} %)<br>${a.domains.join(', ')}`} />
+              data-tip={`<strong>${a.label}</strong><br>${t.doTip(a.value, total, a.pct)}<br>${a.domains.join(', ')}`} />
           ))}
         </g>
         <text x="100" y="96" text-anchor="middle" class="cc__big">0</text>
-        <text x="100" y="118" text-anchor="middle" class="cc__small">blog članaka</text>
+        <text x="100" y="118" text-anchor="middle" class="cc__small">{t.blogPosts}</text>
       </svg>
       <ul class="cc__dlegend">
-        {arcs.map((a) => <li><span style={`background:${a.color}`}></span>{a.label}<b>{a.value}</b><small>{a.pct} %</small></li>)}
-        <li class="is-zero"><span></span>Blog članci<b>0</b><small>0 %</small></li>
+        {arcs.map((a) => <li><span style={`background:${a.color}`}></span>{a.label}<b>{a.value}</b><small>{t.pct(a.pct)}</small></li>)}
+        <li class="is-zero"><span></span>{t.blogPostsCap}<b>0</b><small>{t.pct(0)}</small></li>
       </ul>
       <div class="cc__tip" role="status" hidden></div>
     </div>
-    <figcaption class="cc__note">Ukupno {total} citata: jedna domena može biti citirana u više odgovora. Mjereno 30. listopada 2026.</figcaption>
+    <figcaption class="cc__note">{t.doNote(total)}</figcaption>
   </figure>
 
   <section class="cc__card cc__self" data-citati="samoprocjena" aria-labelledby="cc-se-t">
-    <p class="cc__eyebrow">Samoprocjena · 1 minuta</p>
-    <h3 id="cc-se-t" class="cc__title">Ima li vaša uslužna stranica 5 stvari koje ChatGPT citira?</h3>
-    <p class="cc__lead">Otvorite svoju glavnu uslužnu stranicu i označite što na njoj već postoji.</p>
+    <p class="cc__eyebrow">{t.seEyebrow}</p>
+    <h3 id="cc-se-t" class="cc__title">{t.seTitle}</h3>
+    <p class="cc__lead">{t.seLead}</p>
     <form class="cc__checks" onsubmit="return false">
       {checks.map((c, i) => (
         <label><input type="checkbox" data-i={i} /> <span>{c.t}</span></label>
@@ -152,17 +232,30 @@ const checks = [
     </form>
     <div class="cc__result" aria-live="polite">
       <p class="cc__score"><strong data-score>0</strong> / 5</p>
-      <p data-verdict>Označite što vaša stranica ima.</p>
+      <p data-verdict>{t.seVerdict0}</p>
       <ol data-next>
         {checks.map((c, i) => <li data-i={i}>{c.next}</li>)}
       </ol>
-      <a class="btn btn--primary" href="/kontakt/?usluga=ai-vidljivost">Želite da provjerimo umjesto vas?</a>
+      <a class="btn btn--primary" href={t.seHref}>{t.seCta}</a>
     </div>
   </section>
 </div>
 
 <script>
+  // Hrvatski tekstovi su zadani; engleska verzija ih šalje u data-i18n.
+  const hr = {
+    verdict5: 'Stranica ima sve što smo vidjeli kod citiranih stranica. Sljedeći korak su spomeni izvan vašeg weba: liste, direktoriji i portali.',
+    verdict3: 'Dobra osnova. Za svaki prazan kvadratić sljedeći korak je:',
+    verdict0: 'ChatGPT ovakvu stranicu teško uzima kao izvor. Krenite redom:',
+    flipHint: 'Kliknite karticu da vidite što je ChatGPT stvarno pretražio.',
+    flipFront: 'Pitanje na hrvatskom',
+    flipBack: 'ChatGPT je pretražio',
+    colCites: 'odgovora', colDr: 'dr', colKind: 'vrsta',
+    kindLabel: 'Vrsta stranice', all: 'Sve',
+    count: '{n} od {total} domena',
+  };
   document.querySelectorAll<HTMLElement>('[data-cc]').forEach((root) => {
+    const s: typeof hr = root.dataset.i18n ? { ...hr, ...JSON.parse(root.dataset.i18n) } : hr;
     // Premjesti grafove i samoprocjenu na mjesta u tekstu; bez mjesta ostaju na dnu.
     root.querySelectorAll<HTMLElement>('[data-citati]').forEach((el) => {
       const slot = document.querySelector(`[data-embed="citati-${el.dataset.citati}"]`);
@@ -203,11 +296,7 @@ const checks = [
         score.textContent = String(n);
         boxes.forEach((b, i) => (next[i].hidden = b.checked));
         verdict.textContent =
-          n === 5
-            ? 'Stranica ima sve što smo vidjeli kod citiranih stranica. Sljedeći korak su spomeni izvan vašeg weba: liste, direktoriji i portali.'
-            : n >= 3
-              ? 'Dobra osnova. Za svaki prazan kvadratić sljedeći korak je:'
-              : 'ChatGPT ovakvu stranicu teško uzima kao izvor. Krenite redom:';
+          n === 5 ? s.verdict5 : n >= 3 ? s.verdict3 : s.verdict0;
       };
       boxes.forEach((b) => b.addEventListener('change', update));
       update();
@@ -221,14 +310,14 @@ const checks = [
       const wrap = document.createElement('div');
       wrap.className = 'cc-flip';
       wrap.innerHTML =
-        '<p class="cc-flip__hint">Kliknite karticu da vidite što je ChatGPT stvarno pretražio.</p><div class="cc-flip__grid"></div>';
+        `<p class="cc-flip__hint">${s.flipHint}</p><div class="cc-flip__grid"></div>`;
       const grid = wrap.querySelector('.cc-flip__grid')!;
       rows.forEach(([hr, en]) => {
         const b = document.createElement('button');
         b.type = 'button';
         b.className = 'cc-flip__card';
         b.setAttribute('aria-pressed', 'false');
-        b.innerHTML = `<span class="cc-flip__inner"><span class="cc-flip__face"><small>Pitanje na hrvatskom</small><span></span></span><span class="cc-flip__face cc-flip__back"><small>ChatGPT je pretražio</small><span lang="en"></span></span></span>`;
+        b.innerHTML = `<span class="cc-flip__inner"><span class="cc-flip__face"><small>${s.flipFront}</small><span></span></span><span class="cc-flip__face cc-flip__back"><small>${s.flipBack}</small><span lang="en"></span></span></span>`;
         const faces = b.querySelectorAll('.cc-flip__face > span');
         faces[0].textContent = hr;
         faces[1].textContent = en;
@@ -245,14 +334,14 @@ const checks = [
     if (tSlot && table?.tagName === 'TABLE') {
       const heads = [...table.querySelectorAll('thead th')].map((th) => th.textContent!.trim());
       const col = (name: string) => heads.findIndex((h) => h.toLowerCase().startsWith(name));
-      const ci = col('odgovora'), di = col('dr'), ki = col('vrsta');
+      const ci = col(s.colCites), di = col(s.colDr), ki = col(s.colKind);
       const tbody = table.tBodies[0];
       const rows = [...tbody.rows];
       const num = (r: HTMLTableRowElement, i: number) => Number(r.cells[i].textContent!.replace(',', '.')) || 0;
       const bar = document.createElement('div');
       bar.className = 'cc-tbar';
       const kinds = [...new Set(rows.map((r) => r.cells[ki]?.textContent!.trim()).filter(Boolean))];
-      bar.innerHTML = `<label>Vrsta stranice <select><option value="">Sve</option>${kinds.map((k) => `<option>${k}</option>`).join('')}</select></label><span class="cc-tbar__n"></span>`;
+      bar.innerHTML = `<label>${s.kindLabel} <select><option value="">${s.all}</option>${kinds.map((k) => `<option>${k}</option>`).join('')}</select></label><span class="cc-tbar__n"></span>`;
       tSlot.replaceWith(bar);
       const sel = bar.querySelector('select')!;
       const count = bar.querySelector('.cc-tbar__n')!;
@@ -281,7 +370,7 @@ const checks = [
           tbody.appendChild(r);
         });
         ths.forEach((th, i) => th.setAttribute('aria-sort', i === sortBy ? (dir < 0 ? 'descending' : 'ascending') : 'none'));
-        count.textContent = `${n} od ${rows.length} domena`;
+        count.textContent = s.count.replace('{n}', String(n)).replace('{total}', String(rows.length));
       };
       sel.addEventListener('change', apply);
       apply();

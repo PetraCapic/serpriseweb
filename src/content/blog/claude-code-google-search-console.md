@@ -2,6 +2,7 @@
 title: "Kako spojiti Claude Code s Google Search Consoleom, korak po korak"
 description: "Servisni račun, jedna varijabla okruženja i Claude sam čita klikove, upite i stranice iz Search Consolea. Koraci, provjera i primjeri pitanja."
 date: 2026-11-01
+translation: claude-code-google-search-console-en
 image: /blog/claude-code-google-search-console/naslovna.png
 imageAlt: "Vodič: kako spojiti Claude Code s Google Search Consoleom"
 ---

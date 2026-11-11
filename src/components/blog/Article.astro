@@ -86,7 +86,7 @@ const schema = [
           name: dataset.name,
           description: dataset.description,
           url,
-          inLanguage: 'hr',
+          inLanguage: lang,
           keywords: dataset.keywords,
           license: dataset.license,
           isAccessibleForFree: true,
@@ -137,15 +137,15 @@ const schema = [
       </p>
       {image && <img src={image} alt={imageAlt ?? ''} class="article__img" />}
       <Content />
-      {hasLeaderboard && <LlmLeaderboard />}
-      {hasCitati && <ChatgptCitati />}
-      {has('tracker') && <LlmTracker />}
-      {has('quiz') && <AiQuiz />}
-      {has('cluster-map') && <ClusterMap />}
-      {has('answer-flow') && <AnswerFlow />}
-      {hasTerms && <GlossaryTips />}
-      {has('ai-generator') && <AiProvjera />}
-      {post.body?.includes('data-embed="portali-') && <PortaliClanak />}
+      {hasLeaderboard && <LlmLeaderboard lang={lang} />}
+      {hasCitati && <ChatgptCitati lang={lang} />}
+      {has('tracker') && <LlmTracker lang={lang} />}
+      {has('quiz') && <AiQuiz lang={lang} />}
+      {has('cluster-map') && <ClusterMap lang={lang} />}
+      {has('answer-flow') && <AnswerFlow lang={lang} />}
+      {hasTerms && <GlossaryTips lang={lang} />}
+      {has('ai-generator') && <AiProvjera lang={lang} />}
+      {post.body?.includes('data-embed="portali-') && <PortaliClanak lang={lang} />}
       {/* Vidljiv FAQ iz frontmattera, osim ako ga članak već ima u tekstu */}
       {faq && !post.body?.includes(`## ${t.faq}`) && (
         <section class="article__faq" id={isEn ? 'faq' : 'cesta-pitanja'}>
@@ -166,7 +166,7 @@ const schema = [
           </ol>
         </section>
       )}
-      {hasGa4 && <Ga4AiKanal />}
+      {hasGa4 && <Ga4AiKanal lang={lang} />}
     </div>
   </article>
 

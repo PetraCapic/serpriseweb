@@ -1,0 +1,14 @@
+{
+  "_opis": "English tooltips for terms in English posts (same keys as glosar.json, so data-term markers stay the same in both languages). Component: src/components/blog/GlossaryTips.astro",
+  "llm-vidljivost": "How often ChatGPT, Gemini, Perplexity and Google's AI answers mention or link to you. Measured with prompts and GA4.",
+  "geo": "Generative engine optimization: optimising so that generative search engines (ChatGPT, Perplexity, AI Mode) cite you in their answers.",
+  "aeo": "Answer engine optimization: optimising for direct answers, from featured snippets and AI Overviews to voice assistants.",
+  "ai-seo": "The same as GEO. The name is used more often in agency proposals.",
+  "llms-txt": "A file describing your website for AI tools. Google does not use it, and there is no evidence that it brings citations.",
+  "ai-overview": "AI Overview: the summary Google generates above the search results, with links to sources.",
+  "ai-mode": "AI Mode: Google search in the form of a conversation. Available in Croatian too since February 2026.",
+  "grounding": "When AI searches the web before answering and builds the answer from the pages it finds, instead of only from what it learned in training.",
+  "fan-out": "Query fan-out: AI breaks one question into several searches (often in English too) and combines the results.",
+  "citat": "Citation: next to the answer, AI gives a link to your page as a source.",
+  "spomen": "Mention: AI writes your company's name, with or without a link."
+}

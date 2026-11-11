@@ -2,6 +2,7 @@
 title: "Kako spojiti Claude Code s Meta Pixelom, Conversions API-jem i Meta Ads"
 description: "Isti događaj iz preglednika i sa servera, bez duplih konverzija, i podaci o kampanjama u istom razgovoru s Claudeom. Koraci i pravila koja koristimo."
 date: 2026-11-01
+translation: claude-code-meta-pixel-capi-en
 image: /blog/claude-code-meta-pixel-capi/naslovna.png
 imageAlt: "Vodič: kako spojiti Claude Code s Meta Pixelom, Conversions API-jem i Meta Ads"
 ---

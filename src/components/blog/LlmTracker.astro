@@ -3,10 +3,19 @@ import data from '../../data/llm-tracker.json';
 // Javni tracker "Naše mjerenje": SERPRise u ChatGPT odgovorima kroz vrijeme.
 // Podaci: src/data/llm-tracker.json (jedini izvor; isti widget koriste svi članci).
 // U članku: <div data-embed="tracker"></div>
-const { answers, target, targetDate, points, method } = data;
+interface Props { lang?: 'hr' | 'en' }
+const { lang = 'hr' } = Astro.props;
+const en = lang === 'en';
+const { answers, target, targetDate } = data;
+const method = en ? data.method_en : data.method;
+const points = data.points.map((p: { date: string; hits: number; note?: string; note_en?: string }) => ({ date: p.date, hits: p.hits, note: en ? (p.note_en ?? p.note) : p.note }));
+const locale = en ? 'en-GB' : 'hr-HR';
+const t = en
+  ? { eyebrow: 'Our measurement · public', title: 'SERPRise in ChatGPT answers', of: 'of', goal: 'goal', lead: (d: string) => `The same 35 questions, 45 answers, every month. Deadline for the goal: ${d}. We publish the result even when it is not good.`, last: 'latest measurement', share: 'share of answers', descIntro: 'Line chart of the number of ChatGPT answers citing SERPRise, per measurement.', goalCap: 'Goal', by: 'by', answersWord: 'answers', showTable: 'Show table', thDate: 'Date', thHits: 'Answers with SERPRise', thNote: 'Note' }
+  : { eyebrow: 'Naše mjerenje · javno', title: 'SERPRise u ChatGPT odgovorima', of: 'od', goal: 'cilj', lead: (d: string) => `Istih 35 pitanja, 45 odgovora, svaki mjesec. Rok za cilj: ${d}. Objavljujemo i kad rezultat nije dobar.`, last: 'zadnje mjerenje', share: 'udio odgovora', descIntro: 'Linijski graf broja ChatGPT odgovora u kojima je SERPRise citiran, po mjerenju.', goalCap: 'Cilj', by: 'do', answersWord: 'odgovora', showTable: 'Prikaži tablicu', thDate: 'Datum', thHits: 'Odgovora s SERPRiseom', thNote: 'Napomena' };
 const day = (s: string) => new Date(`${s}T00:00:00Z`).getTime();
-const fmt = (s: string) => new Date(`${s}T00:00:00Z`).toLocaleDateString('hr-HR', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }).replace(/\.$/, '');
-const fmtShort = (s: string) => new Date(`${s}T00:00:00Z`).toLocaleDateString('hr-HR', { day: 'numeric', month: 'numeric', timeZone: 'UTC' });
+const fmt = (s: string) => new Date(`${s}T00:00:00Z`).toLocaleDateString(locale, { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }).replace(/\.$/, '');
+const fmtShort = (s: string) => new Date(`${s}T00:00:00Z`).toLocaleDateString(locale, { day: 'numeric', month: 'numeric', timeZone: 'UTC' });
 
 // Os X: od prvog mjerenja do roka cilja. Os Y: 0 do malo iznad cilja (ne do 45, inače se ništa ne vidi).
 const W = 640, H = 260, L = 40, R = 24, T = 20, B = 36;
@@ -31,19 +40,19 @@ const line = points.map((p, i) => `${i ? 'L' : 'M'}${sx(p.date).toFixed(1)},${sy
 const pct = (n: number) => Math.round((n / answers) * 100);
 ---
 <section class="wg trk" data-tracker aria-labelledby="trk-title">
-  <p class="wg__eyebrow">Naše mjerenje · javno</p>
-  <h3 id="trk-title" class="wg__title">SERPRise u ChatGPT odgovorima: {last.hits} od {answers}, cilj {target} od {answers}</h3>
-  <p class="wg__lead">Istih 35 pitanja, 45 odgovora, svaki mjesec. Rok za cilj: {fmt(targetDate)}. Objavljujemo i kad rezultat nije dobar.</p>
+  <p class="wg__eyebrow">{t.eyebrow}</p>
+  <h3 id="trk-title" class="wg__title">{t.title}: {last.hits} {t.of} {answers}, {t.goal} {target} {t.of} {answers}</h3>
+  <p class="wg__lead">{t.lead(fmt(targetDate))}</p>
 
   <div class="trk__stats">
-    <div><strong>{last.hits}/{answers}</strong><span>zadnje mjerenje ({fmtShort(last.date)})</span></div>
-    <div><strong>{pct(last.hits)}%</strong><span>udio odgovora</span></div>
-    <div><strong>{target}/{answers}</strong><span>cilj ({pct(target)}%)</span></div>
+    <div><strong>{last.hits}/{answers}</strong><span>{t.last} ({fmtShort(last.date)})</span></div>
+    <div><strong>{pct(last.hits)}%</strong><span>{t.share}</span></div>
+    <div><strong>{target}/{answers}</strong><span>{t.goal} ({pct(target)}%)</span></div>
   </div>
 
   <div class="trk__chart">
     <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-labelledby="trk-title trk-desc">
-      <desc id="trk-desc">Linijski graf broja ChatGPT odgovora u kojima je SERPRise citiran, po mjerenju. {points.map((p) => `${fmt(p.date)}: ${p.hits} od ${answers}`).join('; ')}. Cilj: {target} od {answers} do {fmt(targetDate)}.</desc>
+      <desc id="trk-desc">{t.descIntro} {points.map((p) => `${fmt(p.date)}: ${p.hits} ${t.of} ${answers}`).join('; ')}. {t.goalCap}: {target} {t.of} {answers} {t.by} {fmt(targetDate)}.</desc>
       {ticks.map((t) => (
         <g class="trk__grid">
           <line x1={L} x2={W - R} y1={sy(t)} y2={sy(t)} />
@@ -54,12 +63,12 @@ const pct = (n: number) => Math.round((n / answers) * 100);
         <text class="trk__xl" x={sx(m)} y={H - 12} text-anchor="middle">{fmtShort(m)}</text>
       ))}
       <line class="trk__goal" x1={L} x2={W - R} y1={sy(target)} y2={sy(target)} />
-      <text class="trk__goal-l" x={W - R} y={sy(target) - 8} text-anchor="end">cilj {target}/{answers}</text>
+      <text class="trk__goal-l" x={W - R} y={sy(target) - 8} text-anchor="end">{t.goal} {target}/{answers}</text>
       <path class="trk__path-to" d={`M${sx(last.date)},${sy(last.hits)} L${sx(targetDate)},${sy(target)}`} />
       <circle class="trk__target" cx={sx(targetDate)} cy={sy(target)} r="6" />
       <path class="trk__line" d={line} />
       {points.map((p) => (
-        <g class="trk__pt" tabindex="0" data-tip={`${fmt(p.date)}: ${p.hits} od ${answers} odgovora${p.note ? ` · ${p.note}` : ''}`}>
+        <g class="trk__pt" tabindex="0" data-tip={`${fmt(p.date)}: ${p.hits} ${t.of} ${answers} ${t.answersWord}${p.note ? ` · ${p.note}` : ''}`}>
           <circle class="trk__hit" cx={sx(p.date)} cy={sy(p.hits)} r="16" />
           <circle class="trk__dot" cx={sx(p.date)} cy={sy(p.hits)} r="5" />
         </g>
@@ -69,12 +78,12 @@ const pct = (n: number) => Math.round((n / answers) * 100);
   </div>
 
   <details class="trk__table">
-    <summary>Prikaži tablicu</summary>
+    <summary>{t.showTable}</summary>
     <table>
-      <thead><tr><th>Datum</th><th>Odgovora s SERPRiseom</th><th>Napomena</th></tr></thead>
+      <thead><tr><th>{t.thDate}</th><th>{t.thHits}</th><th>{t.thNote}</th></tr></thead>
       <tbody>
-        {points.map((p) => <tr><td>{fmt(p.date)}</td><td>{p.hits} od {answers}</td><td>{p.note ?? ''}</td></tr>)}
-        <tr><td>{fmt(targetDate)}</td><td>cilj: {target} od {answers}</td><td></td></tr>
+        {points.map((p) => <tr><td>{fmt(p.date)}</td><td>{p.hits} {t.of} {answers}</td><td>{p.note ?? ''}</td></tr>)}
+        <tr><td>{fmt(targetDate)}</td><td>{t.goal}: {target} {t.of} {answers}</td><td></td></tr>
       </tbody>
     </table>
   </details>

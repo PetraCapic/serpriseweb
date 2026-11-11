@@ -2,6 +2,7 @@
 title: "Kako spojiti Claude Code s Google Analyticsom 4, korak po korak"
 description: "Isti servisni račun kao za Search Console: Claude čita GA4 izvještaje, provjerava lijevke i postavlja ključne događaje. Koraci, ovlasti i česte greške."
 date: 2026-11-01
+translation: claude-code-google-analytics-4-en
 image: /blog/claude-code-google-analytics-4/naslovna.png
 imageAlt: "Vodič: kako spojiti Claude Code s Google Analyticsom 4"
 ---

@@ -4,16 +4,16 @@
   "next": "2026-12-01",
   "_kind": "Vrsta citirane stranice: usluzna, naslovnica (naslovnica ili O nama), cjenik, case, lista, direktorij, stari-url.",
   "entries": [
-    {"name": "Slade", "domain": "slade.hr", "url": "https://slade.hr/", "cites": 6, "dr": 26, "page": "Naslovnica agencije", "type": "agencija", "kind": "naslovnica"},
-    {"name": "DigiAdria", "domain": "digiadria.hr", "url": "https://digiadria.hr/", "cites": 5, "dr": 33, "page": "Uslužna stranica za AEO", "type": "agencija", "kind": "usluzna"},
-    {"name": "Glaro Digital", "domain": "glarodigital.com.hr", "url": "https://glarodigital.com.hr/", "cites": 5, "dr": 0, "page": "Uslužna stranica za AI optimizaciju", "type": "agencija", "kind": "usluzna"},
-    {"name": "LinkGrid", "domain": "linkgrid.hr", "url": "https://linkgrid.hr/", "cites": 5, "dr": 0, "page": "Stranica \"O nama\"", "type": "agencija", "kind": "naslovnica"},
-    {"name": "Digital Matrix", "domain": "digitalmatrix.hr", "url": "https://digitalmatrix.hr/", "cites": 4, "dr": 4.5, "page": "Javni cjenik", "type": "agencija", "kind": "cjenik"},
-    {"name": "Tsunami Digital", "domain": "tsunami-digital.com", "url": "https://tsunami-digital.com/", "cites": 4, "dr": 29, "page": "Uslužna stranica za SEO i GEO", "type": "agencija", "kind": "usluzna"},
-    {"name": "iGrow", "domain": "igrow.at", "url": "https://igrow.at/", "cites": 4, "dr": 39, "page": "Case study s \"Croatia\" u URL-u", "type": "agencija", "country": "AT", "kind": "case"},
-    {"name": "SERPRise", "domain": "serprise.agency", "url": "https://serprise.agency/", "cites": 1, "dr": null, "page": "Stari URL koji više ne postoji", "type": "agencija", "self": true, "kind": "stari-url"},
-    {"name": "Clutch", "domain": "clutch.co", "url": "https://clutch.co/", "cites": 6, "dr": 91, "page": "Direktorij agencija za Hrvatsku i Zagreb", "type": "izvor", "kind": "direktorij"},
-    {"name": "Assemblio", "domain": "assemblio.hr", "url": "https://assemblio.hr/", "cites": 4, "dr": 16, "page": "Lista \"Top 5 SEO agencija u Hrvatskoj\"", "type": "izvor", "kind": "lista"},
-    {"name": "Tako.hr", "domain": "tako.hr", "url": "https://tako.hr/", "cites": 2, "dr": 6, "page": "Lista najboljih agencija", "type": "izvor", "kind": "lista"}
+    {"name": "Slade", "domain": "slade.hr", "url": "https://slade.hr/", "cites": 6, "dr": 26, "page": "Naslovnica agencije", "page_en": "The agency's homepage", "type": "agencija", "kind": "naslovnica"},
+    {"name": "DigiAdria", "domain": "digiadria.hr", "url": "https://digiadria.hr/", "cites": 5, "dr": 33, "page": "Uslužna stranica za AEO", "page_en": "Service page for AEO", "type": "agencija", "kind": "usluzna"},
+    {"name": "Glaro Digital", "domain": "glarodigital.com.hr", "url": "https://glarodigital.com.hr/", "cites": 5, "dr": 0, "page": "Uslužna stranica za AI optimizaciju", "page_en": "Service page for AI optimisation", "type": "agencija", "kind": "usluzna"},
+    {"name": "LinkGrid", "domain": "linkgrid.hr", "url": "https://linkgrid.hr/", "cites": 5, "dr": 0, "page": "Stranica \"O nama\"", "page_en": "\"About us\" page", "type": "agencija", "kind": "naslovnica"},
+    {"name": "Digital Matrix", "domain": "digitalmatrix.hr", "url": "https://digitalmatrix.hr/", "cites": 4, "dr": 4.5, "page": "Javni cjenik", "page_en": "Public price list", "type": "agencija", "kind": "cjenik"},
+    {"name": "Tsunami Digital", "domain": "tsunami-digital.com", "url": "https://tsunami-digital.com/", "cites": 4, "dr": 29, "page": "Uslužna stranica za SEO i GEO", "page_en": "Service page for SEO and GEO", "type": "agencija", "kind": "usluzna"},
+    {"name": "iGrow", "domain": "igrow.at", "url": "https://igrow.at/", "cites": 4, "dr": 39, "page": "Case study s \"Croatia\" u URL-u", "page_en": "Case study with \"Croatia\" in the URL", "type": "agencija", "country": "AT", "kind": "case"},
+    {"name": "SERPRise", "domain": "serprise.agency", "url": "https://serprise.agency/", "cites": 1, "dr": null, "page": "Stari URL koji više ne postoji", "page_en": "Old URL that no longer exists", "type": "agencija", "self": true, "kind": "stari-url"},
+    {"name": "Clutch", "domain": "clutch.co", "url": "https://clutch.co/", "cites": 6, "dr": 91, "page": "Direktorij agencija za Hrvatsku i Zagreb", "page_en": "Agency directory for Croatia and Zagreb", "type": "izvor", "kind": "direktorij"},
+    {"name": "Assemblio", "domain": "assemblio.hr", "url": "https://assemblio.hr/", "cites": 4, "dr": 16, "page": "Lista \"Top 5 SEO agencija u Hrvatskoj\"", "page_en": "\"Top 5 SEO agencies in Croatia\" list", "type": "izvor", "kind": "lista"},
+    {"name": "Tako.hr", "domain": "tako.hr", "url": "https://tako.hr/", "cites": 2, "dr": 6, "page": "Lista najboljih agencija", "page_en": "List of the best agencies", "type": "izvor", "kind": "lista"}
   ]
 }

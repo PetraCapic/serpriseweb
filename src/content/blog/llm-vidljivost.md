@@ -3,6 +3,7 @@ title: "LLM vidljivost: vodič kako hrvatska tvrtka ulazi u odgovore ChatGPT-a i
 description: "Što su LLM vidljivost, GEO i AEO, koje stranice AI citira za hrvatska pitanja, četiri stvari koje odlučuju, kviz, plan za 30 dana i robots.txt za kopiranje."
 date: 2026-11-01
 updated: 2026-11-01
+translation: llm-visibility
 image: /blog/llm-vidljivost/naslovna.png
 imageAlt: "LLM vidljivost za hrvatske tvrtke"
 about:

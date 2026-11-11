@@ -1,17 +1,40 @@
 ---
-import quiz from '../../data/ai-kviz.json';
+import quizHr from '../../data/ai-kviz.json';
+import quizEn from '../../data/ai-kviz-en.json';
 // Kviz "Koliko ste spremni za AI odgovore?": 10 da/ne pitanja, ocjena 0 do 100 po svakoj od 4 točke,
 // radar graf i 3 najvažnija sljedeća koraka. Opcionalno: rezultat na e-mail (lead u admin + /api/vodic).
 // Pitanja i koraci: src/data/ai-kviz.json. U članku: <div data-embed="quiz"></div>
+interface Props { lang?: 'hr' | 'en' }
+const { lang = 'hr' } = Astro.props;
+const en = lang === 'en';
+// Engleska pitanja: src/data/ai-kviz-en.json (isti id-jevi). Hrvatski ispis ostaje nepromijenjen.
+const quiz = en ? quizEn : quizHr;
 const { pillars, questions } = quiz;
+const t = en
+  ? { eyebrow: 'Quiz · 2 minutes', title: 'How ready are you for AI answers?', lead: 'Ten yes-or-no questions. You will get a score for each of the four points in this guide and three next steps.', yes: 'Yes', no: 'No / not sure', show: 'Show result', radar: 'Radar chart of your score across the four points', total: 'total', next: 'Your three most important next steps', allYes: 'You answered yes to every question. The next step is to measure every month and track who ChatGPT cites instead of you.', mail: 'Email me my result', name: 'First name', email: 'Email', consent: 'I agree that SERPRise may store my email and quiz result and contact me about AI visibility.', privacy: 'Privacy policy (in Croatian)', send: 'Send result', again: 'Start again' }
+  : { eyebrow: 'Kviz · 2 minute', title: 'Koliko ste spremni za AI odgovore?', lead: 'Deset pitanja s da ili ne. Dobit ćete ocjenu za svaku od četiri točke iz ovog vodiča i tri sljedeća koraka.', yes: 'Da', no: 'Ne / ne znam', show: 'Pokaži rezultat', radar: 'Radar graf ocjene po četiri točke', total: 'ukupno', next: 'Tri najvažnija sljedeća koraka', allYes: 'Na sva pitanja ste odgovorili s da. Sljedeći korak je mjeriti svaki mjesec i pratiti koga ChatGPT citira umjesto vas.', mail: 'Pošalji mi rezultat na e-mail', name: 'Ime', email: 'E-mail', consent: 'Slažem se da SERPRise spremi moj e-mail i rezultat kviza i javi mi se u vezi AI vidljivosti.', privacy: 'Pravila privatnosti', send: 'Pošalji rezultat', again: 'Ispočetka' };
+// Tekstovi za skriptu u pregledniku: samo na engleskom (hrvatski su zadani u skripti, pa hrvatski HTML ostaje isti).
+// E-mail s rezultatom (netlify/functions/vodic.mts) zasad postoji samo na hrvatskom, pa ga engleska verzija ne šalje.
+const i18n = en
+  ? JSON.stringify({
+      missing: 'Answer every question ({n} of {total}).',
+      thanks: 'Thanks! Your result is on its way.',
+      sending: 'Sending...',
+      sent: 'Sent to {email}. If it does not arrive within a few minutes, check your Promotions or Spam folder.',
+      received: 'Thanks! We have received your result and will get back to you by email within one working day.',
+      title: 'How ready are you for AI answers?',
+      sourcePage: '/en/blog/llm-visibility/ (quiz)',
+      mailApi: false,
+    })
+  : undefined;
 const C = 130, R = 92; // središte i polumjer radara (viewBox 260x260)
 const angle = (i: number) => -Math.PI / 2 + (i * 2 * Math.PI) / pillars.length;
 const pt = (i: number, r: number) => `${(C + Math.cos(angle(i)) * r).toFixed(1)},${(C + Math.sin(angle(i)) * r).toFixed(1)}`;
 ---
-<section class="wg quiz" data-quiz aria-labelledby="quiz-title">
-  <p class="wg__eyebrow">Kviz · 2 minute</p>
-  <h3 id="quiz-title" class="wg__title">Koliko ste spremni za AI odgovore?</h3>
-  <p class="wg__lead">Deset pitanja s da ili ne. Dobit ćete ocjenu za svaku od četiri točke iz ovog vodiča i tri sljedeća koraka.</p>
+<section class="wg quiz" data-quiz data-i18n={i18n} aria-labelledby="quiz-title">
+  <p class="wg__eyebrow">{t.eyebrow}</p>
+  <h3 id="quiz-title" class="wg__title">{t.title}</h3>
+  <p class="wg__lead">{t.lead}</p>
 
   <form class="quiz__form" novalidate>
     <ol class="quiz__qs">
@@ -21,21 +44,21 @@ const pt = (i: number, r: number) => `${(C + Math.cos(angle(i)) * r).toFixed(1)}
             <legend><span class="quiz__tag">{pillars.find((p) => p.id === q.pillar)?.name}</span>{q.q}</legend>
             <p class="quiz__hint">{q.hint}</p>
             <div class="quiz__yn">
-              <label><input type="radio" name={q.id} value="1" required /> Da</label>
-              <label><input type="radio" name={q.id} value="0" /> Ne / ne znam</label>
+              <label><input type="radio" name={q.id} value="1" required /> {t.yes}</label>
+              <label><input type="radio" name={q.id} value="0" /> {t.no}</label>
             </div>
           </fieldset>
         </li>
       ))}
     </ol>
-    <div class="quiz__bar"><span class="quiz__progress">0 / {questions.length}</span><button type="submit" class="btn btn--primary">Pokaži rezultat</button></div>
+    <div class="quiz__bar"><span class="quiz__progress">0 / {questions.length}</span><button type="submit" class="btn btn--primary">{t.show}</button></div>
     <p class="quiz__status" role="status" aria-live="polite"></p>
   </form>
 
   <div class="quiz__result" hidden tabindex="-1">
     <div class="quiz__grid">
       <div class="quiz__radar">
-        <svg viewBox="-80 0 420 260" role="img" aria-label="Radar graf ocjene po četiri točke">
+        <svg viewBox="-80 0 420 260" role="img" aria-label={t.radar}>
           {[25, 50, 75, 100].map((v) => (
             <polygon class="quiz__ring" points={pillars.map((_, i) => pt(i, (R * v) / 100)).join(' ')} />
           ))}
@@ -49,7 +72,7 @@ const pt = (i: number, r: number) => `${(C + Math.cos(angle(i)) * r).toFixed(1)}
         </svg>
       </div>
       <div>
-        <p class="quiz__total"><strong>0</strong>/100 ukupno</p>
+        <p class="quiz__total"><strong>0</strong>/100 {t.total}</p>
         <ul class="quiz__scores">
           {pillars.map((p) => (
             <li data-score={p.id}><a href={p.anchor}>{p.name}</a><span class="quiz__meter"><span></span></span><b>0</b></li>
@@ -57,24 +80,24 @@ const pt = (i: number, r: number) => `${(C + Math.cos(angle(i)) * r).toFixed(1)}
         </ul>
       </div>
     </div>
-    <h4 class="quiz__h">Tri najvažnija sljedeća koraka</h4>
+    <h4 class="quiz__h">{t.next}</h4>
     <ol class="quiz__steps"></ol>
-    <p class="quiz__done-all" hidden>Na sva pitanja ste odgovorili s da. Sljedeći korak je mjeriti svaki mjesec i pratiti koga ChatGPT citira umjesto vas.</p>
+    <p class="quiz__done-all" hidden>{t.allYes}</p>
 
     <details class="quiz__mail">
-      <summary>Pošalji mi rezultat na e-mail</summary>
+      <summary>{t.mail}</summary>
       <form class="quiz__mailform" novalidate>
         <div class="quiz__row">
-          <label>Ime<input name="firstName" required autocomplete="given-name" maxlength="60" /></label>
-          <label>E-mail<input name="email" type="email" required autocomplete="email" maxlength="200" /></label>
+          <label>{t.name}<input name="firstName" required autocomplete="given-name" maxlength="60" /></label>
+          <label>{t.email}<input name="email" type="email" required autocomplete="email" maxlength="200" /></label>
         </div>
         <input name="fax" tabindex="-1" autocomplete="off" class="quiz__hp" aria-hidden="true" />
-        <label class="quiz__consent"><input type="checkbox" name="consent" required /> Slažem se da SERPRise spremi moj e-mail i rezultat kviza i javi mi se u vezi AI vidljivosti. <a href="/pravila-privatnosti/">Pravila privatnosti</a></label>
-        <button type="submit" class="btn btn--primary">Pošalji rezultat</button>
+        <label class="quiz__consent"><input type="checkbox" name="consent" required /> {t.consent} <a href="/pravila-privatnosti/">{t.privacy}</a></label>
+        <button type="submit" class="btn btn--primary">{t.send}</button>
         <p class="quiz__mailstatus" role="status" aria-live="polite"></p>
       </form>
     </details>
-    <button type="button" class="quiz__again">Ispočetka</button>
+    <button type="button" class="quiz__again">{t.again}</button>
   </div>
   <script type="application/json" data-quiz-data set:html={JSON.stringify(quiz)} />
 </section>
@@ -90,6 +113,18 @@ const pt = (i: number, r: number) => `${(C + Math.cos(angle(i)) * r).toFixed(1)}
     const slot = document.querySelector('[data-embed="quiz"]');
     if (slot) slot.replaceWith(el);
     const { pillars, questions } = JSON.parse(el.querySelector('[data-quiz-data]')!.textContent!) as { pillars: P[]; questions: Q[] };
+    // Tekstovi: hrvatski su zadani; engleska verzija ih šalje u data-i18n.
+    const L = {
+      missing: 'Odgovorite na sva pitanja ({n} od {total}).',
+      thanks: 'Hvala! Rezultat je na putu.',
+      sending: 'Šaljem...',
+      sent: 'Poslano na {email}. Ako ne stigne za nekoliko minuta, provjerite mapu Promocije ili Neželjena pošta.',
+      received: 'Hvala! Zaprimili smo rezultat i javit ćemo vam se na e-mail u roku jednog radnog dana.',
+      title: 'Koliko ste spremni za AI odgovore?',
+      sourcePage: '/blog/llm-vidljivost/ (kviz)',
+      mailApi: true,
+      ...(el.dataset.i18n ? JSON.parse(el.dataset.i18n) : {}),
+    };
     const form = el.querySelector<HTMLFormElement>('.quiz__form')!;
     const result = el.querySelector<HTMLElement>('.quiz__result')!;
     const progress = el.querySelector<HTMLElement>('.quiz__progress')!;
@@ -111,7 +146,7 @@ const pt = (i: number, r: number) => `${(C + Math.cos(angle(i)) * r).toFixed(1)}
       e.preventDefault();
       const missing = questions.find((q) => !form.querySelector(`input[name="${q.id}"]:checked`));
       if (missing) {
-        status.textContent = `Odgovorite na sva pitanja (${count()} od ${questions.length}).`;
+        status.textContent = L.missing.replace('{n}', String(count())).replace('{total}', String(questions.length));
         form.querySelector<HTMLInputElement>(`input[name="${missing.id}"]`)!.focus();
         return;
       }
@@ -173,11 +208,11 @@ const pt = (i: number, r: number) => `${(C + Math.cos(angle(i)) * r).toFixed(1)}
       const val = (k: string) => String(data.get(k) ?? '').trim();
       const btn = mail.querySelector('button')!;
       if (data.get('fax') || Date.now() - startedAt < 5000) {
-        mailStatus.textContent = 'Hvala! Rezultat je na putu.';
+        mailStatus.textContent = L.thanks;
         return;
       }
       btn.disabled = true;
-      mailStatus.textContent = 'Šaljem...';
+      mailStatus.textContent = L.sending;
       const summary = pillars.map((p) => `${p.name}: ${scores[p.id]}/100`).join(', ');
       const no = questions.filter((q) => !answers[q.id]).map((q) => q.id).join(', ');
       if (supabase) {
@@ -186,15 +221,15 @@ const pt = (i: number, r: number) => `${(C + Math.cos(angle(i)) * r).toFixed(1)}
           email: val('email'),
           company: '',
           service: 'ai_vidljivost',
-          message: `Kviz "Koliko ste spremni za AI odgovore?": ${summary}. Odgovori "ne": ${no || 'nijedan'}.`,
+          message: `Kviz "${L.title}": ${summary}. Odgovori "ne": ${no || 'nijedan'}.`,
           consent: true,
-          source_page: '/blog/llm-vidljivost/ (kviz)',
+          source_page: L.sourcePage,
           utm: null,
         });
         if (error) console.error(error);
       }
       let sent = false;
-      try {
+      if (L.mailApi) try {
         const res = await fetch('/api/vodic', {
           method: 'POST',
           headers: { 'content-type': 'application/json' },
@@ -205,8 +240,8 @@ const pt = (i: number, r: number) => `${(C + Math.cos(angle(i)) * r).toFixed(1)}
         console.error(err);
       }
       mailStatus.textContent = sent
-        ? `Poslano na ${val('email')}. Ako ne stigne za nekoliko minuta, provjerite mapu Promocije ili Neželjena pošta.`
-        : 'Hvala! Zaprimili smo rezultat i javit ćemo vam se na e-mail u roku jednog radnog dana.';
+        ? L.sent.replace('{email}', val('email'))
+        : L.received;
       window.dataLayer?.push({ event: 'generate_lead', lead_source: 'ai_kviz' });
     });
   });

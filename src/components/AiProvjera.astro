@@ -1,43 +1,82 @@
 ---
-import data from '../data/ai-provjera.json';
+import dataHr from '../data/ai-provjera.json';
+import dataEn from '../data/ai-provjera-en.json';
 // Interaktivni alat za članak /blog/provjera-ai-vidljivosti/: generator pitanja, tablica za bilježenje,
 // rezultat s dijagnozom i graf napretka. Svaki blok se premješta na mjesto označeno u tekstu
 // (<div data-embed="ai-generator|ai-tablica|ai-rezultati|ai-napredak"></div>). Podaci ostaju u pregledniku.
+// Dvojezično: engleski članak /en/blog/ai-visibility-check/ šalje lang="en" (tekstovi iz ai-provjera-en.json).
+interface Props { lang?: 'hr' | 'en' }
+const { lang = 'hr' } = Astro.props;
+const isEn = lang === 'en';
+const data = isEn ? dataEn : dataHr;
 const { fields, presets, platforms } = data;
+const t = isEn
+  ? {
+      step: 'Free tool · step', genTitle: 'Question generator',
+      genLead: 'Choose an example business or enter your own details. The questions change as you type. You can also edit any question yourself by clicking on its text.',
+      preset: 'Example business', own: 'Your own business (empty fields)', eg: 'e.g. ', copyAll: 'Copy all questions',
+      tabTitle: 'Tracking table',
+      tabLead: 'For each run, choose whether you were mentioned and copy what you see in the answer. Separate several names or domains with commas. Everything is saved only in your browser.',
+      runs: 'Runs for "Recommendation" questions', extra: 'Extra columns (optional)', csv: 'Export to CSV', clear: 'Clear answers for a new measurement',
+      csvNote: 'Open the CSV in Google Sheets: File → Import → Upload. If you export an empty table, you get the same template with the questions you have just built.',
+      resTitle: 'Your result', resLead: 'Fill in at least a few rows of the table and your result will appear here.',
+      topSrc: 'Top 5 sources', topComp: 'Most frequent competitors', diag: 'Diagnosis',
+      ctaB: 'Send us your result and we will comment on it for free.', ctaText: ' We will carry the table summary over into the message on the contact form; you just add your name and email.',
+      sendHref: '/en/contact/?usluga=ai_vidljivost', send: 'Send your result', copySummary: 'Copy summary',
+      progTitle: 'Progress by month',
+      progLead: 'When you finish the table, save the measurement under a date. Next month, clear the answers, repeat the same questions and save a new measurement. The chart appears from the second measurement.',
+      date: 'Measurement date', save: 'Save measurement',
+    }
+  : {
+      step: 'Besplatan alat · korak', genTitle: 'Generator pitanja',
+      genLead: 'Odaberite primjer djelatnosti ili upišite svoje podatke. Pitanja se mijenjaju dok pišete. Svako pitanje možete i sami urediti klikom na tekst.',
+      preset: 'Primjer djelatnosti', own: 'Vlastita djelatnost (prazna polja)', eg: 'npr. ', copyAll: 'Kopiraj sva pitanja',
+      tabTitle: 'Tablica za bilježenje',
+      tabLead: 'Za svaki upis odaberite jeste li spomenuti i prepišite što vidite u odgovoru. Više naziva ili domena odvojite zarezom. Sve se sprema samo u vašem pregledniku.',
+      runs: 'Upisa za pitanja "Preporuka"', extra: 'Dodatni stupci (neobavezno)', csv: 'Izvoz u CSV', clear: 'Očisti odgovore za novo mjerenje',
+      csvNote: 'CSV otvorite u Google Sheetsu: Datoteka → Uvezi → Prijenos. Isti predložak, s pitanjima koja ste upravo složili, dobit ćete i ako izvezete praznu tablicu.',
+      resTitle: 'Vaš rezultat', resLead: 'Ispunite barem nekoliko redova tablice i rezultat će se pojaviti ovdje.',
+      topSrc: 'Top 5 izvora', topComp: 'Najčešći konkurenti', diag: 'Dijagnoza',
+      ctaB: 'Pošaljite nam rezultat, besplatno ga komentiramo.', ctaText: ' Sažetak tablice prenijet ćemo u poruku na kontakt formi, a vi samo dodate ime i e-mail.',
+      sendHref: '/kontakt/?usluga=ai_vidljivost', send: 'Pošaljite rezultat', copySummary: 'Kopiraj sažetak',
+      progTitle: 'Napredak po mjesecima',
+      progLead: 'Kad završite tablicu, spremite mjerenje pod datumom. Sljedeći mjesec očistite odgovore, ponovite ista pitanja i spremite novo mjerenje. Graf se pojavi od drugog mjerenja.',
+      date: 'Datum mjerenja', save: 'Spremi mjerenje',
+    };
 ---
-<div class="aip" data-aip hidden>
+<div class="aip" data-aip hidden data-lang={isEn ? 'en' : undefined}>
   <section class="aip__box" data-block="ai-generator" aria-labelledby="aip-gen">
-    <p class="aip__eyebrow">Besplatan alat · korak 1</p>
-    <h3 id="aip-gen" class="aip__title">Generator pitanja</h3>
-    <p class="aip__lead">Odaberite primjer djelatnosti ili upišite svoje podatke. Pitanja se mijenjaju dok pišete. Svako pitanje možete i sami urediti klikom na tekst.</p>
+    <p class="aip__eyebrow">{t.step} 1</p>
+    <h3 id="aip-gen" class="aip__title">{t.genTitle}</h3>
+    <p class="aip__lead">{t.genLead}</p>
     <label class="aip__preset">
-      <span>Primjer djelatnosti</span>
+      <span>{t.preset}</span>
       <select data-preset>
         {presets.map((p) => <option value={p.key}>{p.name}</option>)}
-        <option value="">Vlastita djelatnost (prazna polja)</option>
+        <option value="">{t.own}</option>
       </select>
     </label>
     <div class="aip__fields">
       {fields.map((f) => (
         <label>
           <span>{f.label} <small>{f.hint}</small></span>
-          <input data-field={f.key} placeholder={f.ph || `npr. ${f.label.toLowerCase()}`} autocomplete="off" />
+          <input data-field={f.key} placeholder={f.ph || `${t.eg}${f.label.toLowerCase()}`} autocomplete="off" />
         </label>
       ))}
     </div>
     <div class="aip__actions">
-      <button type="button" class="btn btn--primary" data-copy-all>Kopiraj sva pitanja</button>
+      <button type="button" class="btn btn--primary" data-copy-all>{t.copyAll}</button>
       <span class="aip__status" data-status role="status"></span>
     </div>
     <div class="aip__groups" data-questions></div>
   </section>
 
   <section class="aip__box" data-block="ai-tablica" aria-labelledby="aip-tab">
-    <p class="aip__eyebrow">Besplatan alat · korak 2</p>
-    <h3 id="aip-tab" class="aip__title">Tablica za bilježenje</h3>
-    <p class="aip__lead">Za svaki upis odaberite jeste li spomenuti i prepišite što vidite u odgovoru. Više naziva ili domena odvojite zarezom. Sve se sprema samo u vašem pregledniku.</p>
+    <p class="aip__eyebrow">{t.step} 2</p>
+    <h3 id="aip-tab" class="aip__title">{t.tabTitle}</h3>
+    <p class="aip__lead">{t.tabLead}</p>
     <div class="aip__opts">
-      <label>Upisa za pitanja "Preporuka"
+      <label><Fragment set:html={t.runs} />
         <select data-runs>
           <option value="2">2</option>
           <option value="3">3</option>
@@ -46,7 +85,7 @@ const { fields, presets, platforms } = data;
         </select>
       </label>
       <fieldset>
-        <legend>Dodatni stupci (neobavezno)</legend>
+        <legend>{t.extra}</legend>
         {platforms.map((p) => <label class="aip__check"><input type="checkbox" data-platform={p.key} /> {p.name}</label>)}
       </fieldset>
     </div>
@@ -58,46 +97,46 @@ const { fields, presets, platforms } = data;
       </table>
     </div>
     <div class="aip__actions">
-      <button type="button" class="btn btn--ghost" data-csv>Izvoz u CSV</button>
-      <button type="button" class="btn btn--ghost" data-clear>Očisti odgovore za novo mjerenje</button>
+      <button type="button" class="btn btn--ghost" data-csv>{t.csv}</button>
+      <button type="button" class="btn btn--ghost" data-clear>{t.clear}</button>
     </div>
-    <p class="aip__meta">CSV otvorite u Google Sheetsu: Datoteka → Uvezi → Prijenos. Isti predložak, s pitanjima koja ste upravo složili, dobit ćete i ako izvezete praznu tablicu.</p>
+    <p class="aip__meta">{t.csvNote}</p>
   </section>
 
   <section class="aip__box aip__box--dark" data-block="ai-rezultati" aria-labelledby="aip-res">
-    <p class="aip__eyebrow">Besplatan alat · korak 3</p>
-    <h3 id="aip-res" class="aip__title">Vaš rezultat</h3>
-    <p class="aip__lead" data-summary>Ispunite barem nekoliko redova tablice i rezultat će se pojaviti ovdje.</p>
+    <p class="aip__eyebrow">{t.step} 3</p>
+    <h3 id="aip-res" class="aip__title">{t.resTitle}</h3>
+    <p class="aip__lead" data-summary>{t.resLead}</p>
     <div class="aip__gauges" data-gauges></div>
     <div class="aip__cols">
       <div>
-        <h4>Top 5 izvora</h4>
+        <h4>{t.topSrc}</h4>
         <ol data-top-sources class="aip__rank"></ol>
       </div>
       <div>
-        <h4>Najčešći konkurenti</h4>
+        <h4>{t.topComp}</h4>
         <ol data-top-comp class="aip__rank"></ol>
       </div>
     </div>
     <div data-platform-res></div>
-    <h4>Dijagnoza</h4>
+    <h4>{t.diag}</h4>
     <ul class="aip__diag" data-diag></ul>
     <div class="aip__cta">
-      <p><strong>Pošaljite nam rezultat, besplatno ga komentiramo.</strong> Sažetak tablice prenijet ćemo u poruku na kontakt formi, a vi samo dodate ime i e-mail.</p>
+      <p><strong>{t.ctaB}</strong>{t.ctaText}</p>
       <div class="aip__actions">
-        <a href="/kontakt/?usluga=ai_vidljivost" class="btn btn--primary" data-send>Pošaljite rezultat</a>
-        <button type="button" class="btn btn--ghost-light" data-copy-summary>Kopiraj sažetak</button>
+        <a href={t.sendHref} class="btn btn--primary" data-send>{t.send}</a>
+        <button type="button" class="btn btn--ghost-light" data-copy-summary>{t.copySummary}</button>
       </div>
     </div>
   </section>
 
   <section class="aip__box" data-block="ai-napredak" aria-labelledby="aip-prog">
-    <p class="aip__eyebrow">Besplatan alat · korak 4</p>
-    <h3 id="aip-prog" class="aip__title">Napredak po mjesecima</h3>
-    <p class="aip__lead">Kad završite tablicu, spremite mjerenje pod datumom. Sljedeći mjesec očistite odgovore, ponovite ista pitanja i spremite novo mjerenje. Graf se pojavi od drugog mjerenja.</p>
+    <p class="aip__eyebrow">{t.step} 4</p>
+    <h3 id="aip-prog" class="aip__title">{t.progTitle}</h3>
+    <p class="aip__lead">{t.progLead}</p>
     <div class="aip__actions">
-      <label class="aip__date">Datum mjerenja <input type="date" data-date /></label>
-      <button type="button" class="btn btn--primary" data-save>Spremi mjerenje</button>
+      <label class="aip__date">{t.date} <input type="date" data-date /></label>
+      <button type="button" class="btn btn--primary" data-save>{t.save}</button>
     </div>
     <div data-chart class="aip__chart"></div>
     <ul data-history class="aip__history"></ul>
@@ -105,7 +144,8 @@ const { fields, presets, platforms } = data;
 </div>
 
 <script>
-  import data from '../data/ai-provjera.json';
+  import dataHr from '../data/ai-provjera.json';
+  import dataEn from '../data/ai-provjera-en.json';
 
   type Run = { m: string; link: string; comp: string; src: string; [k: string]: string };
   type Snap = { date: string; total: number; link: number; types: Record<string, number>; n: number };
@@ -119,11 +159,82 @@ const { fields, presets, platforms } = data;
     history: Snap[];
   };
 
-  const KEY = 'serprise-ai-provjera-v1';
+  // Tekstovi skripte. Hrvatski su isti kao prije; engleski se biraju kad korijen ima data-lang="en".
+  const HR = {
+    copied: 'Kopirano', copyFail: 'Kopiranje nije uspjelo, označite tekst ručno',
+    resetTitle: 'Vrati automatski tekst', reset: 'Vrati', copy: 'Kopiraj', qCopied: 'Pitanje kopirano', allCopied: 'Svih 20 pitanja kopirano',
+    yes: 'da', no: 'ne',
+    th: ['Pitanje', 'Upis', 'Spomenuti?', 'Linkana stranica', 'Konkurenti', 'Izvori'], mentionedQ: 'spomenuti?',
+    rowAria: (n: number, r: number) => `Pitanje ${n}, upis ${r}: spomenuti`, linkAria: 'Linkana stranica', compAria: 'Konkurenti', srcAria: 'Izvori', platAria: 'spomenuti',
+    linkPh: '/usluge/', compPh: 'Firma X, Firma Y', srcPh: 'njuskalo.hr, trebam.hr',
+    estimate: (total: number, minutes: number) => `Ukupno ${total} upisa. Računajte oko ${minutes} minuta (procjena: oko 45 do 50 sekundi po upisu, s čitanjem izvora).`,
+    confirmClear: 'Obrisati sve odgovore u tablici? Pitanja i spremljena mjerenja ostaju.',
+    csvHead: ['Vrsta', 'Br.', 'Pitanje', 'Upis', 'Spomenuti?', 'Linkana stranica', 'Konkurenti', 'Izvori'], csvFile: 'provjera-ai-vidljivosti',
+    of: (m: number, f: number) => `${m} od ${f} upisa`, noRuns: 'nema upisa', ofShort: 'od',
+    summary: (m: number, f: number, pm: number, l: number, pl: number) => `Spomenuti ste u ${m} od ${f} ispunjenih upisa (${pm}%). Vaša stranica linkana je u ${l} (${pl}%).`,
+    empty: 'Ispunite barem nekoliko redova tablice i rezultat će se pojaviti ovdje.',
+    noSrc: 'Upišite izvore u tablicu', noComp: 'Upišite konkurente u tablicu',
+    dNone: 'Još nema podataka. Krenite od pitanja 1 do 5, ona najviše govore o tome hoće li vas AI preporučiti kupcu.',
+    dZero: '<b>Niste spomenuti ni u jednom upisu.</b> Prvi korak: provjerite može li AI pročitati vaš web (Ctrl+U na podstranici, pa Ctrl+F za rečenicu iz teksta). Ako teksta nema u izvornom kodu, to je prvi problem. <a href="/blog/case-study-ai-vidljivost-osmrtnice/">Case study</a> pokazuje kako to izgleda.',
+    dLink: (l: number, m: number) => `<b>Spomenuti ste, ali vaša stranica rijetko je izvor</b> (linkana u ${l} od ${m} spomena). AI vas zna iz tuđih stranica. Prvi korak: napravite stranicu koja izravno odgovara na pitanje gdje ste spomenuti bez linka. <a href="/blog/chatgpt-citati-hrvatska/">Što ChatGPT citira</a>.`,
+    dPrice: (pc: number, top: string) => `<b>Za pitanja o cijeni spominju vas u ${pc}% upisa.</b> ${top ? `Izvori su ${top}. ` : ''}Ako je među njima konkurentov cjenik, AI kupcu daje tuđe cijene. Prvi korak: objavite početne cijene u eurima na svojoj stranici.`,
+    dRec: (pp: number) => `<b>Kod preporuka ste u ${pp}% odgovora.</b> Pogledajte top izvore: liste, direktoriji i portali koji se ponavljaju mjesta su gdje trebate biti. <a href="/blog/portali-za-pr-objave/">Portali za PR objave</a>.`,
+    dRep: (list: string) => `<b>Za pitanja s vašim imenom (${list}) AI vas ne spominje.</b> Ažurirajte Google Business Profile i profile na direktorijima, s istim nazivom, adresom i opisom kao na webu.`,
+    dRead: 'Pročitajte odgovore na pitanja 11, 14 i 15. Ako nešto o vama nije točno, pogledajte korake ispod naslova "Ako AI o vama piše netočno".',
+    dProb: (pr: number) => `<b>Kod pitanja o problemu kupca ste u ${pr}% odgovora.</b> Napišite vodič koji odgovara na pitanja 16 do 20 vašim riječima, s vašim iskustvom i brojkama.`,
+    dSrc: (list: string) => `Izvori koji se ponavljaju: ${list}. To su stranice koje AI čita za vaše tržište.`,
+    dGood: 'Dobar rezultat. Ponovite test za mjesec dana istim pitanjima i pratite trend.',
+    sTitle: 'Rezultat provjere AI vidljivosti (alat na serprise.agency)', sBiz: 'Djelatnost', sFirm: 'firma',
+    sTotal: (m: number, f: number, l: number) => `Ukupno: spomenuti u ${m}/${f} upisa, linkani u ${l}`,
+    sSrc: 'Top izvori', sComp: 'Konkurenti', sumCopied: 'Sažetak kopiran',
+    emptyAlert: 'Tablica je prazna. Ispunite barem jedan red prije spremanja.',
+    locale: 'hr-HR', total: 'Ukupno',
+    hist: (t: number, l: number, n: number) => `ukupno <b>${t}%</b> · linkani ${l}% · ${n} upisa`, del: 'Obriši',
+    oneSnap: 'Spremljeno je jedno mjerenje. Graf se pojavi nakon drugog.', noSnap: 'Još nema spremljenih mjerenja.',
+    chartAria: 'Postotak pojavljivanja po mjerenjima',
+  };
+  const EN: typeof HR = {
+    copied: 'Copied', copyFail: 'Copying failed, select the text manually',
+    resetTitle: 'Restore the automatic text', reset: 'Restore', copy: 'Copy', qCopied: 'Question copied', allCopied: 'All 20 questions copied',
+    yes: 'yes', no: 'no',
+    th: ['Question', 'Run', 'Mentioned?', 'Linked page', 'Competitors', 'Sources'], mentionedQ: 'mentioned?',
+    rowAria: (n, r) => `Question ${n}, run ${r}: mentioned`, linkAria: 'Linked page', compAria: 'Competitors', srcAria: 'Sources', platAria: 'mentioned',
+    linkPh: '/services/', compPh: 'Company X, Company Y', srcPh: 'njuskalo.hr, trebam.hr',
+    estimate: (total, minutes) => `${total} runs in total. Allow about ${minutes} minutes (estimate: about 45 to 50 seconds per run, including reading the sources).`,
+    confirmClear: 'Delete all answers in the table? The questions and saved measurements stay.',
+    csvHead: ['Type', 'No.', 'Question', 'Run', 'Mentioned?', 'Linked page', 'Competitors', 'Sources'], csvFile: 'ai-visibility-check',
+    of: (m, f) => `${m} of ${f} runs`, noRuns: 'no runs', ofShort: 'of',
+    summary: (m, f, pm, l, pl) => `You were mentioned in ${m} of ${f} completed runs (${pm}%). Your site was linked in ${l} (${pl}%).`,
+    empty: 'Fill in at least a few rows of the table and your result will appear here.',
+    noSrc: 'Enter sources in the table', noComp: 'Enter competitors in the table',
+    dNone: 'No data yet. Start with questions 1 to 5: they say the most about whether AI will recommend you to a customer.',
+    dZero: '<b>You were not mentioned in a single run.</b> First step: check whether AI can read your site at all (Ctrl+U on a subpage, then Ctrl+F for a sentence from the text). If the text is not in the source code, that is the first problem. The <a href="/en/blog/ai-visibility-case-study-obituaries/">case study</a> shows what this looks like.',
+    dLink: (l, m) => `<b>You are mentioned, but your site is rarely a source</b> (linked in ${l} of ${m} mentions). AI knows you from other people's pages. First step: create a page that directly answers the question where you were mentioned without a link. <a href="/en/blog/chatgpt-citations-croatia/">What ChatGPT cites</a>.`,
+    dPrice: (pc, top) => `<b>For price questions, you are mentioned in ${pc}% of runs.</b> ${top ? `The sources are ${top}. ` : ''}If a competitor's price list is among them, AI gives the customer someone else's prices. First step: publish starting prices in euros on your own site.`,
+    dRec: (pp) => `<b>For recommendations, you appear in ${pp}% of answers.</b> Look at the top sources: lists, directories and news sites that keep coming up are the places where you need to be. <a href="/en/blog/croatian-news-sites-for-pr/">Croatian news sites for PR</a>.`,
+    dRep: (list) => `<b>For the questions with your name (${list}), AI does not mention you.</b> Update your Google Business Profile and directory profiles, with the same name, address and description as on your website.`,
+    dRead: 'Read the answers to questions 11, 14 and 15. If something about you is wrong, see the steps under the heading "If AI says something wrong about you".',
+    dProb: (pr) => `<b>For questions about a customer's problem, you appear in ${pr}% of answers.</b> Write a guide that answers questions 16 to 20 in your own words, with your experience and numbers.`,
+    dSrc: (list) => `Recurring sources: ${list}. These are the pages AI reads for your market.`,
+    dGood: 'A good result. Repeat the test in a month with the same questions and track the trend.',
+    sTitle: 'AI visibility check result (tool on serprise.agency)', sBiz: 'Business', sFirm: 'company',
+    sTotal: (m, f, l) => `Total: mentioned in ${m}/${f} runs, linked in ${l}`,
+    sSrc: 'Top sources', sComp: 'Competitors', sumCopied: 'Summary copied',
+    emptyAlert: 'The table is empty. Fill in at least one row before saving.',
+    locale: 'en-GB', total: 'Total',
+    hist: (t, l, n) => `total <b>${t}%</b> · linked ${l}% · ${n} runs`, del: 'Delete',
+    oneSnap: 'One measurement saved. The chart appears after the second.', noSnap: 'No saved measurements yet.',
+    chartAria: 'Share of answers you appear in, by measurement',
+  };
+
   const root = document.querySelector<HTMLElement>('[data-aip]');
   if (root) init(root);
 
   function init(root: HTMLElement) {
+    const isEn = root.dataset.lang === 'en';
+    const data = isEn ? dataEn : dataHr;
+    const T = isEn ? EN : HR;
+    const KEY = isEn ? 'serprise-ai-provjera-v1-en' : 'serprise-ai-provjera-v1';
     // Blokove premjesti na mjesta u tekstu članka.
     root.querySelectorAll<HTMLElement>('[data-block]').forEach((b) => {
       const slot = document.querySelector(`[data-embed="${b.dataset.block}"]`);
@@ -165,12 +276,12 @@ const { fields, presets, platforms } = data;
       clearTimeout(statusTimer);
       statusTimer = window.setTimeout(() => (el.textContent = ''), 2500);
     };
-    const copy = async (text: string, msg = 'Kopirano') => {
+    const copy = async (text: string, msg = T.copied) => {
       try {
         await navigator.clipboard.writeText(text);
         flash(msg);
       } catch {
-        flash('Kopiranje nije uspjelo, označite tekst ručno');
+        flash(T.copyFail);
       }
     };
 
@@ -187,8 +298,8 @@ const { fields, presets, platforms } = data;
                   <b class="aip__n">${q.n}.</b>
                   <span class="aip__q" contenteditable="true" spellcheck="false" data-q="${q.n}">${esc(q.text)}</span>
                   <span class="aip__qbtns">
-                    ${q.edited ? `<button type="button" class="aip__mini" data-reset="${q.n}" title="Vrati automatski tekst">Vrati</button>` : ''}
-                    <button type="button" class="aip__mini" data-copy="${q.n}">Kopiraj</button>
+                    ${q.edited ? `<button type="button" class="aip__mini" data-reset="${q.n}" title="${T.resetTitle}">${T.reset}</button>` : ''}
+                    <button type="button" class="aip__mini" data-copy="${q.n}">${T.copy}</button>
                   </span>
                 </li>`).join('')}
             </ol>
@@ -230,7 +341,7 @@ const { fields, presets, platforms } = data;
     qBox.addEventListener('click', (e) => {
       const t = e.target as HTMLElement;
       const c = t.closest<HTMLElement>('[data-copy]');
-      if (c) copy(questions().find((q) => q.n === Number(c.dataset.copy))!.text, 'Pitanje kopirano');
+      if (c) copy(questions().find((q) => q.n === Number(c.dataset.copy))!.text, T.qCopied);
       const r = t.closest<HTMLElement>('[data-reset]');
       if (r) {
         delete state.edits[r.dataset.reset!];
@@ -242,7 +353,7 @@ const { fields, presets, platforms } = data;
       const text = data.groups
         .map((g) => `${g.name}\n` + qs.filter((q) => q.group === g.key).map((q) => `${q.n}. ${q.text}`).join('\n'))
         .join('\n\n');
-      copy(text, 'Svih 20 pitanja kopirano');
+      copy(text, T.allCopied);
     });
 
     // ---------- Tablica ----------
@@ -253,15 +364,15 @@ const { fields, presets, platforms } = data;
     const yn = (name: string, v: string, label: string) => `
       <select data-k="${name}" aria-label="${label}">
         <option value=""${v === '' ? ' selected' : ''}>–</option>
-        <option value="da"${v === 'da' ? ' selected' : ''}>da</option>
-        <option value="ne"${v === 'ne' ? ' selected' : ''}>ne</option>
+        <option value="da"${v === 'da' ? ' selected' : ''}>${T.yes}</option>
+        <option value="ne"${v === 'ne' ? ' selected' : ''}>${T.no}</option>
       </select>`;
 
     const thead = $('[data-thead]');
     const tbody = $('[data-tbody]');
     const renderTable = () => {
       const ps = plats();
-      thead.innerHTML = `<tr><th>Pitanje</th><th>Upis</th><th>Spomenuti?</th><th>Linkana stranica</th><th>Konkurenti</th><th>Izvori</th>${ps.map((p) => `<th>${p.name}: spomenuti?</th>`).join('')}</tr>`;
+      thead.innerHTML = `<tr>${T.th.map((h) => `<th>${h}</th>`).join('')}${ps.map((p) => `<th>${p.name}: ${T.mentionedQ}</th>`).join('')}</tr>`;
       const qs = questions();
       let html = '';
       for (const g of data.groups) {
@@ -274,11 +385,11 @@ const { fields, presets, platforms } = data;
             html += `<tr data-row="${k}" class="${r === 1 ? 'aip__first' : ''}">
               ${r === 1 ? `<td rowspan="${runs}" class="aip__qcell"><b>${q.n}.</b> ${esc(q.text)}</td>` : ''}
               <td class="aip__num">${r}</td>
-              <td>${yn('m', v.m, `Pitanje ${q.n}, upis ${r}: spomenuti`)}</td>
-              <td><input data-k="link" value="${esc(v.link)}" placeholder="/usluge/" aria-label="Linkana stranica" /></td>
-              <td><input data-k="comp" value="${esc(v.comp)}" placeholder="Firma X, Firma Y" aria-label="Konkurenti" /></td>
-              <td><input data-k="src" value="${esc(v.src)}" placeholder="njuskalo.hr, trebam.hr" aria-label="Izvori" /></td>
-              ${ps.map((p) => `<td>${yn(p.key, v[p.key] ?? '', `${p.name}: spomenuti`)}</td>`).join('')}
+              <td>${yn('m', v.m, T.rowAria(q.n, r))}</td>
+              <td><input data-k="link" value="${esc(v.link)}" placeholder="${T.linkPh}" aria-label="${T.linkAria}" /></td>
+              <td><input data-k="comp" value="${esc(v.comp)}" placeholder="${T.compPh}" aria-label="${T.compAria}" /></td>
+              <td><input data-k="src" value="${esc(v.src)}" placeholder="${T.srcPh}" aria-label="${T.srcAria}" /></td>
+              ${ps.map((p) => `<td>${yn(p.key, v[p.key] ?? '', `${p.name}: ${T.platAria}`)}</td>`).join('')}
             </tr>`;
           }
         }
@@ -286,7 +397,7 @@ const { fields, presets, platforms } = data;
       tbody.innerHTML = html;
       const total = data.groups.reduce((s, g) => s + runsFor(g.key) * g.questions.length, 0);
       const minutes = Math.round((total * 48) / 60 / 5) * 5;
-      $('[data-estimate]').textContent = `Ukupno ${total} upisa. Računajte oko ${minutes} minuta (procjena: oko 45 do 50 sekundi po upisu, s čitanjem izvora).`;
+      $('[data-estimate]').textContent = T.estimate(total, minutes);
     };
     const onCell = (e: Event) => {
       const el = e.target as HTMLInputElement | HTMLSelectElement;
@@ -313,7 +424,7 @@ const { fields, presets, platforms } = data;
       }),
     );
     $('[data-clear]').addEventListener('click', () => {
-      if (!confirm('Obrisati sve odgovore u tablici? Pitanja i spremljena mjerenja ostaju.')) return;
+      if (!confirm(T.confirmClear)) return;
       state.rows = {};
       update();
     });
@@ -321,18 +432,20 @@ const { fields, presets, platforms } = data;
     const csvCell = (s: string | number) => `"${String(s).replace(/"/g, '""')}"`;
     $('[data-csv]').addEventListener('click', () => {
       const ps = plats();
-      const head = ['Vrsta', 'Br.', 'Pitanje', 'Upis', 'Spomenuti?', 'Linkana stranica', 'Konkurenti', 'Izvori', ...ps.map((p) => `${p.name}: spomenuti?`)];
+      const head = [...T.csvHead, ...ps.map((p) => `${p.name}: ${T.mentionedQ}`)];
+      // Vrijednosti "da"/"ne" ostaju interne; u engleskom CSV-u pišu se kao yes/no.
+      const yv = (x: string) => (isEn ? (x === 'da' ? T.yes : x === 'ne' ? T.no : x) : x);
       const lines = [head.map(csvCell).join(',')];
       for (const q of questions()) {
         for (let r = 1; r <= runsFor(q.group); r++) {
           const v = getRun(rowKey(q.n, r));
-          lines.push([q.groupName, q.n, q.text, r, v.m, v.link, v.comp, v.src, ...ps.map((p) => v[p.key] ?? '')].map(csvCell).join(','));
+          lines.push([q.groupName, q.n, q.text, r, yv(v.m), v.link, v.comp, v.src, ...ps.map((p) => yv(v[p.key] ?? ''))].map(csvCell).join(','));
         }
       }
       const blob = new Blob(['﻿' + lines.join('\r\n')], { type: 'text/csv;charset=utf-8' });
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
-      a.download = `provjera-ai-vidljivosti-${new Date().toISOString().slice(0, 10)}.csv`;
+      a.download = `${T.csvFile}-${new Date().toISOString().slice(0, 10)}.csv`;
       a.click();
       setTimeout(() => URL.revokeObjectURL(a.href), 1000);
     });
@@ -411,66 +524,66 @@ const { fields, presets, platforms } = data;
       const s = stats();
       const t = s.types;
       $('[data-gauges]').innerHTML = data.groups
-        .map((g) => gauge(g.name, t[g.key].filled ? pct(t[g.key].m, t[g.key].filled) : null, t[g.key].filled ? `${t[g.key].m} od ${t[g.key].filled} upisa` : 'nema upisa'))
+        .map((g) => gauge(g.name, t[g.key].filled ? pct(t[g.key].m, t[g.key].filled) : null, t[g.key].filled ? T.of(t[g.key].m, t[g.key].filled) : T.noRuns))
         .join('');
       $('[data-summary]').textContent = s.filled
-        ? `Spomenuti ste u ${s.mentioned} od ${s.filled} ispunjenih upisa (${pct(s.mentioned, s.filled)}%). Vaša stranica linkana je u ${s.linked} (${pct(s.linked, s.filled)}%).`
-        : 'Ispunite barem nekoliko redova tablice i rezultat će se pojaviti ovdje.';
+        ? T.summary(s.mentioned, s.filled, pct(s.mentioned, s.filled), s.linked, pct(s.linked, s.filled))
+        : T.empty;
       const rank = (list: { label: string; n: number }[], empty: string) =>
         list.length ? list.slice(0, 5).map((x) => `<li><span>${esc(x.label)}</span><b>${x.n}</b></li>`).join('') : `<li class="aip__empty">${empty}</li>`;
-      $('[data-top-sources]').innerHTML = rank(s.sources, 'Upišite izvore u tablicu');
-      $('[data-top-comp]').innerHTML = rank(s.comps, 'Upišite konkurente u tablicu');
+      $('[data-top-sources]').innerHTML = rank(s.sources, T.noSrc);
+      $('[data-top-comp]').innerHTML = rank(s.comps, T.noComp);
       const ps = plats().filter((p) => s.plat[p.key]?.filled);
       $('[data-platform-res]').innerHTML = ps.length
-        ? `<p class="aip__plat">${ps.map((p) => `${p.name}: <b>${pct(s.plat[p.key].m, s.plat[p.key].filled)}%</b> (${s.plat[p.key].m} od ${s.plat[p.key].filled})`).join(' · ')}</p>`
+        ? `<p class="aip__plat">${ps.map((p) => `${p.name}: <b>${pct(s.plat[p.key].m, s.plat[p.key].filled)}%</b> (${s.plat[p.key].m} ${T.ofShort} ${s.plat[p.key].filled})`).join(' · ')}</p>`
         : '';
 
       // Dijagnoza prema sekciji "Kako čitati rezultat" i "Što napraviti nakon testa".
       const d: string[] = [];
       const p = (k: string) => (t[k].filled ? pct(t[k].m, t[k].filled) : null);
       if (!s.filled) {
-        d.push('Još nema podataka. Krenite od pitanja 1 do 5, ona najviše govore o tome hoće li vas AI preporučiti kupcu.');
+        d.push(T.dNone);
       } else {
         if (s.mentioned === 0) {
-          d.push('<b>Niste spomenuti ni u jednom upisu.</b> Prvi korak: provjerite može li AI pročitati vaš web (Ctrl+U na podstranici, pa Ctrl+F za rečenicu iz teksta). Ako teksta nema u izvornom kodu, to je prvi problem. <a href="/blog/case-study-ai-vidljivost-osmrtnice/">Case study</a> pokazuje kako to izgleda.');
+          d.push(T.dZero);
         } else if (s.linked < s.mentioned / 2) {
-          d.push(`<b>Spomenuti ste, ali vaša stranica rijetko je izvor</b> (linkana u ${s.linked} od ${s.mentioned} spomena). AI vas zna iz tuđih stranica. Prvi korak: napravite stranicu koja izravno odgovara na pitanje gdje ste spomenuti bez linka. <a href="/blog/chatgpt-citati-hrvatska/">Što ChatGPT citira</a>.`);
+          d.push(T.dLink(s.linked, s.mentioned));
         }
         const pc = p('cijena');
         if (pc !== null && pc < 50) {
           const top = s.priceSources.slice(0, 3).map((x) => esc(x.label)).join(', ');
-          d.push(`<b>Za pitanja o cijeni spominju vas u ${pc}% upisa.</b> ${top ? `Izvori su ${top}. ` : ''}Ako je među njima konkurentov cjenik, AI kupcu daje tuđe cijene. Prvi korak: objavite početne cijene u eurima na svojoj stranici.`);
+          d.push(T.dPrice(pc, top));
         }
         const pp = p('preporuka');
         if (pp !== null && pp < 50) {
-          d.push(`<b>Kod preporuka ste u ${pp}% odgovora.</b> Pogledajte top izvore: liste, direktoriji i portali koji se ponavljaju mjesta su gdje trebate biti. <a href="/blog/portali-za-pr-objave/">Portali za PR objave</a>.`);
+          d.push(T.dRec(pp));
         }
         const rep = [11, 14, 15].filter((n) => t.usporedba.q[n] === 0);
         if (rep.length) {
-          d.push(`<b>Za pitanja s vašim imenom (${rep.join(', ')}) AI vas ne spominje.</b> Ažurirajte Google Business Profile i profile na direktorijima, s istim nazivom, adresom i opisom kao na webu.`);
+          d.push(T.dRep(rep.join(', ')));
         }
-        if (t.usporedba.filled) d.push('Pročitajte odgovore na pitanja 11, 14 i 15. Ako nešto o vama nije točno, pogledajte korake ispod naslova "Ako AI o vama piše netočno".');
+        if (t.usporedba.filled) d.push(T.dRead);
         const pr = p('problem');
         if (pr !== null && pr < 30) {
-          d.push(`<b>Kod pitanja o problemu kupca ste u ${pr}% odgovora.</b> Napišite vodič koji odgovara na pitanja 16 do 20 vašim riječima, s vašim iskustvom i brojkama.`);
+          d.push(T.dProb(pr));
         }
         const rec = s.sources.filter((x) => x.n >= 2).slice(0, 3);
-        if (rec.length) d.push(`Izvori koji se ponavljaju: ${rec.map((x) => `<b>${esc(x.label)}</b> (${x.n}×)`).join(', ')}. To su stranice koje AI čita za vaše tržište.`);
-        if (d.length === 0) d.push('Dobar rezultat. Ponovite test za mjesec dana istim pitanjima i pratite trend.');
+        if (rec.length) d.push(T.dSrc(rec.map((x) => `<b>${esc(x.label)}</b> (${x.n}×)`).join(', ')));
+        if (d.length === 0) d.push(T.dGood);
       }
       $('[data-diag]').innerHTML = d.map((x) => `<li>${x}</li>`).join('');
 
       lastSummary = [
-        'Rezultat provjere AI vidljivosti (alat na serprise.agency)',
-        `Djelatnost: ${state.f.usluga || '-'} ${state.f.grad || ''}${state.f.firma ? ` · firma: ${state.f.firma}` : ''}`,
-        `Ukupno: spomenuti u ${s.mentioned}/${s.filled} upisa, linkani u ${s.linked}`,
-        ...data.groups.map((g) => `${g.name}: ${t[g.key].filled ? `${pct(t[g.key].m, t[g.key].filled)}% (${t[g.key].m}/${t[g.key].filled})` : 'nema upisa'}`),
-        `Top izvori: ${s.sources.slice(0, 5).map((x) => `${x.label} (${x.n})`).join(', ') || '-'}`,
-        `Konkurenti: ${s.comps.slice(0, 5).map((x) => `${x.label} (${x.n})`).join(', ') || '-'}`,
+        T.sTitle,
+        `${T.sBiz}: ${state.f.usluga || '-'} ${state.f.grad || ''}${state.f.firma ? ` · ${T.sFirm}: ${state.f.firma}` : ''}`,
+        T.sTotal(s.mentioned, s.filled, s.linked),
+        ...data.groups.map((g) => `${g.name}: ${t[g.key].filled ? `${pct(t[g.key].m, t[g.key].filled)}% (${t[g.key].m}/${t[g.key].filled})` : T.noRuns}`),
+        `${T.sSrc}: ${s.sources.slice(0, 5).map((x) => `${x.label} (${x.n})`).join(', ') || '-'}`,
+        `${T.sComp}: ${s.comps.slice(0, 5).map((x) => `${x.label} (${x.n})`).join(', ') || '-'}`,
       ].join('\n');
     };
 
-    $('[data-copy-summary]').addEventListener('click', () => copy(lastSummary, 'Sažetak kopiran'));
+    $('[data-copy-summary]').addEventListener('click', () => copy(lastSummary, T.sumCopied));
     $('[data-send]').addEventListener('click', () => {
       try { sessionStorage.setItem('serprise-prefill', lastSummary); } catch { /* bez prijenosa */ }
     });
@@ -481,7 +594,7 @@ const { fields, presets, platforms } = data;
     $('[data-save]').addEventListener('click', () => {
       const s = stats();
       if (!s.filled) {
-        alert('Tablica je prazna. Ispunite barem jedan red prije spremanja.');
+        alert(T.emptyAlert);
         return;
       }
       const snap: Snap = {
@@ -503,19 +616,19 @@ const { fields, presets, platforms } = data;
       renderHistory();
     });
 
-    const fmt = (d: string) => new Date(d + 'T12:00:00').toLocaleDateString('hr-HR', { day: 'numeric', month: 'numeric', year: 'numeric' });
+    const fmt = (d: string) => new Date(d + 'T12:00:00').toLocaleDateString(T.locale, { day: 'numeric', month: 'numeric', year: 'numeric' });
     const series = [
-      { key: 'total', name: 'Ukupno', cls: 's0' },
+      { key: 'total', name: T.total, cls: 's0' },
       ...data.groups.map((g, i) => ({ key: g.key, name: g.name, cls: `s${i + 1}` })),
     ];
     const renderHistory = () => {
       const h = state.history;
       $('[data-history]').innerHTML = h
-        .map((x) => `<li><span>${fmt(x.date)}</span><span>ukupno <b>${x.total}%</b> · linkani ${x.link}% · ${x.n} upisa</span><button type="button" class="aip__mini" data-del="${x.date}">Obriši</button></li>`)
+        .map((x) => `<li><span>${fmt(x.date)}</span><span>${T.hist(x.total, x.link, x.n)}</span><button type="button" class="aip__mini" data-del="${x.date}">${T.del}</button></li>`)
         .join('');
       const chart = $('[data-chart]');
       if (h.length < 2) {
-        chart.innerHTML = `<p class="aip__empty">${h.length ? 'Spremljeno je jedno mjerenje. Graf se pojavi nakon drugog.' : 'Još nema spremljenih mjerenja.'}</p>`;
+        chart.innerHTML = `<p class="aip__empty">${h.length ? T.oneSnap : T.noSnap}</p>`;
         return;
       }
       const W = 640, H = 260, L = 40, R = 16, T = 16, B = 34;
@@ -533,7 +646,7 @@ const { fields, presets, platforms } = data;
           return `<g class="aip__line ${s.cls}"><polyline points="${pts}" fill="none"/>${dots}</g>`;
         })
         .join('');
-      chart.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Postotak pojavljivanja po mjerenjima">${grid}${labels}${lines}</svg>
+      chart.innerHTML = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="${T.chartAria}">${grid}${labels}${lines}</svg>
         <ul class="aip__legend">${series.map((s) => `<li class="${s.cls}"><i></i>${s.name}</li>`).join('')}</ul>`;
     };
 

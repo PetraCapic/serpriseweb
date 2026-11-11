@@ -2,6 +2,7 @@
 title: "Kako spojiti Claude Code s Google Tag Managerom, korak po korak"
 description: "Claude mijenja kod koji šalje događaje i oznake u Tag Manageru u istom zadatku. Ovlasti, koraci i kako smo objavili 9 verzija spremnika s opisom svake."
 date: 2026-11-01
+translation: claude-code-google-tag-manager-en
 image: /blog/claude-code-google-tag-manager/naslovna.png
 imageAlt: "Vodič: kako spojiti Claude Code s Google Tag Managerom"
 ---

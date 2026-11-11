@@ -3,6 +3,7 @@ title: "GA4 kanal AI Assistant ne vidi sve AI posjete. Regex koji to popravlja"
 description: "GA4 kanal AI Assistant ne radi unatrag i propušta Perplexity. Na hrvatskom portalu uhvatio je 145 od 328 AI posjeta. Regex, 7 koraka, tester i kalkulator."
 date: 2026-11-01
 updated: 2026-11-01
+translation: ga4-ai-channel
 image: /blog/ga4-ai-kanal/naslovna.png
 imageAlt: "GA4 kanal za promet s ChatGPT-a i drugih AI alata"
 howto:

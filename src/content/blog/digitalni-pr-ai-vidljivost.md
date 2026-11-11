@@ -2,6 +2,7 @@
 title: "Digitalni PR za AI vidljivost: kako objava završi u odgovoru ChatGPT-a"
 description: "Digitalni PR za AI vidljivost: kako napisati i gdje objaviti PR objavu da je ChatGPT pročita i spomene vaš brend. Predložak i kontrolna lista od 8 točaka."
 date: 2026-11-10
+translation: digital-pr-ai-visibility
 updated: 2026-11-10
 image: /blog/digitalni-pr-ai-vidljivost/naslovna.png
 imageAlt: "Naslovna slika članka o digitalnom PR-u za AI vidljivost s brojkom 1 od 45 iz SERPRiseova istraživanja"

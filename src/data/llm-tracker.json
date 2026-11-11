@@ -1,11 +1,12 @@
 {
-  "_opis": "Javno mjerenje SERPRise vidljivosti u ChatGPT-u: istih 35 pitanja, 45 odgovora, prvog u mjesecu. Jedan izvor podataka za LlmTracker.astro (blog llm-vidljivost i chatgpt-citati-hrvatska). Nakon svakog mjerenja dodajte točku u points.",
+  "_opis": "Javno mjerenje SERPRise vidljivosti u ChatGPT-u: istih 35 pitanja, 45 odgovora, prvog u mjesecu. Jedan izvor podataka za LlmTracker.astro (blog llm-vidljivost i chatgpt-citati-hrvatska). Nakon svakog mjerenja dodajte točku u points (note_en je engleska napomena za /en/ članke).",
   "answers": 45,
   "target": 10,
   "targetDate": "2027-02-01",
+  "method_en": "35 questions to ChatGPT through the OpenAI API with web search, location Zagreb, 45 answers. We count the answers in which serprise.agency is cited.",
   "method": "35 pitanja ChatGPT-u preko OpenAI API-ja s web pretragom, lokacija Zagreb, 45 odgovora. Brojimo odgovore u kojima je serprise.agency citiran.",
   "points": [
-    { "date": "2026-10-30", "hits": 1, "note": "Polazno mjerenje" },
-    { "date": "2026-11-01", "hits": 1, "note": "Ponovljeno nakon objave bloga" }
+    { "date": "2026-10-30", "hits": 1, "note": "Polazno mjerenje", "note_en": "Baseline measurement" },
+    { "date": "2026-11-01", "hits": 1, "note": "Ponovljeno nakon objave bloga", "note_en": "Repeated after the blog was published" }
   ]
 }

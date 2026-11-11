@@ -2,16 +2,28 @@
 // Animirani dijagram "Kako ChatGPT slaže odgovor": 4 koraka, pale se redom kad dijagram dođe u vidno polje.
 // Bez JS-a (ili uz prefers-reduced-motion) svi koraci su odmah vidljivi. Tekstualna verzija je u članku.
 // U članku: <div data-embed="answer-flow"></div>
-const steps = [
+interface Props { lang?: 'hr' | 'en' }
+const { lang = 'hr' } = Astro.props;
+const steps = lang === 'en'
+  ? [
+      { t: 'Question', d: '"Which agency in Split does SEO and how much does it cost?"', chips: [] },
+      { t: 'Search (fan-out)', d: 'ChatGPT writes several searches itself, in Croatian and in English.', chips: ['seo agencija split cijena', 'SEO agency Split Croatia pricing', 'seo usluge split'] },
+      { t: '~10 pages opened', d: 'It opens around ten results and reads their HTML.', chips: ['service page', 'price list', 'agency list', 'directory', 'local news site'] },
+      { t: 'Answer with sources', d: 'It builds the answer from what it has read and cites its sources. If you are not among those ten, you do not exist.', chips: ['[1] yourcompany.hr', '[2] clutch.co', '[3] lista.hr'] },
+    ]
+  : [
   { t: 'Pitanje', d: '"Koja agencija u Splitu radi SEO i koliko košta?"', chips: [] },
   { t: 'Pretraga (fan-out)', d: 'ChatGPT sam napiše nekoliko pretraga, na hrvatskom i engleskom.', chips: ['seo agencija split cijena', 'SEO agency Split Croatia pricing', 'seo usluge split'] },
   { t: '~10 otvorenih stranica', d: 'Otvori desetak rezultata i pročita njihov HTML.', chips: ['uslužna stranica', 'cjenik', 'lista agencija', 'direktorij', 'lokalni portal'] },
   { t: 'Odgovor s izvorima', d: 'Složi odgovor iz onoga što je pročitao i navede izvore. Ako niste među tih desetak, ne postojite.', chips: ['[1] vasafirma.hr', '[2] clutch.co', '[3] lista.hr'] },
 ];
+const t = lang === 'en'
+  ? { eyebrow: 'Diagram', title: 'How ChatGPT builds an answer', replay: 'Replay animation' }
+  : { eyebrow: 'Dijagram', title: 'Kako ChatGPT slaže odgovor', replay: 'Ponovi animaciju' };
 ---
 <figure class="wg aflow" data-aflow aria-labelledby="aflow-title">
-  <p class="wg__eyebrow">Dijagram</p>
-  <h3 id="aflow-title" class="wg__title">Kako ChatGPT slaže odgovor</h3>
+  <p class="wg__eyebrow">{t.eyebrow}</p>
+  <h3 id="aflow-title" class="wg__title">{t.title}</h3>
   <ol class="aflow__steps">
     {steps.map((s, i) => (
       <li class="aflow__step" style={`--i:${i}`}>
@@ -24,7 +36,7 @@ const steps = [
       </li>
     ))}
   </ol>
-  <button type="button" class="aflow__replay" hidden>Ponovi animaciju</button>
+  <button type="button" class="aflow__replay" hidden>{t.replay}</button>
 </figure>
 
 <script>

@@ -3,6 +3,7 @@ title: "Koje stranice ChatGPT citira kad netko traži agenciju u Hrvatskoj"
 description: "Postavili smo ChatGPT-u 35 hrvatskih pitanja o SEO-u i AI vidljivosti. Citirane su i stranice s DR 0. Evo što su imale i što napraviti na svom webu."
 date: 2026-11-01
 updated: 2026-11-01
+translation: chatgpt-citations-croatia
 image: /blog/chatgpt-citati-hrvatska/naslovna.png
 imageAlt: "14 od 45 ChatGPT odgovora citira stranice s DR 0 do 6"
 dataset:

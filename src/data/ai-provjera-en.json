@@ -1,0 +1,179 @@
+{
+  "fields": [
+    {
+      "key": "usluga",
+      "label": "Service",
+      "hint": "who or what the customer is looking for: \"Recommend ...\"",
+      "ph": "a dentist"
+    },
+    {
+      "key": "grad",
+      "label": "City",
+      "hint": "with a preposition: in Split, on Hvar",
+      "ph": "in Split"
+    },
+    {
+      "key": "regija",
+      "label": "Region",
+      "hint": "with a preposition: in Dalmatia",
+      "ph": "in Dalmatia"
+    },
+    {
+      "key": "kupac",
+      "label": "Customer type",
+      "hint": "who for: children, a small business",
+      "ph": "children"
+    },
+    {
+      "key": "proizvod",
+      "label": "Main product or package",
+      "hint": "e.g. a same-day dental implant",
+      "ph": "a same-day dental implant"
+    },
+    {
+      "key": "alternativa",
+      "label": "Alternative",
+      "hint": "what the customer compares you with",
+      "ph": "a bridge"
+    },
+    {
+      "key": "problem",
+      "label": "Customer's problem",
+      "hint": "a sentence a customer would write",
+      "ph": "My tooth hurts under a crown"
+    },
+    {
+      "key": "firma",
+      "label": "Your company",
+      "hint": "the name as customers write it",
+      "ph": ""
+    },
+    {
+      "key": "konkurent",
+      "label": "Biggest competitor",
+      "hint": "company name",
+      "ph": ""
+    }
+  ],
+  "groups": [
+    {
+      "key": "preporuka",
+      "name": "Recommendation",
+      "questions": [
+        "Recommend {usluga} {grad}.",
+        "Recommend {usluga} {grad} for {kupac}.",
+        "Who in Croatia offers {proizvod}?",
+        "I need {usluga} {grad}. Who has good reviews?",
+        "What is the best choice if I need {usluga} {regija}?"
+      ]
+    },
+    {
+      "key": "cijena",
+      "name": "Price",
+      "questions": [
+        "How much does {proizvod} cost in Croatia?",
+        "How much does {proizvod} cost {grad}?",
+        "What is the average price for {proizvod}?",
+        "Which is better value: {proizvod} or {alternativa}?",
+        "Where {regija} can I get {proizvod} for the lowest price?"
+      ]
+    },
+    {
+      "key": "usporedba",
+      "name": "Comparison",
+      "questions": [
+        "{firma} or {konkurent}, which should I choose?",
+        "What are the alternatives to {konkurent}?",
+        "{problem}. What is better: {proizvod} or {alternativa}?",
+        "{firma}: what are the pros and cons?",
+        "What are people's experiences with {firma}?"
+      ]
+    },
+    {
+      "key": "problem",
+      "name": "Problem",
+      "questions": [
+        "{problem}, what should I do?",
+        "How do I choose {usluga}?",
+        "What should I look out for when choosing {usluga}?",
+        "How long is the wait for {proizvod}?",
+        "Is {proizvod} worth it in my situation? {problem}."
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "key": "stomatolog",
+      "name": "Dental practice in Split",
+      "values": {
+        "usluga": "a dentist",
+        "grad": "in Split",
+        "regija": "in Dalmatia",
+        "kupac": "children",
+        "proizvod": "a same-day dental implant",
+        "alternativa": "a bridge",
+        "problem": "My tooth hurts under a crown"
+      },
+      "edits": {}
+    },
+    {
+      "key": "odvjetnik",
+      "name": "Law firm in Zagreb",
+      "values": {
+        "usluga": "a lawyer",
+        "grad": "in Zagreb",
+        "regija": "in and around Zagreb",
+        "kupac": "a divorce with children",
+        "proizvod": "an uncontested divorce",
+        "alternativa": "litigation",
+        "problem": "My husband and I are divorcing and we have a child"
+      },
+      "edits": {}
+    },
+    {
+      "key": "namjestaj",
+      "name": "Furniture webshop",
+      "values": {
+        "usluga": "a furniture webshop",
+        "grad": "in Zagreb",
+        "regija": "in Croatia",
+        "kupac": "a small flat",
+        "proizvod": "a sofa bed",
+        "alternativa": "a corner sofa",
+        "problem": "My living room is too small for a corner sofa"
+      },
+      "edits": {}
+    },
+    {
+      "key": "apartmani",
+      "name": "Holiday apartments on Hvar",
+      "values": {
+        "usluga": "an apartment",
+        "grad": "on Hvar",
+        "regija": "in central Dalmatia",
+        "kupac": "a family with small children",
+        "proizvod": "an apartment with a pool",
+        "alternativa": "a hotel",
+        "problem": "We are travelling with two small children and a dog"
+      },
+      "edits": {
+        "16": "We are travelling with two small children and a dog. Where should we stay on Hvar?",
+        "19": "How far in advance should I book an apartment with a pool on Hvar?"
+      }
+    }
+  ],
+  "platforms": [
+    {
+      "key": "aimode",
+      "name": "Google AI Mode"
+    },
+    {
+      "key": "gemini",
+      "name": "Gemini"
+    },
+    {
+      "key": "perplexity",
+      "name": "Perplexity"
+    }
+  ]
+}

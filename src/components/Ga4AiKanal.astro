@@ -4,11 +4,15 @@ import path from 'node:path';
 // Interaktivni dodaci članka /blog/ga4-ai-kanal/. Svaki dio se renderira ispod članka
 // i skripta ga premješta na mjesto označeno u tekstu (<div data-embed="ga4-..."></div>).
 // Bez JavaScripta tekst članka (regex u <code>, koraci u <ol>) ostaje potpun.
+// Dvojezično: engleski članak /en/blog/ga4-ai-channel/ šalje lang="en".
+interface Props { lang?: 'hr' | 'en' }
+const { lang = 'hr' } = Astro.props;
+const isEn = lang === 'en';
 
 // Podaci: GA4 portala osmrtnica.com.hr, povučeno 1.11.2026. preko GA4 Data API-ja.
 const period = {
   sve: {
-    label: '1.10.2025. – 31.10.2026.',
+    label: isEn ? '1 Oct 2025 – 31 Oct 2026' : '1.10.2025. – 31.10.2026.',
     rows: [
       { tool: 'ChatGPT', ai: 136, ref: 43, un: 103 },
       { tool: 'Perplexity', ai: 0, ref: 6, un: 16 },
@@ -18,7 +22,7 @@ const period = {
     ],
   },
   nakon: {
-    label: '5.6. – 31.10.2026. (otkad kanal postoji)',
+    label: isEn ? '5 Jun – 31 Oct 2026 (since the channel has existed)' : '5.6. – 31.10.2026. (otkad kanal postoji)',
     rows: [
       { tool: 'ChatGPT', ai: 136, ref: 0, un: 0 },
       { tool: 'Perplexity', ai: 0, ref: 0, un: 8 },
@@ -44,7 +48,7 @@ const tools = [
   { id: 'meta', label: 'Meta AI', re: 'meta\\.ai', on: false },
   { id: 'you', label: 'You.com', re: 'you\\.com', on: false },
   { id: 'phind', label: 'Phind', re: 'phind', on: false },
-  { id: 'kagi', label: 'Kagi', re: 'kagi', on: false, note: 'prije svega tražilica' },
+  { id: 'kagi', label: 'Kagi', re: 'kagi', on: false, note: isEn ? 'primarily a search engine' : 'prije svega tražilica' },
 ];
 const defaultRegex = `.*(${tools.filter((t) => t.on).map((t) => t.re).join('|')}).*`;
 
@@ -55,23 +59,77 @@ const shots = Array.from({ length: 7 }, (_, i) => {
 });
 
 const eng = [
-  { k: 'Stopa angažmana', gpt: '59%', g: '46%', icon: 'M12 21s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.5-7 10-7 10z' },
-  { k: 'Stranica po sesiji', gpt: '2,3', g: '1,5', icon: 'M7 3h7l5 5v13H7zM14 3v5h5' },
-  { k: 'Prosječno trajanje', gpt: '71 s', g: '67 s', icon: 'M12 7v5l3 2M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z' },
+  { k: isEn ? 'Engagement rate' : 'Stopa angažmana', gpt: '59%', g: '46%', icon: 'M12 21s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 11c0 5.5-7 10-7 10z' },
+  { k: isEn ? 'Pages per session' : 'Stranica po sesiji', gpt: isEn ? '2.3' : '2,3', g: isEn ? '1.5' : '1,5', icon: 'M7 3h7l5 5v13H7zM14 3v5h5' },
+  { k: isEn ? 'Average duration' : 'Prosječno trajanje', gpt: '71 s', g: '67 s', icon: 'M12 7v5l3 2M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z' },
 ];
+
+// Tekstovi sučelja. Hrvatski su isti kao prije; engleski se u skriptu prenose preko data-i18n (samo na engleskoj stranici).
+const t = isEn
+  ? {
+      eyebrowData: 'Data from a Croatian news site', kanaliTitle: 'Where GA4 puts AI visits', period: 'Period',
+      months13: '13 months', since: 'Since 5 Jun 2026',
+      total: (all: number, ai: number) => `${all} AI visits in total, ${ai} of them in the AI Assistant channel.`,
+      kanaliNote1: 'Sessions by source and channel, GA4 of the osmrtnica.com.hr site, ', kanaliNote2: '. Numbers: AI Assistant / Referral / Unassigned.',
+      engEyebrow: 'Engagement, 1 Oct 2025 – 31 Oct 2026', engTitle: 'Visitors from ChatGPT vs visitors from Google',
+      gptSessions: '282 sessions', gSessions: '372,415 sessions',
+      engNote: 'Session source chatgpt.com (all channels) and google / organic, GA4 of the osmrtnica.com.hr site.',
+      tool: 'Tool', regexTitle: 'Build your regex', strict: 'Precise patterns for Gemini and Copilot (if you have a campaign with that name)',
+      copy: 'Copy regex', copied: 'Copied',
+      testerTitle: 'Test the regex on your own sources',
+      testerLead: 'In GA4, open Traffic acquisition with the Session source dimension and paste your sources, one per line. The tester uses the regex from the tool above.',
+      calc: 'Calculator', calcTitle: 'How many AI visits you are missing', calcSessions: 'Sessions in the AI Assistant channel',
+      calcPeriod: 'The period you are looking at', calcR1: 'Only since the channel has existed in your GA4', calcR2: '13 months, mostly before the channel launched',
+      calcResult: 'Estimated real AI visits: ', calcMiss: '(about 8 outside the channel)',
+      calcNoteB: 'Estimate based on a single site.', calcNote: ' Ratios 156/145 and 328/145 from the osmrtnica.com.hr site. Does not include AI visits that end up in Direct, so the real number is even higher.',
+      stepPos: 'Step 1 of 7', back: 'Back', done: 'Done', next: 'Next',
+      finishTitle: 'Now check how many AI visits you have.',
+      finishText: 'The channel shows clicks. To see how often AI mentions you without a click, check here: ',
+      finishHref: '/en/blog/ai-visibility-check/', finishLink: 'Does ChatGPT mention your company? A 20-question check',
+    }
+  : {
+      eyebrowData: 'Podaci s hrvatskog portala', kanaliTitle: 'Gdje GA4 sprema AI posjete', period: 'Razdoblje',
+      months13: '13 mjeseci', since: 'Od 5.6.2026.',
+      total: (all: number, ai: number) => `Ukupno ${all} AI posjeta, od toga ${ai} u kanalu AI Assistant.`,
+      kanaliNote1: 'Sesije po izvoru i kanalu, GA4 portala osmrtnica.com.hr, ', kanaliNote2: '. Brojevi: AI Assistant / Referral / Unassigned.',
+      engEyebrow: 'Angažman, 1.10.2025. – 31.10.2026.', engTitle: 'Posjetitelji s ChatGPT-a prema posjetiteljima s Googlea',
+      gptSessions: '282 sesije', gSessions: '372.415 sesija',
+      engNote: 'Izvor sesije chatgpt.com (svi kanali) i google / organic, GA4 portala osmrtnica.com.hr.',
+      tool: 'Alat', regexTitle: 'Složite svoj regex', strict: 'Precizni uzorci za Gemini i Copilot (ako imate kampanju s tim imenom)',
+      copy: 'Kopiraj regex', copied: 'Kopirano',
+      testerTitle: 'Testirajte regex na svojim izvorima',
+      testerLead: 'U GA4 otvorite Traffic acquisition, dimenzija Session source, i zalijepite izvore, jedan po retku. Tester koristi regex iz alata iznad.',
+      calc: 'Kalkulator', calcTitle: 'Koliko AI posjeta propuštate', calcSessions: 'Sesije u kanalu AI Assistant',
+      calcPeriod: 'Razdoblje koje gledate', calcR1: 'Samo otkad kanal postoji u vašem GA4', calcR2: '13 mjeseci, većinom prije uvođenja kanala',
+      calcResult: 'Procjena stvarnih AI posjeta: ', calcMiss: '(oko 8 izvan kanala)',
+      calcNoteB: 'Procjena na temelju jednog portala.', calcNote: ' Omjeri 156/145 i 328/145 s portala osmrtnica.com.hr. Ne uključuje AI posjete koji završe u Direct, pa je stvarna brojka još veća.',
+      stepPos: 'Korak 1 od 7', back: 'Natrag', done: 'Napravljeno', next: 'Dalje',
+      finishTitle: 'Sad provjerite koliko AI posjeta imate.',
+      finishText: 'Kanal pokazuje klikove. Koliko vas AI spominje bez klika provjerite ovdje: ',
+      finishHref: '/blog/provjera-ai-vidljivosti/', finishLink: 'Spominje li ChatGPT vašu firmu? Provjera u 20 pitanja',
+    };
+// Tekstovi za klijentsku skriptu (samo engleski; bez atributa skripta koristi hrvatske).
+const i18n = isEn
+  ? JSON.stringify({
+      total: '{all} AI visits in total, {ai} of them in the AI Assistant channel.',
+      pick: 'Select at least one tool.', hit: 'AI channel', miss: 'stays where it is',
+      locale: 'en-GB', missCalc: '(about {n} outside the channel)',
+      step: 'Step {n}', pos: 'Step {n} of {total}', shot: 'GA4, step {n}', finish: 'Finish', next: 'Next',
+    })
+  : undefined;
 ---
 
-<div hidden data-ga4-widgets>
+<div hidden data-ga4-widgets data-i18n={i18n}>
   <!-- Gdje GA4 sprema AI posjete -->
   <figure class="gw" data-w="ga4-kanali" data-period={JSON.stringify(period)}>
     <div class="gw__head">
       <figcaption>
-        <p class="gw__eyebrow">Podaci s hrvatskog portala</p>
-        <strong class="gw__title">Gdje GA4 sprema AI posjete</strong>
+        <p class="gw__eyebrow">{t.eyebrowData}</p>
+        <strong class="gw__title">{t.kanaliTitle}</strong>
       </figcaption>
-      <div class="gw__seg" role="group" aria-label="Razdoblje">
-        <button type="button" data-p="sve" aria-pressed="true">13 mjeseci</button>
-        <button type="button" data-p="nakon">Od 5.6.2026.</button>
+      <div class="gw__seg" role="group" aria-label={t.period}>
+        <button type="button" data-p="sve" aria-pressed="true">{t.months13}</button>
+        <button type="button" data-p="nakon">{t.since}</button>
       </div>
     </div>
     <ul class="gw__legend">
@@ -94,90 +152,90 @@ const eng = [
       })}
     </div>
     <p class="gw__total" data-total>
-      {(() => { const s = sum(period.sve.rows); return `Ukupno ${s.ai + s.ref + s.un} AI posjeta, od toga ${s.ai} u kanalu AI Assistant.`; })()}
+      {(() => { const s = sum(period.sve.rows); return t.total(s.ai + s.ref + s.un, s.ai); })()}
     </p>
-    <p class="gw__note">Sesije po izvoru i kanalu, GA4 portala osmrtnica.com.hr, <span data-label>{period.sve.label}</span>. Brojevi: AI Assistant / Referral / Unassigned.</p>
+    <p class="gw__note">{t.kanaliNote1}<span data-label>{period.sve.label}</span>{t.kanaliNote2}</p>
   </figure>
 
   <!-- Angažman ChatGPT vs Google -->
   <figure class="gw" data-w="ga4-angazman">
     <figcaption>
-      <p class="gw__eyebrow">Angažman, 1.10.2025. – 31.10.2026.</p>
-      <strong class="gw__title">Posjetitelji s ChatGPT-a prema posjetiteljima s Googlea</strong>
+      <p class="gw__eyebrow">{t.engEyebrow}</p>
+      <strong class="gw__title">{t.engTitle}</strong>
     </figcaption>
     <div class="gw__cmp">
       <div class="gw__col gw__col--gpt">
-        <p class="gw__colhead">ChatGPT <small>282 sesije</small></p>
+        <p class="gw__colhead">ChatGPT <small>{t.gptSessions}</small></p>
         {eng.map((e) => (
           <div class="gw__stat"><svg viewBox="0 0 24 24" aria-hidden="true"><path d={e.icon} /></svg><span>{e.k}</span><strong>{e.gpt}</strong></div>
         ))}
       </div>
       <div class="gw__col">
-        <p class="gw__colhead">Google organic <small>372.415 sesija</small></p>
+        <p class="gw__colhead">Google organic <small>{t.gSessions}</small></p>
         {eng.map((e) => (
           <div class="gw__stat"><svg viewBox="0 0 24 24" aria-hidden="true"><path d={e.icon} /></svg><span>{e.k}</span><strong>{e.g}</strong></div>
         ))}
       </div>
     </div>
-    <p class="gw__note">Izvor sesije chatgpt.com (svi kanali) i google / organic, GA4 portala osmrtnica.com.hr.</p>
+    <p class="gw__note">{t.engNote}</p>
   </figure>
 
   <!-- Regex builder -->
   <div class="gw" data-w="ga4-regex" data-tools={JSON.stringify(tools)}>
-    <p class="gw__eyebrow">Alat</p>
-    <strong class="gw__title">Složite svoj regex</strong>
+    <p class="gw__eyebrow">{t.tool}</p>
+    <strong class="gw__title">{t.regexTitle}</strong>
     <div class="gw__checks">
       {tools.map((t) => (
         <label><input type="checkbox" value={t.id} checked={t.on} /> {t.label}{t.note && <small> ({t.note})</small>}</label>
       ))}
     </div>
-    <label class="gw__strict"><input type="checkbox" data-strict /> Precizni uzorci za Gemini i Copilot (ako imate kampanju s tim imenom)</label>
+    <label class="gw__strict"><input type="checkbox" data-strict /> {t.strict}</label>
     <pre class="gw__out"><code data-regex>{defaultRegex}</code></pre>
-    <button type="button" class="btn btn--primary gw__btn" data-copy>Kopiraj regex</button>
-    <span class="gw__copied" data-copied hidden>Kopirano</span>
+    <button type="button" class="btn btn--primary gw__btn" data-copy>{t.copy}</button>
+    <span class="gw__copied" data-copied hidden>{t.copied}</span>
   </div>
 
   <!-- Regex tester -->
   <div class="gw" data-w="ga4-tester">
-    <p class="gw__eyebrow">Alat</p>
-    <strong class="gw__title">Testirajte regex na svojim izvorima</strong>
-    <p class="gw__lead">U GA4 otvorite Traffic acquisition, dimenzija Session source, i zalijepite izvore, jedan po retku. Tester koristi regex iz alata iznad.</p>
+    <p class="gw__eyebrow">{t.tool}</p>
+    <strong class="gw__title">{t.testerTitle}</strong>
+    <p class="gw__lead">{t.testerLead}</p>
     <textarea rows="7" data-input placeholder="google&#10;chatgpt.com&#10;perplexity&#10;meta&#10;youtube.com"></textarea>
     <ul class="gw__results" data-results aria-live="polite"></ul>
   </div>
 
   <!-- Kalkulator -->
   <div class="gw" data-w="ga4-kalkulator">
-    <p class="gw__eyebrow">Kalkulator</p>
-    <strong class="gw__title">Koliko AI posjeta propuštate</strong>
-    <label class="gw__field">Sesije u kanalu AI Assistant
+    <p class="gw__eyebrow">{t.calc}</p>
+    <strong class="gw__title">{t.calcTitle}</strong>
+    <label class="gw__field">{t.calcSessions}
       <input type="number" min="0" step="1" value="100" data-sessions inputmode="numeric" />
     </label>
     <fieldset class="gw__radios">
-      <legend>Razdoblje koje gledate</legend>
-      <label><input type="radio" name="gw-r" value="1.076" checked /> Samo otkad kanal postoji u vašem GA4</label>
-      <label><input type="radio" name="gw-r" value="2.262" /> 13 mjeseci, većinom prije uvođenja kanala</label>
+      <legend>{t.calcPeriod}</legend>
+      <label><input type="radio" name="gw-r" value="1.076" checked /> {t.calcR1}</label>
+      <label><input type="radio" name="gw-r" value="2.262" /> {t.calcR2}</label>
     </fieldset>
-    <p class="gw__result" aria-live="polite">Procjena stvarnih AI posjeta: <strong data-est>108</strong> <span data-miss>(oko 8 izvan kanala)</span></p>
-    <p class="gw__note"><strong>Procjena na temelju jednog portala.</strong> Omjeri 156/145 i 328/145 s portala osmrtnica.com.hr. Ne uključuje AI posjete koji završe u Direct, pa je stvarna brojka još veća.</p>
+    <p class="gw__result" aria-live="polite">{t.calcResult}<strong data-est>108</strong> <span data-miss>{t.calcMiss}</span></p>
+    <p class="gw__note"><strong>{t.calcNoteB}</strong>{t.calcNote}</p>
   </div>
 
   <!-- Stepper oko <ol> sa 7 koraka -->
   <div class="gw gw--steps" data-w="ga4-koraci" data-shots={JSON.stringify(shots)}>
     <div class="gw__stephead">
-      <span data-pos>Korak 1 od 7</span>
+      <span data-pos>{t.stepPos}</span>
       <span class="gw__dots" data-dots></span>
     </div>
     <div data-stage></div>
     <img class="gw__shot" data-shot alt="" hidden />
     <div class="gw__stepnav">
-      <button type="button" class="btn btn--ghost" data-prev>Natrag</button>
-      <label class="gw__done"><input type="checkbox" data-done /> Napravljeno</label>
-      <button type="button" class="btn btn--primary" data-next>Dalje</button>
+      <button type="button" class="btn btn--ghost" data-prev>{t.back}</button>
+      <label class="gw__done"><input type="checkbox" data-done /> {t.done}</label>
+      <button type="button" class="btn btn--primary" data-next>{t.next}</button>
     </div>
     <div class="gw__finish" data-finish hidden>
-      <strong>Sad provjerite koliko AI posjeta imate.</strong>
-      <p>Kanal pokazuje klikove. Koliko vas AI spominje bez klika provjerite ovdje: <a href="/blog/provjera-ai-vidljivosti/">Spominje li ChatGPT vašu firmu? Provjera u 20 pitanja</a>.</p>
+      <strong>{t.finishTitle}</strong>
+      <p>{t.finishText}<a href={t.finishHref}>{t.finishLink}</a>.</p>
     </div>
   </div>
 </div>
@@ -185,6 +243,15 @@ const eng = [
 <script>
   const root = document.querySelector<HTMLElement>('[data-ga4-widgets]');
   if (root) {
+    // Tekstovi: hrvatski su zadani, engleska stranica ih šalje u data-i18n.
+    const L: Record<string, string> = {
+      total: 'Ukupno {all} AI posjeta, od toga {ai} u kanalu AI Assistant.',
+      pick: 'Odaberite barem jedan alat.', hit: 'AI kanal', miss: 'ostaje gdje je',
+      locale: 'hr-HR', missCalc: '(oko {n} izvan kanala)',
+      step: 'Korak {n}', pos: 'Korak {n} od {total}', shot: 'GA4, korak {n}', finish: 'Završi', next: 'Dalje',
+      ...(root.dataset.i18n ? JSON.parse(root.dataset.i18n) : {}),
+    };
+    const fill = (s: string, v: Record<string, string | number>) => s.replace(/\{(\w+)\}/g, (_, k) => String(v[k]));
     // Premještanje na mjesta u tekstu.
     root.querySelectorAll<HTMLElement>('[data-w]').forEach((w) => {
       const slot = document.querySelector(`[data-embed="${w.dataset.w}"]`);
@@ -210,7 +277,7 @@ const eng = [
             bar.querySelector('.gw__track')!.setAttribute('aria-label', `${r.tool}: AI Assistant ${r.ai}, Referral ${r.ref}, Unassigned ${r.un}`);
             bar.querySelector('.gw__nums')!.textContent = `${r.ai} / ${r.ref} / ${r.un}`;
           }
-          kanali.querySelector('[data-total]')!.textContent = `Ukupno ${all} AI posjeta, od toga ${ai} u kanalu AI Assistant.`;
+          kanali.querySelector('[data-total]')!.textContent = fill(L.total, { all, ai });
           kanali.querySelector('[data-label]')!.textContent = p.label;
         })
       );
@@ -228,7 +295,7 @@ const eng = [
         const on = new Set([...builder.querySelectorAll<HTMLInputElement>('.gw__checks input:checked')].map((i) => i.value));
         const parts = tools.filter((t) => on.has(t.id)).map((t) => (strict.checked && t.strict) || t.re);
         current = parts.length ? `.*(${parts.join('|')}).*` : '';
-        out.textContent = current || 'Odaberite barem jedan alat.';
+        out.textContent = current || L.pick;
         listeners.forEach((f) => f());
       };
       builder.addEventListener('change', build);
@@ -256,7 +323,7 @@ const eng = [
           const li = document.createElement('li');
           li.className = hit ? 'is-ai' : '';
           const code = document.createElement('code'); code.textContent = line;
-          const tag = document.createElement('span'); tag.textContent = hit ? 'AI kanal' : 'ostaje gdje je';
+          const tag = document.createElement('span'); tag.textContent = hit ? L.hit : L.miss;
           li.append(code, tag);
           list.append(li);
         }
@@ -272,8 +339,8 @@ const eng = [
         const n = Math.max(0, Number(calc.querySelector<HTMLInputElement>('[data-sessions]')!.value) || 0);
         const k = Number(calc.querySelector<HTMLInputElement>('input[name="gw-r"]:checked')!.value);
         const est = Math.round(n * k);
-        calc.querySelector('[data-est]')!.textContent = est.toLocaleString('hr-HR');
-        calc.querySelector('[data-miss]')!.textContent = `(oko ${(est - n).toLocaleString('hr-HR')} izvan kanala)`;
+        calc.querySelector('[data-est]')!.textContent = est.toLocaleString(L.locale);
+        calc.querySelector('[data-miss]')!.textContent = fill(L.missCalc, { n: (est - n).toLocaleString(L.locale) });
       };
       calc.addEventListener('input', run);
       run();
@@ -292,7 +359,7 @@ const eng = [
       const dots = steps.querySelector('[data-dots]')!;
       items.forEach((_, n) => {
         const d = document.createElement('button');
-        d.type = 'button'; d.setAttribute('aria-label', `Korak ${n + 1}`);
+        d.type = 'button'; d.setAttribute('aria-label', fill(L.step, { n: n + 1 }));
         d.addEventListener('click', () => show(n));
         dots.append(d);
       });
@@ -308,12 +375,12 @@ const eng = [
           d.classList.toggle('is-on', k === n);
           d.classList.toggle('is-done', done.has(k));
         });
-        steps.querySelector('[data-pos]')!.textContent = `Korak ${n + 1} od ${items.length}`;
+        steps.querySelector('[data-pos]')!.textContent = fill(L.pos, { n: n + 1, total: items.length });
         shot.hidden = !shots[n];
-        if (shots[n]) { shot.src = shots[n]; shot.alt = `GA4, korak ${n + 1}`; }
+        if (shots[n]) { shot.src = shots[n]; shot.alt = fill(L.shot, { n: n + 1 }); }
         doneBox.checked = done.has(n);
         prev.disabled = n === 0;
-        next.textContent = n === items.length - 1 ? 'Završi' : 'Dalje';
+        next.textContent = n === items.length - 1 ? L.finish : L.next;
         finish.hidden = true;
       };
       prev.addEventListener('click', () => i > 0 && show(i - 1));

@@ -3,6 +3,7 @@ title: "Spominje li ChatGPT vašu firmu? Provjera u 20 pitanja"
 description: "Besplatan alat: 20 pitanja za vašu djelatnost, tablica s automatskim izračunom i dijagnoza. Saznajte spominje li vas ChatGPT. Oko 45 minuta, bez plaćenih alata."
 date: 2026-11-01
 updated: 2026-11-01
+translation: ai-visibility-check
 image: /blog/provjera-ai-vidljivosti/naslovna.png
 imageAlt: "Provjera AI vidljivosti u 20 pitanja"
 howto:

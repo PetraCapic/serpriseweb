@@ -7,29 +7,122 @@ import data from '../data/portali.json';
 import zData from '../data/portali-zupanije.json';
 import map from '../data/hr-zupanije.json';
 
+interface Props { lang?: 'hr' | 'en' }
+const { lang = 'hr' } = Astro.props;
+const en = lang === 'en';
+
+// Engleski nazivi (podaci ostaju na hrvatskom jer ih koristi i /portali/).
+const categoriesEn: Record<string, string> = {
+  vijesti: 'National news', regija: 'Regional and local', lifestyle: 'Lifestyle, fashion and entertainment',
+  zdravlje: 'Health and beauty', roditelji: 'Parenting and family', sport: 'Sport', tech: 'Technology and cars',
+  biznis: 'Business and finance', gastro: 'Food and drink', putovanja: 'Travel and sailing',
+  dom: 'Home, garden and construction', edu: 'Education and culture', ostalo: 'Other',
+};
+const countyEn: Record<string, string> = {
+  'HR-01': 'Zagreb County', 'HR-02': 'Krapina-Zagorje County', 'HR-03': 'Sisak-Moslavina County', 'HR-04': 'Karlovac County',
+  'HR-05': 'Varaždin County', 'HR-06': 'Koprivnica-Križevci County', 'HR-07': 'Bjelovar-Bilogora County',
+  'HR-08': 'Primorje-Gorski Kotar County', 'HR-09': 'Lika-Senj County', 'HR-10': 'Virovitica-Podravina County',
+  'HR-11': 'Požega-Slavonia County', 'HR-12': 'Brod-Posavina County', 'HR-13': 'Zadar County', 'HR-14': 'Osijek-Baranja County',
+  'HR-15': 'Šibenik-Knin County', 'HR-16': 'Vukovar-Srijem County', 'HR-17': 'Split-Dalmatia County', 'HR-18': 'Istria County',
+  'HR-19': 'Dubrovnik-Neretva County', 'HR-20': 'Međimurje County', 'HR-21': 'City of Zagreb',
+};
+
+const T = {
+  hr: {
+    national: 'Nacionalni', multiRegion: 'Regionalni, više županija', ba: 'BiH',
+    sDa: 'označeno', sNe: 'bez oznake', sNp: 'nije provjereno',
+    dDa: 'Plaćeni članak označava kao sponzorirani', dNe: 'Objavljuje bez oznake', dNp: 'Nismo provjerili',
+    sites: 'portala', visitsMo: 'posjeta/mj.', perMo: '/mj.',
+    donutEyebrow: 'Katalog', donutTitle: 'Kako portali označavaju plaćene članke',
+    donutAria: (a: number, b: number, c: number) => `${a} označava, ${b} bez oznake, ${c} nije provjereno`,
+    donutNote: 'Stanje tržišta, ne preporuka. Plaćeni članak bez oznake protivan je propisima o zaštiti potrošača (vidi okvir niže). Izvor: SERPRise katalog, listopad 2026.',
+    scEyebrow: 'DR i promet', scTitle: 'Visok DR ne znači da portal ima čitatelje',
+    scLead: (n: number) => `Svaka točka je portal. Promet je na logaritamskoj skali. U crvenom polju je ${n} portala s DR 50+ i manje od 2.000 organskih posjeta mjesečno.`,
+    scAria: 'Raspršeni graf: Domain Rating prema organskom prometu', scY: 'Organski promet / mj.',
+    scLegDot: 'Portal', scLegGap: 'DR 50+ i manje od 2.000 posjeta/mj.',
+    scNote: 'Izvor: Ahrefs (DR i procjena organskog prometa), 28. listopada 2026. Katalog ne uključuje portale s manje od 100 posjeta.',
+    kEyebrow: (a: number, b: number) => `Mini katalog · ${a} od ${b} portala`, kTitle: 'Pretražite i filtrirajte portale',
+    fQ: 'Traži', fQph: 'npr. rijeka, bug', fC: 'Kategorija', fR: 'Regija', fT: 'Promet / mj.', fS: 'Oznaka', all: 'Sve', allM: 'Svi',
+    dr: ['do 29', '30 do 49', '50 do 69', '70+'], tr: ['do 1.000', '1.000 do 10.000', '10.000 do 100.000', '100.000+'],
+    shown: 'Prikazano', of: 'od', thPortal: 'Portal',
+    citedTitle: 'Citiran u našem ChatGPT testu lokalnih pitanja', aiBadge: 'AI citat',
+    kEmpty: 'Nijedan portal ne odgovara filtrima. Probajte u punom katalogu.',
+    kAll: (n: number) => `Pogledaj svih ${n} →`, catalogHref: '/portali/', briefHref: '/portali/#upit',
+    oEyebrow: 'Alat · 3 klika', oTitle: 'Odaberite portal u 3 klika',
+    q1: '1. Što vam je cilj?', g: ['Link za Google', 'Promet i čitatelji', 'AI vidljivost'],
+    q2: '2. Kakav je vaš posao?', b: ['B2B usluga', 'Lokalna usluga', 'Webshop', 'Lifestyle brend'],
+    q3: '3. Gdje su vaši kupci?', region: 'Regija', allHr: 'Cijela Hrvatska', submit: 'Predloži portale',
+    oNote: 'Prijedlog je automatski, iz podataka u katalogu (DR, promet, kategorija, regija i ChatGPT citati iz našeg testa). Cijenu i dostupnost potvrđujemo u ponudi.',
+    oCta: 'Pošaljite nam brief', noJs1: 'Alat radi uz JavaScript. Svi portali su i u ', noJs2: 'katalogu',
+    mEyebrow: 'Karta · regionalni portali', mTitle: 'Regionalni portali po županijama',
+    mLead1: 'Kliknite županiju.', mLead2: 'označava županiju s portalom koji je ChatGPT citirao u našem testu lokalnih pitanja.',
+    mAria: 'Karta županija', mHint: 'Odaberite županiju na karti ili s popisa.', mSel: 'Županija', mAll: 'Sve županije',
+    mNone: 'U katalogu još nemamo regionalni portal za ovu županiju. Nacionalni portali pokrivaju i nju.',
+    mBa: 'BiH (regionalni portali s publikom u Hrvatskoj)', mX: 'Regionalni portali bez jedne županije',
+    mLeg: 'Broj portala u županiji', to: 'do',
+    mNote: 'Županiju smo portalu dodijelili prema sjedištu i temi portala. novilist.hr je nacionalni dnevnik, a na karti je uz Primorsko-goransku jer ga ChatGPT citira za riječka pitanja. Granice: Natural Earth.',
+  },
+  en: {
+    national: 'National', multiRegion: 'Regional, several counties', ba: 'Bosnia and Herzegovina',
+    sDa: 'labelled', sNe: 'no label', sNp: 'not checked',
+    dDa: 'Label paid articles as sponsored', dNe: 'Publish without a label', dNp: 'Not checked yet',
+    sites: 'sites', visitsMo: 'visits/mo', perMo: '/mo',
+    donutEyebrow: 'Catalogue', donutTitle: 'How Croatian news sites label paid articles',
+    donutAria: (a: number, b: number, c: number) => `${a} label, ${b} no label, ${c} not checked`,
+    donutNote: 'A picture of the market, not a recommendation. An unlabelled paid article breaks consumer protection law (see the box below). Source: SERPRise catalogue, October 2026.',
+    scEyebrow: 'DR and traffic', scTitle: 'High DR does not mean a site has readers',
+    scLead: (n: number) => `Each dot is a news site. Traffic is on a log scale. The red area holds ${n} sites with DR 50+ and fewer than 2,000 organic visits a month.`,
+    scAria: 'Scatter chart: Domain Rating against organic traffic', scY: 'Organic traffic / mo',
+    scLegDot: 'News site', scLegGap: 'DR 50+ and under 2,000 visits/mo',
+    scNote: 'Source: Ahrefs (DR and estimated organic traffic), 28 October 2026. The catalogue excludes sites with fewer than 100 visits.',
+    kEyebrow: (a: number, b: number) => `Mini catalogue · ${a} of ${b} sites`, kTitle: 'Search and filter the sites',
+    fQ: 'Search', fQph: 'e.g. rijeka, bug', fC: 'Category', fR: 'Region', fT: 'Traffic / mo', fS: 'Label', all: 'All', allM: 'All',
+    dr: ['up to 29', '30 to 49', '50 to 69', '70+'], tr: ['under 1,000', '1,000 to 10,000', '10,000 to 100,000', '100,000+'],
+    shown: 'Showing', of: 'of', thPortal: 'Site',
+    citedTitle: 'Cited in our ChatGPT test of local queries', aiBadge: 'AI citation',
+    kEmpty: 'No site matches these filters. Try the full catalogue.',
+    kAll: (n: number) => `See all ${n} →`, catalogHref: '/en/publishers/', briefHref: '/en/publishers/#enquiry',
+    oEyebrow: 'Tool · 3 clicks', oTitle: 'Pick a news site in 3 clicks',
+    q1: '1. What is your goal?', g: ['A link for Google', 'Traffic and readers', 'AI visibility'],
+    q2: '2. What kind of business are you?', b: ['B2B service', 'Local service', 'Online shop', 'Lifestyle brand'],
+    q3: '3. Where are your customers?', region: 'Region', allHr: 'All of Croatia', submit: 'Suggest sites',
+    oNote: 'The suggestion is automatic, based on catalogue data (DR, traffic, category, region and ChatGPT citations from our test). We confirm price and availability in a quote.',
+    oCta: 'Send us a brief', noJs1: 'The tool needs JavaScript. All sites are also in the ', noJs2: 'catalogue',
+    mEyebrow: 'Map · regional sites', mTitle: 'Regional news sites by county',
+    mLead1: 'Click a county.', mLead2: 'marks a county with a site that ChatGPT cited in our test of local queries.',
+    mAria: 'Map of Croatian counties', mHint: 'Pick a county on the map or from the list.', mSel: 'County', mAll: 'All counties',
+    mNone: 'We do not have a regional site for this county in the catalogue yet. National sites cover it too.',
+    mBa: 'Bosnia and Herzegovina (regional sites with a Croatian audience)', mX: 'Regional sites not tied to one county',
+    mLeg: 'Number of sites per county', to: 'to',
+    mNote: 'We assigned each site to a county by its head office and coverage. novilist.hr is a national daily, but the map places it in Primorje-Gorski Kotar County because ChatGPT cites it for Rijeka queries. Boundaries: Natural Earth.',
+  },
+}[lang];
+
 type Portal = { d: string; dr: number; t: number; kw: number; rd: number; c: string; z: string | null; s: boolean | null };
 const portals = data.portals as Portal[];
-const categories = data.categories as Record<string, string>;
+const categories = en ? categoriesEn : (data.categories as Record<string, string>);
 const zup = zData.zupanija as Record<string, string>;
 const cited = new Set(zData.cited);
 const counties = map.counties as { id: string; name: string; d: string; cx: number; cy: number }[];
-const countyName = Object.fromEntries(counties.map((c) => [c.id, c.name])) as Record<string, string>;
-countyName.BA = 'BiH';
+const countyName = Object.fromEntries(counties.map((c) => [c.id, en ? countyEn[c.id] ?? c.name : c.name])) as Record<string, string>;
+countyName.BA = T.ba;
 
-const fmt = new Intl.NumberFormat('hr-HR');
-const compact = new Intl.NumberFormat('hr-HR', { notation: 'compact', maximumFractionDigits: 1 });
-const oznaka = (s: boolean | null) => (s === true ? 'označeno' : s === false ? 'bez oznake' : 'nije provjereno');
+const locale = en ? 'en-GB' : 'hr-HR';
+const fmt = new Intl.NumberFormat(locale);
+const compact = new Intl.NumberFormat(locale, { notation: 'compact', maximumFractionDigits: 1 });
+const pctS = (n: number) => (en ? `${n}%` : `${n} %`);
+const oznaka = (s: boolean | null) => (s === true ? T.sDa : s === false ? T.sNe : T.sNp);
 const oznakaKey = (s: boolean | null) => (s === true ? 'da' : s === false ? 'ne' : 'nepoznato');
-const regija = (p: Portal) => (zup[p.d] ? countyName[zup[p.d]] : p.c === 'regija' ? 'Regionalni, više županija' : 'Nacionalni');
+const regija = (p: Portal) => (zup[p.d] ? countyName[zup[p.d]] : p.c === 'regija' ? T.multiRegion : T.national);
 
 // ---------- Donut: 335 portala prema oznaci ----------
 const nDa = portals.filter((p) => p.s === true).length;
 const nNe = portals.filter((p) => p.s === false).length;
 const nNp = portals.length - nDa - nNe;
 const donut = [
-  { label: 'Plaćeni članak označava kao sponzorirani', n: nDa, color: '#102b43' },
-  { label: 'Objavljuje bez oznake', n: nNe, color: '#4f86c6' },
-  { label: 'Nismo provjerili', n: nNp, color: '#b9c3cf' },
+  { label: T.dDa, n: nDa, color: '#102b43' },
+  { label: T.dNe, n: nNe, color: '#4f86c6' },
+  { label: T.dNp, n: nNp, color: '#b9c3cf' },
 ];
 const R = 70;
 const C = 2 * Math.PI * R;
@@ -69,7 +162,7 @@ const mini = [
   ...by((p) => p.c === 'gastro' && !p.z, 1),
 ].filter((p, i, a) => a.findIndex((x) => x.d === p.d) === i);
 const miniCats = [...new Set(mini.map((p) => p.c))];
-const miniRegions = [...new Set(mini.map(regija))].sort((a, b) => (a === 'Nacionalni' ? -1 : b === 'Nacionalni' ? 1 : a.localeCompare(b, 'hr')));
+const miniRegions = [...new Set(mini.map(regija))].sort((a, b) => (a === T.national ? -1 : b === T.national ? 1 : a.localeCompare(b, lang)));
 
 // ---------- Karta ----------
 const regional = portals.filter((p) => zup[p.d]);
@@ -78,52 +171,62 @@ for (const p of regional) (perCounty[zup[p.d]] ??= []).push(p);
 for (const k in perCounty) perCounty[k].sort((a, b) => b.t - a.t);
 const unassigned = portals.filter((p) => p.c === 'regija' && !zup[p.d]).sort((a, b) => b.t - a.t);
 const ramp = (n: number) => (n === 0 ? '#eef1f5' : n <= 2 ? '#c9d7e8' : n <= 5 ? '#8fb0d6' : n <= 8 ? '#4f86c6' : '#1f4f86');
-const listOrder = [...counties].sort((a, b) => a.name.localeCompare(b.name, 'hr'));
+const listOrder = [...counties].sort((a, b) => countyName[a.id].localeCompare(countyName[b.id], lang));
 
 // ---------- Odabir u 3 klika: kompaktni podaci za skriptu ----------
 const pickData = portals
   .filter((p) => !p.z || zup[p.d] === 'BA')
   .map((p) => [p.d, p.dr, p.t, p.c, zup[p.d] ?? '', p.s === true ? 1 : p.s === false ? 0 : -1, cited.has(p.d) ? 1 : 0]);
 const pickJson = JSON.stringify({ p: pickData, cat: categories, zn: countyName });
+// Tekstovi za skriptu; atribut se dodaje samo na engleskom pa hrvatski HTML ostaje isti.
+const i18n = en ? JSON.stringify({
+  locale,
+  regional: 'regional site',
+  visits: 'organic visits/mo',
+  cited: 'cited by ChatGPT in our test of local queries',
+  gap: 'high DR, little traffic: worth it for the link, not for readers',
+  labels: 'clearly labels paid articles',
+  none: 'We do not have enough sites in the catalogue for this combination. Send us a brief and we will suggest some by hand.',
+}) : undefined;
 ---
 
-<div class="pw" data-portali-widgets>
+<div class="pw" data-portali-widgets data-i18n={i18n}>
   <!-- e) Donut -->
   <figure class="pw-card pw-donut" data-mount="portali-oznake" aria-labelledby="pw-donut-t">
     <figcaption>
-      <p class="pw-eyebrow">Katalog · {portals.length} portala</p>
-      <h3 id="pw-donut-t" class="pw-title">Kako portali označavaju plaćene članke</h3>
+      <p class="pw-eyebrow">{T.donutEyebrow} · {portals.length} {T.sites}</p>
+      <h3 id="pw-donut-t" class="pw-title">{T.donutTitle}</h3>
     </figcaption>
     <div class="pw-donut__body">
-      <svg viewBox="0 0 200 200" role="img" aria-label={`${nDa} označava, ${nNe} bez oznake, ${nNp} nije provjereno`}>
+      <svg viewBox="0 0 200 200" role="img" aria-label={T.donutAria(nDa, nNe, nNp)}>
         <circle cx="100" cy="100" r={R} fill="none" stroke="#eef1f5" stroke-width="26" />
         {arcs.map((a) => (
           <circle class="pw-arc" cx="100" cy="100" r={R} fill="none" stroke={a.color} stroke-width="26"
             stroke-dasharray={a.dash} stroke-dashoffset={a.offset} transform="rotate(-90 100 100)">
-            <title>{a.label}: {a.n} portala ({a.pct} %)</title>
+            <title>{a.label}: {a.n} {T.sites} ({pctS(a.pct)})</title>
           </circle>
         ))}
         <text x="100" y="96" text-anchor="middle" class="pw-donut__big">{portals.length}</text>
-        <text x="100" y="118" text-anchor="middle" class="pw-donut__small">portala</text>
+        <text x="100" y="118" text-anchor="middle" class="pw-donut__small">{T.sites}</text>
       </svg>
       <ul class="pw-legend">
         {arcs.map((a) => (
-          <li><span class="pw-swatch" style={`background:${a.color}`}></span><strong>{a.n}</strong> <span class="pw-muted">({a.pct} %)</span> {a.label}</li>
+          <li><span class="pw-swatch" style={`background:${a.color}`}></span><strong>{a.n}</strong> <span class="pw-muted">({pctS(a.pct)})</span> {a.label}</li>
         ))}
       </ul>
     </div>
-    <p class="pw-note">Stanje tržišta, ne preporuka. Plaćeni članak bez oznake protivan je propisima o zaštiti potrošača (vidi okvir niže). Izvor: SERPRise katalog, listopad 2026.</p>
+    <p class="pw-note">{T.donutNote}</p>
   </figure>
 
   <!-- d) Scatter DR vs promet -->
   <figure class="pw-card" data-mount="portali-scatter" aria-labelledby="pw-sc-t">
     <figcaption>
-      <p class="pw-eyebrow">DR i promet · {portals.length} portala</p>
-      <h3 id="pw-sc-t" class="pw-title">Visok DR ne znači da portal ima čitatelje</h3>
-      <p class="pw-lead">Svaka točka je portal. Promet je na logaritamskoj skali. U crvenom polju je {gapCount} portala s DR 50+ i manje od 2.000 organskih posjeta mjesečno.</p>
+      <p class="pw-eyebrow">{T.scEyebrow} · {portals.length} {T.sites}</p>
+      <h3 id="pw-sc-t" class="pw-title">{T.scTitle}</h3>
+      <p class="pw-lead">{T.scLead(gapCount)}</p>
     </figcaption>
     <div class="pw-sc" data-sc>
-      <svg viewBox={`0 0 ${SW} ${SH}`} role="img" aria-label="Raspršeni graf: Domain Rating prema organskom prometu">
+      <svg viewBox={`0 0 ${SW} ${SH}`} role="img" aria-label={T.scAria}>
         <rect x={xS(50)} y={yS(2000)} width={xS(100) - xS(50)} height={yS(100) - yS(2000)} class="pw-sc__zone" rx="4" />
         {yTicks.map((t) => (
           <g>
@@ -135,11 +238,11 @@ const pickJson = JSON.stringify({ p: pickData, cat: categories, zn: countyName }
           <text x={xS(d)} y={SH - PB + 18} text-anchor="middle" class="pw-axis">{d}</text>
         ))}
         <text x={(SW + PL) / 2} y={SH - 6} text-anchor="middle" class="pw-axis pw-axis--t">Domain Rating (Ahrefs)</text>
-        <text x="14" y={(SH - PB) / 2} text-anchor="middle" class="pw-axis pw-axis--t" transform={`rotate(-90 14 ${(SH - PB) / 2})`}>Organski promet / mj.</text>
+        <text x="14" y={(SH - PB) / 2} text-anchor="middle" class="pw-axis pw-axis--t" transform={`rotate(-90 14 ${(SH - PB) / 2})`}>{T.scY}</text>
         {portals.map((p) => (
           <circle cx={xS(p.dr)} cy={yS(p.t)} r="4.5" class:list={['pw-dot', { 'is-gap': isGap(p) }]}
-            data-tip={`${p.d} · DR ${p.dr} · ${fmt.format(p.t)} posjeta/mj.`} tabindex="-1">
-            <title>{p.d}: DR {p.dr}, {fmt.format(p.t)} posjeta/mj.</title>
+            data-tip={`${p.d} · DR ${p.dr} · ${fmt.format(p.t)} ${T.visitsMo}`} tabindex="-1">
+            <title>{p.d}: DR {p.dr}, {fmt.format(p.t)} {T.visitsMo}</title>
           </circle>
         ))}
         {portals.filter((p) => labelled.has(p.d)).map((p) => (
@@ -149,37 +252,37 @@ const pickJson = JSON.stringify({ p: pickData, cat: categories, zn: countyName }
       <div class="pw-tip" data-tip-box hidden></div>
     </div>
     <ul class="pw-legend pw-legend--row">
-      <li><span class="pw-swatch pw-swatch--dot" style="background:#4f86c6"></span>Portal</li>
-      <li><span class="pw-swatch pw-swatch--dot" style="background:#ba2525"></span>DR 50+ i manje od 2.000 posjeta/mj.</li>
+      <li><span class="pw-swatch pw-swatch--dot" style="background:#4f86c6"></span>{T.scLegDot}</li>
+      <li><span class="pw-swatch pw-swatch--dot" style="background:#ba2525"></span>{T.scLegGap}</li>
     </ul>
-    <p class="pw-note">Izvor: Ahrefs (DR i procjena organskog prometa), 28. listopada 2026. Katalog ne uključuje portale s manje od 100 posjeta.</p>
+    <p class="pw-note">{T.scNote}</p>
   </figure>
 
   <!-- a) Mini katalog -->
   <section class="pw-card" data-mount="portali-katalog" aria-labelledby="pw-k-t" data-mini>
-    <p class="pw-eyebrow">Mini katalog · {mini.length} od {portals.length} portala</p>
-    <h3 id="pw-k-t" class="pw-title">Pretražite i filtrirajte portale</h3>
+    <p class="pw-eyebrow">{T.kEyebrow(mini.length, portals.length)}</p>
+    <h3 id="pw-k-t" class="pw-title">{T.kTitle}</h3>
     <div class="pw-filters" role="search">
-      <label class="pw-f pw-f--q"><span>Traži</span><input type="search" data-f="q" placeholder="npr. rijeka, bug" autocomplete="off" /></label>
-      <label class="pw-f"><span>Kategorija</span>
-        <select data-f="c"><option value="">Sve</option>{miniCats.map((c) => <option value={c}>{categories[c]}</option>)}</select></label>
-      <label class="pw-f"><span>Regija</span>
-        <select data-f="r"><option value="">Sve</option>{miniRegions.map((r) => <option value={r}>{r}</option>)}</select></label>
+      <label class="pw-f pw-f--q"><span>{T.fQ}</span><input type="search" data-f="q" placeholder={T.fQph} autocomplete="off" /></label>
+      <label class="pw-f"><span>{T.fC}</span>
+        <select data-f="c"><option value="">{T.all}</option>{miniCats.map((c) => <option value={c}>{categories[c]}</option>)}</select></label>
+      <label class="pw-f"><span>{T.fR}</span>
+        <select data-f="r"><option value="">{T.all}</option>{miniRegions.map((r) => <option value={r}>{r}</option>)}</select></label>
       <label class="pw-f"><span>DR</span>
-        <select data-f="dr"><option value="">Svi</option><option value="0-29">do 29</option><option value="30-49">30 do 49</option><option value="50-69">50 do 69</option><option value="70-100">70+</option></select></label>
-      <label class="pw-f"><span>Promet / mj.</span>
-        <select data-f="t"><option value="">Svi</option><option value="0-999">do 1.000</option><option value="1000-9999">1.000 do 10.000</option><option value="10000-99999">10.000 do 100.000</option><option value="100000-1e12">100.000+</option></select></label>
-      <label class="pw-f"><span>Oznaka</span>
-        <select data-f="s"><option value="">Sve</option><option value="da">označeno</option><option value="ne">bez oznake</option><option value="nepoznato">nije provjereno</option></select></label>
+        <select data-f="dr"><option value="">{T.allM}</option><option value="0-29">{T.dr[0]}</option><option value="30-49">{T.dr[1]}</option><option value="50-69">{T.dr[2]}</option><option value="70-100">{T.dr[3]}</option></select></label>
+      <label class="pw-f"><span>{T.fT}</span>
+        <select data-f="t"><option value="">{T.allM}</option><option value="0-999">{T.tr[0]}</option><option value="1000-9999">{T.tr[1]}</option><option value="10000-99999">{T.tr[2]}</option><option value="100000-1e12">{T.tr[3]}</option></select></label>
+      <label class="pw-f"><span>{T.fS}</span>
+        <select data-f="s"><option value="">{T.all}</option><option value="da">{T.sDa}</option><option value="ne">{T.sNe}</option><option value="nepoznato">{T.sNp}</option></select></label>
     </div>
-    <p class="pw-muted pw-count" aria-live="polite">Prikazano <strong data-count>{mini.length}</strong> od {mini.length}</p>
+    <p class="pw-muted pw-count" aria-live="polite">{T.shown} <strong data-count>{mini.length}</strong> {T.of} {mini.length}</p>
     <div class="pw-table">
       <table>
-        <thead><tr><th scope="col">Portal</th><th scope="col">Kategorija</th><th scope="col">Regija</th><th scope="col" class="num">DR</th><th scope="col" class="num">Promet / mj.</th><th scope="col">Oznaka</th></tr></thead>
+        <thead><tr><th scope="col">{T.thPortal}</th><th scope="col">{T.fC}</th><th scope="col">{T.fR}</th><th scope="col" class="num">DR</th><th scope="col" class="num">{T.fT}</th><th scope="col">{T.fS}</th></tr></thead>
         <tbody>
           {mini.map((p) => (
             <tr data-d={p.d} data-c={p.c} data-r={regija(p)} data-dr={p.dr} data-t={p.t} data-s={oznakaKey(p.s)}>
-              <td><strong>{p.d}</strong>{cited.has(p.d) && <span class="pw-badge" title="Citiran u našem ChatGPT testu lokalnih pitanja">AI citat</span>}</td>
+              <td><strong>{p.d}</strong>{cited.has(p.d) && <span class="pw-badge" title={T.citedTitle}>{T.aiBadge}</span>}</td>
               <td>{categories[p.c]}</td>
               <td>{regija(p)}</td>
               <td class="num">{p.dr}</td>
@@ -189,58 +292,58 @@ const pickJson = JSON.stringify({ p: pickData, cat: categories, zn: countyName }
           ))}
         </tbody>
       </table>
-      <p class="pw-muted" data-empty hidden>Nijedan portal ne odgovara filtrima. Probajte u punom katalogu.</p>
+      <p class="pw-muted" data-empty hidden>{T.kEmpty}</p>
     </div>
-    <p class="pw-actions"><a class="btn btn--primary" href="/portali/">Pogledaj svih {portals.length} →</a></p>
+    <p class="pw-actions"><a class="btn btn--primary" href={T.catalogHref}>{T.kAll(portals.length)}</a></p>
   </section>
 
   <!-- b) Odaberi portal u 3 klika -->
   <section class="pw-card" data-mount="portali-odabir" aria-labelledby="pw-o-t" data-pick>
-    <p class="pw-eyebrow">Alat · 3 klika</p>
-    <h3 id="pw-o-t" class="pw-title">Odaberite portal u 3 klika</h3>
+    <p class="pw-eyebrow">{T.oEyebrow}</p>
+    <h3 id="pw-o-t" class="pw-title">{T.oTitle}</h3>
     <form class="pw-pick" data-pick-form>
       <fieldset>
-        <legend>1. Što vam je cilj?</legend>
-        <label><input type="radio" name="cilj" value="link" required /> Link za Google</label>
-        <label><input type="radio" name="cilj" value="promet" /> Promet i čitatelji</label>
-        <label><input type="radio" name="cilj" value="ai" /> AI vidljivost</label>
+        <legend>{T.q1}</legend>
+        <label><input type="radio" name="cilj" value="link" required /> {T.g[0]}</label>
+        <label><input type="radio" name="cilj" value="promet" /> {T.g[1]}</label>
+        <label><input type="radio" name="cilj" value="ai" /> {T.g[2]}</label>
       </fieldset>
       <fieldset>
-        <legend>2. Kakav je vaš posao?</legend>
-        <label><input type="radio" name="posao" value="b2b" required /> B2B usluga</label>
-        <label><input type="radio" name="posao" value="lokalno" /> Lokalna usluga</label>
-        <label><input type="radio" name="posao" value="webshop" /> Webshop</label>
-        <label><input type="radio" name="posao" value="lifestyle" /> Lifestyle brend</label>
+        <legend>{T.q2}</legend>
+        <label><input type="radio" name="posao" value="b2b" required /> {T.b[0]}</label>
+        <label><input type="radio" name="posao" value="lokalno" /> {T.b[1]}</label>
+        <label><input type="radio" name="posao" value="webshop" /> {T.b[2]}</label>
+        <label><input type="radio" name="posao" value="lifestyle" /> {T.b[3]}</label>
       </fieldset>
       <fieldset>
-        <legend>3. Gdje su vaši kupci?</legend>
-        <select name="regija" aria-label="Regija">
-          <option value="">Cijela Hrvatska</option>
-          {listOrder.map((c) => <option value={c.id}>{c.name}</option>)}
+        <legend>{T.q3}</legend>
+        <select name="regija" aria-label={T.region}>
+          <option value="">{T.allHr}</option>
+          {listOrder.map((c) => <option value={c.id}>{countyName[c.id]}</option>)}
         </select>
       </fieldset>
-      <button type="submit" class="btn btn--primary">Predloži portale</button>
+      <button type="submit" class="btn btn--primary">{T.submit}</button>
     </form>
     <div class="pw-pick__out" data-pick-out aria-live="polite" hidden>
       <ol class="pw-pick__list" data-pick-list></ol>
-      <p class="pw-note">Prijedlog je automatski, iz podataka u katalogu (DR, promet, kategorija, regija i ChatGPT citati iz našeg testa). Cijenu i dostupnost potvrđujemo u ponudi.</p>
-      <p class="pw-actions"><a class="btn btn--primary" href="/portali/#upit" data-pick-cta>Pošaljite nam brief</a></p>
+      <p class="pw-note">{T.oNote}</p>
+      <p class="pw-actions"><a class="btn btn--primary" href={T.briefHref} data-pick-cta>{T.oCta}</a></p>
     </div>
-    <noscript><p class="pw-muted">Alat radi uz JavaScript. Svi portali su i u <a href="/portali/">katalogu</a>.</p></noscript>
+    <noscript><p class="pw-muted">{T.noJs1}<a href={T.catalogHref}>{T.noJs2}</a>.</p></noscript>
     <script type="application/json" data-pick-data set:html={pickJson} />
   </section>
 
   <!-- c) Karta Hrvatske -->
   <section class="pw-card" data-mount="portali-karta" aria-labelledby="pw-m-t" data-map>
-    <p class="pw-eyebrow">Karta · regionalni portali</p>
-    <h3 id="pw-m-t" class="pw-title">Regionalni portali po županijama</h3>
-    <p class="pw-lead">Kliknite županiju. <span class="pw-star">★</span> označava županiju s portalom koji je ChatGPT citirao u našem testu lokalnih pitanja.</p>
+    <p class="pw-eyebrow">{T.mEyebrow}</p>
+    <h3 id="pw-m-t" class="pw-title">{T.mTitle}</h3>
+    <p class="pw-lead">{T.mLead1} <span class="pw-star">★</span> {T.mLead2}</p>
     <div class="pw-map">
-      <svg viewBox={`0 0 ${map.w} ${map.h}`} role="group" aria-label="Karta županija">
+      <svg viewBox={`0 0 ${map.w} ${map.h}`} role="group" aria-label={T.mAria}>
         {counties.map((c) => (
           <path d={c.d} fill={ramp(perCounty[c.id]?.length ?? 0)} class="pw-county" data-county={c.id}
-            tabindex="0" role="button" aria-label={`${c.name}: ${perCounty[c.id]?.length ?? 0} portala`}>
-            <title>{c.name}: {perCounty[c.id]?.length ?? 0} portala</title>
+            tabindex="0" role="button" aria-label={`${countyName[c.id]}: ${perCounty[c.id]?.length ?? 0} ${T.sites}`}>
+            <title>{countyName[c.id]}: {perCounty[c.id]?.length ?? 0} {T.sites}</title>
           </path>
         ))}
         {counties.filter((c) => perCounty[c.id]?.some((p) => cited.has(p.d))).map((c) => (
@@ -248,41 +351,41 @@ const pickJson = JSON.stringify({ p: pickData, cat: categories, zn: countyName }
         ))}
       </svg>
       <div class="pw-map__panel">
-        <p class="pw-muted pw-hint" data-map-hint>Odaberite županiju na karti ili s popisa.</p>
-        <select data-map-select aria-label="Županija">
-          <option value="">Sve županije</option>
-          {listOrder.map((c) => <option value={c.id}>{c.name} ({perCounty[c.id]?.length ?? 0})</option>)}
+        <p class="pw-muted pw-hint" data-map-hint>{T.mHint}</p>
+        <select data-map-select aria-label={T.mSel}>
+          <option value="">{T.mAll}</option>
+          {listOrder.map((c) => <option value={c.id}>{countyName[c.id]} ({perCounty[c.id]?.length ?? 0})</option>)}
         </select>
         <div class="pw-map__lists">
           {listOrder.map((c) => (
             <section data-list={c.id}>
-              <h4>{c.name}</h4>
+              <h4>{countyName[c.id]}</h4>
               {perCounty[c.id]?.length ? (
                 <ul>{perCounty[c.id].map((p) => (
-                  <li><strong>{p.d}</strong> <span class="pw-muted">DR {p.dr} · {fmt.format(p.t)}/mj.</span>{cited.has(p.d) && <span class="pw-badge">AI citat</span>}</li>
+                  <li><strong>{p.d}</strong> <span class="pw-muted">DR {p.dr} · {fmt.format(p.t)}{T.perMo}</span>{cited.has(p.d) && <span class="pw-badge">{T.aiBadge}</span>}</li>
                 ))}</ul>
-              ) : <p class="pw-muted">U katalogu još nemamo regionalni portal za ovu županiju. Nacionalni portali pokrivaju i nju.</p>}
+              ) : <p class="pw-muted">{T.mNone}</p>}
             </section>
           ))}
           <section data-list="BA">
-            <h4>BiH (regionalni portali s publikom u Hrvatskoj)</h4>
-            <ul>{(perCounty.BA ?? []).map((p) => <li><strong>{p.d}</strong> <span class="pw-muted">DR {p.dr} · {fmt.format(p.t)}/mj.</span></li>)}</ul>
+            <h4>{T.mBa}</h4>
+            <ul>{(perCounty.BA ?? []).map((p) => <li><strong>{p.d}</strong> <span class="pw-muted">DR {p.dr} · {fmt.format(p.t)}{T.perMo}</span></li>)}</ul>
           </section>
           <section data-list="X">
-            <h4>Regionalni portali bez jedne županije</h4>
-            <ul>{unassigned.map((p) => <li><strong>{p.d}</strong> <span class="pw-muted">DR {p.dr} · {fmt.format(p.t)}/mj.</span></li>)}</ul>
+            <h4>{T.mX}</h4>
+            <ul>{unassigned.map((p) => <li><strong>{p.d}</strong> <span class="pw-muted">DR {p.dr} · {fmt.format(p.t)}{T.perMo}</span></li>)}</ul>
           </section>
         </div>
       </div>
     </div>
-    <ul class="pw-legend pw-legend--row" aria-label="Broj portala u županiji">
+    <ul class="pw-legend pw-legend--row" aria-label={T.mLeg}>
       <li><span class="pw-swatch" style="background:#eef1f5"></span>0</li>
-      <li><span class="pw-swatch" style="background:#c9d7e8"></span>1 do 2</li>
-      <li><span class="pw-swatch" style="background:#8fb0d6"></span>3 do 5</li>
-      <li><span class="pw-swatch" style="background:#4f86c6"></span>6 do 8</li>
+      <li><span class="pw-swatch" style="background:#c9d7e8"></span>1 {T.to} 2</li>
+      <li><span class="pw-swatch" style="background:#8fb0d6"></span>3 {T.to} 5</li>
+      <li><span class="pw-swatch" style="background:#4f86c6"></span>6 {T.to} 8</li>
       <li><span class="pw-swatch" style="background:#1f4f86"></span>9+</li>
     </ul>
-    <p class="pw-note">Županiju smo portalu dodijelili prema sjedištu i temi portala. novilist.hr je nacionalni dnevnik, a na karti je uz Primorsko-goransku jer ga ChatGPT citira za riječka pitanja. Granice: Natural Earth.</p>
+    <p class="pw-note">{T.mNote}</p>
   </section>
 </div>
 
@@ -292,7 +395,11 @@ const pickJson = JSON.stringify({ p: pickData, cat: categories, zn: countyName }
     const slot = document.querySelector(`[data-embed="${el.dataset.mount}"]`);
     if (slot) slot.replaceWith(el);
   });
-  const fmt = new Intl.NumberFormat('hr-HR');
+  // Engleski tekstovi stižu kroz data-i18n (samo na /en/ stranici); bez njega ostaje hrvatski.
+  type I18n = { locale: string; regional: string; visits: string; cited: string; gap: string; labels: string; none: string };
+  const i18nRaw = document.querySelector<HTMLElement>('[data-portali-widgets]')?.dataset.i18n;
+  const I: I18n | null = i18nRaw ? JSON.parse(i18nRaw) : null;
+  const fmt = new Intl.NumberFormat(I ? I.locale : 'hr-HR');
 
   // ---------- Scatter tooltip ----------
   const sc = document.querySelector<HTMLElement>('[data-sc]');
@@ -398,11 +505,11 @@ const pickJson = JSON.stringify({ p: pickData, cat: categories, zn: countyName }
       list.innerHTML = '';
       for (const [d, dr, t, c, z, s, ci] of top) {
         const why: string[] = [];
-        if (c === 'regija' && zn[z]) why.push(`regionalni portal, ${zn[z]}`); else why.push(z && zn[z] ? `${cat[c]}, ${zn[z]}` : cat[c]);
-        why.push(`DR ${dr}`, `${fmt.format(t)} organskih posjeta/mj.`);
-        if (ci) why.push('ChatGPT ga je citirao u našem testu lokalnih pitanja');
-        if (dr >= 50 && t < 2000) why.push('visok DR uz malo prometa: vrijedi za link, ne za čitatelje');
-        if (s === 1) why.push('plaćene članke jasno označava');
+        if (c === 'regija' && zn[z]) why.push(`${I ? I.regional : 'regionalni portal'}, ${zn[z]}`); else why.push(z && zn[z] ? `${cat[c]}, ${zn[z]}` : cat[c]);
+        why.push(`DR ${dr}`, `${fmt.format(t)} ${I ? I.visits : 'organskih posjeta/mj.'}`);
+        if (ci) why.push(I ? I.cited : 'ChatGPT ga je citirao u našem testu lokalnih pitanja');
+        if (dr >= 50 && t < 2000) why.push(I ? I.gap : 'visok DR uz malo prometa: vrijedi za link, ne za čitatelje');
+        if (s === 1) why.push(I ? I.labels : 'plaćene članke jasno označava');
         const li = document.createElement('li');
         const b = document.createElement('strong');
         b.textContent = d;
@@ -413,7 +520,7 @@ const pickJson = JSON.stringify({ p: pickData, cat: categories, zn: countyName }
       }
       if (!top.length) {
         const li = document.createElement('li');
-        li.textContent = 'Za ovu kombinaciju nemamo dovoljno portala u katalogu. Pošaljite brief pa ćemo predložiti ručno.';
+        li.textContent = I ? I.none : 'Za ovu kombinaciju nemamo dovoljno portala u katalogu. Pošaljite brief pa ćemo predložiti ručno.';
         list.append(li);
       }
       out.hidden = false;

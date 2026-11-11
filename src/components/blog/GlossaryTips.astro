@@ -1,7 +1,12 @@
 ---
-import glosar from '../../data/glosar.json';
+import glosarHr from '../../data/glosar.json';
+import glosarEn from '../../data/glosar-en.json';
 // Tooltipovi za pojmove u tekstu članka: <span data-term="geo">GEO</span>.
 // Bez JS-a pojam ostaje običan tekst; definicije su i u tablici "Nazivi koje ćete sretati".
+// Ključevi (data-term) su isti na oba jezika; engleski članci čitaju definicije iz glosar-en.json.
+interface Props { lang?: 'hr' | 'en' }
+const { lang = 'hr' } = Astro.props;
+const glosar = lang === 'en' ? glosarEn : glosarHr;
 const terms = Object.fromEntries(Object.entries(glosar).filter(([k]) => !k.startsWith('_')));
 ---
 <script type="application/json" data-glosar set:html={JSON.stringify(terms)} />

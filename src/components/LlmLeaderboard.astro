@@ -1,23 +1,29 @@
 ---
 import data from '../data/llm-leaderboard.json';
 // Leaderboard LLM vidljivosti iz istraživanja ChatGPT citata. Podaci u src/data/llm-leaderboard.json.
+interface Props { lang?: 'hr' | 'en' }
+const { lang = 'hr' } = Astro.props;
+const en = lang === 'en';
+const t = en
+  ? { eyebrow: 'Leaderboard · LLM visibility', title: 'Who ChatGPT cites most often for Croatian queries', lead: (n: number) => `Number of the ${n} ChatGPT answers in which the domain was cited. Click a row for details.`, sortBy: 'Sort by', cites: 'Citations', eff: 'Citations at the lowest DR', sources: 'Also show directories and lists', srcTag: 'directory / list', share: 'Share of answers', cited: 'What was cited', zero: 'DR 0, yet still cited', visit: 'Visit', note: 'Measured on 30 October 2026 through the OpenAI API with web search, location Zagreb. The numbers show a direction, not an exact picture. Next measurement on 1 December.' }
+  : { eyebrow: 'Leaderboard · LLM vidljivost', title: 'Koga ChatGPT najčešće citira za hrvatske upite', lead: (n: number) => `Broj od ${n} ChatGPT odgovora u kojima je domena citirana. Kliknite red za detalje.`, sortBy: 'Poredaj po', cites: 'Citati', eff: 'Citati uz najniži DR', sources: 'Prikaži i direktorije i liste', srcTag: 'direktorij / lista', share: 'Udio odgovora', cited: 'Što je citirano', zero: 'DR 0, a ipak citiran', visit: 'Posjeti', note: 'Mjereno 30. listopada 2026. preko OpenAI API-ja s web pretragom, lokacija Zagreb. Brojke pokazuju smjer, ne točnu sliku. Sljedeće mjerenje 1. prosinca.' };
 const { answers, entries } = data;
 const max = Math.max(...entries.map((e) => e.cites));
 const pct = (n: number) => Math.round((n / answers) * 100);
 ---
-<section class="lb" data-lb aria-labelledby="lb-title">
+<section class:list={['lb', { 'lb--en': en }]} data-lb aria-labelledby="lb-title">
   <div class="lb__head">
     <div>
-      <p class="lb__eyebrow">Leaderboard · LLM vidljivost</p>
-      <h2 id="lb-title" class="lb__title">Koga ChatGPT najčešće citira za hrvatske upite</h2>
-      <p class="lb__lead">Broj od {answers} ChatGPT odgovora u kojima je domena citirana. Kliknite red za detalje.</p>
+      <p class="lb__eyebrow">{t.eyebrow}</p>
+      <h2 id="lb-title" class="lb__title">{t.title}</h2>
+      <p class="lb__lead">{t.lead(answers)}</p>
     </div>
     <div class="lb__controls">
-      <div class="lb__seg" role="group" aria-label="Poredaj po">
-        <button type="button" data-sort="cites" aria-pressed="true">Citati</button>
-        <button type="button" data-sort="eff" aria-pressed="false">Citati uz najniži DR</button>
+      <div class="lb__seg" role="group" aria-label={t.sortBy}>
+        <button type="button" data-sort="cites" aria-pressed="true">{t.cites}</button>
+        <button type="button" data-sort="eff" aria-pressed="false">{t.eff}</button>
       </div>
-      <label class="lb__toggle"><input type="checkbox" data-sources /> Prikaži i direktorije i liste</label>
+      <label class="lb__toggle"><input type="checkbox" data-sources /> {t.sources}</label>
     </div>
   </div>
 
@@ -34,23 +40,23 @@ const pct = (n: number) => Math.round((n / answers) * 100);
           <span class="lb__rank"></span>
           <span class="lb__name">
             <strong>{e.name}</strong>
-            <span class="lb__domain">{e.domain}{e.country && <span class="lb__tag">{e.country}</span>}{e.type === 'izvor' && <span class="lb__tag">direktorij / lista</span>}</span>
+            <span class="lb__domain">{e.domain}{e.country && <span class="lb__tag">{e.country}</span>}{e.type === 'izvor' && <span class="lb__tag">{t.srcTag}</span>}</span>
           </span>
           <span class="lb__bar" aria-hidden="true"><span style={`--w:${(e.cites / max) * 100}%`}></span></span>
           <span class="lb__score"><strong>{e.cites}</strong><small>/{answers}</small></span>
         </button>
         <div class="lb__more" hidden>
           <dl>
-            <div><dt>Udio odgovora</dt><dd>{pct(e.cites)}%</dd></div>
-            <div><dt>Domain Rating</dt><dd>{e.dr ?? 'n/a'}{e.dr === 0 && <span class="lb__zero">DR 0, a ipak citiran</span>}</dd></div>
-            <div><dt>Što je citirano</dt><dd>{e.page}</dd></div>
+            <div><dt>{t.share}</dt><dd>{pct(e.cites)}%</dd></div>
+            <div><dt>Domain Rating</dt><dd>{e.dr ?? 'n/a'}{e.dr === 0 && <span class="lb__zero">{t.zero}</span>}</dd></div>
+            <div><dt>{t.cited}</dt><dd>{en ? e.page_en : e.page}</dd></div>
           </dl>
-          {!e.self && <a href={e.url} target="_blank" rel="noopener">Posjeti {e.domain} ↗</a>}
+          {!e.self && <a href={e.url} target="_blank" rel="noopener">{t.visit} {e.domain} ↗</a>}
         </div>
       </li>
     ))}
   </ol>
-  <p class="lb__note">Mjereno 30. listopada 2026. preko OpenAI API-ja s web pretragom, lokacija Zagreb. Brojke pokazuju smjer, ne točnu sliku. Sljedeće mjerenje 1. prosinca.</p>
+  <p class="lb__note">{t.note}</p>
 </section>
 
 <script>
@@ -123,6 +129,7 @@ const pct = (n: number) => Math.round((n / answers) * 100);
   .is-source .lb__bar span { background: #9aa8b8; }
   .is-self .lb__bar span { background: var(--navy); }
   .is-self .lb__name strong::after { content: ' (mi)'; font-weight: 400; color: var(--muted); }
+  .lb--en .is-self .lb__name strong::after { content: ' (us)'; }
   .lb__score { text-align: right; font-family: var(--font-display); }
   .lb__score strong { font-size: 1.25rem; color: var(--navy); }
   .lb__score small { color: var(--muted); }

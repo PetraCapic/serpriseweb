@@ -3,6 +3,7 @@ title: "Hrvatski portali za PR objave: 335 portala, DR, promet i oznaka sponzori
 description: "Koje hrvatske portale ChatGPT stvarno citira, koliko košta objava, što zakon kaže o oznaci sponzorirano i kako odabrati portal prema cilju."
 date: 2026-11-01
 updated: 2026-11-01
+translation: croatian-news-sites-for-pr
 image: /blog/portali-za-pr-objave/naslovna.png
 imageAlt: "Hrvatski portali za PR objave"
 faq:

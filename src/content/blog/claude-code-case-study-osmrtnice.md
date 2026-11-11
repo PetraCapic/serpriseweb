@@ -2,6 +2,7 @@
 title: "Claude Code u praksi: 17 dana, 86 promjena i 2,2 puta više klikova"
 description: "Kako smo s Claude Codeom vodili SEO, programmatic stranice i praćenje konverzija na portalu osmrtnica.com.hr. Popis aktivnosti, alati, brojke iz Search Consolea i plan."
 date: 2026-11-01
+translation: claude-code-case-study-obituaries
 image: /blog/claude-code-case-study-osmrtnice/naslovna.png
 imageAlt: "Case study: što smo s Claude Codeom napravili na portalu za osmrtnice, 2,2 puta više klikova s Googlea"
 ---

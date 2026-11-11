@@ -2,6 +2,7 @@
 title: "AI sadržaj za SEO: testirali smo webove sa 100 % AI tekstovima"
 description: "Radi li AI sadržaj za SEO? Testirali smo nove webove sa 100 % AI tekstovima, bez linkova i s linkovima. Rezultat: 700+ klikova dnevno."
 date: 2026-11-09
+translation: ai-content-seo-experiment
 image: /blog/ai-sadrzaj-seo-eksperiment/naslovna.png
 imageAlt: "Naslovna članka o eksperimentu s AI sadržajem za SEO i brojka 700+ klikova dnevno"
 ---

@@ -2,6 +2,7 @@
 title: "Case study: kako je portal za osmrtnice ušao u odgovore ChatGPT-a"
 description: "Portal s 35.000 klikova mjesečno ChatGPT-u je slao praznu stranicu. Nakon jedne tehničke promjene posjeti s ChatGPT-a narasli su sa 6 na 67 u 12 dana."
 date: 2026-11-01
+translation: ai-visibility-case-study-obituaries
 updated: 2026-11-06
 image: /blog/case-study-ai-vidljivost-osmrtnice/naslovna.png
 imageAlt: "Case study AI vidljivosti: portal za osmrtnice, 67 posjeta s ChatGPT-a u 12 dana"

@@ -2,6 +2,7 @@
 title: "Metoda: kako vidjeti što ChatGPT pretražuje i napisati stranicu koju će citirati"
 description: "Kako u Chromeu vidjeti pretrage koje ChatGPT pokrene u pozadini, što iz njih pročitati i kako od njih napraviti stranicu koju AI citira. Korak po korak."
 date: 2026-11-01
+translation: chatgpt-searches
 image: /blog/chatgpt-pretrage/naslovna.png
 imageAlt: "Kupac pita jedno, ChatGPT pretražuje nešto drugo"
 ---

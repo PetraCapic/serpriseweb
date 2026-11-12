@@ -37,7 +37,7 @@
   status = 301
 [[redirects]]
   from = "/services/croatian-backlinks-service/*"
-  to = "/link-building-digitalni-pr/"
+  to = "/en/link-building/"
   status = 301
 [[redirects]]
   from = "/services/reseller-link-building/*"
@@ -50,6 +50,19 @@
 [[redirects]]
   from = "/services/agency-partnership/*"
   to = "/en/white-label-link-building/"
+  status = 301
+# Stari URL-ovi s prometom u Search Consoleu (11.11.2026.): na najsličniju postojeću stranicu, prije općih pravila.
+[[redirects]]
+  from = "/expired-domain/setting-up-301-redirect/*"
+  to = "/blog/301-redirects-in-bulk/"
+  status = 301
+[[redirects]]
+  from = "/blog/how-to-redirect-page-in-wordpress/*"
+  to = "/blog/301-redirects-in-bulk/"
+  status = 301
+[[redirects]]
+  from = "/blog/setting-up-google-search-console/*"
+  to = "/en/blog/claude-code-google-search-console/"
   status = 301
 [[redirects]]
   from = "/expired-domain/*"

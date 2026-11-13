@@ -119,3 +119,9 @@
   for = "/vodic/*.pdf"
   [headers.values]
     X-Robots-Tag = "noindex"
+
+# Slike za objave na društvenim mrežama: javne (Buffer ih dohvaća), ali se ne indeksiraju
+[[headers]]
+  for = "/social/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"

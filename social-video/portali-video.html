@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="hr"><head><meta charset="utf-8"><title>SERPRise Portali video</title>
+<style>
+:root{--navy:#102b43;--navy2:#0a1e30;--muted:#52657a;--border:#e1e6ef;--accent:#ba2525;--accent2:#e0452f;--soft:#fbeaea;--ok:#1f9d6a;--bg:#f1f2f4;
+  --ease:cubic-bezier(.2,.8,.2,1)}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1080px;height:100%;background:var(--bg);overflow:hidden;font-family:'Inter',sans-serif;color:var(--navy);-webkit-font-smoothing:antialiased}
+body{display:flex;align-items:center;justify-content:center;animation:bgc 450ms ease 13800ms both}
+@keyframes bgc{from{background:#f1f2f4}to{background:#102b43}}
+#stage{position:relative;width:1080px;height:1350px;flex:none}
+h1,h2,.disp{font-family:'Inter Display','Inter',sans-serif;font-weight:800;letter-spacing:-.03em;line-height:1.05}
+.brand{position:absolute;left:72px;top:64px;font:800 46px 'Inter Display','Inter';letter-spacing:-.03em}
+.brand b{color:var(--accent)}
+.foot{position:absolute;left:72px;bottom:56px;font-size:28px;color:var(--muted)}
+.scene{position:absolute;inset:0;padding:190px 72px 120px;opacity:0;
+  animation:fin 450ms var(--ease) var(--t0) both, fout 350ms ease-in calc(var(--t0) + var(--len)) forwards}
+.a{animation:var(--n,up) var(--d,600ms) var(--ease) calc(var(--t0) + var(--at)) both}
+@keyframes fin{from{opacity:0}to{opacity:1}}
+@keyframes fout{from{opacity:1}to{opacity:0}}
+@keyframes up{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:none}}
+@keyframes pop{0%{opacity:0;transform:scale(.6)}60%{opacity:1;transform:scale(1.06)}100%{opacity:1;transform:scale(1)}}
+@keyframes grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes show{from{opacity:0}to{opacity:1}}
+@keyframes hide{from{opacity:1}to{opacity:0}}
+@keyframes dim{to{opacity:.32}}
+.eyebrow{font-size:30px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+
+/* S1 */
+#s1{--t0:0ms;--len:3500ms;display:flex;flex-direction:column;justify-content:center}
+#s1 .q{font-size:112px;margin-top:36px}
+#s1 .q span{display:inline-block;margin-right:.24em}
+#s1 .qwrap{animation:dim 500ms ease calc(var(--t0) + 1750ms) forwards}
+#s1 .ans{font-size:76px;margin-top:64px}
+#s1 .but{font-size:46px;font-weight:600;line-height:1.25;margin-top:36px;color:var(--accent)}
+
+/* S2 */
+#s2{--t0:3700ms;--len:3800ms}
+#s2 h2{font-size:68px;margin-top:20px}
+#s2 .bars{margin-top:54px;display:grid;gap:30px}
+.bar .lbl{display:flex;justify-content:space-between;align-items:baseline;font-size:38px;font-weight:600}
+.bar .num{font:800 54px 'Inter Display','Inter';letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.bar .track{height:26px;border-radius:13px;background:#dfe4ec;margin-top:10px;overflow:hidden}
+.bar .fill{height:100%;border-radius:13px;background:linear-gradient(90deg,var(--accent),var(--accent2));transform-origin:left;--n:grow;--d:900ms}
+#s2 .punch{margin-top:56px;font-size:52px;line-height:1.15}
+#s2 .punch em{font-style:normal;color:var(--accent)}
+#s2 .src{font-size:24px;color:var(--muted);margin-top:18px}
+
+/* S3 */
+#s3{--t0:7400ms;--len:6500ms;padding-top:170px}
+#s3 h2{font-size:72px;margin-top:14px}
+#s3 h2 em{font-style:normal;color:var(--accent)}
+.mock{position:relative;margin-top:40px;width:936px;height:846px;background:#fff;border-radius:26px;border:1px solid var(--border);
+  box-shadow:0 30px 60px -30px rgba(16,43,67,.35);overflow:hidden}
+.chrome{height:60px;background:#e4e8ee;display:flex;align-items:center;padding:0 22px;gap:10px}
+.chrome i{width:15px;height:15px;border-radius:50%;background:#c4cad3}
+.chrome span{margin-left:14px;background:#fff;border-radius:9px;padding:6px 18px;font-size:22px;color:var(--muted)}
+.tools{display:grid;grid-template-columns:1.7fr 1fr 1fr;gap:16px;padding:22px 28px 18px}
+.tools label{font-size:17px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.sel{position:relative;margin-top:8px;height:58px;border:2px solid var(--border);border-radius:12px;padding:0 18px;display:flex;align-items:center;font-size:25px;font-weight:500}
+.sel:after{content:"";position:absolute;right:18px;top:22px;width:10px;height:10px;border-right:3px solid var(--navy);border-bottom:3px solid var(--navy);transform:rotate(45deg)}
+#selcat{animation:selhl 400ms ease calc(var(--t0) + 1350ms) forwards}
+@keyframes selhl{to{border-color:var(--accent);background:var(--soft)}}
+.th{display:grid;grid-template-columns:76px 1fr 110px 190px;height:46px;align-items:center;background:#f4f6fa;border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+  font-size:17px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.th .r,.row .r{text-align:right;padding-right:30px}
+.rows{position:relative;height:420px}
+.set{position:absolute;inset:0}
+#setA{animation:hide 250ms ease calc(var(--t0) + 1400ms) forwards}
+#setB{opacity:0;animation:up 450ms var(--ease) calc(var(--t0) + 1600ms) both;--x:0}
+.row{position:relative;display:grid;grid-template-columns:76px 1fr 110px 190px;height:84px;align-items:center;border-bottom:1px solid var(--border);font-size:26px}
+.row .hl{position:absolute;inset:0;background:var(--soft);opacity:0}
+.row>*{position:relative}
+.row .name{font-weight:700;font-size:27px}
+.row .tag{display:inline-block;margin-left:10px;font-size:16px;font-weight:600;color:var(--ok);border:1.5px solid var(--ok);border-radius:99px;padding:1px 10px;vertical-align:3px}
+.dr{display:inline-block;background:var(--navy);color:#fff;font-weight:700;font-size:22px;border-radius:8px;padding:3px 10px}
+.cb{width:30px;height:30px;border:2.5px solid #9aa7b6;border-radius:7px;margin-left:30px;position:relative}
+.cb:after{content:"";position:absolute;inset:-2.5px;border-radius:7px;background:var(--accent) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5' fill='none' stroke='%23fff' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/82% no-repeat;opacity:0;animation:inherit}
+.row.pick .hl{animation:show 200ms ease calc(var(--t0) + var(--ck)) forwards}
+.row.pick .cb:after{animation:pop 300ms var(--ease) calc(var(--t0) + var(--ck)) both}
+.cart{position:absolute;left:0;right:0;bottom:0;height:186px;padding:20px 28px;background:#fff;border-top:2px solid var(--border)}
+.cart h3{font:700 26px 'Inter Display','Inter'}
+.chips{margin-top:12px;width:590px;display:flex;flex-wrap:wrap;gap:10px}
+.chip{background:var(--soft);border-radius:99px;padding:7px 18px;font-size:22px;font-weight:600;opacity:0;animation:pop 350ms var(--ease) calc(var(--t0) + var(--ck) + 80ms) both}
+.btn{position:absolute;right:28px;top:52px;width:270px;height:84px;border-radius:99px;background:linear-gradient(120deg,var(--accent),var(--accent2));color:#fff;
+  font:700 29px 'Inter Display','Inter';display:flex;align-items:center;justify-content:center;box-shadow:0 14px 26px -12px rgba(186,37,37,.7);
+  animation:press 300ms ease calc(var(--t0) + 4350ms) both}
+@keyframes press{0%{transform:scale(1)}40%{transform:scale(.93)}100%{transform:scale(1)}}
+.btn .sent{position:absolute;inset:0;border-radius:99px;background:var(--ok);display:flex;align-items:center;justify-content:center;opacity:0;animation:show 250ms ease calc(var(--t0) + 4500ms) forwards}
+.toast{position:absolute;left:50%;top:340px;width:700px;margin-left:-350px;background:var(--navy);color:#fff;border-radius:22px;padding:30px 36px;text-align:center;
+  box-shadow:0 30px 60px -20px rgba(10,30,48,.6);opacity:0;animation:pop 450ms var(--ease) calc(var(--t0) + 4700ms) both}
+.toast b{display:block;font:800 44px 'Inter Display','Inter';letter-spacing:-.02em}
+.toast span{display:block;font-size:27px;margin-top:8px;opacity:.85}
+.cursor{position:absolute;left:0;top:0;width:54px;height:54px;z-index:5;filter:drop-shadow(0 4px 6px rgba(0,0,0,.35));
+  animation:cur 4400ms linear calc(var(--t0) + 500ms) both}
+@keyframes cur{
+  0%{transform:translate(760px,520px);opacity:0}
+  4%{opacity:1}
+  16%{transform:translate(250px,145px);animation-timing-function:steps(1)}
+  27%{transform:translate(250px,145px);animation-timing-function:ease-in-out}
+  39%{transform:translate(36px,275px);animation-timing-function:steps(1)}
+  45%{transform:translate(36px,275px);animation-timing-function:ease-in-out}
+  53%{transform:translate(36px,443px);animation-timing-function:steps(1)}
+  58%{transform:translate(36px,443px);animation-timing-function:ease-in-out}
+  64%{transform:translate(36px,527px);animation-timing-function:steps(1)}
+  69%{transform:translate(36px,527px);animation-timing-function:ease-in-out}
+  84%{transform:translate(765px,750px);animation-timing-function:steps(1)}
+  100%{transform:translate(765px,750px);opacity:1}
+}
+.rip{position:absolute;width:90px;height:90px;margin:-45px 0 0 -45px;border-radius:50%;border:5px solid var(--accent);opacity:0;z-index:4;
+  animation:rip 450ms ease-out calc(var(--t0) + var(--ck)) forwards}
+@keyframes rip{0%{opacity:.9;transform:scale(.2)}100%{opacity:0;transform:scale(1.2)}}
+
+/* S4 */
+#s4{--t0:13800ms;--len:99000ms;display:flex;flex-direction:column;justify-content:center;background:var(--navy);color:#fff;padding-top:120px}
+#s4 .brand2{font:800 54px 'Inter Display','Inter';letter-spacing:-.03em}
+#s4 .brand2 b{color:#ff6a55}
+#s4 h2{font-size:104px;margin-top:40px}
+#s4 h2 em{font-style:normal;color:#ff6a55}
+#s4 ul{list-style:none;margin-top:48px;display:grid;gap:22px}
+#s4 li{font-size:42px;font-weight:500;display:flex;align-items:center;gap:20px}
+#s4 li:before{content:"";flex:none;width:46px;height:46px;border-radius:50%;background:var(--ok) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 12.5l4 4L18 8.5' fill='none' stroke='%23fff' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/80% no-repeat}
+#s4 .cta{margin-top:60px;align-self:flex-start;background:linear-gradient(120deg,#d63a2f,#f0553c);border-radius:99px;padding:32px 56px;font:800 50px 'Inter Display','Inter';letter-spacing:-.02em;
+  box-shadow:0 24px 50px -18px rgba(240,85,60,.8)}
+#s4 .pulse{animation:pulse 1100ms ease-in-out calc(var(--t0) + 2300ms) infinite both;align-self:flex-start;margin-top:60px}
+#s4 .pulse .cta{margin-top:0}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.045)}}
+#s4 .url{margin-top:30px;font-size:36px;opacity:.8}
+</style></head><body>
+<div id="stage">
+  <div class="brand">SERP<b>Rise</b></div>
+
+  <section class="scene" id="s1">
+    <div class="eyebrow a" style="--at:100ms">U SEO-u stalno čujemo</div>
+    <div class="qwrap"><h1 class="q" id="q">„A treba li nama uopće link building?”</h1></div>
+    <div class="ans disp a" style="--at:1750ms;--n:pop;--d:450ms;transform-origin:left">Iskreno? Ponekad i ne.</div>
+    <div class="but a" style="--at:2450ms">Ali pogledajte ključne riječi<br>od kojih firme žive&nbsp;↓</div>
+  </section>
+
+  <section class="scene" id="s2">
+    <div class="eyebrow a" style="--at:100ms">Top 5 na Googleu u Hrvatskoj</div>
+    <h2 class="a" style="--at:200ms">S koliko domena imaju linkove?</h2>
+    <div class="bars" id="bars"></div>
+    <div class="punch disp a" style="--at:2300ms">Ključne riječi koje donose klijente <em>traže linkove.</em></div>
+    <div class="src a" style="--at:2500ms">Prosjek referring domena za top 5 rezultata · Ahrefs</div>
+  </section>
+
+  <section class="scene" id="s3">
+    <div class="eyebrow a" style="--at:100ms">335 hrvatskih portala</div>
+    <h2 class="a" style="--at:200ms">Odaberite portale <em>sami.</em></h2>
+    <div class="mock a" style="--at:350ms">
+      <div class="chrome"><i></i><i></i><i></i><span>serprise.agency/portali</span></div>
+      <div class="tools">
+        <div><label>Kategorija</label><div class="sel" id="selcat"><span data-swap='[[0,"Sve kategorije"],[1350,"Zdravlje i ljepota"]]'></span></div></div>
+        <div><label>DR</label><div class="sel">Svi</div></div>
+        <div><label>Promet / mj.</label><div class="sel">Svi</div></div>
+      </div>
+      <div class="th"><span></span><span>Portal</span><span>DR</span><span class="r">Promet / mj.</span></div>
+      <div class="rows"><div class="set" id="setA"></div><div class="set" id="setB"></div></div>
+      <div class="cart">
+        <h3>Odabrani portali (<span data-swap='[[0,"0"],[2300,"1"],[3000,"2"],[3600,"3"]]'></span>)</h3>
+        <div class="chips">
+          <span class="chip" style="--ck:2300ms">krenizdravo.dnevnik.hr</span>
+          <span class="chip" style="--ck:3000ms">miss7zdrava.24sata.hr</span>
+          <span class="chip" style="--ck:3600ms">centarzdravlja.hr</span>
+        </div>
+        <div class="btn">Pošalji upit<span class="sent">Upit poslan ✓</span></div>
+      </div>
+      <div class="rip" style="left:250px;top:145px;--ck:1250ms"></div>
+      <div class="rip" style="left:45px;top:279px;--ck:2250ms"></div>
+      <div class="rip" style="left:45px;top:447px;--ck:2950ms"></div>
+      <div class="rip" style="left:45px;top:531px;--ck:3550ms"></div>
+      <div class="rip" style="left:773px;top:754px;--ck:4300ms"></div>
+      <svg class="cursor" viewBox="0 0 24 24"><path d="M4 2l15 9.2-6.6 1.5 3.9 7.6-2.9 1.5-3.9-7.6L4 19z" fill="#102b43" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/></svg>
+      <div class="toast"><b>Ponuda stiže unutar 1 radnog dana</b><span>cijena + prijedlog teme, bez obveze</span></div>
+    </div>
+  </section>
+
+  <section class="scene" id="s4">
+    <div class="brand2 a" style="--at:150ms">SERP<b>Rise</b></div>
+    <h2 class="a" style="--at:250ms">Linkovi s portala koje <em>birate sami.</em></h2>
+    <ul>
+      <li class="a" style="--at:800ms">Članak pišemo mi, besplatno</li>
+      <li class="a" style="--at:1000ms">Link uživo najčešće za 3 radna dana</li>
+      <li class="a" style="--at:1200ms">Bez minimalne narudžbe</li>
+      <li class="a" style="--at:1400ms">Upit za cijenu bez obveze</li>
+    </ul>
+    <div class="pulse"><div class="cta a" style="--at:1750ms;--n:pop;--d:500ms">Odaberite portale →</div></div>
+    <div class="url a" style="--at:2000ms">serprise.agency/portali</div>
+  </section>
+</div>
+<script>
+const $=s=>document.querySelector(s);
+// S1 word reveal
+const q=$('#q');q.innerHTML=q.textContent.split(' ').map((w,i)=>`<span class="a" style="--at:${250+i*150}ms;--d:450ms">${w}</span>`).join('');
+// S2 bars
+const data=[['agencija za nekretnine',619],['odvjetnik zagreb',400],['knjigovodstveni servis',381],['rent a car',316],['stomatolog zagreb',285]];
+$('#bars').innerHTML=data.map(([k,v],i)=>{const at=600+i*230;return `<div class="bar a" style="--at:${at}ms"><div class="lbl"><span>${k}</span><span class="num" data-count="${v}" data-at="${at+100}">0</span></div>
+<div class="track"><div class="fill a" style="--at:${at+100}ms;width:${v/619*100}%"></div></div></div>`}).join('');
+// S3 rows
+const row=(d,dr,t,ck,tag)=>`<div class="row${ck?' pick':''}"${ck?` style="--ck:${ck}ms"`:''}><div class="hl"></div><div class="cb"></div><div class="name">${d}${tag?'<span class="tag">bez oznake</span>':''}</div><div><span class="dr">${dr}</span></div><div class="r">${t}</div></div>`;
+$('#setA').innerHTML=[['24sata.hr',77,'6,2 mil.'],['index.hr',75,'5,7 mil.'],['net.hr',75,'2,8 mil.'],['dnevnik.hr',77,'2,6 mil.'],['jutarnji.hr',79,'2 mil.']].map(r=>row(...r)).join('');
+$('#setB').innerHTML=[['krenizdravo.dnevnik.hr',77,'781 tis.',2300],['ordinacija.vecernji.hr',78,'89,3 tis.'],['miss7zdrava.24sata.hr',77,'49,5 tis.',3000],['centarzdravlja.hr',44,'23 tis.',3600,1],['alternativa-za-vas.com',48,'14 tis.']].map(r=>row(...r)).join('');
+const T3=7400,T2=3700;
+window.seek=function(ms){
+  document.getAnimations().forEach(a=>{a.pause();a.currentTime=ms});
+  document.querySelectorAll('[data-count]').forEach(e=>{const p=Math.min(1,Math.max(0,(ms-T2-(+e.dataset.at))/900));e.textContent=Math.round(+e.dataset.count*(1-Math.pow(1-p,3)))});
+  document.querySelectorAll('[data-swap]').forEach(e=>{let v='';for(const [t,s] of JSON.parse(e.dataset.swap))if(ms-T3>=t||t===0)v=s;e.textContent=v});
+};
+const p=new URLSearchParams(location.search);
+if(p.has('t'))document.fonts.ready.then(()=>seek(+p.get('t')));else{const s=performance.now();(function f(){seek((performance.now()-s)%17800);requestAnimationFrame(f)})()}
+</script></body></html>

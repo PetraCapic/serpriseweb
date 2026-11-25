@@ -1,0 +1,260 @@
+---
+// Interaktivni dodaci za vodič /blog/black-friday-seo/ (i englesku verziju).
+// U tekstu članka ih označava <div data-embed="bf-..."></div>; skripta na dnu premješta svaki widget na to mjesto.
+// Sve radi u pregledniku: ništa što posjetitelj upiše ne šalje se nikamo.
+interface Props { lang?: 'hr' | 'en' }
+const { lang = 'hr' } = Astro.props;
+const en = lang === 'en';
+
+const T = en
+  ? {
+      tool: 'Tool',
+      nTitle: 'Build your Black Friday page title',
+      nLead: 'Type your store name and up to three broadest departments. The year goes in the title, never in the URL.',
+      nStore: 'Store name', nStorePh: 'e.g. My Shop',
+      nDepts: 'Departments (comma separated, up to 3)', nDeptsPh: 'e.g. shoes, jackets, bags',
+      nYear: 'Year', nOut: 'Title', nUrl: 'URL (the same every year)', nSub: 'Department pages',
+      nChars: 'characters', nLong: 'Longer than about 60 characters: Google may cut it off. Use fewer or shorter departments.',
+      nOk: 'Fits in about 60 characters.', nEmpty: 'Type a store name to see the title.',
+      nJoin: ' and ', copy: 'Copy', copied: 'Copied',
+      cTitle: 'See what Google shows for your store',
+      cLead: 'Type your store name. Each link opens a Google search in a new tab. Nothing you type is sent to us.',
+      cStore: 'Store name', cStorePh: 'e.g. My Shop', cCat: 'What you sell (one word)', cCatPh: 'e.g. trainers',
+      cEmpty: 'Type a store name to get the searches.',
+      cQ: [
+        ['{s} reviews', 'Is a Reddit or forum thread above your own site?'],
+        ['{s} reddit', 'What do people say about you, and how old is the thread?'],
+        ['{s} black friday', 'Does your sale page show up, and does the title say this year?'],
+        ['black friday {c}', 'Who ranks for your department: a shop page, a comparison site or a Facebook post?'],
+      ],
+      suffix: { reviews: 'reviews' },
+      pTitle: 'Your checklist',
+      pLead: 'Tick what is done. The list is saved in this browser only.',
+      pDone: 'done',
+      pGroups: [
+        ['The sale page', [
+          'One page at /black-friday/, no year in the URL',
+          'Title: Black Friday [year]: up to three departments | store name',
+          'Short text on the page: until when, on what, delivery and returns',
+          'Sale price and 30-day lowest price next to every product',
+          'Link from the homepage and from two or three most-read blog posts',
+          'Indexing requested in Search Console',
+        ]],
+        ['Reddit', [
+          'Searched store name + reviews and store name + reddit',
+          'Answered existing threads under our own name',
+          'Offer posted in the subreddit\'s official Black Friday thread, with no codes',
+        ]],
+        ['After Friday', [
+          'Page kept at the same URL, with the date of the next sale',
+          'Link removed from the homepage, one permanent link kept',
+        ]],
+      ],
+      noJs: 'These tools need JavaScript. The steps are also listed in the text.',
+    }
+  : {
+      tool: 'Alat',
+      nTitle: 'Složite naslov svoje Black Friday stranice',
+      nLead: 'Upišite ime trgovine i do tri najšira odjela. Godina ide u naslov, nikad u adresu.',
+      nStore: 'Ime trgovine', nStorePh: 'npr. Moja trgovina',
+      nDepts: 'Odjeli (odvojeni zarezom, do 3)', nDeptsPh: 'npr. obuća, jakne, torbe',
+      nYear: 'Godina', nOut: 'Naslov', nUrl: 'Adresa (ista svake godine)', nSub: 'Stranice odjela',
+      nChars: 'znakova', nLong: 'Dulje od oko 60 znakova: Google ga može odrezati. Stavite manje odjela ili kraće nazive.',
+      nOk: 'Stane u oko 60 znakova.', nEmpty: 'Upišite ime trgovine da vidite naslov.',
+      nJoin: ' i ', copy: 'Kopiraj', copied: 'Kopirano',
+      cTitle: 'Provjerite što Google prikazuje za vašu trgovinu',
+      cLead: 'Upišite ime trgovine. Svaki link otvara Google pretragu u novoj kartici. Ništa što upišete ne šalje se nama.',
+      cStore: 'Ime trgovine', cStorePh: 'npr. Moja trgovina', cCat: 'Što prodajete (jedna riječ)', cCatPh: 'npr. tenisice',
+      cEmpty: 'Upišite ime trgovine da dobijete pretrage.',
+      cQ: [
+        ['{s} iskustva', 'Je li Reddit ili forum iznad vaše stranice?'],
+        ['{s} reddit', 'Što ljudi pišu o vama i koliko je nit stara?'],
+        ['{s} black friday', 'Prikazuje li se vaša stranica akcije i piše li u naslovu ova godina?'],
+        ['black friday {c}', 'Tko je na vrhu za vaš odjel: stranica trgovine, usporedni portal ili objava s Facebooka?'],
+      ],
+      suffix: { reviews: 'iskustva' },
+      pTitle: 'Vaš popis',
+      pLead: 'Označite što je gotovo. Popis se sprema samo u ovom pregledniku.',
+      pDone: 'gotovo',
+      pGroups: [
+        ['Stranica akcije', [
+          'Jedna stranica na adresi /black-friday/, bez godine u adresi',
+          'Naslov: Black Friday [godina]: do tri odjela | ime trgovine',
+          'Kratki tekst na stranici: do kada, na što, dostava i povrat',
+          'Uz svaki proizvod akcijska cijena i najniža u 30 dana',
+          'Link s naslovnice i iz dva-tri najčitanija teksta na blogu',
+          'Zatraženo indeksiranje u Search Consoleu',
+        ]],
+        ['Reddit', [
+          'Pretraženo ime trgovine + iskustva i ime trgovine + reddit',
+          'Odgovoreno u postojećim nitima pod svojim imenom',
+          'Ponuda u službenoj Black Friday niti subreddita, bez kodova',
+        ]],
+        ['Nakon petka', [
+          'Stranica ostaje na istoj adresi, s datumom iduće akcije',
+          'Link maknut s naslovnice, jedan stalni link ostavljen',
+        ]],
+      ],
+      noJs: 'Alati rade uz JavaScript. Koraci su navedeni i u tekstu.',
+    };
+
+const year = new Date().getFullYear();
+const i18n = { join: T.nJoin, chars: T.nChars, long: T.nLong, ok: T.nOk, empty: T.nEmpty, copy: T.copy, copied: T.copied, cEmpty: T.cEmpty, done: T.pDone, q: T.cQ, hl: en ? 'en' : 'hr', gl: 'hr' };
+---
+
+<div class="bfw" data-bf-widgets data-i18n={JSON.stringify(i18n)}>
+  <section class="bfw-card" data-mount="bf-naslov">
+    <p class="bfw-eyebrow">{T.tool}</p>
+    <h3 class="bfw-title">{T.nTitle}</h3>
+    <p class="bfw-lead">{T.nLead}</p>
+    <div class="bfw-form">
+      <label class="bfw-f">{T.nStore}<input type="text" data-bf="store" placeholder={T.nStorePh} autocomplete="off" maxlength="40" /></label>
+      <label class="bfw-f bfw-f--wide">{T.nDepts}<input type="text" data-bf="depts" placeholder={T.nDeptsPh} autocomplete="off" maxlength="80" /></label>
+      <label class="bfw-f bfw-f--narrow">{T.nYear}<input type="number" data-bf="year" value={year} min="2024" max="2040" /></label>
+    </div>
+    <div class="bfw-out" aria-live="polite">
+      <p class="bfw-k">{T.nOut}</p>
+      <p class="bfw-result" data-bf="title">{T.nEmpty}</p>
+      <p class="bfw-meta"><span data-bf="count"></span> <button type="button" class="bfw-copy" data-bf="copy" hidden>{T.copy}</button></p>
+      <p class="bfw-k">{T.nUrl}</p>
+      <p class="bfw-code">/black-friday/</p>
+      <div data-bf="subwrap" hidden>
+        <p class="bfw-k">{T.nSub}</p>
+        <p class="bfw-code" data-bf="subs"></p>
+      </div>
+    </div>
+    <noscript><p class="bfw-note">{T.noJs}</p></noscript>
+  </section>
+
+  <section class="bfw-card" data-mount="bf-provjera">
+    <p class="bfw-eyebrow">{T.tool}</p>
+    <h3 class="bfw-title">{T.cTitle}</h3>
+    <p class="bfw-lead">{T.cLead}</p>
+    <div class="bfw-form">
+      <label class="bfw-f">{T.cStore}<input type="text" data-bf="cstore" placeholder={T.cStorePh} autocomplete="off" maxlength="40" /></label>
+      <label class="bfw-f">{T.cCat}<input type="text" data-bf="ccat" placeholder={T.cCatPh} autocomplete="off" maxlength="30" /></label>
+    </div>
+    <ul class="bfw-links" data-bf="links" aria-live="polite"><li class="bfw-muted">{T.cEmpty}</li></ul>
+    <noscript><p class="bfw-note">{T.noJs}</p></noscript>
+  </section>
+
+  <section class="bfw-card" data-mount="bf-plan">
+    <p class="bfw-eyebrow">{T.tool}</p>
+    <h3 class="bfw-title">{T.pTitle}</h3>
+    <p class="bfw-lead">{T.pLead} <strong data-bf="progress"></strong></p>
+    {T.pGroups.map(([group, items], g) => (
+      <div class="bfw-group">
+        <p class="bfw-k">{group}</p>
+        <ul class="bfw-checks">
+          {(items as string[]).map((item, i) => (
+            <li><label><input type="checkbox" data-bf-check={`${g}-${i}`} /> <span>{item}</span></label></li>
+          ))}
+        </ul>
+      </div>
+    ))}
+  </section>
+</div>
+
+<script>
+  // Premjesti widgete na mjesta označena u tekstu članka.
+  document.querySelectorAll<HTMLElement>('.bfw [data-mount]').forEach((el) => {
+    const slot = document.querySelector(`[data-embed="${el.dataset.mount}"]`);
+    if (slot) slot.replaceWith(el);
+  });
+  const root = document.querySelector<HTMLElement>('[data-bf-widgets]');
+  const I = JSON.parse(root?.dataset.i18n ?? '{}');
+  const $ = <T extends HTMLElement>(sel: string) => document.querySelector<T>(`[data-bf="${sel}"]`);
+  const slug = (s: string) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/g, 'd').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+
+  // 1. Naslov stranice akcije
+  const store = $<HTMLInputElement>('store'), depts = $<HTMLInputElement>('depts'), yr = $<HTMLInputElement>('year');
+  const out = $('title'), count = $('count'), copy = $<HTMLButtonElement>('copy'), subs = $('subs'), subwrap = $('subwrap');
+  const build = () => {
+    if (!store || !depts || !yr || !out || !count || !copy || !subs || !subwrap) return;
+    const name = store.value.trim();
+    const list = depts.value.split(',').map((d) => d.trim()).filter(Boolean).slice(0, 3);
+    if (!name) { out.textContent = I.empty; count.textContent = ''; copy.hidden = true; subwrap.hidden = true; return; }
+    const joined = list.length > 1 ? `${list.slice(0, -1).join(', ')}${I.join}${list[list.length - 1]}` : list[0] ?? '';
+    const title = `Black Friday ${yr.value}${joined ? `: ${joined}` : ''} | ${name}`;
+    out.textContent = title;
+    const over = title.length > 60;
+    count.textContent = `${title.length} ${I.chars}. ${over ? I.long : I.ok}`;
+    count.classList.toggle('is-over', over);
+    copy.hidden = false;
+    subwrap.hidden = list.length === 0;
+    subs.textContent = list.map((d) => `/black-friday/${slug(d)}/`).join('\n');
+  };
+  [store, depts, yr].forEach((el) => el?.addEventListener('input', build));
+  copy?.addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText(out?.textContent ?? ''); copy.textContent = I.copied; setTimeout(() => { copy.textContent = I.copy; }, 1500); } catch { /* bez dozvole za međuspremnik korisnik označi tekst ručno */ }
+  });
+
+  // 2. Što Google prikazuje za trgovinu
+  const cstore = $<HTMLInputElement>('cstore'), ccat = $<HTMLInputElement>('ccat'), links = $('links');
+  const renderLinks = () => {
+    if (!cstore || !ccat || !links) return;
+    const s = cstore.value.trim(), c = ccat.value.trim();
+    links.replaceChildren();
+    if (!s) { const li = document.createElement('li'); li.className = 'bfw-muted'; li.textContent = I.cEmpty; links.append(li); return; }
+    (I.q as [string, string][]).forEach(([pattern, hint]) => {
+      if (pattern.includes('{c}') && !c) return;
+      const q = pattern.replace('{s}', s).replace('{c}', c);
+      const li = document.createElement('li');
+      const a = document.createElement('a');
+      a.href = `https://www.google.com/search?q=${encodeURIComponent(q)}&hl=${I.hl}&gl=${I.gl}`;
+      a.target = '_blank'; a.rel = 'noopener noreferrer'; a.textContent = q;
+      const span = document.createElement('span'); span.textContent = hint;
+      li.append(a, span); links.append(li);
+    });
+  };
+  [cstore, ccat].forEach((el) => el?.addEventListener('input', renderLinks));
+
+  // 3. Popis: stanje se pamti samo u ovom pregledniku
+  const KEY = 'bf-plan';
+  const boxes = [...document.querySelectorAll<HTMLInputElement>('[data-bf-check]')];
+  const progress = $('progress');
+  let saved: Record<string, boolean> = {};
+  try { saved = JSON.parse(localStorage.getItem(KEY) ?? '{}'); } catch { saved = {}; }
+  const show = () => { if (progress) progress.textContent = `${boxes.filter((b) => b.checked).length}/${boxes.length} ${I.done}`; };
+  boxes.forEach((b) => {
+    b.checked = Boolean(saved[b.dataset.bfCheck ?? '']);
+    b.addEventListener('change', () => {
+      saved[b.dataset.bfCheck ?? ''] = b.checked;
+      try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch { /* privatni način: popis vrijedi do zatvaranja stranice */ }
+      show();
+    });
+  });
+  show();
+</script>
+
+<style>
+  .bfw { display: contents; }
+  .bfw-card { border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin: 1.6em 0; background: var(--surface); }
+  .bfw-eyebrow { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin: 0 0 4px; font-weight: 600; }
+  .bfw-title { margin: 0 0 6px; font-size: 1.2rem; }
+  .bfw-lead { margin: 0 0 14px; color: var(--muted); font-size: 0.95rem; }
+  .bfw-note, .bfw-muted { font-size: 0.9rem; color: var(--muted); }
+  .bfw-form { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 14px; }
+  .bfw-f { display: grid; gap: 4px; font-size: 0.8rem; color: var(--muted); font-weight: 500; flex: 1 1 180px; }
+  .bfw-f--wide { flex: 2 1 260px; }
+  .bfw-f--narrow { flex: 0 1 100px; }
+  .bfw-f input { font: inherit; font-size: 1rem; color: var(--text); padding: 9px 10px; border: 1px solid var(--border); border-radius: 8px; background: #fff; width: 100%; box-sizing: border-box; }
+  .bfw-out { background: var(--bg-2); border-radius: 10px; padding: 14px 16px; }
+  .bfw-k { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); font-weight: 600; margin: 10px 0 2px; }
+  .bfw-k:first-child { margin-top: 0; }
+  .bfw-result { font-size: 1.1rem; font-weight: 600; margin: 0; overflow-wrap: anywhere; }
+  .bfw-meta { font-size: 0.85rem; color: var(--muted); margin: 4px 0 0; }
+  .bfw-meta .is-over { color: var(--accent); font-weight: 600; }
+  .bfw-copy { font: inherit; font-size: 0.85rem; margin-left: 6px; padding: 3px 10px; border: 1px solid var(--border); border-radius: 999px; background: #fff; color: var(--text); cursor: pointer; }
+  .bfw-code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.95rem; margin: 0; overflow-wrap: anywhere; white-space: pre-line; }
+  .bfw-links { list-style: none; padding: 0 !important; margin: 0; display: grid; gap: 10px; }
+  .bfw-links li { margin: 0; display: grid; gap: 2px; }
+  .bfw-links a { font-weight: 600; overflow-wrap: anywhere; }
+  .bfw-links span { font-size: 0.88rem; color: var(--muted); }
+  .bfw-group + .bfw-group { margin-top: 6px; }
+  .bfw-checks { list-style: none; padding: 0 !important; margin: 0 0 6px; display: grid; gap: 6px; }
+  .bfw-checks li { margin: 0; }
+  .bfw-checks label { display: flex; gap: 10px; align-items: flex-start; cursor: pointer; font-size: 0.97rem; }
+  .bfw-checks input { margin-top: 4px; width: 18px; height: 18px; flex: none; accent-color: var(--accent); }
+  .bfw-checks input:checked + span { color: var(--muted); text-decoration: line-through; }
+</style>

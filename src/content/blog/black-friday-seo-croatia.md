@@ -42,7 +42,7 @@ sources:
     url: "https://trends.google.com/trends/explore?date=2025-10-01%202025-12-10&geo=HR&q=black%20friday"
 ---
 
-Most Black Friday search demand in Croatia comes before the Friday itself, retailers have no page for many of the queries, and when a shopper types a store's name plus "reviews", Reddit is often what they see first. This guide collects what we measured: two years of Google Trends, Google's results for 31 queries, the sale pages of about a dozen Croatian retailers, and 257 posts and comments from Croatian subreddits.
+Most Black Friday search demand in Croatia comes before the Friday itself, retailers have no page for many of the queries, and when a shopper types a store's name plus "reviews", Reddit is often what they see first. This guide collects what we measured: two years of Google Trends, Google's results for 31 queries, the sale pages of about a dozen Croatian retailers, the prices of 634 products from 14 stores, and 641 comments from Croatian subreddits.
 
 We are adding to the guide every day until Black Friday:
 
@@ -183,11 +183,11 @@ Besides Reddit, local forums are on page one for 8 of the 19 queries. Reddit or 
 
 ### What people write about Black Friday
 
-We read 257 posts and comments about Black Friday on r/croatia and r/askcroatia, from 2019 to this week. Three things repeat.
+We read 641 comments about Black Friday from 35 threads on r/croatia, r/hrvatska, r/askcroatia and r/Split, from 2020 to this week. Among the 75 most upvoted comments, 34 say the discount is fake or too small, 14 describe how they verify a price, 7 recommend buying abroad, and none praises a Black Friday discount from a local store. Three things repeat.
 
-**Distrust of discounts.** The most common sentence is some version of: "A month before, they all raise prices, and on Black Friday they lower them again." This week a thread about a price label showing a sale price of €9.99, with small print saying the product had cost €4.99, has 138 upvotes.
+**Distrust of discounts.** The most common sentence is some version of: "A month before, they all raise prices, and on Black Friday they lower them again." This week a thread about a price label showing a sale price of €9.99, with small print saying the product had cost €4.99, has 143 upvotes.
 
-**People track prices themselves.** They recommend local price comparison sites and check prices against Germany. Those who wrote prices down in advance say it paid off. One user writes that in 2021 she noted the prices of five household appliances and saved 3,000 to 4,000 kuna on Black Friday.
+**People track prices themselves.** They recommend local price comparison sites, keep old receipts and check prices against Germany. Those who wrote prices down in advance say it paid off. One user writes that in 2021 she noted the prices of five household appliances and saved 3,000 to 4,000 kuna on Black Friday. How exactly they check, and what they see on store pages when they do, is measured in [Part 3](#part-3-what-shoppers-want-to-see).
 
 **The same questions every autumn.** "Is it worth waiting for Black Friday to buy a phone?", "a laptop?", "a washing machine?", "when is Black Friday this year?". The questions start in September.
 
@@ -288,9 +288,9 @@ The worst option is a permanent redirect to the homepage. Google can treat that 
 
 - **Google Trends:** Croatia, term "black friday", by day from 1 October to 10 December, for 2024 and 2025. Shares are sums of daily index values in that period. Trends measures relative interest, not the number of searches or sales.
 - **Search results:** Google's results for Croatia. For the sale page, 12 queries and 117 results on 24 November 2026. For Reddit, 19 queries and the top 10 results per query on 25 November 2026. These are one-day snapshots; rankings change.
-- **Reddit:** 257 posts and comments about Black Friday from r/croatia and r/askcroatia, collected on 25 November 2026. Nineteen queries is a small sample.
+- **Google queries for Reddit:** nineteen queries is a small sample.
 - **Product prices (Part 3):** 634 products from the sale and Black Friday pages of 14 stores, the first products loaded in mobile view, 25 November 2026. Not a representative sample; stores that block automated browsing are not included. At one fashion store the discount is written as "extra −X%", and we assumed it is not included in the displayed price.
-- **Reddit (Part 3):** 641 comments from 35 threads on r/croatia, r/hrvatska, r/askcroatia and r/Split. Threads were chosen by Black Friday topic, so complaints are probably over-represented; the split of the 75 most upvoted comments was done by hand.
+- **Reddit:** 641 comments from 35 threads on r/croatia, r/hrvatska, r/askcroatia and r/Split. Threads were chosen by Black Friday topic, so complaints are probably over-represented; the split of the 75 most upvoted comments was done by hand.
 - **Retailer pages:** titles, URLs and structure were read directly from the pages or from Google's results.
 
 If you would like us to review your sale page before next season, [get in touch](/en/contact/).

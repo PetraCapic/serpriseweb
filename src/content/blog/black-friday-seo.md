@@ -40,7 +40,7 @@ sources:
     url: "https://trends.google.com/trends/explore?date=2025-10-01%202025-12-10&geo=HR&q=black%20friday"
 ---
 
-Većina potražnje za Black Friday u Hrvatskoj dogodi se prije samog petka, za dobar dio upita trgovine nemaju stranicu, a kad kupac upiše ime trgovine i "iskustva", na vrhu ga često dočeka Reddit. Ovaj vodič skuplja ono što smo izmjerili: Google Trends za dvije godine, Googleove rezultate za 31 upit, stranice akcija desetak hrvatskih trgovina i 257 objava i komentara s hrvatskih subreddita.
+Većina potražnje za Black Friday u Hrvatskoj dogodi se prije samog petka, za dobar dio upita trgovine nemaju stranicu, a kad kupac upiše ime trgovine i "iskustva", na vrhu ga često dočeka Reddit. Ovaj vodič skuplja ono što smo izmjerili: Google Trends za dvije godine, Googleove rezultate za 31 upit, stranice akcija desetak hrvatskih trgovina, cijene 634 proizvoda iz 14 trgovina i 641 komentar s hrvatskih subreddita.
 
 Vodič dopunjujemo svaki dan do Black Fridaya:
 
@@ -181,11 +181,11 @@ Uz Reddit, forumi (forum.hr, Bug forum) su na prvoj stranici za 8 od 19 upita. R
 
 ### Što ljudi pišu o Black Fridayu
 
-Pročitali smo 257 objava i komentara o Black Fridayu s r/croatia i r/askcroatia, od 2019. do ovog tjedna. Ponavljaju se tri stvari.
+Pročitali smo 641 komentar o Black Fridayu iz 35 niti na r/croatia, r/hrvatska, r/askcroatia i r/Split, od 2020. do ovog tjedna. Među 75 najlajkanijih komentara 34 govore da je popust lažan ili premalen, 14 opisuje kako provjeravaju cijenu, 7 preporučuje kupnju u inozemstvu, a nijedan ne hvali Black Friday popust domaće trgovine. Ponavljaju se tri stvari.
 
-**Nepovjerenje u popuste.** Najčešća rečenica je neka verzija ove: "Mjesec dana prije svi dignu cijene i onda ih na Black Friday spuste." Ovaj tjedan nit o etiketi na kojoj piše akcijska cijena 9,99 €, a sitnim slovima da je proizvod koštao 4,99 €, ima 138 glasova.
+**Nepovjerenje u popuste.** Najčešća rečenica je neka verzija ove: "Mjesec dana prije svi dignu cijene i onda ih na Black Friday spuste." Ovaj tjedan nit o etiketi na kojoj piše akcijska cijena 9,99 €, a sitnim slovima da je proizvod koštao 4,99 €, ima 143 glasa.
 
-**Ljudi sami prate cijene.** Preporučuju nabava.net i jeftinije.hr, a cijene uspoređuju s Njemačkom. Oni koji su cijene zapisali unaprijed kažu da se isplatilo. Jedna korisnica piše da je 2021. zapisala cijene pet kućanskih aparata i na Black Friday uštedjela 3 do 4 tisuće kuna.
+**Ljudi sami prate cijene.** Preporučuju nabava.net i jeftinije.hr, čuvaju stare račune, a cijene uspoređuju s Njemačkom. Oni koji su cijene zapisali unaprijed kažu da se isplatilo. Jedna korisnica piše da je 2021. zapisala cijene pet kućanskih aparata i na Black Friday uštedjela 3 do 4 tisuće kuna. Kako točno provjeravaju i što pritom vide na stranicama trgovina, izmjerili smo u [dijelu 3](#dio-3-što-kupac-želi-vidjeti).
 
 **Ista pitanja svake jeseni.** "Isplati li se čekati Black Friday za mobitel?", "za laptop?", "za perilicu?", "kada je Black Friday ove godine?". Pitanja stižu od rujna.
 
@@ -286,9 +286,9 @@ Najgora opcija je trajno preusmjeravanje na naslovnicu. Google takvo preusmjerav
 
 - **Google Trends:** Hrvatska, pojam "black friday", po danima od 1. listopada do 10. prosinca, za 2024. i 2025. Udjeli su zbroj dnevnih indeksa u tom razdoblju. Trends mjeri relativni interes, a ne broj pretraga ni prodaju.
 - **Rezultati pretrage:** Googleovi rezultati za Hrvatsku. Za stranicu akcije 12 upita i 117 rezultata, 24. studenoga 2026. Za Reddit 19 upita i prvih 10 rezultata po upitu, 25. studenoga 2026. To su snimke jednog dana; poredak se mijenja.
-- **Reddit:** 257 objava i komentara o Black Fridayu s r/croatia i r/askcroatia, preuzetih 25. studenoga 2026. Devetnaest upita je mali uzorak.
+- **Googleovi upiti za Reddit:** devetnaest upita je mali uzorak.
 - **Cijene proizvoda (dio 3):** 634 proizvoda s akcijskih i Black Friday stranica 14 trgovina, prvi učitani proizvodi u mobilnom prikazu, 25. studenoga 2026. Uzorak nije reprezentativan; trgovine koje blokiraju automatski pregled nisu uključene. Kod jedne modne trgovine popust je napisan kao „extra −X %“ pa smo pretpostavili da nije uračunat u prikazanu cijenu.
-- **Reddit (dio 3):** 641 komentar iz 35 niti na r/croatia, r/hrvatska, r/askcroatia i r/Split. Niti su birane po temi Black Fridaya, pa su pritužbe vjerojatno prezastupljene; podjela 75 najlajkanijih komentara je ručna.
+- **Reddit:** 641 komentar iz 35 niti na r/croatia, r/hrvatska, r/askcroatia i r/Split. Niti su birane po temi Black Fridaya, pa su pritužbe vjerojatno prezastupljene; podjela 75 najlajkanijih komentara je ručna.
 - **Stranice trgovina:** naslove, adrese i strukturu pročitali smo izravno sa stranica ili iz Googleovih rezultata.
 
 Ako želite da pregledamo vašu stranicu akcije prije iduće sezone, [javite nam se](/kontakt/).

@@ -2,7 +2,7 @@
 title: "Black Friday SEO vodič za webshopove: podaci za Hrvatsku, stranica akcije i Reddit"
 description: "Vodič s podacima za Hrvatsku: kada kupci traže, tko se rangira, kako složiti stranicu akcije i što napraviti s Reddit nitima o vašoj trgovini. S alatima."
 date: 2026-11-24
-updated: 2026-11-25
+updated: 2026-11-26
 translation: black-friday-seo-croatia
 image: /blog/black-friday-seo/naslovna.png
 imageAlt: "Graf interesa za Black Friday u Hrvatskoj: 83% interesa dogodi se prije samog petka"
@@ -30,6 +30,12 @@ sources:
     url: "https://www.zakon.hr/z/193/Zakon-o-za%C5%A1titi-potro%C5%A1a%C4%8Da"
   - name: "Zakon o nedopuštenom oglašavanju, članak 6."
     url: "https://www.zakon.hr/z/229/Zakon-o-nedopu%C5%A1tenom-ogla%C5%A1avanju"
+  - name: "Odluka o isticanju dodatne cijene kao mjera izravne kontrole cijena (NN 101/2026)"
+    url: "https://narodne-novine.nn.hr/clanci/sluzbeni/full/2026_09_101_1212.html"
+  - name: "Odluka o izmjeni Odluke o isticanju dodatne cijene (NN 110/2026)"
+    url: "https://narodne-novine.nn.hr/clanci/sluzbeni/2026_09_110_1309.html"
+  - name: "HRT: Borzan, 72 posto građana naišlo je na lažne popuste (9.2.2026.)"
+    url: "https://glashrvatske.hrt.hr/en/economy/borzan-72-percent-of-citizens-have-encountered-fake-discounts-12563281"
   - name: "Google Trends, Hrvatska, pojam \"black friday\""
     url: "https://trends.google.com/trends/explore?date=2025-10-01%202025-12-10&geo=HR&q=black%20friday"
 ---
@@ -40,7 +46,7 @@ Vodič dopunjujemo svaki dan do Black Fridaya:
 
 - **Dio 1: stranica akcije** (24.11.). Kada kupci traže, tko se rangira, adresa, naslov, struktura za velike trgovine.
 - **Dio 2: Reddit** (25.11.). Gdje je Reddit na Googleu, što ljudi pišu i što trgovina smije napraviti.
-- **Dio 3: što kupac želi vidjeti na stranici akcije.** Stiže 26.11.
+- **Dio 3: što kupac želi vidjeti** (26.11.). Kako kupci provjeravaju popust, što pokazuju cijene 634 proizvoda i provjera u jednoj tablici.
 - **Dio 4: što sa stranicom nakon petka.** Kratka verzija je već na dnu, detaljna stiže 27.11.
 
 Ako želite odmah na posao, [popis zadataka](#vaš-popis) je na dnu.
@@ -204,6 +210,54 @@ Dakle, pisati o svojoj trgovini s lažnog profila nije samo protiv pravila Reddi
 
 Koliko prometa jedna nit donese trgovini nismo mjerili, pa to ne obećavamo. Izmjerili smo gdje stoji: na prvoj stranici Googlea, uz ime trgovine, godinama.
 
+## Dio 3: što kupac želi vidjeti
+
+### Kupac prvo provjeri popust
+
+Pročitali smo 641 komentar o Black Fridayu iz 35 Reddit niti, od 2020. do 2026. Među 75 najlajkanijih, 34 govore da je popust lažan ili premalen, 14 opisuje kako točno provjeravaju cijenu, a nijedan ne hvali Black Friday popust domaće trgovine. Anketa zastupnice Biljane Borzan iz 2025. kaže isto: 72 % građana naišlo je na lažni popust.
+
+Kupci provjeravaju na četiri načina:
+
+1. **Guglaju model u drugoj trgovini.** „Aparat za kavu snižen s 450 na 280 €. Googlam model i nađem ga u drugom dućanu za 260 u redovnoj cijeni.“
+2. **Gledaju povijest cijene na usporedilicama.** „Kad sam počeo pratiti, koštao je 85 €. Sad imaju Black Month popust, košta 85 €.“
+3. **Vade stare račune.** Kupnja od prije mjesec dana: 23,99 €. Isti proizvod na „zagrijavanju za Black Friday“: 29,99 €.
+4. **Čitaju sitna slova.** Od 17. studenoga 2026. svaka trgovina uz cijenu mora istaknuti i cijenu koja je vrijedila 10. rujna 2026. Reddit nit koja uspoređuje tu cijenu s Black Friday popustima skupila je u tjednu prije Black Fridaya 143 glasa.
+
+### Što kupac sada vidi: 634 proizvoda
+
+Na akcijskim i Black Friday stranicama 14 trgovina usporedili smo cijenu uz proizvod s cijenom na dan 10. rujna.
+
+![Koliko je akcijska cijena niža od cijene na dan 10. rujna 2026., na 634 proizvoda iz 14 trgovina](/blog/black-friday-seo/cijena-10-9.png)
+
+- **85 % proizvoda** jeftinije je nego 10. rujna. Medijan sniženja je 20 %.
+- **13 %** pokazuje istu cijenu kao 10. rujna, a popust se vidi tek u košarici ili kao „dodatnih X %“.
+- **2 %** nema nikakav popust, a 5 proizvoda je skuplje nego u rujnu.
+- **Skuplji proizvodi imaju manji popust:** medijan je 15 % za proizvode iznad 1.000 €, a 27 % za one ispod 200 €.
+- **Prekrižena cijena:** na 463 kartice koje je imaju, u 74 % slučajeva jednaka je cijeni na 10. rujna, u 20 % je niža, a u 6 % viša.
+- **Samo 4 od 14 trgovina** uz proizvod riječima piše „najniža cijena u 30 dana“.
+
+Većina popusta je, dakle, prava. Kupac to ne vidi jer dokaz stoji u sitnim slovima, a jedan loš proizvod završi kao snimka zaslona na Redditu.
+
+### Provjera u jednoj tablici
+
+Ako vodite webshop, istu provjeru možete napraviti prije kupca.
+
+![Primjer tablice: akcijska cijena, prekrižena cijena, cijena na 10. rujna i što napraviti sa svakim proizvodom](/blog/black-friday-seo/tablica.png)
+
+1. Iz administracije webshopa izvezite proizvode koji su na akciji u Excel ili Google Sheets. Ostavite četiri stupca: naziv, akcijska cijena, prekrižena cijena, cijena na dan 10. rujna.
+2. U peti stupac upišite koliko je akcijska cijena niža od cijene na 10. rujna (akcijska podijeljena s rujanskom, minus 1) i poredajte tablicu po tom stupcu.
+3. Prođite retke od vrha. Naći ćete tri vrste slučajeva.
+
+**Akcijska cijena ista je ili viša nego 10. rujna.** Primjer koji smo našli: laptop na akciji za 1.163,65 € s oznakom −15 %, a 10. rujna je koštao 1.124 €. Takav proizvod maknite sa stranice akcije.
+
+**Cijena je ista kao u rujnu jer popust vrijedi tek u košarici.** Primjer: čizme 69,99 €, ispod piše „cijena na 10.9.: 69,99 €“, a popust od 40 % obračuna se na kraju. Uz proizvod napišite konačnu cijenu: 41,99 €.
+
+**Oznaka obećava više nego što je sniženje prema rujnu.** Primjer: usisavač 449 €, prekriženo 659 € (oznaka −32 %), a 10. rujna je koštao 619 € (stvarno −27 %). Popust je i dalje dobar, ali takav proizvod nemojte stavljati na vrh stranice.
+
+Sve ostalo ostaje kako jest. Kod petine proizvoda naći ćete i suprotno: u rujnu je cijena bila viša od prekrižene. Tu slobodno dopišite „u rujnu 629 €“, jer vam to ide u korist.
+
+Dvije napomene. Popust se po zakonu i dalje računa od najniže cijene u zadnjih 30 dana; cijena na 10. rujna je dodatni podatak uz nju. I pogledajte datum uz dodatnu cijenu: na 15 % kartica to nije 10. rujna nego kasniji datum, jer je proizvod kasnije uveden u ponudu.
+
 ## Što napraviti i kada
 
 ### Što napraviti ovaj tjedan
@@ -233,6 +287,8 @@ Najgora opcija je trajno preusmjeravanje na naslovnicu. Google takvo preusmjerav
 - **Google Trends:** Hrvatska, pojam "black friday", po danima od 1. listopada do 10. prosinca, za 2024. i 2025. Udjeli su zbroj dnevnih indeksa u tom razdoblju. Trends mjeri relativni interes, a ne broj pretraga ni prodaju.
 - **Rezultati pretrage:** Googleovi rezultati za Hrvatsku. Za stranicu akcije 12 upita i 117 rezultata, 24. studenoga 2026. Za Reddit 19 upita i prvih 10 rezultata po upitu, 25. studenoga 2026. To su snimke jednog dana; poredak se mijenja.
 - **Reddit:** 257 objava i komentara o Black Fridayu s r/croatia i r/askcroatia, preuzetih 25. studenoga 2026. Devetnaest upita je mali uzorak.
+- **Cijene proizvoda (dio 3):** 634 proizvoda s akcijskih i Black Friday stranica 14 trgovina, prvi učitani proizvodi u mobilnom prikazu, 25. studenoga 2026. Uzorak nije reprezentativan; trgovine koje blokiraju automatski pregled nisu uključene. Kod jedne modne trgovine popust je napisan kao „extra −X %“ pa smo pretpostavili da nije uračunat u prikazanu cijenu.
+- **Reddit (dio 3):** 641 komentar iz 35 niti na r/croatia, r/hrvatska, r/askcroatia i r/Split. Niti su birane po temi Black Fridaya, pa su pritužbe vjerojatno prezastupljene; podjela 75 najlajkanijih komentara je ručna.
 - **Stranice trgovina:** naslove, adrese i strukturu pročitali smo izravno sa stranica ili iz Googleovih rezultata.
 
 Ako želite da pregledamo vašu stranicu akcije prije iduće sezone, [javite nam se](/kontakt/).

@@ -2,7 +2,7 @@
 title: "Black Friday SEO guide for online shops: data from Croatia, the sale page and Reddit"
 description: "A guide built on data from Croatia: when shoppers search, who ranks, how to build the sale page and what to do about Reddit threads on your store. With tools."
 date: 2026-11-24
-updated: 2026-11-25
+updated: 2026-11-26
 lang: en
 path: /en/blog/black-friday-seo-croatia/
 translation: black-friday-seo
@@ -32,6 +32,12 @@ sources:
     url: "https://www.zakon.hr/z/193/Zakon-o-za%C5%A1titi-potro%C5%A1a%C4%8Da"
   - name: "Croatian Unfair Advertising Act, Article 6 (in Croatian)"
     url: "https://www.zakon.hr/z/229/Zakon-o-nedopu%C5%A1tenom-ogla%C5%A1avanju"
+  - name: "Croatian Government Decision on displaying an additional price (Official Gazette 101/2026, in Croatian)"
+    url: "https://narodne-novine.nn.hr/clanci/sluzbeni/full/2026_09_101_1212.html"
+  - name: "Amendment to the Decision (Official Gazette 110/2026, in Croatian)"
+    url: "https://narodne-novine.nn.hr/clanci/sluzbeni/2026_09_110_1309.html"
+  - name: "HRT: Borzan, 72 percent of citizens have encountered fake discounts (9 Feb 2026)"
+    url: "https://glashrvatske.hrt.hr/en/economy/borzan-72-percent-of-citizens-have-encountered-fake-discounts-12563281"
   - name: "Google Trends, Croatia, term \"black friday\""
     url: "https://trends.google.com/trends/explore?date=2025-10-01%202025-12-10&geo=HR&q=black%20friday"
 ---
@@ -42,7 +48,7 @@ We are adding to the guide every day until Black Friday:
 
 - **Part 1: the sale page** (24 Nov). When shoppers search, who ranks, the URL, the title, structure for large shops.
 - **Part 2: Reddit** (25 Nov). Where Reddit sits on Google, what people write and what a shop may do.
-- **Part 3: what shoppers want to see on the sale page.** Coming 26 Nov.
+- **Part 3: what shoppers want to see** (26 Nov). How shoppers verify a discount, what the prices of 634 products show, and a check in one sheet.
 - **Part 4: what to do with the page after Friday.** The short version is already below; the detailed one comes 27 Nov.
 
 If you want to get straight to work, the [checklist](#your-checklist) is at the bottom.
@@ -206,6 +212,54 @@ So writing about your own shop from a fake profile is not only against Reddit's 
 
 We did not measure how much traffic one thread sends to a shop, so we do not promise any. What we measured is where it sits: on page one of Google, next to the store's name, for years.
 
+## Part 3: what shoppers want to see
+
+### Shoppers check the discount first
+
+We read 641 comments about Black Friday from 35 Croatian Reddit threads, 2020 to 2026. Among the 75 most upvoted, 34 say the discount is fake or too small, 14 describe exactly how they verify a price, and none praises a Black Friday discount from a local store. A 2025 survey by MEP Biljana Borzan says the same: 72% of Croatians have run into a fake discount.
+
+Shoppers check in four ways:
+
+1. **They google the model at another store.** "Coffee machine cut from €450 to €280. I google the model and find it elsewhere for €260 at regular price."
+2. **They look at price history on comparison sites.** "When I started tracking it cost €85. Now it's on a Black Month discount. It costs €85."
+3. **They pull out old receipts.** A purchase a month earlier: €23.99. The same item during the "Black Friday warm-up": €29.99.
+4. **They read the small print.** Since 17 November 2026 every retailer in Croatia must show, next to the current price, the price that applied on 10 September 2026. A Reddit thread comparing that price with Black Friday discounts got 143 upvotes in the week before Black Friday.
+
+### What the shopper now sees: 634 products
+
+On the sale and Black Friday pages of 14 stores we compared the price on the product card with the price on 10 September.
+
+![How far the sale price is below the price on 10 September 2026, for 634 products from 14 stores](/blog/black-friday-seo-croatia/price-10-sep.png)
+
+- **85% of products** are cheaper than on 10 September. The median cut is 20%.
+- **13%** show the same price as on 10 September, with the discount visible only in the cart or as an "extra X%".
+- **2%** have no discount at all, and 5 products cost more than in September.
+- **Expensive products get smaller cuts:** the median is 15% for products above €1,000 and 27% for those under €200.
+- **Crossed-out price:** on the 463 cards that have one, it equals the 10 September price in 74% of cases, is lower in 20% and higher in 6%.
+- **Only 4 of 14 stores** write "lowest price in 30 days" in words next to the product.
+
+So most discounts are real. Shoppers do not see it because the proof sits in small print, and one bad product ends up as a screenshot on Reddit.
+
+### The check in one sheet
+
+If you run an online store, you can do the same check before your shoppers do.
+
+![Example sheet: sale price, crossed-out price, price on 10 September and what to do with each product](/blog/black-friday-seo-croatia/sheet.png)
+
+1. Export the products on sale from your store admin to Excel or Google Sheets. Keep four columns: name, sale price, crossed-out price, price on 10 September.
+2. In a fifth column, calculate how far the sale price is below the 10 September price (sale price divided by the September price, minus 1) and sort the sheet by that column.
+3. Go through the rows from the top. You will find three kinds of cases.
+
+**The sale price is the same as or higher than on 10 September.** One we found: a laptop on sale at €1,163.65 with a −15% badge, which cost €1,124 on 10 September. Remove that product from the sale page.
+
+**The price equals the September price because the discount applies only in the cart.** Example: boots at €69.99, with "price on 10 Sep: €69.99" below, and a 40% discount applied at the end. Print the final price next to the product: €41.99.
+
+**The badge promises more than the cut against September.** Example: a vacuum cleaner at €449, crossed-out €659 (badge −32%), which cost €619 on 10 September (really −27%). The discount is still good, but do not put that product at the top of the page.
+
+Everything else stays as it is. For a fifth of products you will find the opposite: the September price was higher than the crossed-out one. There you can add "€629 in September", because it works in your favour.
+
+Two notes. By law the discount is still calculated from the lowest price in the last 30 days; the 10 September price is an extra figure shown next to it. And look at the date next to the reference price: on 15% of cards it is later than 10 September, because the product was listed later.
+
 ## What to do and when
 
 ### What to do this week
@@ -235,6 +289,8 @@ The worst option is a permanent redirect to the homepage. Google can treat that 
 - **Google Trends:** Croatia, term "black friday", by day from 1 October to 10 December, for 2024 and 2025. Shares are sums of daily index values in that period. Trends measures relative interest, not the number of searches or sales.
 - **Search results:** Google's results for Croatia. For the sale page, 12 queries and 117 results on 24 November 2026. For Reddit, 19 queries and the top 10 results per query on 25 November 2026. These are one-day snapshots; rankings change.
 - **Reddit:** 257 posts and comments about Black Friday from r/croatia and r/askcroatia, collected on 25 November 2026. Nineteen queries is a small sample.
+- **Product prices (Part 3):** 634 products from the sale and Black Friday pages of 14 stores, the first products loaded in mobile view, 25 November 2026. Not a representative sample; stores that block automated browsing are not included. At one fashion store the discount is written as "extra −X%", and we assumed it is not included in the displayed price.
+- **Reddit (Part 3):** 641 comments from 35 threads on r/croatia, r/hrvatska, r/askcroatia and r/Split. Threads were chosen by Black Friday topic, so complaints are probably over-represented; the split of the 75 most upvoted comments was done by hand.
 - **Retailer pages:** titles, URLs and structure were read directly from the pages or from Google's results.
 
 If you would like us to review your sale page before next season, [get in touch](/en/contact/).

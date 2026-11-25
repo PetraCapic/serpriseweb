@@ -13,6 +13,7 @@ import GlossaryTips from './GlossaryTips.astro';
 import Ga4AiKanal from '../Ga4AiKanal.astro';
 import AiProvjera from '../AiProvjera.astro';
 import PortaliClanak from '../PortaliClanak.astro';
+import BlackFriday from './BlackFriday.astro';
 import { getPosts, formatDate, readingTime, postUrl } from '../../lib/blog';
 import { site, team } from '../../lib/site';
 
@@ -146,6 +147,7 @@ const schema = [
       {hasTerms && <GlossaryTips lang={lang} />}
       {has('ai-generator') && <AiProvjera lang={lang} />}
       {post.body?.includes('data-embed="portali-') && <PortaliClanak lang={lang} />}
+      {post.body?.includes('data-embed="bf-') && <BlackFriday lang={lang} />}
       {/* Vidljiv FAQ iz frontmattera, osim ako ga članak već ima u tekstu */}
       {faq && !post.body?.includes(`## ${t.faq}`) && (
         <section class="article__faq" id={isEn ? 'faq' : 'cesta-pitanja'}>

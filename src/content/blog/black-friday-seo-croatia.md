@@ -1,7 +1,8 @@
 ---
-title: "Black Friday SEO: what the data from Croatia shows and what to do with your sale page"
-description: "83% of Black Friday search interest in Croatia comes before the Friday. Who ranks, how to build a sale page for 5 or 500 categories, and what to do with it after."
+title: "Black Friday SEO guide for online shops: data from Croatia, the sale page and Reddit"
+description: "A guide built on data from Croatia: when shoppers search, who ranks, how to build the sale page and what to do about Reddit threads on your store. With tools."
 date: 2026-11-24
+updated: 2026-11-25
 lang: en
 path: /en/blog/black-friday-seo-croatia/
 translation: black-friday-seo
@@ -18,6 +19,10 @@ faq:
     a: "Comparative advertising is allowed under the conditions in Article 6 of the Croatian Unfair Advertising Act: it must not mislead, it must compare goods serving the same purpose, the features compared must be objective and verifiable, and it must not denigrate the competitor. Have a lawyer review the comparison before publishing."
   - q: "What must a retailer in Croatia show next to a sale price?"
     a: "Under Article 19 of the Croatian Consumer Protection Act, the retailer must show the sale price and the lowest price it applied to that product in the 30 days before the sale. This also applies to advertising of goods."
+  - q: "Why does Reddit in Google results matter for an online shop?"
+    a: "In our check of 19 Croatian shopping queries, Reddit was on page one of Google for 11 of them, and in the top five for all four store + reviews queries. Threads stay in the results for years, so shoppers read them before buying."
+  - q: "Can a shop post about itself on Reddit?"
+    a: "Yes, under its own name and within the subreddit's rules. The Croatian Consumer Protection Act, which implements EU rules, lists a trader posing as a consumer and fake consumer reviews among misleading practices, so praising your own shop from a hidden account is not allowed."
 sources:
   - name: "Google Search Central: Best practices for Black Friday and Cyber Monday pages"
     url: "https://developers.google.com/search/blog/2020/10/best-practices-black-friday"
@@ -31,9 +36,20 @@ sources:
     url: "https://trends.google.com/trends/explore?date=2025-10-01%202025-12-10&geo=HR&q=black%20friday"
 ---
 
-Most Black Friday search demand in Croatia comes before the Friday itself, and for many product-type queries retailers have no page at all. We looked at two years of Google Trends, Google's results for 12 queries and the sale pages of about a dozen Croatian retailers. This is what the data shows and what to do about it.
+Most Black Friday search demand in Croatia comes before the Friday itself, retailers have no page for many of the queries, and when a shopper types a store's name plus "reviews", Reddit is often what they see first. This guide collects what we measured: two years of Google Trends, Google's results for 31 queries, the sale pages of about a dozen Croatian retailers, and 257 posts and comments from Croatian subreddits.
 
-## Shoppers search before Friday
+We are adding to the guide every day until Black Friday:
+
+- **Part 1: the sale page** (24 Nov). When shoppers search, who ranks, the URL, the title, structure for large shops.
+- **Part 2: Reddit** (25 Nov). Where Reddit sits on Google, what people write and what a shop may do.
+- **Part 3: what shoppers want to see on the sale page.** Coming 26 Nov.
+- **Part 4: what to do with the page after Friday.** The short version is already below; the detailed one comes 27 Nov.
+
+If you want to get straight to work, the [checklist](#your-checklist) is at the bottom.
+
+## Part 1: the sale page
+
+### Shoppers search before Friday
 
 According to Google Trends, 83% of search interest for "black friday" in Croatia in 2025 came before the Friday itself. The Friday accounted for 8%. A year earlier the split was 86% to 7%.
 
@@ -43,7 +59,7 @@ Interest starts at the end of October. A week before the Friday it is already at
 
 A sale page that goes live on Thursday evening has missed most of the demand.
 
-## What people type
+### What people type
 
 The most common related queries take two forms:
 
@@ -52,7 +68,7 @@ The most common related queries take two forms:
 
 The third form is the year. "Black friday 2025" was last year's top related query, and "black friday 2024" was still being searched.
 
-## Who ranks today
+### Who ranks today
 
 For "black friday popusti" (Black Friday discounts) and "black friday 2026", the top results are eKupi, JYSK, Bazzar, Notino, Mall, Zalando and Links. All of them have one permanent sale page with no year in the URL.
 
@@ -68,7 +84,7 @@ For product-type queries the picture is different:
 
 That last point means retailers have no page for those queries, so Google shows their Facebook post instead. A shop that builds a page for that department competes with social posts, not with other shops.
 
-## What if you have 500 categories and 100,000 products
+### What if you have 500 categories and 100,000 products
 
 The answer is visible in what the leaders already do.
 
@@ -89,7 +105,7 @@ What goes on the main page when thousands of items are discounted? eKupi has a "
 
 These three criteria are our suggested method. We have no data on which selection sells best, so test it against your own numbers.
 
-## The page title
+### The page title
 
 Google's own guidance recommends that the title describes the event and gives the example "Black Friday 2021 Deals". A year in the title is therefore a recommendation, not a mistake.
 
@@ -101,6 +117,8 @@ A rule that works for any range:
 - **Three at most**, the ones that bring the most sales.
 - **Always the store name**, because "store + black friday" is the most common query form.
 - **About 60 characters**, so Google does not cut it off.
+
+<div data-embed="bf-naslov"></div>
 
 Good examples from the Croatian market:
 
@@ -114,7 +132,7 @@ Bad examples:
 - A title that says only "Black Friday", with no store name and no year.
 - A title full of emojis, where the words the shopper is looking for are hard to see.
 
-## Five mistakes visible in the results
+### Five mistakes visible in the results
 
 **The year in the URL.** One retailer ranks today for "black friday bijela tehnika" with a page whose URL and title say "Black Friday 2025". A shopper in November 2026 lands on last year's page.
 
@@ -126,7 +144,7 @@ Bad examples:
 
 **No page for the department.** Your Facebook post shows up instead of your page.
 
-## Trust: 30 days and comparing with competitors
+### Trust: 30 days and comparing with competitors
 
 People type "black friday popusti reddit" because they doubt the discounts. The comparison site isplatise.hr gets traffic from that doubt. Its page says: "Next to every product we show the lowest price in the last 30 days. If the 'deal' costs more than that price, it is not a real deal."
 
@@ -139,7 +157,58 @@ In practice: show the 30-day lowest price clearly, because that is what the shop
 
 This is a summary of the law, not legal advice.
 
-## What to do this week
+## Part 2: Reddit
+
+### Reddit is on page one of Google for 11 of 19 queries
+
+We checked 19 shopping queries on Google in Croatia: "which X to buy", "X reviews" and "is X worth it", all in Croatian. Reddit is on page one for 11 of them and in the top five for 10.
+
+![Reddit's position in Google results for 11 Croatian shopping queries, 25 November 2026](/blog/black-friday-seo-croatia/reddit.png)
+
+Three things stand out in the results:
+
+- **"Store + reviews" queries.** For all four we checked, Reddit is in the top five. The thread titles are complaints. The store's own page is below them, or absent.
+- **The threads are old.** For "najbolji madrac iskustva" (best mattress reviews), the first result is a thread from 2020. What someone writes today, Google shows for years.
+- **Translated foreign threads.** For four queries Google shows Reddit threads from other countries, auto-translated into Croatian. For "isplati li se dyson" (is Dyson worth it), an Australian thread ranks third.
+
+Besides Reddit, local forums are on page one for 8 of the 19 queries. Reddit or a forum appears in 13 of 19.
+
+<div data-embed="bf-provjera"></div>
+
+### What people write about Black Friday
+
+We read 257 posts and comments about Black Friday on r/croatia and r/askcroatia, from 2019 to this week. Three things repeat.
+
+**Distrust of discounts.** The most common sentence is some version of: "A month before, they all raise prices, and on Black Friday they lower them again." This week a thread about a price label showing a sale price of €9.99, with small print saying the product had cost €4.99, has 138 upvotes.
+
+**People track prices themselves.** They recommend local price comparison sites and check prices against Germany. Those who wrote prices down in advance say it paid off. One user writes that in 2021 she noted the prices of five household appliances and saved 3,000 to 4,000 kuna on Black Friday.
+
+**The same questions every autumn.** "Is it worth waiting for Black Friday to buy a phone?", "a laptop?", "a washing machine?", "when is Black Friday this year?". The questions start in September.
+
+### What a shop may and may not do
+
+r/croatia has an official Black Friday thread and a dedicated post flair. The moderators state in it that all offers go in that thread and that referral codes are not allowed.
+
+The Croatian Consumer Protection Act lists among misleading commercial practices:
+
+- a trader falsely presenting itself as a consumer,
+- submitting fake consumer reviews or recommendations, or commissioning others to submit them.
+
+So writing about your own shop from a fake profile is not only against Reddit's rules.
+
+### Five steps for a shop owner
+
+1. **Find the threads about you.** Search your store name + reviews, and your store name + reddit. The tool above opens those searches.
+2. **Answer under your own name.** First sentence: "I work at this store."
+3. **Answer a complaint with specifics.** What happened, what you changed, who the customer can contact. Do not ask for it to be removed.
+4. **When someone asks "is it worth waiting", answer with a number.** That product's price at your store over the last 90 days. It is what people go elsewhere to check. The law requires 30 days; 90 is our suggestion because it also covers the period before the price rises people complain about.
+5. **Put your offer in the official Black Friday thread**, not in a new post. Product, today's price, lowest price in 30 days. No codes.
+
+We did not measure how much traffic one thread sends to a shop, so we do not promise any. What we measured is where it sits: on page one of Google, next to the store's name, for years.
+
+## What to do and when
+
+### What to do this week
 
 1. A `/black-friday/` page with a title that follows the rule above.
 2. A short text on the page: when the sale ends, what it covers, delivery and returns. One of the questions Google shows is "What is the date of Black Friday 2026?".
@@ -147,7 +216,7 @@ This is a summary of the law, not legal advice.
 4. A link from the homepage and from your two or three most-read blog posts, plus an indexing request in Search Console. Google recommends creating the page early and linking to it from the homepage.
 5. Department pages for your two or three largest departments, if there is time.
 
-## What to do after Friday
+### What to do after Friday
 
 The page stays at the same URL. It is not deleted and not redirected. The content changes: the sale has ended, the next one starts on this date, leave your email.
 
@@ -157,10 +226,15 @@ That way [links from news sites](/en/link-building/), which are worth earning ev
 
 The worst option is a permanent redirect to the homepage. Google can treat that kind of redirect as if the page no longer exists, so the links it collected stop counting.
 
+### Your checklist
+
+<div data-embed="bf-plan"></div>
+
 ## How we got the data
 
 - **Google Trends:** Croatia, term "black friday", by day from 1 October to 10 December, for 2024 and 2025. Shares are sums of daily index values in that period. Trends measures relative interest, not the number of searches or sales.
-- **Search results:** Google's results for Croatia on 24 November 2026 for 12 queries, 117 results in total. This is a one-day snapshot; rankings change.
+- **Search results:** Google's results for Croatia. For the sale page, 12 queries and 117 results on 24 November 2026. For Reddit, 19 queries and the top 10 results per query on 25 November 2026. These are one-day snapshots; rankings change.
+- **Reddit:** 257 posts and comments about Black Friday from r/croatia and r/askcroatia, collected on 25 November 2026. Nineteen queries is a small sample.
 - **Retailer pages:** titles, URLs and structure were read directly from the pages or from Google's results.
 
 If you would like us to review your sale page before next season, [get in touch](/en/contact/).

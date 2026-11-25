@@ -225,6 +225,10 @@ Shoppers check in four ways:
 3. **They pull out old receipts.** A purchase a month earlier: €23.99. The same item during the "Black Friday warm-up": €29.99.
 4. **They read the small print.** Since 17 November 2026 every retailer in Croatia must show, next to the current price, the price that applied on 10 September 2026. A Reddit thread comparing that price with Black Friday discounts got 143 upvotes in the week before Black Friday.
 
+You can browse the comments behind these numbers here:
+
+<div data-embed="bf-komentari"></div>
+
 ### What the shopper now sees: 634 products
 
 On the sale and Black Friday pages of 14 stores we compared the price on the product card with the price on 10 September.

@@ -223,6 +223,10 @@ Kupci provjeravaju na četiri načina:
 3. **Vade stare račune.** Kupnja od prije mjesec dana: 23,99 €. Isti proizvod na „zagrijavanju za Black Friday“: 29,99 €.
 4. **Čitaju sitna slova.** Od 17. studenoga 2026. svaka trgovina uz cijenu mora istaknuti i cijenu koja je vrijedila 10. rujna 2026. Reddit nit koja uspoređuje tu cijenu s Black Friday popustima skupila je u tjednu prije Black Fridaya 143 glasa.
 
+Sve komentare na kojima se temelje ove brojke možete pregledati ovdje:
+
+<div data-embed="bf-komentari"></div>
+
 ### Što kupac sada vidi: 634 proizvoda
 
 Na akcijskim i Black Friday stranicama 14 trgovina usporedili smo cijenu uz proizvod s cijenom na dan 10. rujna.

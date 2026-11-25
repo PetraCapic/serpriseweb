@@ -98,6 +98,20 @@ const T = en
       noJs: 'Alati rade uz JavaScript. Koraci su navedeni i u tekstu.',
     };
 
+import comments from '../../data/bf-reddit.json';
+const R = en
+  ? { eyebrow: 'Data', title: 'Browse the comments behind the numbers', lead: 'The 75 most upvoted comments from the Reddit threads we read, sorted by upvotes. A comment can carry more than one label.',
+      all: 'All', tags: { neg: 'Fake or too small discount', check: 'How they check', abroad: 'Buying abroad', other: 'Other' },
+      search: 'Search comments', searchPh: 'e.g. price, Amazon, 30 days', sort: 'Sort', byScore: 'Most upvoted', byYear: 'Newest',
+      shown: 'shown', of: 'of', more: 'Show more', none: 'No comments match.', votes: 'upvotes', open: 'Open on Reddit',
+      note: 'Comments are translated from Croatian and shortened. Store names and profanity are removed; the link opens the original.' }
+  : { eyebrow: 'Podaci', title: 'Pregledajte komentare iza brojki', lead: '75 najlajkanijih komentara iz Reddit niti koje smo pročitali, poredanih po glasovima. Jedan komentar može imati više oznaka.',
+      all: 'Svi', tags: { neg: 'Lažan ili premalen popust', check: 'Kako provjeravaju', abroad: 'Kupnja vani', other: 'Ostalo' },
+      search: 'Pretraži komentare', searchPh: 'npr. cijena, Amazon, 30 dana', sort: 'Poredaj', byScore: 'Najviše glasova', byYear: 'Najnoviji',
+      shown: 'prikazano', of: 'od', more: 'Prikaži još', none: 'Nema komentara za taj odabir.', votes: 'glasova', open: 'Otvori na Redditu',
+      note: 'Komentari su skraćeni. Imena trgovina i psovke su uklonjeni; poveznica vodi na izvornik.' };
+const tagKeys = ['neg', 'check', 'abroad', 'other'] as const;
+const tagCount = Object.fromEntries(tagKeys.map((k) => [k, comments.filter((c) => c.t.includes(k)).length]));
 const year = new Date().getFullYear();
 const i18n = { join: T.nJoin, chars: T.nChars, long: T.nLong, ok: T.nOk, empty: T.nEmpty, copy: T.copy, copied: T.copied, cEmpty: T.cEmpty, done: T.pDone, q: T.cQ, hl: en ? 'en' : 'hr', gl: 'hr' };
 ---
@@ -152,6 +166,43 @@ const i18n = { join: T.nJoin, chars: T.nChars, long: T.nLong, ok: T.nOk, empty: 
         </ul>
       </div>
     ))}
+  </section>
+
+  <section class="bfw-card bfr" data-mount="bf-komentari" data-bfr data-more={R.more} data-shown={R.shown} data-of={R.of}>
+    <p class="bfw-eyebrow">{R.eyebrow}</p>
+    <h3 class="bfw-title">{R.title}</h3>
+    <p class="bfw-lead">{R.lead}</p>
+    <div class="bfr-bar" aria-hidden="true">
+      {tagKeys.map((k) => <span class={`bfr-seg bfr-${k}`} style={`flex:${tagCount[k]}`}></span>)}
+    </div>
+    <div class="bfr-chips" role="group" aria-label={R.sort}>
+      <button type="button" class="bfr-chip is-on" data-bfr-tag="all" aria-pressed="true">{R.all} <b>{comments.length}</b></button>
+      {tagKeys.map((k) => (
+        <button type="button" class="bfr-chip" data-bfr-tag={k} aria-pressed="false"><i class={`bfr-dot bfr-${k}`}></i>{R.tags[k]} <b>{tagCount[k]}</b></button>
+      ))}
+    </div>
+    <div class="bfw-form bfr-tools">
+      <label class="bfw-f bfw-f--wide">{R.search}<input type="search" data-bfr-q placeholder={R.searchPh} autocomplete="off" maxlength="40" /></label>
+      <label class="bfw-f">{R.sort}<select data-bfr-sort><option value="s">{R.byScore}</option><option value="y">{R.byYear}</option></select></label>
+    </div>
+    <p class="bfw-meta" data-bfr-count aria-live="polite"></p>
+    <ul class="bfr-list" data-bfr-list>
+      {comments.map((c) => (
+        <li class="bfr-item" data-tags={c.t.join(' ')} data-s={c.s} data-y={c.y}>
+          <p class="bfr-q">{en ? c.en : c.hr}</p>
+          <p class="bfr-m">
+            <span class="bfr-votes">▲ {c.s}</span>
+            <span>{c.y}.</span>
+            <span>r/{c.r}</span>
+            {c.t.map((k) => <span class="bfr-tag"><i class={`bfr-dot bfr-${k}`}></i>{R.tags[k as keyof typeof R.tags]}</span>)}
+            <a href={c.u} target="_blank" rel="noopener nofollow">{R.open}</a>
+          </p>
+        </li>
+      ))}
+    </ul>
+    <p class="bfw-muted" data-bfr-none hidden>{R.none}</p>
+    <button type="button" class="bfr-more" data-bfr-more hidden>{R.more}</button>
+    <p class="bfw-note">{R.note}</p>
   </section>
 </div>
 
@@ -225,6 +276,43 @@ const i18n = { join: T.nJoin, chars: T.nChars, long: T.nLong, ok: T.nOk, empty: 
     });
   });
   show();
+
+  // 4. Preglednik Reddit komentara
+  const bfr = document.querySelector<HTMLElement>('[data-bfr]');
+  if (bfr) {
+    const list = bfr.querySelector<HTMLElement>('[data-bfr-list]')!;
+    const items = [...list.querySelectorAll<HTMLElement>('.bfr-item')];
+    const q = bfr.querySelector<HTMLInputElement>('[data-bfr-q]')!;
+    const sortSel = bfr.querySelector<HTMLSelectElement>('[data-bfr-sort]')!;
+    const moreBtn = bfr.querySelector<HTMLButtonElement>('[data-bfr-more]')!;
+    const countEl = bfr.querySelector<HTMLElement>('[data-bfr-count]')!;
+    const noneEl = bfr.querySelector<HTMLElement>('[data-bfr-none]')!;
+    const chips = [...bfr.querySelectorAll<HTMLButtonElement>('[data-bfr-tag]')];
+    const norm = (t: string) => t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    const STEP = 6;
+    let tag = 'all', limit = STEP;
+    const render = () => {
+      const needle = norm(q.value.trim());
+      const key = sortSel.value === 'y' ? 'y' : 's';
+      const sorted = [...items].sort((a, b) => Number(b.dataset[key]) - Number(a.dataset[key]) || Number(b.dataset.s) - Number(a.dataset.s));
+      sorted.forEach((el) => list.appendChild(el));
+      const match = sorted.filter((el) => (tag === 'all' || (el.dataset.tags ?? '').split(' ').includes(tag)) && (!needle || norm(el.textContent ?? '').includes(needle)));
+      items.forEach((el) => (el.hidden = true));
+      match.slice(0, limit).forEach((el) => (el.hidden = false));
+      countEl.textContent = `${Math.min(limit, match.length)} ${bfr.dataset.of} ${match.length} ${bfr.dataset.shown}`;
+      noneEl.hidden = match.length > 0;
+      moreBtn.hidden = match.length <= limit;
+    };
+    chips.forEach((c) => c.addEventListener('click', () => {
+      tag = c.dataset.bfrTag ?? 'all'; limit = STEP;
+      chips.forEach((x) => { const on = x === c; x.classList.toggle('is-on', on); x.setAttribute('aria-pressed', String(on)); });
+      render();
+    }));
+    q.addEventListener('input', () => { limit = STEP; render(); });
+    sortSel.addEventListener('change', () => { limit = STEP; render(); });
+    moreBtn.addEventListener('click', () => { limit += STEP * 2; render(); });
+    render();
+  }
 </script>
 
 <style>
@@ -257,4 +345,25 @@ const i18n = { join: T.nJoin, chars: T.nChars, long: T.nLong, ok: T.nOk, empty: 
   .bfw-checks label { display: flex; gap: 10px; align-items: flex-start; cursor: pointer; font-size: 0.97rem; }
   .bfw-checks input { margin-top: 4px; width: 18px; height: 18px; flex: none; accent-color: var(--accent); }
   .bfw-checks input:checked + span { color: var(--muted); text-decoration: line-through; }
+  .bfr-bar { display: flex; height: 8px; border-radius: 999px; overflow: hidden; gap: 2px; margin: 0 0 12px; }
+  .bfr-seg { display: block; }
+  .bfr-neg { background: #dc2626; } .bfr-check { background: #2563eb; } .bfr-abroad { background: #d97706; } .bfr-other { background: #94a3b8; }
+  .bfr-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; }
+  .bfr-chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 14px; }
+  .bfr-chip { font: inherit; font-size: 0.88rem; padding: 6px 12px; border: 1px solid var(--border); border-radius: 999px; background: #fff; color: var(--text); cursor: pointer; display: inline-flex; align-items: center; }
+  .bfr-chip b { margin-left: 6px; color: var(--muted); font-weight: 600; }
+  .bfr-chip.is-on { border-color: var(--text); background: var(--text); color: #fff; }
+  .bfr-chip.is-on b { color: #fff; opacity: 0.8; }
+  .bfr-chip:focus-visible, .bfr-more:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .bfr-tools { margin-bottom: 8px; }
+  .bfr-tools select { font: inherit; font-size: 1rem; color: var(--text); padding: 9px 10px; border: 1px solid var(--border); border-radius: 8px; background: #fff; width: 100%; box-sizing: border-box; }
+  .bfr-list { list-style: none; padding: 0 !important; margin: 10px 0 0; display: grid; gap: 10px; }
+  .bfr-item { margin: 0; background: var(--bg-2); border-radius: 10px; padding: 12px 14px; }
+  .bfr-item[hidden] { display: none; }
+  .bfr-q { margin: 0 0 8px; font-size: 0.97rem; line-height: 1.5; overflow-wrap: anywhere; }
+  .bfr-m { margin: 0; display: flex; flex-wrap: wrap; gap: 4px 12px; align-items: center; font-size: 0.8rem; color: var(--muted); }
+  .bfr-votes { font-weight: 700; color: var(--text); }
+  .bfr-tag { display: inline-flex; align-items: center; }
+  .bfr-more { font: inherit; font-size: 0.92rem; font-weight: 600; margin: 12px 0 0; padding: 9px 16px; border: 1px solid var(--border); border-radius: 999px; background: #fff; color: var(--text); cursor: pointer; }
+  .bfr .bfw-note { margin: 12px 0 0; }
 </style>

@@ -26,7 +26,7 @@ A realistic expectation: a well-written article on the right news site increases
 
 The article goes through six steps. If it gets stuck at any of them, there is no mention.
 
-![Six-step diagram: how a PR article on a Croatian news site leads to a brand mention in a ChatGPT answer](/blog/digitalni-pr-ai-vidljivost/put-pr-objave-do-chatgpt.png)
+![Six-step diagram: how a PR article on a Croatian news site leads to a brand mention in a ChatGPT answer](/blog/digital-pr-ai-visibility/pr-to-chatgpt.png)
 
 1. **Publication on the news site.** A text with the brand, line of business, city and price.
 2. **Indexing.** The page gets into the indexes AI uses.
@@ -43,7 +43,7 @@ Step 3 determines the content of the article. ChatGPT cites Croatian pages more 
 
 A classic press release tells a story and builds an impression. An article for AI gives clear facts that still make sense when lifted out of the text.
 
-![Comparison table of a classic PR article and a PR article written to be cited in ChatGPT and AI Overviews](/blog/digitalni-pr-ai-vidljivost/klasicna-vs-ai-pr-objava.png)
+![Comparison table of a classic PR article and a PR article written to be cited in ChatGPT and AI Overviews](/blog/digital-pr-ai-visibility/classic-vs-ai-pr.png)
 
 | | Classic PR article | Article written for AI citation |
 |---|---|---|
@@ -111,7 +111,7 @@ Expectations need to be realistic. Whether an article gets into an answer depend
 
 Each point is checked with a yes or a no.
 
-![An 8-point checklist a PR article should meet before it is sent to a Croatian news site](/blog/digitalni-pr-ai-vidljivost/kontrolna-lista-pr-objava.png)
+![An 8-point checklist a PR article should meet before it is sent to a Croatian news site](/blog/digital-pr-ai-visibility/pr-checklist.png)
 
 1. **Clear claim:** the first paragraph says who you are and what you do.
 2. **Line of business:** it is named in the words customers search for.

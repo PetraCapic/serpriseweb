@@ -30,7 +30,7 @@ I set up the test to rule out as many other factors as possible:
 
 The texts, the structure and the technical setup of the sites stayed the same through both phases. The only variable I changed was links.
 
-![The four steps of the experiment: new sites, AI text, a phase without links and a phase with links](/blog/ai-sadrzaj-seo-eksperiment/koraci-eksperimenta.png)
+![The four steps of the experiment: new sites, AI text, a phase without links and a phase with links](/blog/ai-content-seo-experiment/experiment-steps.png)
 
 If you want to track this kind of data yourself, see [how to read your Search Console data](/en/blog/claude-code-google-search-console/).
 
@@ -52,7 +52,7 @@ After that, clicks started to grow and reached 700+ a day.
 
 <!-- GSC screenshot: faza s linkovima -->
 
-![Clicks for the AI-text sites before and after links were added](/blog/ai-sadrzaj-seo-eksperiment/usporedba-bez-i-s-linkovima.png)
+![Clicks for the AI-text sites before and after links were added](/blog/ai-content-seo-experiment/with-and-without-links.png)
 
 ### What the experiment does not prove
 
@@ -77,7 +77,7 @@ Mostly, yes. Google published "Good SEO is good GEO" by Brendon Kraham, which sa
 
 Groberman also shares a study that analysed 11,882 queries and 304,805 URLs cited by ChatGPT, Google AI Mode and Perplexity, and compared them with pages from Google's top 20 that AI did not cite. The cited pages differed as follows:
 
-![Bar chart of five traits that set pages cited by AI apart from pages it does not cite](/blog/ai-sadrzaj-seo-eksperiment/stupci-sto-ai-citira.png)
+![Bar chart of five traits that set pages cited by AI apart from pages it does not cite](/blog/ai-content-seo-experiment/what-ai-cites.png)
 
 | Trait | Difference |
 |---|---|

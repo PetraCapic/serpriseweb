@@ -86,6 +86,8 @@ translation: ime-datoteke   # isti članak na drugom jeziku (hreflang i prekida�
 Tekst članka u Markdownu. Slike članka stavi u public/blog/<ime-clanka>/.
 ```
 
+**Slike i jezik.** Slika s tekstom radi se posebno za svaki jezik: engleski članak ne smije koristiti hrvatsku sliku ni obrnuto. `npm run build` prije builda pokreće `scripts/check-blog-images.mjs`, koji prekida build ako HR i EN članak koriste istu datoteku ili ako slika ne postoji. Sliku bez teksta (npr. snimku zaslona stranog sučelja) smiju dijeliti oba jezika samo ako je upisana u `scripts/shared-images.json`.
+
 - Članci s `draft: true` ili datumom u budućnosti se ne prikazuju.
 - Link "Blog" u izborniku i podnožju te `/blog/` u sitemapu pojavljuju se tek kad postoji barem jedan objavljen članak.
 - Svaki članak ima BlogPosting i BreadcrumbList schemu, `og:type` article i sliku za dijeljenje.

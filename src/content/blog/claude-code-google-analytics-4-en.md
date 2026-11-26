@@ -13,7 +13,7 @@ Connecting GA4 to Claude Code means two things. Claude reads the reports (sessio
 
 This is the second of four guides that accompany our [case study on Claude Code on an obituary portal](/en/blog/claude-code-case-study-obituaries/). The first step, the service account, is described in the [Search Console guide](/en/blog/claude-code-google-search-console/).
 
-![Sessions by source on osmrtnica.com.hr from 19 to 31 October 2026, from the GA4 Data API](/blog/claude-code-google-analytics-4/ga4-izvori.png)
+![Sessions by source on osmrtnica.com.hr from 19 to 31 October 2026, from the GA4 Data API](/blog/claude-code-google-analytics-4/ga4-sources.png)
 
 The chart above is the first report we asked for after connecting: sessions by source for the last 13 days. Without opening GA4, you can see that ChatGPT already brings more visits than DuckDuckGo and Ecosia combined.
 
@@ -49,7 +49,7 @@ The rules we gave Claude, and which we recommend:
 
 This is what it looks like in numbers. Obituary view, memorial click and candle click are events Claude added to the code on 16 October:
 
-![Counts of the obituary_view, obituary_memorial_click and obituary_candle_click events in GA4 from 19 to 31 October 2026](/blog/claude-code-google-analytics-4/ga4-dogadaji.png)
+![Counts of the obituary_view, obituary_memorial_click and obituary_candle_click events in GA4 from 19 to 31 October 2026](/blog/claude-code-google-analytics-4/ga4-events.png)
 
 How the tags are set up in Tag Manager is described in the [Tag Manager guide](/en/blog/claude-code-google-tag-manager/).
 
@@ -61,7 +61,7 @@ How the tags are set up in Tag Manager is described in the [Tag Manager guide](/
 
 The last question showed us that from 1 to 18 October GA4 recorded roughly a quarter of visits, even though Search Console clicks were normal. We marked that period as not comparable in our statistics.
 
-![Search Console clicks and GA4 organic sessions by day, September and October 2026, with a gap from 1 to 18 October](/blog/claude-code-google-analytics-4/ga4-vs-gsc.png)
+![Search Console clicks and GA4 organic sessions by day, September and October 2026, with a gap from 1 to 18 October](/blog/claude-code-google-analytics-4/ga4-vs-gsc-en.png)
 
 The gap still exists after 19 October, but it is smaller. Part of it is expected: GA4 does not record visitors who decline cookies, while Search Console counts every click.
 

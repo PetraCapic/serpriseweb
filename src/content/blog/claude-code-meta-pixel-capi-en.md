@@ -31,7 +31,7 @@ For testing, the "Test events" tab on the same screen gives you a test code. Sto
 
 This is the most important rule. If the Pixel and the server send the same event with the same name and the same event_id, Meta merges them into one. If the event_id differs, the conversion is counted twice.
 
-![Diagram: the same StartMemorial event from Meta Pixel and from the Conversions API with the same event_id, counted once by Meta](/blog/claude-code-meta-pixel-capi/meta-dedup.png)
+![Diagram: the same StartMemorial event from Meta Pixel and from the Conversions API with the same event_id, counted once by Meta](/blog/claude-code-meta-pixel-capi/meta-dedup-en.png)
 
 In our setup the event_id is derived from a real object: for starting a memorial it is a prefix plus the user ID (start_ and the ID). That way both the browser and the server know it without having to coordinate.
 
@@ -57,7 +57,7 @@ To read campaigns we use the Windsor.ai connector in Claude. Once it is connecte
 
 This is the real answer to one question about the portal's campaigns in October:
 
-![Meta campaigns of the obituary portal in October 2026: clicks and cost per click by campaign](/blog/claude-code-meta-pixel-capi/meta-kampanje.png)
+![Meta campaigns of the obituary portal in October 2026: clicks and cost per click by campaign](/blog/claude-code-meta-pixel-capi/meta-campaigns.png)
 
 Campaigns for the free guides and the e-book have a cost per click of about 1 cent, while the sales and retargeting campaigns are around 12 cents. That is not bad in itself, because sales campaigns target a smaller, warmer audience. But it shows why we used the guides as the first step: they cheaply bring in people who then sign up for the newsletter.
 

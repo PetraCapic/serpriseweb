@@ -21,12 +21,24 @@ const { post } = Astro.props;
 const lang = post.data.lang;
 const isEn = lang === 'en';
 const t = isEn
-  ? { crumbs: 'Breadcrumb', home: 'Home', blog: '/en/blog/', published: 'published', updated: 'Last updated', read: 'min read', faq: 'FAQ', sources: 'Sources', copy: 'Copy', copied: 'Copied', copyFail: 'Select and copy manually' }
-  : { crumbs: 'Putanja', home: 'Početna', blog: '/blog/', published: 'objavljeno', updated: 'Zadnje ažurirano', read: 'min čitanja', faq: 'Česta pitanja', sources: 'Izvori', copy: 'Kopiraj', copied: 'Kopirano', copyFail: 'Označite i kopirajte ručno' };
+  ? { crumbs: 'Breadcrumb', home: 'Home', blog: '/en/blog/', published: 'published', updated: 'Last updated', read: 'min read', faq: 'FAQ', sources: 'Sources', toc: 'In this article', copy: 'Copy', copied: 'Copied', copyFail: 'Select and copy manually' }
+  : { crumbs: 'Putanja', home: 'Početna', blog: '/blog/', published: 'objavljeno', updated: 'Zadnje ažurirano', read: 'min čitanja', faq: 'Česta pitanja', sources: 'Izvori', toc: 'U ovom članku', copy: 'Kopiraj', copied: 'Kopirano', copyFail: 'Označite i kopirajte ručno' };
 // Isti članak na drugom jeziku (hreflang i prekidač HR/EN).
 const other = post.data.translation ? (await getPosts('all')).find((p) => p.id === post.data.translation) : undefined;
 const alternates = other ? (isEn ? { hr: postUrl(other), en: postUrl(post) } : { hr: postUrl(post), en: postUrl(other) }) : undefined;
-const { Content } = await render(post);
+const { Content, headings } = await render(post);
+// Kazalo na početku dužih članaka: glavni naslovi (h2), a kad ih je malo i podnaslovi (h3).
+const words = (post.body ?? '').split(/\s+/).length;
+const h2s = headings.filter((h) => h.depth === 2);
+const showToc = words >= 1200 && h2s.length >= 4;
+const withSubs = h2s.length <= 6;
+const toc: { slug: string; text: string; subs: { slug: string; text: string }[] }[] = [];
+if (showToc) {
+  for (const h of headings) {
+    if (h.depth === 2) toc.push({ slug: h.slug, text: h.text, subs: [] });
+    else if (h.depth === 3 && withSubs && toc.length) toc[toc.length - 1].subs.push({ slug: h.slug, text: h.text });
+  }
+}
 const { title, description, date, updated, author, image, imageAlt, dataset, about, hasPart, faq, sources } = post.data;
 const allPosts = hasPart ? await getPosts('all') : [];
 const parts = (hasPart ?? []).map((slug) => allPosts.find((p) => p.id === slug)).filter((p) => p !== undefined);
@@ -137,6 +149,27 @@ const schema = [
         {person?.profile ? <a href={person.profile} rel="author">{author}</a> : author} · {t.published} <time datetime={date.toISOString()}>{formatDate(date, lang)}</time>{updated && <> · <strong class="article__upd">{t.updated}: <time datetime={updated.toISOString()}>{formatDate(updated, lang)}</time></strong></>} · {readingTime(post.body)} {t.read}
       </p>
       {image && <img src={image} alt={imageAlt ?? ''} class="article__img" />}
+      {showToc && (
+        <nav class="article__toc" aria-label={t.toc}>
+          <details open data-toc>
+            <summary>{t.toc}</summary>
+            <ol>
+              {toc.map((h) => (
+                <li>
+                  <a href={`#${h.slug}`}>{h.text}</a>
+                  {h.subs.length > 0 && (
+                    <ul>
+                      {h.subs.map((sub) => <li><a href={`#${sub.slug}`}>{sub.text}</a></li>)}
+                    </ul>
+                  )}
+                </li>
+              ))}
+              {faq && !post.body?.includes(`## ${t.faq}`) && <li><a href={`#${isEn ? 'faq' : 'cesta-pitanja'}`}>{t.faq}</a></li>}
+              {sources && <li><a href={`#${isEn ? 'sources' : 'izvori'}`}>{t.sources}</a></li>}
+            </ol>
+          </details>
+        </nav>
+      )}
       <Content />
       {hasLeaderboard && <LlmLeaderboard lang={lang} />}
       {hasCitati && <ChatgptCitati lang={lang} />}
@@ -185,6 +218,9 @@ const schema = [
 </Base>
 
 <script define:vars={{ copyLabels: [t.copy, t.copied, t.copyFail] }}>
+  // Dugo kazalo na uskom zaslonu kreće zatvoreno, da ne gura tekst članka prema dolje.
+  const tocBox = document.querySelector('[data-toc]');
+  if (tocBox && window.innerWidth < 640 && tocBox.querySelectorAll('a').length > 10) tocBox.removeAttribute('open');
   // Gumb "Kopiraj" na svakom bloku koda u članku.
   document.querySelectorAll('.article pre').forEach((pre) => {
     const b = document.createElement('button');
@@ -227,6 +263,15 @@ const schema = [
   .article :global(.wg__lead) { margin: 0; color: var(--muted); font-size: 0.95rem; }
   .article :global(.wg__note) { margin: 12px 0 0; color: var(--muted); font-size: 0.8rem; }
   .article__img { border-radius: 14px; margin: 24px 0 32px; width: 100%; height: auto; }
+  .article__toc { margin: 0 0 32px; border: 1px solid var(--border); border-radius: 14px; background: var(--bg-2); padding: 14px 20px; }
+  .article__toc summary { cursor: pointer; font: 700 1rem var(--font-display); color: var(--navy); }
+  .article__toc ol { margin: 12px 0 4px; padding-left: 1.4em; }
+  .article__toc li { margin-bottom: 0.35em; }
+  .article__toc ol > li > a { font-weight: 600; }
+  .article__toc ul { margin: 0.35em 0 0.2em; padding-left: 1.1em; list-style: none; font-size: 0.92rem; }
+  .article__toc ul li { margin-bottom: 0.25em; }
+  .article__toc ul a { color: var(--muted); }
+  .article :global(h2), .article :global(h3), .article__faq, .article__sources { scroll-margin-top: 90px; }
   .article :global(h3) { margin-top: 1.4em; }
   .article :global(ol), .article :global(ul) { padding-left: 1.3em; }
   .article :global(li) { margin-bottom: 0.4em; }

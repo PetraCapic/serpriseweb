@@ -228,15 +228,17 @@ $('#strip').innerHTML=C.map(([f,n])=>`<img src="../public/klijenti/${f}.png" alt
 const V=new URLSearchParams(location.search).get('v')||'a';
 const order=V==='b'?[['sc',5200],['s3',6500],['s4',99000]]:[['s1',3500],['s2',3800],['s3',6500],['sc',4300],['s4',99000]];
 $('#now').innerHTML=V==='b'?'Sada smo i malim i srednjim tvrtkama <em>udaljeni jedan klik&nbsp;↓</em>':'Sada smo dostupni i <em>malim i srednjim tvrtkama.</em>';
-const T={};let acc=0;document.querySelectorAll('.scene').forEach(e=>e.style.display='none');
-for(const [id,len] of order){const e=$('#'+id);e.style.display='';e.style.setProperty('--t0',acc+'ms');e.style.setProperty('--len',len+'ms');T[id]=acc;acc+=len+200}
+const QP=new URLSearchParams(location.search),OV=Object.fromEntries((QP.get('len')||'').split(',').filter(Boolean).map(x=>x.split(':')));
+const T={},W={};let acc=0;document.querySelectorAll('.scene').forEach(e=>e.style.display='none');
+for(const [id,len] of order){const e=$('#'+id);e.style.display='';e.style.setProperty('--t0',acc+'ms');e.style.setProperty('--len',len+'ms');T[id]=acc;const real=+(OV[id]||len);W[id]={t0:acc,k:real/len};acc+=real+200}
 document.body.style.setProperty('--t4',T.s4+'ms');
-window.DUR=T.s4+4600;
+window.DUR=T.s4+(+QP.get('end')||4600);
+const warp=(id,ms)=>W[id]?W[id].t0+(ms-W[id].t0)/W[id].k:ms;
 const T3=T.s3,T2=T.s2||0;
 window.seek=function(ms){
-  document.getAnimations().forEach(a=>{a.pause();a.currentTime=ms});
-  document.querySelectorAll('[data-count]').forEach(e=>{const p=Math.min(1,Math.max(0,(ms-T2-(+e.dataset.at))/900));e.textContent=Math.round(+e.dataset.count*(1-Math.pow(1-p,3)))});
-  document.querySelectorAll('[data-swap]').forEach(e=>{let v='';for(const [t,s] of JSON.parse(e.dataset.swap))if(ms-T3>=t||t===0)v=s;e.textContent=v});
+  document.getAnimations().forEach(a=>{a.pause();const sc=a.effect&&a.effect.target&&a.effect.target.closest('.scene');a.currentTime=sc?warp(sc.id,ms):ms});
+  document.querySelectorAll('[data-count]').forEach(e=>{const p=Math.min(1,Math.max(0,(warp('s2',ms)-T2-(+e.dataset.at))/900));e.textContent=Math.round(+e.dataset.count*(1-Math.pow(1-p,3)))});
+  document.querySelectorAll('[data-swap]').forEach(e=>{let v='';for(const [t,s] of JSON.parse(e.dataset.swap))if(warp('s3',ms)-T3>=t||t===0)v=s;e.textContent=v});
 };
 const p=new URLSearchParams(location.search);
 if(p.has('t'))document.fonts.ready.then(()=>seek(+p.get('t')));else{const s=performance.now();(function f(){seek((performance.now()-s)%DUR);requestAnimationFrame(f)})()}

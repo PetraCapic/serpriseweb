@@ -19,7 +19,7 @@ This is the first of four guides that accompany our [case study on Claude Code o
 - A Google Cloud project. It is free, and you use the same project for [GA4](/en/blog/claude-code-google-analytics-4/) and [Tag Manager](/en/blog/claude-code-google-tag-manager/).
 - Claude Code, locally or on claude.ai/code.
 
-![Connecting Claude Code to Search Console in four steps: Google Cloud, service account, user in Search Console, environment variable](/blog/claude-code-google-search-console/gsc-shema.png)
+![Connecting Claude Code to Search Console in four steps: Google Cloud, service account, user in Search Console, environment variable](/blog/claude-code-google-search-console/gsc-diagram.png)
 
 ## Step 1: create a service account
 
@@ -67,13 +67,13 @@ If the list is empty, the service account was not added to the right property. A
 
 Here is what a real answer looks like when Claude has access. The question was one sentence, and Claude wrote the API query for four periods itself.
 
-![Example answer in Claude Code: clicks before and after 19 October 2026 and the same days in 2025 for osmrtnica.com.hr](/blog/claude-code-google-search-console/gsc-odgovor.png)
+![Example answer in Claude Code: clicks before and after 19 October 2026 and the same days in 2025 for osmrtnica.com.hr](/blog/claude-code-google-search-console/gsc-answer.png)
 
 - "Compare clicks for the 12 days before and after 19 October with the same days last year." The year-on-year comparison shows how much of the growth is seasonal.
 - "Split clicks by page type based on the URL." For us: individual obituaries, cities, funerals, cemeteries, blog.
 - "Find queries with more than 2,000 impressions at positions 4 to 12." These are the quickest wins.
 
-![Table of queries with more than 2,000 impressions at positions 4 to 12 for osmrtnica.com.hr](/blog/claude-code-google-search-console/gsc-prilike.png)
+![Table of queries with more than 2,000 impressions at positions 4 to 12 for osmrtnica.com.hr](/blog/claude-code-google-search-console/gsc-opportunities.png)
 
 
 In our case the answer was clear: the city pages sit at positions 4 to 8 for queries with tens of thousands of impressions, and their CTR is below 1%. That is why they are first in the plan.

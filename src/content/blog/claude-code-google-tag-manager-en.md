@@ -42,7 +42,7 @@ window.dataLayer.push({
 
 In Tag Manager, each such event has a "Custom Event" trigger and a tag that forwards it. For groups of events we use one trigger with a regex, so a new event from the same group does not need a new tag.
 
-![Event flow from dataLayer.push in the code, through a trigger in Tag Manager, to the GA4 and Google Ads tags, with the real names from the container](/blog/claude-code-google-tag-manager/gtm-tok.png)
+![Event flow from dataLayer.push in the code, through a trigger in Tag Manager, to the GA4 and Google Ads tags, with the real names from the container](/blog/claude-code-google-tag-manager/gtm-flow.png)
 
 ## Step 4: how Claude changes the container
 
@@ -55,7 +55,7 @@ Through the API, Claude does the same as you would in the interface:
 
 Since 16 October, 9 versions have been published on the portal this way:
 
-![Version history of the Tag Manager container from v7 to v15 with dates and descriptions](/blog/claude-code-google-tag-manager/gtm-verzije.png)
+![Version history of the Tag Manager container from v7 to v15 with dates and descriptions](/blog/claude-code-google-tag-manager/gtm-versions.png)
 
 The descriptions matter. When someone asks in a month why the conversions differ, the version history says what was changed and why.
 

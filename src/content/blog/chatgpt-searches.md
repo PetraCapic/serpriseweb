@@ -13,7 +13,7 @@ When a customer types "Preporuči mi SEO agenciju u Zagrebu" (recommend me an SE
 
 In our [test of 35 Croatian questions](/en/blog/chatgpt-citations-croatia/), these very searches explained most of the results. ChatGPT searched general questions in English, but as soon as a question included a city, "Hrvatska" (Croatia) or "cijena" (price), it searched in Croatian and cited Croatian pages.
 
-![ChatGPT breaks one customer question into several shorter searches](/blog/chatgpt-pretrage/fanout.png)
+![ChatGPT breaks one customer question into several shorter searches](/blog/chatgpt-searches/fanout.png)
 
 ## Before you start
 
@@ -24,7 +24,7 @@ In our [test of 35 Croatian questions](/en/blog/chatgpt-citations-croatia/), the
 
 ## How to see the searches in Chrome
 
-![Where in Chrome, in the Network tab, you can see the searches ChatGPT ran](/blog/chatgpt-pretrage/devtools.png)
+![Where in Chrome, in the Network tab, you can see the searches ChatGPT ran](/blog/chatgpt-searches/devtools.png)
 
 1) Ask your question and wait for the answer to finish.
 2) In the address bar, copy everything after `/c/`. That is the conversation ID, e.g. `6720abcd-1234-...`.
@@ -81,7 +81,7 @@ Before you write a new page, check that you do not already have one. A second pa
 1) Search Console, **Performance**, **+ Add filter**, **Query**, **Exact query**. Paste the search from ChatGPT.
 2) Turn on **Average position** and open the **Pages** tab.
 
-![What to do depending on where your page ranks for that search](/blog/chatgpt-pretrage/odluka.png)
+![What to do depending on where your page ranks for that search](/blog/chatgpt-searches/decision.png)
 
 ## How to write a page AI can cite
 

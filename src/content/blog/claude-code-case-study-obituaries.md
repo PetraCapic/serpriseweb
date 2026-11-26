@@ -36,7 +36,7 @@ The situation in mid-October:
 - All content was drawn in the browser. Crawlers that do not run JavaScript saw an empty page.
 - Sales tracking was partial: from 1 to 18 October GA4 recorded roughly a quarter of visits, and Meta was not receiving events from the server.
 
-![Clicks from Google per week from July 2025 to October 2026](/blog/claude-code-case-study-osmrtnice/tjedni-klikovi.png)
+![Clicks from Google per week from July 2025 to October 2026](/blog/claude-code-case-study-obituaries/weekly-clicks.png)
 
 ## Strategy: five directions
 
@@ -50,7 +50,7 @@ We did not start with new content. We started with the question of which pages a
 
 ## Activities, day by day
 
-![Clicks per day in October and the number of merged pull requests per day](/blog/claude-code-case-study-osmrtnice/pr-i-klikovi.png)
+![Clicks per day in October and the number of merged pull requests per day](/blog/claude-code-case-study-obituaries/pr-and-clicks.png)
 
 **16 to 18 October: measurement and sales**
 
@@ -84,7 +84,7 @@ We did not start with new content. We started with the question of which pages a
 
 ## Which programmatic pages we optimised and what happened
 
-![Clicks by page type 12 days before and after 19 October, compared with the same days in 2025](/blog/claude-code-case-study-osmrtnice/programmatic-stranice.png)
+![Clicks by page type 12 days before and after 19 October, compared with the same days in 2025](/blog/claude-code-case-study-obituaries/programmatic-pages.png)
 
 The end of October is a stronger period for this topic because of All Saints' Day. That is why we compare each page type with the same days in 2025. This shows how much of the growth is seasonal.
 
@@ -119,7 +119,7 @@ We describe how to set this up on your own site, step by step, in four separate 
 
 ## How to connect everything into one project
 
-![Diagram: Claude Code connected to GitHub, Netlify, Supabase, Search Console, GA4, Tag Manager, Meta Pixel and Meta Ads](/blog/claude-code-case-study-osmrtnice/jedan-projekt.png)
+![Diagram: Claude Code connected to GitHub, Netlify, Supabase, Search Console, GA4, Tag Manager, Meta Pixel and Meta Ads](/blog/claude-code-case-study-obituaries/one-project.png)
 
 1. **Code on GitHub,** deployed from the main branch (Netlify, in our case). Without this, Claude cannot make changes that can be measured.
 2. **One Google service account** for Search Console, GA4 and Tag Manager. The key goes into an environment variable, and you add the service account's email as a user in each tool.

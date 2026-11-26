@@ -46,7 +46,7 @@ The site also has an llms.txt with a description of its sections and prices (dig
 
 ## Result 1: Google, clicks per day
 
-![Clicks from Google per day in September and October 2026, with a jump on 19 October](/blog/case-study-ai-vidljivost-osmrtnice/gsc-klikovi.png)
+![Clicks from Google per day in September and October 2026, with a jump on 19 October](/blog/ai-visibility-case-study-obituaries/gsc-clicks.png)
 
 | Week | Clicks 2026 | Same week 2025 |
 | --- | --- | --- |
@@ -56,7 +56,7 @@ The site also has an llms.txt with a description of its sections and prices (dig
 
 The end of October is usually a stronger period for this topic because of All Saints' Day. That is why we compared the same weeks last year: in 2025 there was no jump at all. Position stayed around 6, and impressions rose from 318,721 to 388,159 a week. The number of pages that get any clicks at all is growing.
 
-![Clicks by page type before and after the change](/blog/case-study-ai-vidljivost-osmrtnice/stranice.png)
+![Clicks by page type before and after the change](/blog/ai-visibility-case-study-obituaries/pages.png)
 
 Individual obituaries had the biggest jump: from 1,238 clicks in 14 days to 8,449 in 12 days. The number of pages with at least one click rose from 3,305 to 15,881.
 
@@ -64,7 +64,7 @@ During that period one obituary had a lot of searches by name and brought around
 
 ## Result 2: ChatGPT, visits per day
 
-![Visits from ChatGPT per day, September and October 2026](/blog/case-study-ai-vidljivost-osmrtnice/chatgpt-sesije.png)
+![Visits from ChatGPT per day, September and October 2026](/blog/ai-visibility-case-study-obituaries/chatgpt-sessions.png)
 
 In GA4, source chatgpt.com:
 
@@ -79,7 +79,7 @@ In absolute terms this is still small compared with Google. But a visitor from C
 
 On 1 November we asked ChatGPT (via the API, with web search and the location set to Zagreb) 12 questions that families and relatives ask.
 
-![Results of the 12 questions in ChatGPT](/blog/case-study-ai-vidljivost-osmrtnice/ai-test.png)
+![Results of the 12 questions in ChatGPT](/blog/ai-visibility-case-study-obituaries/ai-test.png)
 
 The site was mentioned in 5 of the 12 answers, and in 3 it was a linked source. For "Sprovodi danas Rijeka" (funerals today Rijeka) it was the only source. For the digital memorial, ChatGPT linked to the memorial page itself. It was not cited for questions about Zagreb, Split, Zadar and Šibenik, where ChatGPT uses local news sites and city cemetery websites.
 

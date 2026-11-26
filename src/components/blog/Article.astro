@@ -151,8 +151,8 @@ const schema = [
       {image && <img src={image} alt={imageAlt ?? ''} class="article__img" />}
       {showToc && (
         <nav class="article__toc" aria-label={t.toc}>
-          <details open data-toc>
-            <summary>{t.toc}</summary>
+          <details>
+            <summary>{t.toc} <span class="article__toc-n">({toc.length})</span></summary>
             <ol>
               {toc.map((h) => (
                 <li>
@@ -218,9 +218,6 @@ const schema = [
 </Base>
 
 <script define:vars={{ copyLabels: [t.copy, t.copied, t.copyFail] }}>
-  // Dugo kazalo na uskom zaslonu kreće zatvoreno, da ne gura tekst članka prema dolje.
-  const tocBox = document.querySelector('[data-toc]');
-  if (tocBox && window.innerWidth < 640 && tocBox.querySelectorAll('a').length > 10) tocBox.removeAttribute('open');
   // Gumb "Kopiraj" na svakom bloku koda u članku.
   document.querySelectorAll('.article pre').forEach((pre) => {
     const b = document.createElement('button');
@@ -263,8 +260,9 @@ const schema = [
   .article :global(.wg__lead) { margin: 0; color: var(--muted); font-size: 0.95rem; }
   .article :global(.wg__note) { margin: 12px 0 0; color: var(--muted); font-size: 0.8rem; }
   .article__img { border-radius: 14px; margin: 24px 0 32px; width: 100%; height: auto; }
-  .article__toc { margin: 0 0 32px; border: 1px solid var(--border); border-radius: 14px; background: var(--bg-2); padding: 14px 20px; }
+  .article__toc { margin: 0 0 32px; border: 1px solid var(--border); border-radius: 14px; background: var(--bg-2); padding: 12px 20px; }
   .article__toc summary { cursor: pointer; font: 700 1rem var(--font-display); color: var(--navy); }
+  .article__toc-n { font-weight: 500; color: var(--muted); }
   .article__toc ol { margin: 12px 0 4px; padding-left: 1.4em; }
   .article__toc li { margin-bottom: 0.35em; }
   .article__toc ol > li > a { font-weight: 600; }

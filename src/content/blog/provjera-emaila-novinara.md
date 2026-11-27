@@ -12,7 +12,9 @@ faq:
   - q: "Koliko stoji Muck Rack?"
     a: "Muck Rack ne objavljuje cijenu. Prema Vendru (59 ugovora, veljača 2026.) medijan ugovora je 13.000 $ godišnje, a za jednog korisnika navodi se oko 5.000 $. Ponude koje su korisnici objavili na Redditu kreću se od 3.500 $ do 53.000 $ godišnje, ovisno o broju korisnika."
   - q: "Koliko stoji Cision?"
-    a: "Cision ne objavljuje cijenu. Prema Vendru (107 ugovora) medijan ugovora je 12.625 $ godišnje, od 3.150 $ do 30.368 $."
+    a: "Cision cjenik objavljuje u britanskom državnom katalogu G-Cloud: paket CisionOne Outreach (baza novinara i distribucija priopćenja) stoji 6.500 £ za tri korisnika, dodatni korisnik 900 £, a cijeli CisionOne paket 25.000 £ za deset korisnika (cjenik od 13. 11. 2026.). Prema Vendru (107 ugovora) medijan ugovora je 12.625 $ godišnje."
+  - q: "Što je G-Cloud i kako u njemu naći cijenu alata?"
+    a: "G-Cloud je javni katalog britanske vlade preko kojeg javni sektor kupuje softver i usluge. Svaki dobavljač mora uz uslugu objaviti cjenik u PDF-u, pa se tu vide cijene alata i dnevne cijene agencija koje inače dobijete tek na upit. Pretražuje se bez prijave na Digital Marketplaceu: upišete naziv alata, otvorite uslugu i kliknete Pricing document."
   - q: "Koliko stoji JournoFinder?"
     a: "JournoFinder objavljuje cijenu: 189 $ mjesečno za jednog korisnika ili 119 $ mjesečno uz godišnju pretplatu (1.428 $ godišnje), 2.748 $ godišnje za tri korisnika, uz 7 dana besplatnog probnog razdoblja."
   - q: "Može li ChatGPT ili Claude pronaći e-mail novinara?"
@@ -24,6 +26,10 @@ faq:
   - q: "Koliko košta provjera e-mail adrese?"
     a: "U Hunterovoj usporedbi iz listopada 2026. 100 provjera stoji od 0,17 $ (Giggal) do 1,95 $ (ZeroBounce); Hunter 1,23 $, Bouncer 0,60 $, Emailable 0,76 $, Clearout i NeverBounce 0,80 $, Kickbox 1,00 $."
 sources:
+  - name: "G-Cloud (Digital Marketplace): Cision Nexus, opis usluge"
+    url: "https://www.applytosupply.digitalmarketplace.service.gov.uk/g-cloud/services/677528054559333"
+  - name: "Cision: G-Cloud 15 cjenik (PDF, 13. 11. 2026.)"
+    url: "https://assets.applytosupply.digitalmarketplace.service.gov.uk/g-cloud-15/documents/711742/677528054559333-pricing-document-2026-11-13-1226.pdf"
   - name: "JournoFinder: Muck Rack vs Cision vs JournoFinder (cijene)"
     url: "https://journofinder.com/compare/muck-rack-vs-cision-vs-journofinder"
   - name: "BuzzStream: 10 Best Media Databases (Roxhill, G-Cloud cijena)"
@@ -80,14 +86,14 @@ Razlika je bila u izdavaču, a ne u novinaru. Na Liverpool Echu e-mail je objavi
 
 ## Koliko stoje baze novinara: Roxhill, Muck Rack, Cision, Meltwater i JournoFinder
 
-Od pet najpoznatijih baza novinara samo JournoFinder javno objavljuje cijenu: 189 $ mjesečno za jednog korisnika, odnosno 1.428 $ godišnje uz godišnju pretplatu. Roxhill, Muck Rack, Cision i Meltwater cijenu daju tek na upit, pa su brojke ispod ono što navode kupci, katalozi nabave i usporedbe, a ne službeni cjenici. Stanje u studenom 2026.:
+Od pet najpoznatijih baza novinara samo JournoFinder cijenu objavljuje na svojoj stranici: 189 $ mjesečno za jednog korisnika, odnosno 1.428 $ godišnje uz godišnju pretplatu. Cision svoj cjenik objavljuje samo u britanskom državnom katalogu G-Cloud (više [niže](#gdje-naći-službenu-cijenu-britanski-g-cloud)). Roxhill, Muck Rack i Meltwater cijenu daju tek na upit, pa su brojke za njih ono što navode kupci, katalozi nabave i usporedbe, a ne službeni cjenici. Stanje u studenom 2026.:
 
 | Baza | Cijena (godišnje) | Odakle je podatak |
 |---|---|---|
 | JournoFinder | 1.428 $ za jednog korisnika (119 $ mjesečno); 2.748 $ za tri korisnika; mjesečno 189 $; 7 dana besplatno | objavljeno na stranici JournoFindera |
 | Roxhill | oko 3.000 £ do 25.000 £ „po instanci“; Prowly procjenjuje od oko 6.000 £, samo godišnja pretplata | britanski katalog javne nabave G-Cloud, kako ga citiraju BuzzStream i Commswith.ai; procjena Prowlyja |
 | Muck Rack | medijan ugovora 13.000 $ (raspon 8.000 do 20.860 $); za jednog korisnika navodi se oko 5.000 $ | Vendr, 59 ugovora (veljača 2026.); Prezly i Rephonic |
-| Cision | medijan ugovora 12.625 $ (najniže 3.150 $, najviše 30.368 $) | Vendr, 107 ugovora |
+| Cision | službeno: paket Outreach (baza novinara i distribucija) 6.500 £ za 3 korisnika, dodatni korisnik 900 £; medijan ugovora 12.625 $ (najniže 3.150 $, najviše 30.368 $) | Cisionov cjenik u G-Cloudu (13. 11. 2026.); Vendr, 107 ugovora |
 | Meltwater | medijan ugovora 25.800 $ | Vendr (veljača 2026.) |
 
 **Što kažu korisnici:**
@@ -103,6 +109,26 @@ Od pet najpoznatijih baza novinara samo JournoFinder javno objavljuje cijenu: 18
 - **Obnova može biti skuplja.** Cisionovi opći uvjeti predviđaju poskupljenje od 5 % pri svakoj obnovi, ako ugovor ne kaže drugačije.
 
 Dio izvora su konkurentski alati (Prowly, PressPilot, JournoFinder), koji imaju interes prikazati druge baze skupljima. Prije kupnje zatražite pisanu ponudu.
+
+### Gdje naći službenu cijenu: britanski G-Cloud
+
+G-Cloud je javni katalog britanske vlade preko kojeg ministarstva, općine i bolnice kupuju softver i usluge. Svaki dobavljač uz uslugu mora objaviti cjenik, a sniženje koje odobri mora vrijediti za sve kupce, pa se tu vide cijene koje inače dobijete tek na upit. Katalog je otvoren svima, bez prijave, na [Digital Marketplaceu](https://www.applytosupply.digitalmarketplace.service.gov.uk/g-cloud/search).
+
+Što ondje nađete:
+
+- **opis usluge** s funkcijama, brojem korisnika i uvjetima podrške;
+- **cjenik u PDF-u** s datumom verzije: kod alata cijene paketa, kod agencija dnevne cijene po ulozi (junior, senior, direktor);
+- **naziv dobavljača i e-mail** za javne natječaje.
+
+U studenom 2026. pretraga daje 83 usluge za „search engine optimisation“, 273 za „media monitoring“ i 40 za „media database“.
+
+Primjer je Cision. Na [stranici usluge](https://www.applytosupply.digitalmarketplace.service.gov.uk/g-cloud/services/677528054559333) piše da su ugovori obično godišnji, a u [cjeniku (PDF, verzija od 13. 11. 2026.)](https://assets.applytosupply.digitalmarketplace.service.gov.uk/g-cloud-15/documents/711742/677528054559333-pricing-document-2026-11-13-1226.pdf) na stranici 22 stoje paketi CisionOne:
+
+![Cisionovi paketi iz G-Cloud cjenika: Outreach 6.500 £ za 3 korisnika, Monitoring Essentials 6.500 £, Outreach + Monitoring 12.000 £, Monitoring Plus 16.000 £, Full Comms Suite 25.000 £](/blog/provjera-emaila-novinara/g-cloud-cision.png)
+
+Paket Outreach (baza novinara i distribucija priopćenja) stoji 6.500 £ za tri korisnika, svaki dodatni korisnik 900 £, a globalna baza novinara uz njega dodatnih 3.000 £. To je cijena za javni sektor; privatnoj tvrtki ponuda može biti drugačija, ali je to dobra polazna točka za pregovore.
+
+Kako sami pretražiti: upišite naziv alata ili usluge u tražilicu, otvorite uslugu i na dnu stranice kliknite „Pricing document“. Svih pet alata iz tablice gore nećete naći: Roxhillov unos u studenom 2026. ne pronalazimo, pa njegovu brojku navodimo prema BuzzStreamu i Commswith.aiju.
 
 ## Format adrese: kako redakcije slažu e-mail
 

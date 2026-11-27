@@ -2,6 +2,7 @@
 title: "Kako provjeriti e-mail novinara prije slanja (i kako AI tu pomaže, a kako odmaže)"
 description: "Kako naći i provjeriti e-mail novinara: formati adresa u redakcijama, alati za provjeru s cijenama, zamke accept-all domena i kako sigurno koristiti AI."
 date: 2026-11-27
+translation: verify-journalist-email
 image: /blog/provjera-emaila-novinara/naslovna.png
 imageAlt: "Naslovna slika članka o provjeri e-maila novinara: 55 od 61 adrese u formatu ime.prezime"
 faq:

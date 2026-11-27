@@ -2,10 +2,19 @@
 title: "Kako provjeriti e-mail novinara prije slanja (i kako AI tu pomaže, a kako odmaže)"
 description: "Kako naći i provjeriti e-mail novinara: formati adresa u redakcijama, alati za provjeru s cijenama, zamke accept-all domena i kako sigurno koristiti AI."
 date: 2026-11-27
+updated: 2026-11-27
 translation: verify-journalist-email
 image: /blog/provjera-emaila-novinara/naslovna.png
 imageAlt: "Naslovna slika članka o provjeri e-maila novinara: 55 od 61 adrese u formatu ime.prezime"
 faq:
+  - q: "Koliko stoji Roxhill?"
+    a: "Roxhill ne objavljuje cijenu. Britanski katalog javne nabave G-Cloud, kako ga citiraju BuzzStream i Commswith.ai, navodi oko 3.000 £ do 25.000 £ godišnje po instanci, a Prowly procjenjuje od oko 6.000 £ godišnje, samo uz godišnju pretplatu."
+  - q: "Koliko stoji Muck Rack?"
+    a: "Muck Rack ne objavljuje cijenu. Prema Vendru (59 ugovora, veljača 2026.) medijan ugovora je 13.000 $ godišnje, a za jednog korisnika navodi se oko 5.000 $. Ponude koje su korisnici objavili na Redditu kreću se od 3.500 $ do 53.000 $ godišnje, ovisno o broju korisnika."
+  - q: "Koliko stoji Cision?"
+    a: "Cision ne objavljuje cijenu. Prema Vendru (107 ugovora) medijan ugovora je 12.625 $ godišnje, od 3.150 $ do 30.368 $."
+  - q: "Koliko stoji JournoFinder?"
+    a: "JournoFinder objavljuje cijenu: 189 $ mjesečno za jednog korisnika ili 119 $ mjesečno uz godišnju pretplatu (1.428 $ godišnje), 2.748 $ godišnje za tri korisnika, uz 7 dana besplatnog probnog razdoblja."
   - q: "Može li ChatGPT ili Claude pronaći e-mail novinara?"
     a: "Može predložiti adresu, ali je ne može provjeriti, jer ne razgovara s mail serverom. U Hunterovom testu 9 AI modela 76 % adresa koje su modeli predložili bilo je nevažeće. AI koristite za traženje autorske stranice i formata adrese, a adresu provjerite alatom za provjeru."
   - q: "Što znači accept-all ili catch-all kod provjere e-maila?"
@@ -15,6 +24,18 @@ faq:
   - q: "Koliko košta provjera e-mail adrese?"
     a: "U Hunterovoj usporedbi iz listopada 2026. 100 provjera stoji od 0,17 $ (Giggal) do 1,95 $ (ZeroBounce); Hunter 1,23 $, Bouncer 0,60 $, Emailable 0,76 $, Clearout i NeverBounce 0,80 $, Kickbox 1,00 $."
 sources:
+  - name: "JournoFinder: Muck Rack vs Cision vs JournoFinder (cijene)"
+    url: "https://journofinder.com/compare/muck-rack-vs-cision-vs-journofinder"
+  - name: "BuzzStream: 10 Best Media Databases (Roxhill, G-Cloud cijena)"
+    url: "https://www.buzzstream.com/blog/media-databases/"
+  - name: "Commswith.ai: Roxhill Media review"
+    url: "https://www.commswith.ai/tools/roxhill-media/"
+  - name: "Prowly: Roxhill pricing"
+    url: "https://prowly.com/magazine/roxhill-pricing/"
+  - name: "PressPilot: Muck Rack pricing 2026 (Vendr i Rephonic)"
+    url: "https://www.presspilot.io/academy/muck-rack-pricing"
+  - name: "Market Intelligence Tools: Media database pricing 2026 (Vendr)"
+    url: "https://marketintelligencetools.com/reports/media-database-pricing/"
   - name: "Hunter: MCP for Email Verification, 8 checkers compared (test 8. listopada 2026.)"
     url: "https://hunter.io/blog/mcp-email-verification/"
   - name: "Google: Email sender guidelines"
@@ -44,7 +65,7 @@ Prije bilo kakvog alata provjerite pet mjesta, ovim redom:
 2. **Profil na X-u ili Blueskyju.** Novinari u opisu profila često pišu adresu ili napomenu „DM za pitcheve“.
 3. **Kraj članka.** Neki portali uz članak stave „Imate priču? Javite se na…“.
 4. **Kontakt stranica redakcije.** Ondje su adrese rubrika (vijesti, potrošači, biznis) kad osobna adresa nije javna.
-5. **Baza novinara** (Muck Rack, Roxhill, Cision, JournoFinder). Vrijedi kad šaljete često; baze naplaćuju godišnju pretplatu.
+5. **Baza novinara** (Muck Rack, Roxhill, Cision, JournoFinder). Vrijedi kad šaljete često; koliko stoje, piše [niže](#koliko-stoje-baze-novinara-roxhill-muck-rack-cision-meltwater-i-journofinder).
 
 Kad smo za UK kampanju složili listu od 199 novinara koji pišu o temi, rezultat je izgledao ovako:
 
@@ -56,6 +77,32 @@ Kad smo za UK kampanju složili listu od 199 novinara koji pišu o temi, rezulta
 | Bez objavljene adrese, samo kandidat po formatu redakcije | 110 |
 
 Razlika je bila u izdavaču, a ne u novinaru. Na Liverpool Echu e-mail je objavilo 9 od 9 novinara, na Manchester Evening Newsu 7 od 9 i na Expressu 8 od 10. Na BBC-ju, Evening Standardu, Telegraphu i Independentu nijedan.
+
+## Koliko stoje baze novinara: Roxhill, Muck Rack, Cision, Meltwater i JournoFinder
+
+Od pet najpoznatijih baza novinara samo JournoFinder javno objavljuje cijenu: 189 $ mjesečno za jednog korisnika, odnosno 1.428 $ godišnje uz godišnju pretplatu. Roxhill, Muck Rack, Cision i Meltwater cijenu daju tek na upit, pa su brojke ispod ono što navode kupci, katalozi nabave i usporedbe, a ne službeni cjenici. Stanje u studenom 2026.:
+
+| Baza | Cijena (godišnje) | Odakle je podatak |
+|---|---|---|
+| JournoFinder | 1.428 $ za jednog korisnika (119 $ mjesečno); 2.748 $ za tri korisnika; mjesečno 189 $; 7 dana besplatno | objavljeno na stranici JournoFindera |
+| Roxhill | oko 3.000 £ do 25.000 £ „po instanci“; Prowly procjenjuje od oko 6.000 £, samo godišnja pretplata | britanski katalog javne nabave G-Cloud, kako ga citiraju BuzzStream i Commswith.ai; procjena Prowlyja |
+| Muck Rack | medijan ugovora 13.000 $ (raspon 8.000 do 20.860 $); za jednog korisnika navodi se oko 5.000 $ | Vendr, 59 ugovora (veljača 2026.); Prezly i Rephonic |
+| Cision | medijan ugovora 12.625 $ (najniže 3.150 $, najviše 30.368 $) | Vendr, 107 ugovora |
+| Meltwater | medijan ugovora 25.800 $ | Vendr (veljača 2026.) |
+
+**Što kažu korisnici:**
+
+- Na r/PublicRelations jedan korisnik preporučuje JournoFinder kao povoljnu opciju jer „stoji oko 1.100 £ godišnje“, što odgovara službenoj godišnjoj cijeni preračunatoj u funte.
+- Rephonic je skupio 24 ponude za Muck Rack iz šest Reddit niti: od 3.500 $ za jednog korisnika do 53.000 $ za tim od sedam do devet ljudi. Za jednog korisnika najčešće se navodi oko 5.000 $, za pet korisnika oko 25.000 $. Rephonic navodi da te brojke nije mogao provjeriti i da su neke starije.
+- Jedan korisnik Reddita naveo je da mu je Muck Rack za tim od 12 ljudi ponudio 34.000 $ godišnje (citira JournoFinder).
+
+**Kako se te cijene slažu:**
+
+- **Plaća se po korisniku.** Roxhill ima pakete Core, Boutique, Enterprise i Premium s 1, 3 i 5 prijava u prva tri; distribucija priopćenja uključena je tek od paketa Boutique.
+- **Prva ponuda nije konačna.** Kupci Muck Racka kroz Vendr u prosjeku su dobili 17 % popusta na prvu ponudu.
+- **Obnova može biti skuplja.** Cisionovi opći uvjeti predviđaju poskupljenje od 5 % pri svakoj obnovi, ako ugovor ne kaže drugačije.
+
+Dio izvora su konkurentski alati (Prowly, PressPilot, JournoFinder), koji imaju interes prikazati druge baze skupljima. Prije kupnje zatražite pisanu ponudu.
 
 ## Format adrese: kako redakcije slažu e-mail
 

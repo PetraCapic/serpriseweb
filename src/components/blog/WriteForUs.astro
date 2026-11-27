@@ -1,0 +1,170 @@
+---
+// Interaktivni dodaci za članak o "write for us" stranicama (HR i EN).
+// <div data-embed="wfu-provjera"></div>: provjera jedne stranice prije objave članka s linkom.
+// <div data-embed="wfu-podaci"></div>: pregled svih 172 stranice iz istraživanja (filteri, pretraga, sortiranje).
+// Sve radi u pregledniku; ništa se ne šalje.
+import data from '../../data/write-for-us.json';
+interface Props { lang?: 'hr' | 'en' }
+const { lang = 'hr' } = Astro.props;
+const en = lang === 'en';
+const T = en
+  ? {
+      cEyebrow: 'Tool', cTitle: 'Check a site before you buy a link', cLead: 'Enter what you see in Ahrefs, Semrush or DataForSEO. The check uses the same thresholds we use for client links.',
+      traffic: 'Organic visits per month', rel: 'Share of traffic from your topic (%)', relHint: 'Of the top 20 keywords, how many are about your topic', drop: 'Drop from peak in the last 12 months (%)', linked: 'Linked domains (outgoing)', ref: 'Referring domains (incoming)', links: 'Commercial links per recent article',
+      ok: 'Looks like a site worth a link', warn: 'Borderline: check the category page and the articles by hand', bad: 'Skip this site',
+      rTraffic: 'Under 100 visits a month: the site has no authority to pass on.', rRel: 'Less than half the traffic comes from your topic.', rRelLow: 'Less than 20% of the traffic comes from your topic.', rDrop: 'Traffic fell more than 50% without recovering.', rDropHigh: 'Traffic fell more than 80%.', rRatio: 'Links out to many more domains than link to it.', rLinks: '2 or more commercial links per article: written for links, not readers.', rGood: 'Traffic, topic, trend and links all pass.',
+      dEyebrow: 'Data', dTitle: 'All 172 sites we checked', dLead: 'Every site Google showed us for "[niche] write for us" in November 2026. Click a column to sort, filter by niche or search by domain.',
+      search: 'Search domain', all: 'All niches', onlyOk: 'Only sites that pass traffic and topic', cols: ['Site', 'Niche', 'DR', 'Visits/mo', 'From topic', 'Drop', 'Top keywords'], more: 'Show more', of: 'of', shown: 'shown', csv: 'Download CSV', pass: 'passes', none: 'n/a',
+      note: 'Visits: DataForSEO estimate for the US. From topic: share of traffic from the top 100 keywords that match the niche (rough keyword match). Drop: from the monthly peak since January 2024, only for 49 sites with DR 50+ and 1,000 to 100,000 visits.',
+    }
+  : {
+      cEyebrow: 'Alat', cTitle: 'Provjerite stranicu prije kupnje linka', cLead: 'Upišite ono što vidite u Ahrefsu, Semrushu ili DataForSEO-u. Provjera koristi iste pragove koje koristimo za linkove klijenata.',
+      traffic: 'Organski posjeti mjesečno', rel: 'Udio prometa iz vaše teme (%)', relHint: 'Od 20 ključnih riječi s najviše prometa, koliko ih je iz vaše teme', drop: 'Pad od vrhunca u zadnjih 12 mjeseci (%)', linked: 'Linked domains (izlazne)', ref: 'Referring domains (ulazne)', links: 'Komercijalnih linkova po novijem članku',
+      ok: 'Stranica izgleda vrijedna linka', warn: 'Granično: ručno provjerite kategoriju i članke', bad: 'Preskočite ovu stranicu',
+      rTraffic: 'Ispod 100 posjeta mjesečno: stranica nema autoritet koji bi prenijela.', rRel: 'Manje od pola prometa dolazi iz vaše teme.', rRelLow: 'Manje od 20 % prometa dolazi iz vaše teme.', rDrop: 'Promet je pao više od 50 % i nije se vratio.', rDropHigh: 'Promet je pao više od 80 %.', rRatio: 'Linka na puno više domena nego što ih linka na nju.', rLinks: '2 ili više komercijalnih linkova po članku: pisano zbog linkova, ne čitatelja.', rGood: 'Promet, tema, trend i linkovi prolaze.',
+      dEyebrow: 'Podaci', dTitle: 'Svih 172 stranice koje smo provjerili', dLead: 'Sve stranice koje nam je Google prikazao za „[niša] write for us“ u studenom 2026. Kliknite stupac za sortiranje, filtrirajte po niši ili tražite domenu.',
+      search: 'Traži domenu', all: 'Sve niše', onlyOk: 'Samo stranice koje prolaze promet i temu', cols: ['Stranica', 'Niša', 'DR', 'Posjeti/mj.', 'Iz teme', 'Pad', 'Top ključne riječi'], more: 'Prikaži još', of: 'od', shown: 'prikazano', csv: 'Preuzmi CSV', pass: 'prolazi', none: 'n/p',
+      note: 'Posjeti: DataForSEO procjena za SAD. Iz teme: udio prometa sa 100 najjačih ključnih riječi koje odgovaraju niši (gruba podudarnost riječi). Pad: od mjesečnog vrhunca od siječnja 2024., samo za 49 stranica s DR-om 50+ i 1.000 do 100.000 posjeta.',
+    };
+const niches = Object.entries(data.niches as Record<string, string>).map(([k, hr]) => ({ k, label: en ? k : hr }));
+---
+<section class="bfw-card wfu" data-mount="wfu-provjera" data-i18n={JSON.stringify({ ok: T.ok, warn: T.warn, bad: T.bad, rTraffic: T.rTraffic, rRel: T.rRel, rRelLow: T.rRelLow, rDrop: T.rDrop, rDropHigh: T.rDropHigh, rRatio: T.rRatio, rLinks: T.rLinks, rGood: T.rGood })}>
+  <p class="bfw-eyebrow">{T.cEyebrow}</p>
+  <h3 class="bfw-title">{T.cTitle}</h3>
+  <p class="bfw-lead">{T.cLead}</p>
+  <div class="bfw-form">
+    <label class="bfw-f">{T.traffic}<input type="number" min="0" inputmode="numeric" data-w="t" placeholder="1500" /></label>
+    <label class="bfw-f">{T.rel}<input type="number" min="0" max="100" inputmode="numeric" data-w="rel" placeholder="60" /><span>{T.relHint}</span></label>
+    <label class="bfw-f">{T.drop}<input type="number" min="0" max="100" inputmode="numeric" data-w="drop" placeholder="10" /></label>
+    <label class="bfw-f">{T.linked}<input type="number" min="0" inputmode="numeric" data-w="out" placeholder="300" /></label>
+    <label class="bfw-f">{T.ref}<input type="number" min="0" inputmode="numeric" data-w="in" placeholder="900" /></label>
+    <label class="bfw-f">{T.links}<input type="number" min="0" inputmode="numeric" data-w="cl" placeholder="0" /></label>
+  </div>
+  <div class="wfu-verdict" data-w="verdict" aria-live="polite" hidden></div>
+</section>
+
+<section class="bfw-card wfu" data-mount="wfu-podaci" data-rows={JSON.stringify(data.rows)} data-i18n={JSON.stringify({ more: T.more, of: T.of, shown: T.shown, pass: T.pass, none: T.none, niches: Object.fromEntries(niches.map((n) => [n.k, n.label])) })}>
+  <p class="bfw-eyebrow">{T.dEyebrow}</p>
+  <h3 class="bfw-title">{T.dTitle}</h3>
+  <p class="bfw-lead">{T.dLead}</p>
+  <div class="wfu-controls">
+    <input type="search" data-w="q" placeholder={T.search} aria-label={T.search} />
+    <select data-w="niche" aria-label={T.all}><option value="">{T.all}</option>{niches.map((n) => <option value={n.k}>{n.label}</option>)}</select>
+    <label class="wfu-chk"><input type="checkbox" data-w="ok" /> {T.onlyOk}</label>
+  </div>
+  <p class="bfw-muted" data-w="count"></p>
+  <div class="wfu-scroll">
+    <table class="wfu-table">
+      <thead><tr>
+        <th data-sort="d">{T.cols[0]}</th><th data-sort="n">{T.cols[1]}</th><th data-sort="dr" class="num">{T.cols[2]}</th><th data-sort="t" class="num">{T.cols[3]}</th><th data-sort="rel" class="num">{T.cols[4]}</th><th data-sort="drop" class="num">{T.cols[5]}</th><th>{T.cols[6]}</th>
+      </tr></thead>
+      <tbody data-w="body"></tbody>
+    </table>
+  </div>
+  <button type="button" class="bfw-copy" data-w="more">{T.more}</button>
+  <p class="bfw-note">{T.note} <a href="/data/istrazivanja/write-for-us-172-stranice.csv" download>{T.csv}</a></p>
+</section>
+
+<script>
+  const place = (name: string) => {
+    const el = document.querySelector<HTMLElement>(`[data-mount="${name}"]`);
+    const slot = document.querySelector(`[data-embed="${name}"]`);
+    if (el && slot) slot.replaceWith(el);
+    return el;
+  };
+
+  // Provjera jedne stranice.
+  const c = place('wfu-provjera');
+  if (c) {
+    const I = JSON.parse(c.dataset.i18n ?? '{}');
+    const v = (k: string) => { const s = c.querySelector<HTMLInputElement>(`[data-w="${k}"]`)!.value.trim(); return s === '' ? null : Number(s); };
+    const out = c.querySelector<HTMLElement>('[data-w="verdict"]')!;
+    const run = () => {
+      const t = v('t'), rel = v('rel'), drop = v('drop'), o = v('out'), i = v('in'), cl = v('cl');
+      if ([t, rel, drop, o, i, cl].every((x) => x === null)) { out.hidden = true; return; }
+      const bad: string[] = [], warn: string[] = [];
+      if (t !== null && t < 100) bad.push(I.rTraffic);
+      if (rel !== null && rel < 20) bad.push(I.rRelLow); else if (rel !== null && rel < 50) warn.push(I.rRel);
+      if (drop !== null && drop > 80) bad.push(I.rDropHigh); else if (drop !== null && drop > 50) warn.push(I.rDrop);
+      if (o !== null && i !== null && i > 0 && o / i > 3) bad.push(I.rRatio); else if (o !== null && i !== null && i > 0 && o / i > 1) warn.push(I.rRatio);
+      if (cl !== null && cl >= 2) bad.push(I.rLinks);
+      const level = bad.length ? 'bad' : warn.length ? 'warn' : 'ok';
+      const reasons = bad.length || warn.length ? [...bad, ...warn] : [I.rGood];
+      out.className = `wfu-verdict wfu-${level}`;
+      out.innerHTML = `<strong>${I[level]}</strong><ul>${reasons.map((r) => `<li>${r}</li>`).join('')}</ul>`;
+      out.hidden = false;
+    };
+    c.querySelectorAll('input').forEach((x) => x.addEventListener('input', run));
+  }
+
+  // Pregled svih stranica.
+  const d = place('wfu-podaci');
+  if (d) {
+    type Row = { d: string; u: string; n: string; dr: number | null; t: number; rel: number | null; drop: number | null; top: string[]; ok: boolean };
+    const rows: Row[] = JSON.parse(d.dataset.rows ?? '[]');
+    const I = JSON.parse(d.dataset.i18n ?? '{}');
+    const L = [...d.querySelectorAll('thead th')].map((th) => th.textContent ?? '');
+    const q = d.querySelector<HTMLInputElement>('[data-w="q"]')!, niche = d.querySelector<HTMLSelectElement>('[data-w="niche"]')!, ok = d.querySelector<HTMLInputElement>('[data-w="ok"]')!;
+    const body = d.querySelector<HTMLElement>('[data-w="body"]')!, count = d.querySelector<HTMLElement>('[data-w="count"]')!, more = d.querySelector<HTMLButtonElement>('[data-w="more"]')!;
+    let key: keyof Row = 't', dir = -1, limit = 20;
+    const esc = (s: string) => s.replace(/[&<>"]/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[ch]!);
+    const fmt = (x: number | null, suf = '') => (x === null ? `<span class="bfw-muted">${I.none}</span>` : `${x.toLocaleString(document.documentElement.lang || 'hr')}${suf}`);
+    const draw = () => {
+      const s = q.value.trim().toLowerCase();
+      const f = rows.filter((r) => (!s || r.d.includes(s)) && (!niche.value || r.n === niche.value) && (!ok.checked || r.ok));
+      f.sort((a, b) => { const x = a[key] ?? -1, y = b[key] ?? -1; return (x < y ? -1 : x > y ? 1 : 0) * dir; });
+      body.innerHTML = f.slice(0, limit).map((r) => `<tr class="${r.ok ? 'is-ok' : ''}">
+        <td><a href="${esc(r.u)}" rel="nofollow noopener" target="_blank">${esc(r.d)}</a>${r.ok ? ` <span class="wfu-pass">${I.pass}</span>` : ''}</td>
+        <td data-l="${esc(L[1])}">${esc(I.niches[r.n] ?? r.n)}</td><td class="num" data-l="${esc(L[2])}">${fmt(r.dr)}</td><td class="num" data-l="${esc(L[3])}">${fmt(r.t)}</td><td class="num" data-l="${esc(L[4])}">${fmt(r.rel, ' %')}</td><td class="num" data-l="${esc(L[5])}">${r.drop === null ? fmt(null) : `−${r.drop} %`}</td>
+        <td class="wfu-kw">${r.top.map(esc).join(', ')}</td></tr>`).join('');
+      count.textContent = `${Math.min(limit, f.length)} ${I.of} ${f.length} ${I.shown}`;
+      more.hidden = f.length <= limit;
+    };
+    d.querySelectorAll<HTMLElement>('th[data-sort]').forEach((th) => th.addEventListener('click', () => {
+      const k = th.dataset.sort as keyof Row; dir = key === k ? -dir : (k === 'd' || k === 'n' ? 1 : -1); key = k; draw();
+    }));
+    [q, niche, ok].forEach((x) => x.addEventListener('input', () => { limit = 20; draw(); }));
+    more.addEventListener('click', () => { limit += 40; draw(); });
+    draw();
+  }
+</script>
+
+<style is:global>
+  .bfw-card { border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin: 1.6em 0; background: var(--surface); }
+  .bfw-eyebrow { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin: 0 0 4px; font-weight: 600; }
+  .bfw-title { margin: 0 0 6px; font-size: 1.2rem; }
+  .bfw-lead { margin: 0 0 14px; color: var(--muted); font-size: 0.95rem; }
+  .bfw-note, .bfw-muted { font-size: 0.85rem; color: var(--muted); }
+  .bfw-form { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 14px; }
+  .bfw-f { display: grid; gap: 4px; font-size: 0.8rem; color: var(--muted); font-weight: 500; }
+  .bfw-f span { font-weight: 400; font-size: 0.75rem; }
+  .bfw-f input, .wfu-controls input[type='search'], .wfu-controls select { font: inherit; font-size: 1rem; padding: 8px 10px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg, #fff); color: inherit; min-width: 0; }
+  .bfw-copy { font: inherit; font-size: 0.9rem; padding: 8px 14px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg, #fff); color: inherit; cursor: pointer; margin: 10px 0; }
+  .wfu-verdict { border-radius: 10px; padding: 12px 14px; font-size: 0.95rem; }
+  .wfu-verdict ul { margin: 6px 0 0; padding-left: 18px; }
+  .wfu-ok { background: #e8f5ec; color: #14532d; }
+  .wfu-warn { background: #fff6e0; color: #713f12; }
+  .wfu-bad { background: #fdecec; color: #7f1d1d; }
+  .wfu-controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 8px; }
+  .wfu-controls input[type='search'] { flex: 1 1 180px; }
+  .wfu-chk { font-size: 0.85rem; display: flex; gap: 6px; align-items: center; }
+  .wfu .wfu-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; border: 1px solid var(--border); border-radius: 10px; }
+  .wfu table.wfu-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; min-width: 720px; margin: 0; border: 0; }
+  .wfu table.wfu-table th { text-align: left; padding: 8px 10px; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--muted); border: 0; border-bottom: 1px solid var(--border); cursor: pointer; white-space: nowrap; background: none; }
+  .wfu table.wfu-table td { padding: 7px 10px; border: 0; border-bottom: 1px solid var(--border); vertical-align: top; line-height: 1.35; }
+  .wfu table.wfu-table td:first-child { white-space: nowrap; }
+  .wfu table.wfu-table .num { text-align: right; white-space: nowrap; }
+  .wfu .wfu-kw { color: var(--muted); font-size: 0.8rem; min-width: 220px; }
+  .wfu .wfu-pass { display: inline-block; font-size: 0.68rem; background: #e8f5ec; color: #14532d; border-radius: 999px; padding: 1px 7px; margin-left: 4px; white-space: nowrap; }
+  @media (max-width: 640px) {
+    .wfu .wfu-scroll { border: 0; overflow: visible; }
+    .wfu table.wfu-table { min-width: 0; }
+    .wfu table.wfu-table thead { display: none; }
+    .wfu table.wfu-table tr { display: flex; flex-wrap: wrap; gap: 2px 14px; padding: 10px 2px; border-bottom: 1px solid var(--border); }
+    .wfu table.wfu-table td { display: block; border: 0; padding: 0; text-align: left; }
+    .wfu table.wfu-table td:first-child, .wfu table.wfu-table td.wfu-kw { flex-basis: 100%; }
+    .wfu table.wfu-table td[data-l]::before { content: attr(data-l) ': '; color: var(--muted); font-size: 0.75rem; }
+    .wfu .wfu-kw { min-width: 0; }
+  }
+  @media (prefers-color-scheme: dark) { .wfu-ok, .wfu-pass { background: #14351f; color: #bbf7d0; } .wfu-warn { background: #3a2c0a; color: #fde68a; } .wfu-bad { background: #3b1414; color: #fecaca; } }
+</style>

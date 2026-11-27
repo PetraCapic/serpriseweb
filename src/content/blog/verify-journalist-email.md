@@ -2,12 +2,21 @@
 title: "How to Verify a Journalist's Email Before You Send (and Where AI Helps or Hurts)"
 description: "How to find and verify a journalist's email: newsroom address formats, verification tools with prices, the accept-all trap and how to use AI safely."
 date: 2026-11-27
+updated: 2026-11-27
 lang: en
 path: /en/blog/verify-journalist-email/
 translation: provjera-emaila-novinara
 image: /blog/verify-journalist-email/cover.png
 imageAlt: "Cover image for the article on verifying a journalist's email: 55 of 61 addresses use firstname.lastname"
 faq:
+  - q: "How much does Roxhill cost?"
+    a: "Roxhill does not publish its price. The UK G-Cloud public procurement listing, as cited by BuzzStream and Commswith.ai, gives about £3,000 to £25,000 a year per instance, and Prowly estimates from about £6,000 a year, annual plan only."
+  - q: "How much does Muck Rack cost?"
+    a: "Muck Rack does not publish its price. According to Vendr (59 contracts, February 2026) the median contract is $13,000 a year, and about $5,000 is reported for one user. Quotes users posted on Reddit range from $3,500 to $53,000 a year depending on the number of users."
+  - q: "How much does Cision cost?"
+    a: "Cision does not publish its price. According to Vendr (107 contracts) the median contract is $12,625 a year, from $3,150 to $30,368."
+  - q: "How much does JournoFinder cost?"
+    a: "JournoFinder publishes its price: $189 a month for one user, or $119 a month on an annual plan ($1,428 a year), $2,748 a year for three users, with a 7-day free trial."
   - q: "Can ChatGPT or Claude find a journalist's email?"
     a: "It can suggest an address but cannot verify it, because it does not talk to the mail server. In Hunter's test of 9 AI models, 76% of the addresses the models suggested were invalid. Use AI to find the author page and the address format, then check the address with a verification tool."
   - q: "What does accept-all or catch-all mean in email verification?"
@@ -17,6 +26,18 @@ faq:
   - q: "How much does email verification cost?"
     a: "In Hunter's comparison from October 2026, 100 checks cost from $0.17 (Giggal) to $1.95 (ZeroBounce): Hunter $1.23, Bouncer $0.60, Emailable $0.76, Clearout and NeverBounce $0.80, Kickbox $1.00."
 sources:
+  - name: "JournoFinder: Muck Rack vs Cision vs JournoFinder (pricing)"
+    url: "https://journofinder.com/compare/muck-rack-vs-cision-vs-journofinder"
+  - name: "BuzzStream: 10 Best Media Databases (Roxhill, G-Cloud price)"
+    url: "https://www.buzzstream.com/blog/media-databases/"
+  - name: "Commswith.ai: Roxhill Media review"
+    url: "https://www.commswith.ai/tools/roxhill-media/"
+  - name: "Prowly: Roxhill pricing"
+    url: "https://prowly.com/magazine/roxhill-pricing/"
+  - name: "PressPilot: Muck Rack pricing 2026 (Vendr and Rephonic)"
+    url: "https://www.presspilot.io/academy/muck-rack-pricing"
+  - name: "Market Intelligence Tools: Media database pricing 2026 (Vendr)"
+    url: "https://marketintelligencetools.com/reports/media-database-pricing/"
   - name: "Hunter: MCP for Email Verification, 8 checkers compared (test run 8 October 2026)"
     url: "https://hunter.io/blog/mcp-email-verification/"
   - name: "Google: Email sender guidelines"
@@ -46,7 +67,7 @@ Before any tool, check five places, in this order:
 2. **The profile on X or Bluesky.** Journalists often put their address in the bio, or a note such as "DM for pitches".
 3. **The end of the article.** Some sites add "Got a story? Contact…" under the piece.
 4. **The newsroom contact page.** Desk addresses (news, consumer, business) live there when personal ones are not public.
-5. **A journalist database** (Muck Rack, Roxhill, Cision, JournoFinder). Worth it if you pitch often; they charge an annual subscription.
+5. **A journalist database** (Muck Rack, Roxhill, Cision, JournoFinder). Worth it if you pitch often; what they cost is [below](#how-much-journalist-databases-cost-roxhill-muck-rack-cision-meltwater-and-journofinder).
 
 When we built a list of 199 journalists covering a topic for a UK campaign, the result looked like this:
 
@@ -58,6 +79,32 @@ When we built a list of 199 journalists covering a topic for a UK campaign, the 
 | No published address, only a candidate from the newsroom format | 110 |
 
 The difference came from the publisher, not the journalist. At the Liverpool Echo 9 of 9 journalists published their email, at the Manchester Evening News 7 of 9 and at the Express 8 of 10. At the BBC, Evening Standard, Telegraph and Independent, none did.
+
+## How much journalist databases cost: Roxhill, Muck Rack, Cision, Meltwater and JournoFinder
+
+Of the five best-known journalist databases, only JournoFinder publishes its price: $189 a month for one user, or $1,428 a year on an annual plan. Roxhill, Muck Rack, Cision and Meltwater quote on request, so the figures below are what buyers, procurement listings and comparisons report, not official price lists. As of November 2026:
+
+| Database | Price (per year) | Where the figure comes from |
+|---|---|---|
+| JournoFinder | $1,428 for one user ($119 a month); $2,748 for three users; $189 month to month; 7-day free trial | published on JournoFinder's site |
+| Roxhill | about £3,000 to £25,000 "per instance"; Prowly estimates from about £6,000, annual plan only | UK G-Cloud public procurement listing, as cited by BuzzStream and Commswith.ai; Prowly's estimate |
+| Muck Rack | median contract $13,000 (range $8,000 to $20,860); about $5,000 reported for one user | Vendr, 59 contracts (February 2026); Prezly and Rephonic |
+| Cision | median contract $12,625 (low $3,150, high $30,368) | Vendr, 107 contracts |
+| Meltwater | median contract $25,800 | Vendr (February 2026) |
+
+**What users say:**
+
+- On r/PublicRelations one user recommends JournoFinder as a budget option because it "costs about £1,100 a year", which matches the official annual price converted to pounds.
+- Rephonic collected 24 Muck Rack quotes from six Reddit threads: from $3,500 for one user to $53,000 for a team of seven to nine. The most common figure for one user is about $5,000, and about $25,000 for five users. Rephonic notes it could not verify these figures and that some are older.
+- One Reddit user said Muck Rack quoted $34,000 a year for a team of 12 (as cited by JournoFinder).
+
+**How these prices are built:**
+
+- **You pay per user.** Roxhill has Core, Boutique, Enterprise and Premium bands with 1, 3 and 5 logins on the first three; press release distribution is included only from Boutique up.
+- **The first quote is not final.** Muck Rack buyers on Vendr saved 17% on average against the first quote.
+- **Renewal can cost more.** Cision's general terms allow a 5% increase at each renewal unless the contract says otherwise.
+
+Some of the sources are competing tools (Prowly, PressPilot, JournoFinder) with an interest in showing other databases as more expensive. Ask for a written quote before you buy.
 
 ## Address format: how newsrooms build emails
 

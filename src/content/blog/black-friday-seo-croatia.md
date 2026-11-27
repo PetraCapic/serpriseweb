@@ -2,7 +2,7 @@
 title: "Black Friday SEO guide for online shops: data from Croatia, the sale page and Reddit"
 description: "A guide built on data from Croatia: when shoppers search, who ranks, how to build the sale page and what to do about Reddit threads on your store. With tools."
 date: 2026-11-24
-updated: 2026-11-26
+updated: 2026-11-27
 lang: en
 path: /en/blog/black-friday-seo-croatia/
 translation: black-friday-seo
@@ -49,7 +49,7 @@ We are adding to the guide every day until Black Friday:
 - **Part 1: the sale page** (24 Nov). When shoppers search, who ranks, the URL, the title, structure for large shops.
 - **Part 2: Reddit** (25 Nov). Where Reddit sits on Google, what people write and what a shop may do.
 - **Part 3: what shoppers want to see** (26 Nov). How shoppers verify a discount, what the prices of 634 products show, and a check in one sheet.
-- **Part 4: what to do with the page after Friday.** The short version is already below; the detailed one comes 27 Nov.
+- **Part 4: what to do with the page after Friday** (27 Nov). What stores did with last year's pages, how many links a permanent URL collects, and five steps after the sale.
 
 If you want to get straight to work, the [checklist](#your-checklist) is at the bottom.
 
@@ -264,6 +264,39 @@ Everything else stays as it is. For a fifth of products you will find the opposi
 
 Two notes. By law the discount is still calculated from the lowest price in the last 30 days; the 10 September price is an extra figure shown next to it. And look at the date next to the reference price: on 15% of cards it is later than 10 September, because the product was listed later.
 
+## Part 4: what to do with the page after Friday
+
+### Interest drops right after Friday
+
+Last year, interest in "black friday" in Croatia peaked on the Friday itself (100). Saturday had 41, Sunday 37, Cyber Monday 14, and from 5 December zero. Until September the term is barely searched; October averages 8 and November 41.
+
+So the sale lasts a few days. The page can work much longer, because links to it arrive out of season too.
+
+![What last year's Black Friday URLs of six stores return today, how many domains link to the permanent pages of Notino and JYSK, and search interest in "black friday" by month](/blog/black-friday-seo-croatia/after-friday.png)
+
+### What stores did with last year's pages
+
+Six stores had the year in the URL of their sale page (e.g. /black-friday-2025/). On Black Friday 2026 we checked what last year's URL returns:
+
+- **Two:** "page not found". Everything that pointed to that page now leads nowhere.
+- **One:** still shows the "Black friday 2025" page, while the 2026 URL goes to the homepage.
+- **Three:** redirect the old URL to a new 2026 one. That works, but every year there is a new URL and another step in the redirect.
+
+### A permanent URL collects links for years
+
+- **Notino, /black-friday/:** 35 domains link to the page. The first link is from 2019, and new ones are still arriving in 2026.
+- **JYSK, /black-friday:** 13 domains. Index.hr linked to it on 7 December 2025 and 24sata in February 2026, out of season.
+
+Had those pages been deleted after the sale, those links would point to "page not found".
+
+### Five steps after the sale
+
+1. **Do not delete the page or redirect it to the homepage.** The URL stays the same.
+2. **As soon as the sale ends, remove sale prices, countdowns and "sale on now" banners.** Showing a discount that no longer applies misleads shoppers.
+3. **Replace the sale with a short notice:** Black Friday returns next year, a sign-up for an email alert, and links to categories and current offers. The page stays available to Google and keeps collecting links.
+4. **Redirect old pages with the year in the URL to the permanent /black-friday/ URL**, not to the homepage. That way the links from all the old pages end up in one place.
+5. **In September, put the homepage link back and start filling the page**, so Google finds it before October, when interest starts.
+
 ## What to do and when
 
 ### What to do this week
@@ -295,6 +328,7 @@ The worst option is a permanent redirect to the homepage. Google can treat that 
 - **Google queries for Reddit:** nineteen queries is a small sample.
 - **Product prices (Part 3):** 634 products from the sale and Black Friday pages of 14 stores, the first products loaded in mobile view, 25 November 2026. Not a representative sample; stores that block automated browsing are not included. At one fashion store the discount is written as "extra −X%", and we assumed it is not included in the displayed price.
 - **Reddit:** 641 comments from 35 threads on r/croatia, r/hrvatska, r/askcroatia and r/Split. Threads were chosen by Black Friday topic, so complaints are probably over-represented; the split of the 75 most upvoted comments was done by hand.
+- **Pages after the sale (Part 4):** we opened last year's URLs of six stores with the year in the URL on 27 November 2026 and recorded where they lead. Referring domains for the Notino and JYSK pages come from the DataForSEO backlink index, pulled the same day; the index does not record every link.
 - **Retailer pages:** titles, URLs and structure were read directly from the pages or from Google's results.
 
 If you would like us to review your sale page before next season, [get in touch](/en/contact/).

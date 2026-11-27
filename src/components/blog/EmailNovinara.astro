@@ -1,0 +1,66 @@
+---
+// Alat za članak /blog/provjera-emaila-novinara/: iz imena, prezimena i domene složi moguće adrese za provjeru.
+// U tekstu ga označava <div data-embed="email-generator"></div>. Radi samo u pregledniku; ništa se ne šalje.
+interface Props { lang?: 'hr' | 'en' }
+const { lang = 'hr' } = Astro.props;
+const en = lang === 'en';
+const T = en
+  ? { eyebrow: 'Tool', title: 'Candidate addresses to verify', lead: 'Type the journalist\'s name and the email domain their colleagues use. The most common newsroom formats come first. Send only to an address a checker marks as valid.',
+      first: 'First name', last: 'Last name', domain: 'Email domain', domainPh: 'e.g. reachplc.com', empty: 'Type a name and a domain.', copy: 'Copy list', copied: 'Copied', common: 'most common in our UK list', note: 'Domain from the website is often wrong: Liverpool Echo journalists use reachplc.com. Take the domain from two published colleague addresses.' }
+  : { eyebrow: 'Alat', title: 'Kandidati za adresu, za provjeru', lead: 'Upišite ime i prezime novinara i domenu koju koriste njegovi kolege. Najčešći formati redakcija su prvi. Šaljite samo na adresu koju alat za provjeru označi kao valid.',
+      first: 'Ime', last: 'Prezime', domain: 'Domena e-maila', domainPh: 'npr. reachplc.com', empty: 'Upišite ime i domenu.', copy: 'Kopiraj popis', copied: 'Kopirano', common: 'najčešće na našoj UK listi', note: 'Domena portala često je kriva: novinari Liverpool Echa koriste reachplc.com. Domenu uzmite iz dvije objavljene adrese kolega.' };
+---
+<section class="bfw-card emg" data-mount="email-generator" data-i18n={JSON.stringify({ empty: T.empty, copy: T.copy, copied: T.copied, common: T.common })}>
+  <p class="bfw-eyebrow">{T.eyebrow}</p>
+  <h3 class="bfw-title">{T.title}</h3>
+  <p class="bfw-lead">{T.lead}</p>
+  <div class="bfw-form">
+    <label class="bfw-f">{T.first}<input type="text" data-emg="first" autocomplete="off" maxlength="40" /></label>
+    <label class="bfw-f">{T.last}<input type="text" data-emg="last" autocomplete="off" maxlength="40" /></label>
+    <label class="bfw-f">{T.domain}<input type="text" data-emg="domain" placeholder={T.domainPh} autocomplete="off" maxlength="60" /></label>
+  </div>
+  <ol class="emg-list" data-emg="list" aria-live="polite"><li class="bfw-muted">{T.empty}</li></ol>
+  <button type="button" class="bfw-copy" data-emg="copy" hidden>{T.copy}</button>
+  <p class="bfw-note">{T.note}</p>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-mount="email-generator"]').forEach((el) => {
+    const slot = document.querySelector('[data-embed="email-generator"]');
+    if (slot) slot.replaceWith(el);
+    const I = JSON.parse(el.dataset.i18n ?? '{}');
+    const $ = <T extends HTMLElement>(k: string) => el.querySelector<T>(`[data-emg="${k}"]`)!;
+    const clean = (s: string) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/đ/g, 'd').replace(/[^a-z0-9]/g, '');
+    const render = () => {
+      const f = clean($<HTMLInputElement>('first').value), l = clean($<HTMLInputElement>('last').value);
+      // Dvostruko ime (Ana Marija): redakcije često uzmu samo prvo.
+      const f0 = clean($<HTMLInputElement>('first').value.trim().split(/\s+/)[0] ?? '');
+      const d = $<HTMLInputElement>('domain').value.trim().toLowerCase().replace(/^.*@/, '').replace(/^https?:\/\//, '').replace(/^www\./, '').replace(/\/.*$/, '');
+      const list = $('list'); const copy = $<HTMLButtonElement>('copy');
+      if (!f || !d || !d.includes('.')) { list.innerHTML = `<li class="bfw-muted">${I.empty}</li>`; copy.hidden = true; return; }
+      const locals = l
+        ? [`${f}.${l}`, ...(f0 && f0 !== f ? [`${f0}.${l}`] : []), `${f}${l}`, `${f[0]}${l}`, `${f[0]}.${l}`, `${f}_${l}`, `${f}-${l}`, `${l}.${f}`, `${f}`, `${l}`, `${f}${l[0]}`]
+        : [f];
+      const emails = [...new Set(locals)].map((x) => `${x}@${d}`);
+      list.innerHTML = emails.map((e, i) => `<li><code>${e}</code>${i === 0 && l ? ` <span>${I.common}</span>` : ''}</li>`).join('');
+      copy.hidden = false; copy.textContent = I.copy;
+      copy.onclick = async () => { try { await navigator.clipboard.writeText(emails.join('\n')); copy.textContent = I.copied; } catch {} };
+    };
+    el.querySelectorAll('input').forEach((i) => i.addEventListener('input', render));
+  });
+</script>
+
+<style>
+  .bfw-card { border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin: 1.6em 0; background: var(--surface); }
+  .bfw-eyebrow { font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin: 0 0 4px; font-weight: 600; }
+  .bfw-title { margin: 0 0 6px; font-size: 1.2rem; }
+  .bfw-lead { margin: 0 0 14px; color: var(--muted); font-size: 0.95rem; }
+  .bfw-note, .bfw-muted { font-size: 0.9rem; color: var(--muted); }
+  .bfw-form { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 14px; }
+  .bfw-f { display: grid; gap: 4px; font-size: 0.8rem; color: var(--muted); font-weight: 500; flex: 1 1 160px; }
+  .bfw-f input { font: inherit; font-size: 1rem; color: var(--text); padding: 9px 10px; border: 1px solid var(--border); border-radius: 8px; background: #fff; width: 100%; box-sizing: border-box; }
+  .emg-list { margin: 0 0 10px; padding-left: 1.4em; display: grid; gap: 4px; }
+  .emg-list code { font-size: 0.95rem; overflow-wrap: anywhere; }
+  .emg-list span { font-size: 0.8rem; color: var(--accent); font-weight: 600; }
+  .bfw-copy { font: inherit; font-size: 0.85rem; padding: 5px 12px; border: 1px solid var(--border); border-radius: 999px; background: #fff; color: var(--text); cursor: pointer; }
+</style>

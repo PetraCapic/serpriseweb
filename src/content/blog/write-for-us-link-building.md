@@ -2,6 +2,7 @@
 title: "Zašto Write for Us više ne radi: provjerili smo 172 stranice"
 description: "Provjerili smo 172 stranice koje Google daje za „write for us“: promet, ključne riječi, DR, padove prometa i linkove. Samo 41 prolazi. Kako odabrati stranicu za link."
 date: 2026-11-27
+translation: write-for-us-guest-posts
 image: /blog/write-for-us-link-building/naslovna.png
 imageAlt: "Zašto Write for Us više ne radi: 41 od 172 stranice ima promet iz svoje teme"
 about:
@@ -10,6 +11,16 @@ about:
   - name: "Guest blogging"
     sameAs: "https://en.wikipedia.org/wiki/Guest_blogging"
   - name: "Domain Rating"
+dataset:
+  name: "Write for Us stranice: promet, tema, DR i padovi prometa (studeni 2026.)"
+  description: "172 domene koje Google (SAD) prikazuje za upite „[niša] write for us“ u 20 niša, s URL-om stranice za autore, Ahrefs DR-om, DataForSEO procjenom organskog prometa, udjelom prometa s ključnih riječi niše, padom prometa od vrhunca od 2024., brojem domena koje linkaju i top ključnim riječima."
+  measured: 2026-11-27
+  method: "Google pretraga (SAD, engleski) za 20 upita, prve dvije stranice rezultata, bez društvenih mreža. Promet i 100 ključnih riječi s najviše prometa: DataForSEO Labs (SAD). Udio iz teme: podudarnost ključnih riječi s rječnikom pojmova niše. Povijest prometa od siječnja 2024. za 49 domena s DR-om 50+ i 1.000 do 100.000 posjeta. Backlinkovi: DataForSEO Backlinks. DR: Ahrefs."
+  license: "https://creativecommons.org/licenses/by/4.0/"
+  keywords: ["link building", "guest posting", "write for us", "Domain Rating", "SEO"]
+  files:
+    - name: "172 stranice (CSV)"
+      url: /data/istrazivanja/write-for-us-172-stranice.csv
 howto:
   name: "Kako provjeriti stranicu prije objave članka s linkom"
   anchor: "kontrolna-lista-6-provjera-prije-objave"
@@ -44,7 +55,7 @@ sources:
     url: "https://ahrefs.com/website-authority-checker"
 ---
 
-Guest post preko „write for us“ stranice danas većinom ne donosi ništa. Provjerili smo 172 stranice koje Google prikazuje za upite poput „marketing write for us“ ili „health write for us“ i samo 41 ima promet koji dolazi iz njezine vlastite teme. Ostale ili nemaju posjetitelje, ili ih imaju s ključnih riječi koje nemaju veze s onim o čemu primaju članke. Takav link vašem webu ne prenosi autoritet, a AI alati takve stranice rijetko citiraju.
+Guest post preko „write for us“ stranice danas većinom ne donosi ništa. Provjerili smo 172 stranice koje Google prikazuje za upite poput „marketing write for us“ ili „health write for us“ i samo 41 ima promet koji dolazi iz njezine vlastite teme. Ostale ili nemaju posjetitelje, ili ih imaju s ključnih riječi koje nemaju veze s onim o čemu primaju članke. Takav link vašem webu ne prenosi autoritet.
 
 Godišnje napravimo više od 2.000 linkova za klijente i stalno pratimo koji od njih pomaknu pozicije i vidljivost u ChatGPT-u i Googleovim AI odgovorima. Ovo istraživanje je pokušaj da to što vidimo u praksi pokažemo brojkama.
 
@@ -69,6 +80,8 @@ Za svaku domenu uzeli smo:
 - **sažetak backlinkova** (DataForSEO Backlinks: domene koje linkaju, izlazni linkovi, spam score).
 
 Procjene prometa nisu podaci iz Google Analyticsa stranice, nego model alata. Za usporedbu stranica međusobno su dovoljno dobre; za točan broj posjeta treba pitati vlasnika.
+
+Svih 172 stranice, s URL-ovima koje smo gledali i brojkama za svaku, možete pregledati i filtrirati [niže u članku](#svih-172-stranice).
 
 ## 1. Većina stranica nema promet
 
@@ -155,6 +168,12 @@ Prompt koji koristimo: „Ovo je portal [tema] i ovo su njegovi najčitaniji čl
 
 Spojka ima granicu. Članak o brzim kreditima na nautičkom portalu nema spojku ni za čitatelja ni za Google.
 
+## Provjerite stranicu prije kupnje linka
+
+Upišite brojke iz Ahrefsa, Semrusha ili DataForSEO-a za stranicu koju razmatrate. Alat koristi iste pragove kao kontrolna lista ispod.
+
+<div data-embed="wfu-provjera"></div>
+
 ## Kontrolna lista: 6 provjera prije objave
 
 1. **Promet.** Ispod 100 organskih posjeta mjesečno preskačemo, osim ako je stranica izrazito nišna i jedina u temi.
@@ -165,3 +184,9 @@ Spojka ima granicu. Članak o brzim kreditima na nautičkom portalu nema spojku 
 6. **Spojka i oznaka.** Znamo zašto čitatelj tog portala treba članak, a link je označen kao sponzoriran.
 
 Kod 172 „write for us“ stranice, prve dvije provjere prošla je 41. Ostale četiri smanjile bi taj broj još više.
+
+## Svih 172 stranice
+
+Sve stranice iz istraživanja, s linkom na „write for us“ stranicu koju smo gledali, DR-om, procjenom prometa, udjelom prometa iz teme i padom prometa. Stranice označene s „prolazi“ imaju barem 100 posjeta i barem 20 % prometa iz svoje niše; to još ne znači da su dobre za link, nego samo da su prošle prve dvije provjere.
+
+<div data-embed="wfu-podaci"></div>

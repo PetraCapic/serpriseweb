@@ -14,7 +14,9 @@ faq:
   - q: "How much does Muck Rack cost?"
     a: "Muck Rack does not publish its price. According to Vendr (59 contracts, February 2026) the median contract is $13,000 a year, and about $5,000 is reported for one user. Quotes users posted on Reddit range from $3,500 to $53,000 a year depending on the number of users."
   - q: "How much does Cision cost?"
-    a: "Cision does not publish its price. According to Vendr (107 contracts) the median contract is $12,625 a year, from $3,150 to $30,368."
+    a: "Cision publishes its price list in the UK government catalogue G-Cloud: the CisionOne Outreach package (journalist database and press release distribution) costs £6,500 for three users, £900 per extra user, and the full CisionOne suite £25,000 for ten users (pricing document of 13 Nov 2026). According to Vendr (107 contracts) the median contract is $12,625 a year."
+  - q: "What is G-Cloud and how do I find a tool's price there?"
+    a: "G-Cloud is the UK government's public catalogue through which the public sector buys software and services. Every supplier has to publish a PDF price list with each service, so it shows tool prices and agency day rates you would otherwise only get on request. You can search it without logging in on the Digital Marketplace: type the tool's name, open the service and click Pricing document."
   - q: "How much does JournoFinder cost?"
     a: "JournoFinder publishes its price: $189 a month for one user, or $119 a month on an annual plan ($1,428 a year), $2,748 a year for three users, with a 7-day free trial."
   - q: "Can ChatGPT or Claude find a journalist's email?"
@@ -26,6 +28,10 @@ faq:
   - q: "How much does email verification cost?"
     a: "In Hunter's comparison from October 2026, 100 checks cost from $0.17 (Giggal) to $1.95 (ZeroBounce): Hunter $1.23, Bouncer $0.60, Emailable $0.76, Clearout and NeverBounce $0.80, Kickbox $1.00."
 sources:
+  - name: "G-Cloud (Digital Marketplace): Cision Nexus service listing"
+    url: "https://www.applytosupply.digitalmarketplace.service.gov.uk/g-cloud/services/677528054559333"
+  - name: "Cision: G-Cloud 15 pricing document (PDF, 13 Nov 2026)"
+    url: "https://assets.applytosupply.digitalmarketplace.service.gov.uk/g-cloud-15/documents/711742/677528054559333-pricing-document-2026-11-13-1226.pdf"
   - name: "JournoFinder: Muck Rack vs Cision vs JournoFinder (pricing)"
     url: "https://journofinder.com/compare/muck-rack-vs-cision-vs-journofinder"
   - name: "BuzzStream: 10 Best Media Databases (Roxhill, G-Cloud price)"
@@ -82,14 +88,14 @@ The difference came from the publisher, not the journalist. At the Liverpool Ech
 
 ## How much journalist databases cost: Roxhill, Muck Rack, Cision, Meltwater and JournoFinder
 
-Of the five best-known journalist databases, only JournoFinder publishes its price: $189 a month for one user, or $1,428 a year on an annual plan. Roxhill, Muck Rack, Cision and Meltwater quote on request, so the figures below are what buyers, procurement listings and comparisons report, not official price lists. As of November 2026:
+Of the five best-known journalist databases, only JournoFinder publishes its price on its own site: $189 a month for one user, or $1,428 a year on an annual plan. Cision publishes its price list only in the UK government catalogue G-Cloud (more [below](#where-to-find-the-official-price-the-uk-g-cloud)). Roxhill, Muck Rack and Meltwater quote on request, so their figures are what buyers, procurement listings and comparisons report, not official price lists. As of November 2026:
 
 | Database | Price (per year) | Where the figure comes from |
 |---|---|---|
 | JournoFinder | $1,428 for one user ($119 a month); $2,748 for three users; $189 month to month; 7-day free trial | published on JournoFinder's site |
 | Roxhill | about £3,000 to £25,000 "per instance"; Prowly estimates from about £6,000, annual plan only | UK G-Cloud public procurement listing, as cited by BuzzStream and Commswith.ai; Prowly's estimate |
 | Muck Rack | median contract $13,000 (range $8,000 to $20,860); about $5,000 reported for one user | Vendr, 59 contracts (February 2026); Prezly and Rephonic |
-| Cision | median contract $12,625 (low $3,150, high $30,368) | Vendr, 107 contracts |
+| Cision | official: Outreach package (journalist database and distribution) £6,500 for 3 users, extra user £900; median contract $12,625 (low $3,150, high $30,368) | Cision's G-Cloud pricing document (13 Nov 2026); Vendr, 107 contracts |
 | Meltwater | median contract $25,800 | Vendr (February 2026) |
 
 **What users say:**
@@ -105,6 +111,26 @@ Of the five best-known journalist databases, only JournoFinder publishes its pri
 - **Renewal can cost more.** Cision's general terms allow a 5% increase at each renewal unless the contract says otherwise.
 
 Some of the sources are competing tools (Prowly, PressPilot, JournoFinder) with an interest in showing other databases as more expensive. Ask for a written quote before you buy.
+
+### Where to find the official price: the UK G-Cloud
+
+G-Cloud is the UK government's public catalogue through which departments, councils and hospitals buy software and services. Every supplier has to publish a price list with each service, and any discount it approves must apply to all buyers, so it shows prices you would otherwise only get on request. Anyone can browse it, without logging in, on the [Digital Marketplace](https://www.applytosupply.digitalmarketplace.service.gov.uk/g-cloud/search).
+
+What you find there:
+
+- **a service description** with features, number of users and support terms;
+- **a pricing document (PDF)** with a version date: package prices for tools, day rates per role (junior, senior, director) for agencies;
+- **the supplier's name and email** for public tenders.
+
+In November 2026 a search returns 83 services for "search engine optimisation", 273 for "media monitoring" and 40 for "media database".
+
+Cision is an example. Its [service page](https://www.applytosupply.digitalmarketplace.service.gov.uk/g-cloud/services/677528054559333) says contracts are usually annual, and page 22 of its [pricing document (PDF, version of 13 Nov 2026)](https://assets.applytosupply.digitalmarketplace.service.gov.uk/g-cloud-15/documents/711742/677528054559333-pricing-document-2026-11-13-1226.pdf) lists the CisionOne packages:
+
+![Cision packages from its G-Cloud pricing document: Outreach £6,500 for 3 users, Monitoring Essentials £6,500, Outreach + Monitoring £12,000, Monitoring Plus £16,000, Full Comms Suite £25,000](/blog/verify-journalist-email/g-cloud-cision.png)
+
+The Outreach package (journalist database and press release distribution) costs £6,500 for three users, each extra user £900, and the global journalist database another £3,000 on top. That is the public-sector price; a private company may be quoted differently, but it is a solid starting point for negotiation.
+
+To search yourself: type the tool or service into the search box, open the service and click "Pricing document" at the bottom of the page. Not all five tools in the table above are there: we cannot find a Roxhill listing in November 2026, so its figure is cited via BuzzStream and Commswith.ai.
 
 ## Address format: how newsrooms build emails
 

@@ -2,7 +2,7 @@
 title: "Black Friday SEO vodič za webshopove: podaci za Hrvatsku, stranica akcije i Reddit"
 description: "Vodič s podacima za Hrvatsku: kada kupci traže, tko se rangira, kako složiti stranicu akcije i što napraviti s Reddit nitima o vašoj trgovini. S alatima."
 date: 2026-11-24
-updated: 2026-11-26
+updated: 2026-11-27
 translation: black-friday-seo-croatia
 image: /blog/black-friday-seo/naslovna.png
 imageAlt: "Graf interesa za Black Friday u Hrvatskoj: 83% interesa dogodi se prije samog petka"
@@ -47,7 +47,7 @@ Vodič dopunjujemo svaki dan do Black Fridaya:
 - **Dio 1: stranica akcije** (24.11.). Kada kupci traže, tko se rangira, adresa, naslov, struktura za velike trgovine.
 - **Dio 2: Reddit** (25.11.). Gdje je Reddit na Googleu, što ljudi pišu i što trgovina smije napraviti.
 - **Dio 3: što kupac želi vidjeti** (26.11.). Kako kupci provjeravaju popust, što pokazuju cijene 634 proizvoda i provjera u jednoj tablici.
-- **Dio 4: što sa stranicom nakon petka.** Kratka verzija je već na dnu, detaljna stiže 27.11.
+- **Dio 4: što sa stranicom nakon petka** (27.11.). Što su trgovine napravile s prošlogodišnjim stranicama, koliko linkova skupi stalna adresa i pet koraka nakon akcije.
 
 Ako želite odmah na posao, [popis zadataka](#vaš-popis) je na dnu.
 
@@ -262,6 +262,39 @@ Sve ostalo ostaje kako jest. Kod petine proizvoda naći ćete i suprotno: u rujn
 
 Dvije napomene. Popust se po zakonu i dalje računa od najniže cijene u zadnjih 30 dana; cijena na 10. rujna je dodatni podatak uz nju. I pogledajte datum uz dodatnu cijenu: na 15 % kartica to nije 10. rujna nego kasniji datum, jer je proizvod kasnije uveden u ponudu.
 
+## Dio 4: što sa stranicom nakon petka
+
+### Interes pada odmah nakon petka
+
+Prošle godine najveći interes za "black friday" u Hrvatskoj bio je na sam petak (100). Subota je imala 41, nedjelja 37, Cyber Monday 14, a od 5. prosinca nula. Do rujna se pojam gotovo ne traži; u listopadu je prosjek 8, a u studenom 41.
+
+Akcija, dakle, traje nekoliko dana. Stranica može raditi puno dulje, jer linkovi na nju stižu i izvan sezone.
+
+![Što danas vraćaju prošlogodišnje Black Friday adrese šest trgovina, koliko domena linka na stalne stranice Notina i JYSK-a i interes za "black friday" po mjesecima](/blog/black-friday-seo/nakon-petka.png)
+
+### Što su trgovine napravile s prošlogodišnjim stranicama
+
+Šest trgovina imalo je godinu u adresi stranice akcije (npr. /black-friday-2025/). Na Black Friday 2026 provjerili smo što vraća prošlogodišnja adresa:
+
+- **Dvije:** "stranica nije pronađena". Sve što je vodilo na tu stranicu, vodi u prazno.
+- **Jedna:** i dalje prikazuje stranicu "Black friday 2025", a adresa s 2026 vodi na naslovnicu.
+- **Tri:** preusmjeravaju staru adresu na novu, s 2026. To radi, ali svake godine nastaje nova adresa i novi korak u preusmjeravanju.
+
+### Stalna adresa skuplja linkove godinama
+
+- **Notino, /black-friday/:** na stranicu linka 35 domena. Prvi link je iz 2019., a novi stižu i 2026.
+- **JYSK, /black-friday:** linka 13 domena. Index.hr je na stranicu linkao 7. prosinca 2025., a 24sata u veljači 2026., dakle izvan sezone.
+
+Da su te stranice nakon akcije obrisane, ti bi linkovi vodili na "stranica nije pronađena".
+
+### Pet koraka nakon akcije
+
+1. **Ne brišite stranicu i ne preusmjeravajte je na naslovnicu.** Adresa ostaje ista.
+2. **Čim akcija završi, maknite akcijske cijene, odbrojavanje i natpis "akcija traje".** Prikazivati popust koji više ne vrijedi je zavaravanje kupca.
+3. **Umjesto akcije stavite kratku najavu:** Black Friday se vraća sljedeće godine, prijava na obavijest e-mailom, linkovi na kategorije i trenutne akcije. Stranica ostaje dostupna Googleu i dalje skuplja linkove.
+4. **Stare stranice s godinom u adresi preusmjerite na stalnu adresu /black-friday/**, a ne na naslovnicu. Tako se linkovi sa svih starih stranica skupe na jednom mjestu.
+5. **U rujnu vratite link s naslovnice i počnite puniti stranicu**, kako bi je Google našao prije listopada, kad interes kreće.
+
 ## Što napraviti i kada
 
 ### Što napraviti ovaj tjedan
@@ -293,6 +326,7 @@ Najgora opcija je trajno preusmjeravanje na naslovnicu. Google takvo preusmjerav
 - **Googleovi upiti za Reddit:** devetnaest upita je mali uzorak.
 - **Cijene proizvoda (dio 3):** 634 proizvoda s akcijskih i Black Friday stranica 14 trgovina, prvi učitani proizvodi u mobilnom prikazu, 25. studenoga 2026. Uzorak nije reprezentativan; trgovine koje blokiraju automatski pregled nisu uključene. Kod jedne modne trgovine popust je napisan kao „extra −X %“ pa smo pretpostavili da nije uračunat u prikazanu cijenu.
 - **Reddit:** 641 komentar iz 35 niti na r/croatia, r/hrvatska, r/askcroatia i r/Split. Niti su birane po temi Black Fridaya, pa su pritužbe vjerojatno prezastupljene; podjela 75 najlajkanijih komentara je ručna.
+- **Stranice nakon akcije (dio 4):** prošlogodišnje adrese šest trgovina s godinom u adresi otvorili smo 27. studenoga 2026. i zabilježili kamo vode. Referirajuće domene za stranice Notina i JYSK-a su iz baze linkova DataForSEO, preuzete istog dana; baza ne bilježi sve linkove.
 - **Stranice trgovina:** naslove, adrese i strukturu pročitali smo izravno sa stranica ili iz Googleovih rezultata.
 
 Ako želite da pregledamo vašu stranicu akcije prije iduće sezone, [javite nam se](/kontakt/).
